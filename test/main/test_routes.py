@@ -18,6 +18,15 @@ class MainBlueprintTestCase(unittest.TestCase):
         self.assertEqual(rv.status_code, 308)
         self.assertEqual(rv.location, f"{self.domain}/healthcheck/live/")
 
+    def test_requires_session_key_redirects(self):
+        rv = self.app.get("/request-a-service-record/all-fields-form/")
+        self.assertEqual(rv.status_code, 302)
+        self.assertEqual(rv.location, "/request-a-service-record/")
+
+    def test_requires_session_key_does_not_redirect(self):
+        rv = self.app.get("/request-a-service-record/")
+        self.assertEqual(rv.status_code, 200)
+
     def test_homepage(self):
         rv = self.app.get("/request-a-service-record/")
         self.assertEqual(rv.status_code, 200)
