@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from app.lib.aws import upload_proof_of_death
 from app.lib.cache import cache, cache_key_prefix
 from app.lib.content import load_content
 from app.lib.db_handler import add_service_record_request
@@ -13,7 +14,6 @@ from app.main.forms.proceed_to_pay import ProceedToPay
 from app.main.forms.request_a_service_record import RequestAServiceRecord
 from flask import current_app, redirect, render_template, request, session, url_for
 
-
 @bp.route("/all-fields-in-one-form/", methods=["GET", "POST"])
 def all_fields_in_one_form():
     form = RequestAServiceRecord()
@@ -22,8 +22,17 @@ def all_fields_in_one_form():
     if form.validate_on_submit():
         session["form_data"] = {}
         for field_name, field in form._fields.items():
-            if field_name not in ["csrf_token", "submit", "evidence_of_death"]:
-                session["form_data"][field_name] = field.data
+            if field_name not in ["csrf_token", "submit"]:
+                if field_name == "evidence_of_death":
+                    file = upload_proof_of_death(file=field.data)
+
+                    if file is None:
+                        # Redirect back to file upload form with error message "file failed to upload, try again"
+                        return redirect(url_for("main.all_fields_in_one_form"))
+                    
+                    session["form_data"][field_name] = file if file else None
+                else:
+                    session["form_data"][field_name] = field.data
 
         return redirect(url_for("main.review"))
 

@@ -66,23 +66,29 @@ class Production(Features):
         os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS", "False")
     )
 
+    AWS_ACCESS_KEY_ID: str = os.environ.get("AWS_ACCESS_KEY_ID", "")
+    AWS_SECRET_ACCESS_KEY: str = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
+    AWS_DEFAULT_REGION: str = os.environ.get("AWS_DEFAULT_REGION", "")
+    AWS_SESSION_TOKEN: str = os.environ.get("AWS_SESSION_TOKEN", "")
+    PROOF_OF_DEATH_BUCKET_NAME: str = os.environ.get("PROOF_OF_DEATH_BUCKET_NAME", "")
+    MAX_UPLOAD_ATTEMPTS: int = int(os.environ.get("MAX_UPLOAD_ATTEMPTS", "3"))
 
 class Staging(Production):
-    CACHE_DEFAULT_TIMEOUT = int(os.environ.get("CACHE_DEFAULT_TIMEOUT", "60"))
+    CACHE_DEFAULT_TIMEOUT: int = int(os.environ.get("CACHE_DEFAULT_TIMEOUT", "60"))
 
 
 class Develop(Production):
-    CACHE_DEFAULT_TIMEOUT = int(os.environ.get("CACHE_DEFAULT_TIMEOUT", "1"))
+    CACHE_DEFAULT_TIMEOUT: int = int(os.environ.get("CACHE_DEFAULT_TIMEOUT", "1"))
 
 
 class Test(Production):
-    SECRET_KEY = "abc123"
-    DEBUG = True
-    TESTING = True
-    EXPLAIN_TEMPLATE_LOADING = True
+    SECRET_KEY: str = "abc123"
+    DEBUG: bool = True
+    TESTING: bool = True
+    EXPLAIN_TEMPLATE_LOADING: bool = True
 
-    CACHE_TYPE = "SimpleCache"
-    CACHE_DEFAULT_TIMEOUT = 1
+    CACHE_TYPE: str = "SimpleCache"
+    CACHE_DEFAULT_TIMEOUT: int = 1
 
-    FORCE_HTTPS = False
-    PREFERRED_URL_SCHEME = "http"
+    FORCE_HTTPS: bool = False
+    PREFERRED_URL_SCHEME: str = "http"
