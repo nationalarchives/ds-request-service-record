@@ -44,7 +44,7 @@ def test_upload_file_to_s3_valid_file_returns_filename(context):
         result = upload_file_to_s3(
             file=fs,
             bucket_name="test-bucket",
-            filename_override="override-name.png",
+            filename_override="override-name",
         )
 
     assert isinstance(result, str)
@@ -69,7 +69,7 @@ def test_upload_file_to_s3_invalid_empty_file_returns_none(context):
         result = upload_file_to_s3(
             file=fs,
             bucket_name="test-bucket",
-            filename_override="should-not-matter.png",
+            filename_override="should-not-matter",
         )
 
     assert result is None

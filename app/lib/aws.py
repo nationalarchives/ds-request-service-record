@@ -11,11 +11,10 @@ def upload_proof_of_death(file: FileStorage) -> str | None:
     """
     Function that uploads a proof of death file to S3, with a UUID as the filename.
     """
-    file_extension = os.path.splitext(file.filename)[1]
 
-    filename = str(uuid.uuid4()) + file_extension
+    uuid_filename = str(uuid.uuid4())
 
-    return upload_file_to_s3(file=file, bucket_name=current_app.config["PROOF_OF_DEATH_BUCKET_NAME"], filename_override=filename)
+    return upload_file_to_s3(file=file, bucket_name=current_app.config["PROOF_OF_DEATH_BUCKET_NAME"], filename_override=uuid_filename)
 
 
 def upload_file_to_s3(file: FileStorage, bucket_name: str, filename_override: str | None = None) -> str | None:
@@ -42,7 +41,11 @@ def upload_file_to_s3(file: FileStorage, bucket_name: str, filename_override: st
             region_name=current_app.config.get("AWS_DEFAULT_REGION", "eu-west-2"),
         )
 
-        filename = filename_override if filename_override else file.filename
+        filename = file.filename
+
+        if filename_override:
+            file_extension = os.path.splitext(file.filename)[1]
+            filename = f"{filename_override}{file_extension}"
 
         for attempt in range(1, current_app.config["MAX_UPLOAD_ATTEMPTS"] + 1):
             stream = io.BytesIO(data)
