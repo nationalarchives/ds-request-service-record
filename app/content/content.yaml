@@ -3,6 +3,8 @@ app:
 pages:
   start:
     heading: Request a military service record
+  must_submit_subject_access_request:
+    heading: Submit a data request for a living subject
   all_fields_in_one_form:
     service_person_details:
       legend: Service person detail
@@ -86,7 +88,7 @@ forms:
     regiment:
       label: Regiment (optional)
     service_branch:
-      label: Service branch
+      label: What was the person's service branch?
       messages:
         required: The service person's service branch is required
     additional_information:

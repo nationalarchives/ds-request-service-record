@@ -8,9 +8,9 @@
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
 
-        <form action="{{ url_for('main.is_service_person_alive') }}" method="post" novalidate>
+        <form action="{{ url_for('main.service_branch_form') }}" method="post" novalidate>
+          {{ form.service_branch(params={'headingLevel':1, 'headingSize':'xl'}) }}
           {{ form.csrf_token }}
-          {{ form.is_service_person_alive(params={'headingLevel':1, 'headingSize':'xl'}) }}
           <div class="tna-button-group">
             {{ form.submit }}
           </div>
