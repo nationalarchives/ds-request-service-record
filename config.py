@@ -98,3 +98,8 @@ class Test(Production):
 
     FORCE_HTTPS: bool = False
     PREFERRED_URL_SCHEME: str = "http"
+
+    REDIS_HOST: str = ""
+    REDIS_PORT: str = ""
+    REDIS_DB: str = ""
+    REDIS_PASSWORD: str = ""
