@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{%- set pageTitle = content.app.title -%}
+
+{% block content %}
+  <div class="tna-section">
+    <div class="tna-container">
+      <div
+        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+
+        <h1 class="tna-heading-xl">{{ content.pages.start.heading }}</h1>
+        <p>[Content TBC]</p>
+
+        <div class="tna-!--margin-top-m">
+          <form action="{{ url_for('main.start') }}" method="post" novalidate>
+            {{ form.csrf_token }}
+            <div class="tna-button-group">
+              {{ form.submit }}
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

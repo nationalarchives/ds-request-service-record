@@ -9,6 +9,12 @@
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
 
         <h1 class="tna-heading-xl">{{ content.app.title }}</h1>
+        <h2 class="tna-heading-l">Multi form user journey</h2>
+        <p>This user journey has been designed to present users with questions in sequence, dynamically routing them to
+          different pages reflecting information they provide and choices they make.</p>
+        <a class="tna-button tna-!--margin-top-l" href="{{ url_for('main.start') }}">Try
+          the multi form journey</a>
+
         <h2 class="tna-heading-l">'Kitchen sink' form</h2>
         <p>During the 15-17 July 2025 timebox, we were asked to prepare a form using the Flask Application Template that
           included all fields from the existing 'open' and 'closed' request forms.</p>
@@ -18,9 +24,7 @@
         <p>At this stage, the form has basic validation in place, but no inter-field validation. For this reason, some
           fields - such as 'Email address' - are required when they might not necessarily be.</p>
         <a class="tna-button tna-!--margin-top-l" href="{{ url_for('main.all_fields_in_one_form') }}">Try
-          the {{ content.app.title }}
-          form</a>
-
+          the kitchen sink form</a>
       </div>
     </div>
   </div>

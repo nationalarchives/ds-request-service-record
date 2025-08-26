@@ -11,7 +11,7 @@ from flask import current_app
 class GOV_UK_PAY_EVENT_TYPES(Enum):
     EXPIRED = "card_payment_expired"
     CANCELLED = "card_payment_cancelled"
-    SUCCESS = "card_payment_success"
+    SUCCEEDED = "card_payment_succeeded"
 
 
 def create_payment(
@@ -72,7 +72,7 @@ def process_webhook_data(data: dict) -> None:
     if event_type not in [type.value for type in GOV_UK_PAY_EVENT_TYPES]:
         raise ValueError(f"Unknown event type received: {event_type}")
 
-    if event_type == GOV_UK_PAY_EVENT_TYPES.SUCCESS.value:
+    if event_type == GOV_UK_PAY_EVENT_TYPES.SUCCEEDED.value:
         send_data_to_dynamics(record)
 
     delete_service_record_request(record)

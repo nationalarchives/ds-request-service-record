@@ -13,7 +13,7 @@ test("development landing page", async ({ page }) => {
 });
 
 test("all fields form", async ({ page }) => {
-  await page.goto("/request-a-service-record/all-fields-form/");
+  await page.goto("/request-a-service-record/all-fields-in-one-form/");
   await expect(page.locator("h1")).toHaveText(/Request a Service Record/);
   await validateHtml(page);
   await checkAccessibility(page);

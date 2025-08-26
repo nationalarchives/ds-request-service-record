@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from app.lib.aws import upload_proof_of_death
 from app.lib.cache import cache, cache_key_prefix
 from app.lib.content import load_content
 from app.lib.db_handler import add_service_record_request
@@ -13,14 +14,6 @@ from app.main.forms.proceed_to_pay import ProceedToPay
 from app.main.forms.request_a_service_record import RequestAServiceRecord
 from flask import current_app, redirect, render_template, request, session, url_for
 
-
-@bp.route("/")
-@cache.cached(key_prefix=cache_key_prefix)
-def index():
-    content = load_content()
-    return render_template("main/index.html", content=content)
-
-
 @bp.route("/all-fields-in-one-form/", methods=["GET", "POST"])
 def all_fields_in_one_form():
     form = RequestAServiceRecord()
@@ -29,13 +22,23 @@ def all_fields_in_one_form():
     if form.validate_on_submit():
         session["form_data"] = {}
         for field_name, field in form._fields.items():
-            if field_name not in ["csrf_token", "submit", "evidence_of_death"]:
-                session["form_data"][field_name] = field.data
+            if field_name not in ["csrf_token", "submit"]:
+                if field_name == "evidence_of_death":
+                    if data := field.data:
+                        file = upload_proof_of_death(file=data)
+
+                        if file is None:
+                            # Redirect back to file upload form with error message "file failed to upload, try again"
+                            return redirect(url_for("main.all_fields_in_one_form"))
+                    
+                        session["form_data"][field_name] = file if file else None
+                else:
+                    session["form_data"][field_name] = field.data
 
         return redirect(url_for("main.review"))
 
     return render_template(
-        "main/all-fields-in-one-form.html", content=content, form=form
+        "main/all-fields-in-one-form/form.html", content=content, form=form
     )
 
 
@@ -49,7 +52,7 @@ def review():
         return redirect(url_for("main.send_to_gov_pay"))
 
     return render_template(
-        "main/review.html", form=form, form_data=form_data, content=content
+        "main/all-fields-in-one-form/review.html", form=form, form_data=form_data, content=content
     )
 
 
@@ -99,19 +102,19 @@ def handle_gov_uk_pay_response():
 @bp.route("/payment-link-creation_failed/")
 def payment_link_creation_failed():
     content = load_content()
-    return render_template("main/payment-link-creation-failed.html", content=content)
+    return render_template("main/payment/payment-link-creation-failed.html", content=content)
 
 
 @bp.route("/payment-incomplete/")
 def payment_incomplete():
     content = load_content()
-    return render_template("main/payment-incomplete.html", content=content)
+    return render_template("main/payment/payment-incomplete.html", content=content)
 
 
 @bp.route("/confirm-payment-received/")
 def confirm_payment_received():
     content = load_content()
-    return render_template("main/confirm-payment-received.html", content=content)
+    return render_template("main/payment/confirm-payment-received.html", content=content)
 
 
 @bp.route("/gov-uk-pay-webhook/", methods=["POST"])

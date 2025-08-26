@@ -1,6 +1,10 @@
 app:
   title: Request a Service Record
 pages:
+  start:
+    heading: Request a military service record
+  must_submit_subject_access_request:
+    heading: Submit a data request for a living subject
   all_fields_in_one_form:
     service_person_details:
       legend: Service person detail
@@ -50,6 +54,12 @@ pages:
       - Your payment was not completed successfully.
 forms:
   fields:
+    start_now:
+      call_to_action: Start now
+    is_service_person_alive:
+      label: Is this person still alive?
+      messages:
+        required: An answer to this question is required
     forenames:
       label: Forenames (including middle names)
       messages:
@@ -78,7 +88,7 @@ forms:
     regiment:
       label: Regiment (optional)
     service_branch:
-      label: Service branch
+      label: What was the person's service branch?
       messages:
         required: The service person's service branch is required
     additional_information:
