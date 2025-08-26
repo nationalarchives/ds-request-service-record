@@ -1,5 +1,5 @@
 from statemachine import StateMachine, State
-
+from app.constants import MultiPageFormRoutes
 
 class RoutingStateMachine(StateMachine):
     """
@@ -44,13 +44,13 @@ class RoutingStateMachine(StateMachine):
     )
 
     def entering_service_person_alive_form(self, event, state):
-        self.route_for_current_state = "main.is_service_person_alive"
+        self.route_for_current_state = MultiPageFormRoutes.IS_SERVICE_PERSON_ALIVE.value
 
     def entering_subject_access_request_statement(self, event, state):
-        self.route_for_current_state = "main.must_submit_subject_access_request"
+        self.route_for_current_state = MultiPageFormRoutes.MUST_SUBMIT_SUBJECT_ACCESS_REQUEST.value
 
     def entering_service_branch_form(self, event, state):
-        self.route_for_current_state = "main.service_branch_form"
+        self.route_for_current_state = MultiPageFormRoutes.SERVICE_BRANCH_FORM.value
 
     def on_enter_state(self, event, state):
         """This method is called when entering any state."""
