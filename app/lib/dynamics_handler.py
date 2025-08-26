@@ -1,3 +1,4 @@
+from app.lib.aws import send_email
 from app.lib.models import ServiceRecordRequest
 
 
@@ -38,4 +39,9 @@ def send_data_to_dynamics(record: ServiceRecordRequest) -> None:
     """
 
     # Send email
+    send_email(
+        to=record.requester_email,
+        subject=f"New Service Record Request: {record.id}",
+        body=email_data
+    )
     print(email_data)  # Replace with actual email sending logic
