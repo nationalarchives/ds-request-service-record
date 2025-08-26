@@ -24,13 +24,14 @@ def all_fields_in_one_form():
         for field_name, field in form._fields.items():
             if field_name not in ["csrf_token", "submit"]:
                 if field_name == "evidence_of_death":
-                    file = upload_proof_of_death(file=field.data)
+                    if data := field.data:
+                        file = upload_proof_of_death(file=data)
 
-                    if file is None:
-                        # Redirect back to file upload form with error message "file failed to upload, try again"
-                        return redirect(url_for("main.all_fields_in_one_form"))
+                        if file is None:
+                            # Redirect back to file upload form with error message "file failed to upload, try again"
+                            return redirect(url_for("main.all_fields_in_one_form"))
                     
-                    session["form_data"][field_name] = file if file else None
+                        session["form_data"][field_name] = file if file else None
                 else:
                     session["form_data"][field_name] = field.data
 
