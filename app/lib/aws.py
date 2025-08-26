@@ -60,3 +60,26 @@ def upload_file_to_s3(file: FileStorage, bucket_name: str, filename_override: st
 
         return filename
     return None
+
+def send_email(to: str, subject: str, body: str) -> None:
+    """
+    Function to send an email using AWS SES.
+    """
+    ses = boto3.client(
+        "ses",
+        aws_access_key_id=current_app.config["AWS_ACCESS_KEY_ID"],
+        aws_secret_access_key=current_app.config["AWS_SECRET_ACCESS_KEY"],
+        region_name=current_app.config.get("AWS_DEFAULT_REGION", "eu-west-2"),
+    )
+
+    try:
+        ses.send_email(
+            Source=current_app.config["EMAIL_FROM"],
+            Destination={"ToAddresses": [to]},
+            Message={
+                "Subject": {"Data": subject},
+                "Body": {"Text": {"Data": body}},
+            },
+        )
+    except Exception as e:
+        current_app.logger.error(f"Error sending email: {e}")
