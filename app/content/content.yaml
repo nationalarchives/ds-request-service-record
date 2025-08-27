@@ -5,6 +5,10 @@ pages:
     heading: Request a military service record
   must_submit_subject_access_request:
     heading: Submit a data request for a living subject
+  only_living_subjects_can_request_their_record:
+    heading: Service records of living persons can only be released to themselves
+    paragraphs:
+      - Unfortunately we won't be able to release the record to you.
   all_fields_in_one_form:
     service_person_details:
       legend: Service person detail
