@@ -2,17 +2,28 @@ from app.lib.models import ServiceRecordRequest, db
 from flask import current_app
 
 
-def get_service_record_request(payment_id: str) -> ServiceRecordRequest | None:
-    record = None
+def get_service_record_request(*, payment_id: str | None = None, record_id: str | None = None) -> ServiceRecordRequest | None:
+    """
+    Get a ServiceRecordRequest item by payment_id or record_id.
+    Must provide either a payment_id OR a record_id.
+    """
+    if (payment_id is None and record_id is None) or (payment_id is not None and record_id is not None):
+        raise ValueError("Invalid parameters: provide either payment_id or record_id.")
 
     try:
-        record = (
-            db.session.query(ServiceRecordRequest)
-            .filter_by(payment_id=payment_id)
-            .first()
-        )
+        if record_id is not None:
+            record = (
+                db.session.get(ServiceRecordRequest, record_id)
+            )
+        else:
+            record = (
+                db.session.query(ServiceRecordRequest)
+                .filter_by(payment_id=payment_id)
+                .first()
+            )
     except Exception as e:
         current_app.logger.error(f"Error fetching service record request: {e}")
+        return None
 
     if not record:
         current_app.logger.error(
