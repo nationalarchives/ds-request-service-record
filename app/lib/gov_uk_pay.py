@@ -30,7 +30,7 @@ FAILED_PAYMENT_STATUSES: set[str] = {
     "error"
 }
 
-def get_payment_status(payment_id: str) -> dict | None:
+def get_payment_data(payment_id: str) -> dict | None:
     headers = {
         "Authorization": f"Bearer {current_app.config["GOV_UK_PAY_API_KEY"]}",
         "Content-Type": "application/json",
@@ -44,17 +44,21 @@ def get_payment_status(payment_id: str) -> dict | None:
     try:
         response.raise_for_status()
     except Exception as e:
-        current_app.logger.error(f"Error fetching payment status: {e}")
+        current_app.logger.error(f"Error fetching payment data: {e}")
         return None
 
     return response.json()
 
 
+def get_payment_status(payment_id: str) -> dict | None:
+    data = get_payment_data(payment_id)
+    if data is None:
+        return None
+    return data.get("state").get("status")
+
+
 def validate_payment(payment_id: str) -> bool:
-    payment_status = get_payment_status(payment_id)
-    if payment_status is None:
-        return False
-    return payment_status.get("state").get("status") in SUCCESS_PAYMENT_STATUSES
+    return get_payment_status(payment_id) in SUCCESS_PAYMENT_STATUSES
 
 
 def create_payment(
