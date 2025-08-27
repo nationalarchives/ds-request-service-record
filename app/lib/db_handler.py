@@ -32,6 +32,9 @@ def get_service_record_request(*, payment_id: str | None = None, record_id: str 
 
     return record
 
+def get_payment_id_from_record_id(record_id: str) -> str | None:
+    record = get_service_record_request(record_id=record_id)
+    return record.payment_id if record else None
 
 def add_service_record_request(data: dict) -> None:
     try:
