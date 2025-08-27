@@ -28,6 +28,7 @@ services:
       - ./:/app
     depends_on:
       - db
+      - redis
 
   db:
     image: postgres:16.0
