@@ -67,8 +67,9 @@ def send_email(to: str, subject: str, body: str) -> None:
     """
     ses = boto3.client(
         "ses",
-        aws_access_key_id=current_app.config["AWS_ACCESS_KEY_ID"],
-        aws_secret_access_key=current_app.config["AWS_SECRET_ACCESS_KEY"],
+        aws_access_key_id=current_app.config.get("AWS_ACCESS_KEY_ID"),
+        aws_secret_access_key=current_app.config.get("AWS_SECRET_ACCESS_KEY"),
+        aws_session_token=current_app.config.get("AWS_SESSION_TOKEN"),
         region_name=current_app.config.get("AWS_DEFAULT_REGION", "eu-west-2"),
     )
 
