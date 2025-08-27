@@ -113,6 +113,10 @@ def handle_gov_uk_pay_response():
     
     payment_id = get_payment_id_from_record_id(id)
 
+    if payment_id is None:
+        # User got here with an ID that doesn't exist in the DB - could be our fault, or could be malicious, do something
+        return "Shouldn't be here"
+
     if validate_payment(payment_id):
         return redirect(url_for("main.confirm_payment_received"))
 
