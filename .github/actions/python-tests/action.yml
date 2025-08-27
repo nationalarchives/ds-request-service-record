@@ -9,6 +9,9 @@ runs:
     - name: Start dev container
       run: docker compose up --detach --wait --wait-timeout 300 dev || docker compose logs dev
       shell: bash
+    - name: Create database
+      run: docker compose exec dev poetry run python create_database.py
+      shell: bash
     - name: Run tests in the dev container
       run: docker compose exec dev poetry run python -m pytest
       shell: bash
