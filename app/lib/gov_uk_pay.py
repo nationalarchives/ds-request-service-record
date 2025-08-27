@@ -35,6 +35,13 @@ def get_payment_status(payment_id: str) -> dict | None:
     return response.json()
 
 
+def validate_payment(payment_id: str) -> bool:
+    payment_status = get_payment_status(payment_id)
+    if payment_status is None:
+        return False
+    return payment_status.get("state").get("status") == "success"
+
+
 def create_payment(
     amount: int, description: str, reference: str, email: str | None, return_url: str
 ) -> dict | None:
