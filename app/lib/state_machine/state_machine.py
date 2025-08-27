@@ -30,6 +30,7 @@ class RoutingStateMachine(StateMachine):
     service_person_alive_form = State(enter="entering_service_person_alive_form", final=True)
     subject_access_request_statement = State(enter="entering_subject_access_request_statement", final=True)
     service_branch_form = State(enter="entering_service_branch_form", final=True)
+    only_living_subjects_can_request_their_record_statement = State(enter="entering_only_living_subjects_can_request_their_record_statement", final=True)
     """
     These are our Events. We call these in route methods to trigger transitions between States.
 
@@ -40,7 +41,8 @@ class RoutingStateMachine(StateMachine):
     continue_to_service_person_alive_form = initial.to(service_person_alive_form)
     continue_from_service_person_alive_form = (
         initial.to(subject_access_request_statement, cond="living_subject")
-        | initial.to(service_branch_form, unless="living_subject")
+        | initial.to(service_branch_form, cond="deceased_subject")
+        | initial.to(only_living_subjects_can_request_their_record_statement, cond="potentially_living_subject")
     )
 
     def entering_service_person_alive_form(self, event, state):
@@ -51,6 +53,9 @@ class RoutingStateMachine(StateMachine):
 
     def entering_service_branch_form(self, event, state):
         self.route_for_current_state = MultiPageFormRoutes.SERVICE_BRANCH_FORM.value
+
+    def entering_only_living_subjects_can_request_their_record_statement(self, event, state):
+        self.route_for_current_state = MultiPageFormRoutes.ONLY_LIVING_SUBJECTS_CAN_REQUEST_THEIR_RECORD.value
 
     def on_enter_state(self, event, state):
         """This method is called when entering any state."""
@@ -64,3 +69,11 @@ class RoutingStateMachine(StateMachine):
     def living_subject(self, form):
         """Condition method to determine if the service person is alive."""
         return form.is_service_person_alive.data == "yes"
+
+    def deceased_subject(self, form):
+        """Condition method to determine if the service person is deceased."""
+        return form.is_service_person_alive.data == "no"
+
+    def potentially_living_subject(self, form):
+        """Condition method to determine if the service person is potentially living."""
+        return form.is_service_person_alive.data == "unsure"

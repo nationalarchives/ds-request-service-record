@@ -40,6 +40,12 @@ def must_submit_subject_access_request():
         "main/multi-page-journey/must-submit-subject-access-request.html", content=load_content()
     )
 
+@bp.route("/only-living-subjects-can-request-their-record/", methods=["GET"])
+def only_living_subjects_can_request_their_record():
+    return render_template(
+        "main/multi-page-journey/only-living-subjects-can-request-their-record.html",
+        content=load_content(),
+    )
 
 @bp.route("/service-branch/", methods=["GET"])
 def service_branch_form():
