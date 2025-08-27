@@ -116,6 +116,7 @@ def handle_gov_uk_pay_response():
     if validate_payment(payment_id):
         return redirect(url_for("main.confirm_payment_received"))
 
+    # Let the user know it failed, ask if they want to retry
     return redirect(url_for("main.payment_incomplete"))
 
 
