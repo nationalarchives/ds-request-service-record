@@ -1,12 +1,12 @@
 from flask_sqlalchemy import SQLAlchemy
-
+import uuid
 db = SQLAlchemy()
 
 
 class ServiceRecordRequest(db.Model):
     __tablename__ = "service_record_requests"
 
-    id = db.Column(db.String(64), primary_key=True)
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     additional_information = db.Column(db.Text, nullable=True)
     case_reference_number = db.Column(db.String(64), nullable=True)
     date_of_birth = db.Column(db.DateTime)
