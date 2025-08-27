@@ -31,7 +31,7 @@ runs:
       run: npx playwright install-deps webkit
       shell: bash
     - name: Start service
-      run: docker compose up --detach --wait --wait-timeout 300 || docker compose logs app
+      run: docker compose up --detach --wait --wait-timeout 300 app || docker compose logs app
       shell: bash
     - name: Run tests
       run: CI=true npx playwright test --grep-invert "@wip"
