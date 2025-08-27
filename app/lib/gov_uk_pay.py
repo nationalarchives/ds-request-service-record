@@ -14,6 +14,27 @@ class GOV_UK_PAY_EVENT_TYPES(Enum):
     SUCCEEDED = "card_payment_succeeded"
 
 
+
+def get_payment_status(payment_id: str) -> dict | None:
+    headers = {
+        "Authorization": f"Bearer {current_app.config["GOV_UK_PAY_API_KEY"]}",
+        "Content-Type": "application/json",
+    }
+
+    response = requests.get(
+        f"{current_app.config["GOV_UK_PAY_API_URL"]}/{payment_id}",
+        headers=headers
+    )
+
+    try:
+        response.raise_for_status()
+    except Exception as e:
+        current_app.logger.error(f"Error fetching payment status: {e}")
+        return None
+
+    return response.json()
+
+
 def create_payment(
     amount: int, description: str, reference: str, email: str | None, return_url: str
 ) -> dict | None:
@@ -64,7 +85,7 @@ def process_webhook_data(data: dict) -> None:
     payment_id = data.get("resource_id", "")
     event_type = data.get("event_type", "")
 
-    record = get_service_record_request(payment_id)
+    record = get_service_record_request(payment_id=payment_id)
 
     if record is None:
         raise ValueError(f"Service record not found for payment ID: {payment_id}")
