@@ -6,7 +6,7 @@ import pytest
 from app.lib.gov_uk_pay import (
     GOV_UK_PAY_EVENT_TYPES,
     create_payment,
-    is_webhook_signature_valid,
+    validate_webhook_signature,
     process_webhook_data,
 )
 
@@ -47,7 +47,7 @@ def test_create_payment_failure(mock_post, test_app):
         assert result is None
 
 
-def test_is_webhook_signature_valid(test_app):
+def test_validate_webhook_signature(test_app):
     class DummyRequest:
         def __init__(self, data, signature):
             self._data = data
@@ -61,9 +61,9 @@ def test_is_webhook_signature_valid(test_app):
         payload = b"test"
         signature = hmac.new(b"secret", payload, hashlib.sha256).hexdigest()
         req = DummyRequest(payload, signature)
-        assert is_webhook_signature_valid(req) is True
+        assert validate_webhook_signature(req) is True
         req = DummyRequest(payload, "wrong")
-        assert is_webhook_signature_valid(req) is False
+        assert validate_webhook_signature(req) is False
 
 
 def test_process_webhook_events(test_app):

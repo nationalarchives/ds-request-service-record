@@ -92,7 +92,7 @@ def create_payment(
     return response.json()
 
 
-def is_webhook_signature_valid(request: requests.Request) -> bool:
+def validate_webhook_signature(request: requests.Request) -> bool:
     signing_secret = current_app.config["GOV_UK_PAY_SIGNING_SECRET"]
     pay_signature = request.headers.get("Pay-Signature", "")
     body = request.get_data()
