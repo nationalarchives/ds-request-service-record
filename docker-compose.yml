@@ -49,6 +49,8 @@ services:
     image: ghcr.io/nationalarchives/tna-python-dev:preview
     volumes:
       - ./:/app
+    depends_on:
+      - db
 
   docs:
     image: squidfunk/mkdocs-material
