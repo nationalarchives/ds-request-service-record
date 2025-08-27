@@ -74,6 +74,7 @@ class Production(Features):
     MAX_UPLOAD_ATTEMPTS: int = int(os.environ.get("MAX_UPLOAD_ATTEMPTS", "3"))
 
     EMAIL_FROM: str = os.environ.get("EMAIL_FROM", "")
+    DYNAMICS_INBOX: str = os.environ.get("DYNAMICS_INBOX", "")
 
 class Staging(Production):
     CACHE_DEFAULT_TIMEOUT: int = int(os.environ.get("CACHE_DEFAULT_TIMEOUT", "60"))

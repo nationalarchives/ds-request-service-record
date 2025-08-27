@@ -61,7 +61,7 @@ def upload_file_to_s3(file: FileStorage, bucket_name: str, filename_override: st
         return filename
     return None
 
-def send_email(to: str, subject: str, body: str) -> None:
+def send_email(subject: str, body: str) -> None:
     """
     Function to send an email using AWS SES.
     """
@@ -76,7 +76,7 @@ def send_email(to: str, subject: str, body: str) -> None:
     try:
         ses.send_email(
             Source=current_app.config["EMAIL_FROM"],
-            Destination={"ToAddresses": [to]},
+            Destination={"ToAddresses": current_app.config["DYNAMICS_INBOX"]},
             Message={
                 "Subject": {"Data": subject},
                 "Body": {"Text": {"Data": body}},
