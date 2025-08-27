@@ -10,7 +10,7 @@ from flask import current_app
 
 class GOV_UK_PAY_EVENT_TYPES(Enum):
     EXPIRED = "card_payment_expired"
-    CANCELLED = "card_payment_cancelled"
+    FAILED = "card_payment_failed"
     SUCCEEDED = "card_payment_succeeded"
 
 SUCCESS_PAYMENT_STATUSES: set[str] = {
