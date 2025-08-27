@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import uuid
 from app.lib.aws import upload_proof_of_death
 from app.lib.cache import cache, cache_key_prefix
 from app.lib.content import load_content
@@ -62,12 +63,14 @@ def send_to_gov_pay():
     form_data = session.get("form_data", {})
     requester_email = form_data.get("requester_email", None)
 
+    id = str(uuid.uuid4())
+
     response = create_payment(
         amount=1000,
         description=content["app"]["title"],
         reference="ServiceRecordRequest",
         email=requester_email,
-        return_url=url_for("main.handle_gov_uk_pay_response", _external=True),
+        return_url=f"{url_for("main.handle_gov_uk_pay_response", _external=True)}?id={id}",
     )
 
     if not response:
@@ -87,7 +90,7 @@ def send_to_gov_pay():
             else None
         )
 
-        data = {**form_data, "payment_id": payment_id, "created_at": datetime.now()}
+        data = {**form_data, "id": id, "payment_id": payment_id, "created_at": datetime.now()}
 
         data["date_of_birth"] = (
             date_of_birth  # TODO: Temporary until full implementation, date_of_birth/death will be a string
