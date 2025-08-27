@@ -3,12 +3,19 @@ from app.lib.models import ServiceRecordRequest
 
 
 def send_data_to_dynamics(record: ServiceRecordRequest) -> None:
-    # This is just an example for now. There are a lot of different fields, and these vary per type of Dynamics Case
-
     # Check "status" of record, based on defined logic (used in Dynamics email subject, e.g. FOICD, DPA, etc)
 
-    # Generate tagged XML for email
-    email_data = f"""
+    tagged_data = generate_tagged_data(record)
+
+    send_email(
+        to=record.requester_email,
+        subject=f"New Service Record Request: {record.id}",
+        body=tagged_data
+    )
+    
+
+def generate_tagged_data(record: ServiceRecordRequest) -> str:
+    return f"""
         <enquiry_id>{record.id}</enquiry_id>
         <title>{record.requester_title}</title>
         <mandatory_forename>{record.requester_first_name}</mandatory_forename>
@@ -37,11 +44,3 @@ def send_data_to_dynamics(record: ServiceRecordRequest) -> None:
         <died_in_service>{record.died_in_service}</died_in_service>
         <prior_contact_reference>{record.case_reference_number}</prior_contact_reference>
     """
-
-    # Send email
-    send_email(
-        to=record.requester_email,
-        subject=f"New Service Record Request: {record.id}",
-        body=email_data
-    )
-    print(email_data)  # Replace with actual email sending logic
