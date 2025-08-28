@@ -54,7 +54,7 @@ def get_payment_status(payment_id: str) -> dict | None:
     data = get_payment_data(payment_id)
     if data is None:
         return None
-    return data.get("state").get("status")
+    return data.get("state", {}).get("status")
 
 
 def validate_payment(payment_id: str) -> bool:
