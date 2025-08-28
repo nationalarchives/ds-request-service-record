@@ -55,5 +55,23 @@ In addition to the [base Docker image variables](https://github.com/nationalarch
 | `CACHE_DEFAULT_TIMEOUT`          | The number of seconds to cache pages for                                    | production: `300`, staging: `60`, develop: `0`, test: `0` |
 | `CACHE_DIR`                      | Directory for storing cached responses when using `FileSystemCache`         | `/tmp`                                                    |
 | `GA4_ID`                         | The Google Analytics 4 ID                                                   | _none_                                                    |
+| `GOV_UK_PAY_API_KEY`             | GOV.UK Pay API key                                                          | _none_ (required for payments)                            |
+| `GOV_UK_PAY_API_URL`             | GOV.UK Pay create payment endpoint URL                                      | _none_ (required for payments)                            |
+| `GOV_UK_PAY_SIGNING_SECRET`      | GOV.UK Pay webhook HMAC signing secret                                      | _none_ (required for webhooks)                            |
+| `SQLALCHEMY_DATABASE_URI`        | SQLAlchemy database connection string                                       | _none_ (required)                                         |
+| `SQLALCHEMY_TRACK_MODIFICATIONS` | SQLAlchemy event system toggle                                              | `False`                                                   |
+| `REDIS_HOST`                     | Redis host for sessions/cache                                               | _none_                                                    |
+| `REDIS_PORT`                     | Redis port                                                                  | `6379`                                                    |
+| `REDIS_DB`                       | Redis database index                                                        | `0`                                                       |
+| `REDIS_USERNAME`                 | Redis username                                                              | _none_                                                    |
+| `REDIS_PASSWORD`                 | Redis password                                                              | _none_                                                    |
+| `AWS_ACCESS_KEY_ID`              | AWS access key                                                              | _none_                                                    |
+| `AWS_SECRET_ACCESS_KEY`          | AWS secret key                                                              | _none_                                                    |
+| `AWS_SESSION_TOKEN`              | AWS session token                                                           | _none_                                                    |
+| `AWS_DEFAULT_REGION`             | AWS region for clients (SES/S3)                                             | _none_                                                    |
+| `PROOF_OF_DEATH_BUCKET_NAME`     | S3 bucket location for uploaded proof-of-death files                        | _none_ (required for file uploads)                        |
+| `MAX_UPLOAD_ATTEMPTS`            | Number of retry attempts for S3 uploads                                     | `3`                                                       |
+| `EMAIL_FROM`                     | The address which SES will send emails from                                 | _none_                                                    |
+| `DYNAMICS_INBOX`                 | The address which SES will send Dynamics emails to                          | _none_                                                    |
 
 [^1] [Debugging in Flask](https://flask.palletsprojects.com/en/2.3.x/debugging/)

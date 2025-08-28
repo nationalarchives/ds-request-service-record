@@ -66,6 +66,12 @@ class Production(Features):
         os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS", "False")
     )
 
+    REDIS_HOST: str = os.environ.get("REDIS_HOST", "")
+    REDIS_PORT: int = int(os.environ.get("REDIS_PORT", "6379"))
+    REDIS_DB: int = int(os.environ.get("REDIS_DB", "0"))
+    REDIS_USERNAME: str = os.environ.get("REDIS_USERNAME", None)
+    REDIS_PASSWORD: str = os.environ.get("REDIS_PASSWORD", "")
+
     AWS_ACCESS_KEY_ID: str = os.environ.get("AWS_ACCESS_KEY_ID", "")
     AWS_SECRET_ACCESS_KEY: str = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
     AWS_DEFAULT_REGION: str = os.environ.get("AWS_DEFAULT_REGION", "")
