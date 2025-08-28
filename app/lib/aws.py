@@ -73,14 +73,11 @@ def send_email(to: str, subject: str, body: str) -> None:
         region_name=current_app.config.get("AWS_DEFAULT_REGION", "eu-west-2"),
     )
 
-    try:
-        ses.send_email(
-            Source=current_app.config["EMAIL_FROM"],
-            Destination={"ToAddresses": [to]},
-            Message={
-                "Subject": {"Data": subject},
-                "Body": {"Text": {"Data": body}},
-            },
-        )
-    except Exception as e:
-        current_app.logger.error(f"Error sending email: {e}")
+    ses.send_email(
+        Source=current_app.config["EMAIL_FROM"],
+        Destination={"ToAddresses": [to]},
+        Message={
+            "Subject": {"Data": subject},
+            "Body": {"Text": {"Data": body}},
+        },
+    )
