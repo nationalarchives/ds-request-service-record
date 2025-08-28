@@ -8,6 +8,7 @@ from app.lib.gov_uk_pay import (
     create_payment,
     validate_webhook_signature,
     process_webhook_data,
+    validate_payment
 )
 
 from app import create_app
@@ -84,3 +85,24 @@ def test_process_webhook_events(test_app):
                     process_webhook_data(data)
                     mock_delete.assert_called_with(record)
                     mock_commit.assert_called()
+
+
+@patch("app.lib.gov_uk_pay.get_payment_status", return_value="success")
+def test_validate_payment_success(mock_status, test_app):
+    with test_app.app_context():
+        assert validate_payment("any_id") is True
+        mock_status.assert_called_once_with("any_id")
+
+
+@patch("app.lib.gov_uk_pay.get_payment_status", return_value="failed")
+def test_validate_payment_failed(mock_status, test_app):
+    with test_app.app_context():
+        assert validate_payment("any_id") is False
+        mock_status.assert_called_once_with("any_id")
+
+
+@patch("app.lib.gov_uk_pay.get_payment_status", return_value=None)
+def test_validate_payment_status_none(mock_status, test_app):
+    with test_app.app_context():
+        assert validate_payment("any_id") is False
+        mock_status.assert_called_once_with("any_id")
