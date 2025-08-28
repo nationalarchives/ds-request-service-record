@@ -24,6 +24,7 @@ def create_app(config_class):
             host=app.config["REDIS_HOST"],
             port=app.config["REDIS_PORT"],
             db=app.config["REDIS_DB"],
+            username=app.config["REDIS_USERNAME"],
             password=app.config["REDIS_PASSWORD"],
         )
         app.session_interface = RedisSessionInterface(app=app, client=redis)
