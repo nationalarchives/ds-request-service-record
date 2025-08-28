@@ -20,6 +20,7 @@ def start(state_machine):
         "main/multi-page-journey/start.html", form=form, content=load_content()
     )
 
+
 @bp.route("/is-service-person-alive/", methods=["GET", "POST"])
 @with_state_machine
 def is_service_person_alive(state_machine):
@@ -40,6 +41,7 @@ def must_submit_subject_access_request():
         "main/multi-page-journey/must-submit-subject-access-request.html", content=load_content()
     )
 
+
 @bp.route("/only-living-subjects-can-request-their-record/", methods=["GET"])
 def only_living_subjects_can_request_their_record():
     return render_template(
@@ -47,9 +49,37 @@ def only_living_subjects_can_request_their_record():
         content=load_content(),
     )
 
-@bp.route("/service-branch/", methods=["GET"])
-def service_branch_form():
+
+@bp.route("/service-branch/", methods=["GET", "POST"])
+@with_state_machine
+def service_branch_form(state_machine):
     form = ServiceBranch()
+
+    if form.validate_on_submit():
+        state_machine.continue_from_service_branch_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
+
     return render_template(
         "main/multi-page-journey/service-branch.html", form=form, content=load_content()
+    )
+
+
+@bp.route("/mod-have-this-record/", methods=["GET"])
+def mod_have_this_record():
+    return render_template(
+        "main/multi-page-journey/mod-have-this-record.html", content=load_content()
+    )
+
+
+@bp.route("/was-service-person-officer/", methods=["GET"])
+def was_service_person_officer_form():
+    return render_template(
+        "main/multi-page-journey/was-service-person-an-officer.html", content=load_content()
+    )
+
+
+@bp.route("/check-ancestry/", methods=["GET"])
+def check_ancestry():
+    return render_template(
+        "main/multi-page-journey/check-ancestry.html", content=load_content()
     )

@@ -9,6 +9,14 @@ pages:
     heading: Service records of living persons can only be released to themselves
     paragraphs:
       - Unfortunately we won't be able to release the record to you.
+  mod_have_this_record:
+    heading: The Ministry of Defence has this record
+  was_service_person_an_officer:
+    heading: Was the service person an officer?
+  check_ancestry:
+    heading: Check Ancestry
+    paragraphs:
+      - Home Guard records are in the process of being digitised by Ancestry. Check there first
   all_fields_in_one_form:
     service_person_details:
       legend: Service person detail

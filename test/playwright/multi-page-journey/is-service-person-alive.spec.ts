@@ -1,18 +1,19 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("is this person still alive", () => {
-  const JOURNEY_START_PAGE_URL = "/request-a-service-record/start/";
-  const IS_SERVICE_PERSON_ALIVE_URL =
-    "/request-a-service-record/is-service-person-alive/";
-  const MUST_SUBMIT_SUBJECT_ACCESS_URL =
-    "/request-a-service-record/must-submit-subject-access/";
-  const SELECT_SERVICE_BRANCH_URL = "/request-a-service-record/service-branch/";
-  const ONLY_LIVING_SUBJECTS_CAN_REQUEST_THEIR_OWN_RECORD =
-    "/request-a-service-record/only-living-subjects-can-request-their-record/";
+  const basePath = "/request-a-service-record";
+
+  enum Urls {
+    JOURNEY_START_PAGE = `${basePath}/start/`,
+    IS_SERVICE_PERSON_ALIVE = `${basePath}/is-service-person-alive/`,
+    MUST_SUBMIT_SUBJECT_ACCESS = `${basePath}/must-submit-subject-access/`,
+    SELECT_SERVICE_BRANCH = `${basePath}/service-branch/`,
+    ONLY_LIVING_SUBJECTS_CAN_REQUEST_THEIR_OWN_RECORD = `${basePath}/only-living-subjects-can-request-their-record/`,
+  }
 
   test.beforeEach(async ({ page }) => {
-    await page.goto(JOURNEY_START_PAGE_URL); // We need to go here first because we prevent direct access to mid-journey pages
-    await page.goto(IS_SERVICE_PERSON_ALIVE_URL);
+    await page.goto(Urls.JOURNEY_START_PAGE); // We need to go here first because we prevent direct access to mid-journey pages
+    await page.goto(Urls.IS_SERVICE_PERSON_ALIVE);
   });
 
   test("Shows the correct heading", async ({ page }) => {
@@ -33,7 +34,7 @@ test.describe("is this person still alive", () => {
   }) => {
     await page.getByLabel("Yes").check();
     await page.getByRole("button", { name: /Continue/i }).click();
-    await expect(page).toHaveURL(MUST_SUBMIT_SUBJECT_ACCESS_URL);
+    await expect(page).toHaveURL(Urls.MUST_SUBMIT_SUBJECT_ACCESS);
     await expect(page.locator("h1")).toHaveText(
       /Submit a data request for a living subject/,
     );
@@ -44,7 +45,7 @@ test.describe("is this person still alive", () => {
   }) => {
     await page.getByLabel("No", { exact: true }).check();
     await page.getByRole("button", { name: /Continue/i }).click();
-    await expect(page).toHaveURL(SELECT_SERVICE_BRANCH_URL);
+    await expect(page).toHaveURL(Urls.SELECT_SERVICE_BRANCH);
     await expect(page.locator("h1")).toHaveText(
       /What was the person's service branch\?/,
     );
@@ -56,7 +57,7 @@ test.describe("is this person still alive", () => {
     await page.getByLabel("I don't know", { exact: true }).check();
     await page.getByRole("button", { name: /Continue/i }).click();
     await expect(page).toHaveURL(
-      ONLY_LIVING_SUBJECTS_CAN_REQUEST_THEIR_OWN_RECORD,
+      Urls.ONLY_LIVING_SUBJECTS_CAN_REQUEST_THEIR_OWN_RECORD,
     );
     await expect(page.locator("h1")).toHaveText(
       /Service records of living persons can only be released to themselves/,
