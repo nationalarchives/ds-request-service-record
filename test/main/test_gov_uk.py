@@ -81,10 +81,15 @@ def test_process_webhook_events(test_app):
                 with (
                     patch("app.lib.models.db.session.delete") as mock_delete,
                     patch("app.lib.models.db.session.commit") as mock_commit,
+                    patch("app.lib.dynamics_handler.send_email") as mock_email,
                 ):
                     process_webhook_data(data)
                     mock_delete.assert_called_with(record)
                     mock_commit.assert_called()
+                    if event_type.value == GOV_UK_PAY_EVENT_TYPES.SUCCEEDED.value:
+                        mock_email.assert_called()
+                    else:
+                        mock_email.assert_not_called()
 
 
 @patch("app.lib.gov_uk_pay.get_payment_status", return_value="success")
@@ -106,3 +111,4 @@ def test_validate_payment_status_none(mock_status, test_app):
     with test_app.app_context():
         assert validate_payment("any_id") is False
         mock_status.assert_called_once_with("any_id")
+                    
