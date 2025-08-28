@@ -76,29 +76,32 @@ def send_to_gov_pay():
 
     if not response:
         return redirect(url_for("main.payment_link_creation_failed"))
-    else:
-        payment_url = response.get("_links", {}).get("next_url", "").get("href", "")
-        payment_id = response.get("payment_id", "")
+    
+    payment_url = response.get("_links", {}).get("next_url", "").get("href", "")
+    payment_id = response.get("payment_id", "")
 
-        date_of_birth = (
-            datetime.strptime(form_data["date_of_birth"], "%a, %d %b %Y %H:%M:%S GMT")
-            if form_data.get("date_of_birth")
-            else None
-        )
-        date_of_death = (
-            datetime.strptime(form_data["date_of_death"], "%a, %d %b %Y %H:%M:%S GMT")
-            if form_data.get("date_of_death")
-            else None
-        )
+    if not payment_url or not payment_id:
+        return redirect(url_for("main.payment_link_creation_failed"))
 
-        data = {**form_data, "id": id, "payment_id": payment_id, "created_at": datetime.now()}
+    date_of_birth = (
+        datetime.strptime(form_data["date_of_birth"], "%a, %d %b %Y %H:%M:%S GMT")
+        if form_data.get("date_of_birth")
+        else None
+    )
+    date_of_death = (
+        datetime.strptime(form_data["date_of_death"], "%a, %d %b %Y %H:%M:%S GMT")
+        if form_data.get("date_of_death")
+        else None
+    )
 
-        data["date_of_birth"] = date_of_birth
-        data["date_of_death"] = date_of_death
+    data = {**form_data, "id": id, "payment_id": payment_id, "created_at": datetime.now()}
 
-        add_service_record_request(data)
+    data["date_of_birth"] = date_of_birth
+    data["date_of_death"] = date_of_death
 
-        return redirect(payment_url)
+    add_service_record_request(data)
+
+    return redirect(payment_url)
 
 
 @bp.route("/handle-gov-uk-pay-response/")
