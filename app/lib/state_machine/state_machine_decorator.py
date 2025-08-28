@@ -4,7 +4,7 @@ from flask import g
 from app.lib.state_machine.state_machine import RoutingStateMachine
 
 
-def with_state_machine(fn):
+def with_state_machine(function):
     """
     Decorator that provides a per-request RoutingStateMachine.
 
@@ -20,26 +20,26 @@ def with_state_machine(fn):
       removed and the parameter can be unconditionally injected.
     """
 
-    @wraps(fn)
+    @wraps(function)
     def wrapper(*args, **kwargs):
-        sm = RoutingStateMachine()
+        state_machine = RoutingStateMachine()
 
         # Store the state machine on Flask's request-scoped `g` so other
         # code in the same request can access it without passing it around explicitly.
-        g.state_machine = sm
+        g.state_machine = state_machine
 
         try:
             # Only inject the argument when the wrapped function explicitly
             # accepts a `state_machine` parameter. This keeps the decorator
             # compatible with views that do not expect it.
-            if "state_machine" in inspect.signature(fn).parameters:
-                kwargs["state_machine"] = sm
+            if "state_machine" in inspect.signature(function).parameters:
+                kwargs["state_machine"] = state_machine
         except (ValueError, TypeError):
             # Some callables (e.g., builtins) may not expose
             # a retrievable signature; fail silently and avoid injection.
             pass
 
         # Call the original function with possibly augmented kwargs.
-        return fn(*args, **kwargs)
+        return function(*args, **kwargs)
 
     return wrapper
