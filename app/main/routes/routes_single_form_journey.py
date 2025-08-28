@@ -93,9 +93,7 @@ def send_to_gov_pay():
 
         data = {**form_data, "id": id, "payment_id": payment_id, "created_at": datetime.now()}
 
-        data["date_of_birth"] = (
-            date_of_birth  # TODO: Temporary until full implementation, date_of_birth/death will be a string
-        )
+        data["date_of_birth"] = date_of_birth
         data["date_of_death"] = date_of_death
 
         add_service_record_request(data)
