@@ -149,7 +149,7 @@ def gov_uk_pay_webhook():
         return "FAILED", 403
 
     try:
-        process_webhook_data(request.get_json())
+        process_webhook_data(request.json)
     except Exception as e:
         current_app.logger.error(f"Error processing webhook data: {e}")
         return "FAILED", 500
