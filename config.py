@@ -67,8 +67,8 @@ class Production(Features):
     )
 
     REDIS_HOST: str = os.environ.get("REDIS_HOST", "")
-    REDIS_PORT: str = os.environ.get("REDIS_PORT", "6379")
-    REDIS_DB: str = os.environ.get("REDIS_DB", "0")
+    REDIS_PORT: int = int(os.environ.get("REDIS_PORT", "6379"))
+    REDIS_DB: int = int(os.environ.get("REDIS_DB", "0"))
     REDIS_PASSWORD: str = os.environ.get("REDIS_PASSWORD", "")
 
     AWS_ACCESS_KEY_ID: str = os.environ.get("AWS_ACCESS_KEY_ID", "")
