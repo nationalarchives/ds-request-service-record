@@ -15,6 +15,9 @@ services:
       - COOKIE_DOMAIN=localhost
       - CSP_STYLE_SRC='self',fonts.googleapis.com,p.typekit.net,use.typekit.net
       - CSP_FONT_SRC='self',fonts.gstatic.com,use.typekit.net
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
       - SQLALCHEMY_DATABASE_URI=postgresql://postgres:postgres@db:5432/postgres
     env_file:
       - path: .env
@@ -25,6 +28,7 @@ services:
       - ./:/app
     depends_on:
       - db
+      - redis
 
   db:
     image: postgres:16.0
@@ -55,3 +59,11 @@ services:
       - .:/docs
     ports:
       - 65518:8000
+
+  redis:
+    image: redis:latest
+    volumes:
+      - redis:/data
+
+volumes:
+  redis:
