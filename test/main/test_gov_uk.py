@@ -80,7 +80,12 @@ def test_process_webhook_events(test_app):
                 with (
                     patch("app.lib.models.db.session.delete") as mock_delete,
                     patch("app.lib.models.db.session.commit") as mock_commit,
+                    patch("app.lib.dynamics_handler.send_email") as mock_email,
                 ):
                     process_webhook_data(data)
                     mock_delete.assert_called_with(record)
                     mock_commit.assert_called()
+                    if event_type.value == GOV_UK_PAY_EVENT_TYPES.SUCCEEDED.value:
+                        mock_email.assert_called()
+                    else:
+                        mock_email.assert_not_called()
