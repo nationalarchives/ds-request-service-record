@@ -1,3 +1,4 @@
+from flask import current_app
 from app.lib.aws import send_email
 from app.lib.models import ServiceRecordRequest
 
@@ -8,7 +9,7 @@ def send_data_to_dynamics(record: ServiceRecordRequest) -> None:
     tagged_data = generate_tagged_data(record)
 
     send_email(
-        to=record.requester_email,
+        to=current_app.config["DYNAMICS_INBOX"],
         subject=f"New Service Record Request: {record.id}",
         body=tagged_data
     )
