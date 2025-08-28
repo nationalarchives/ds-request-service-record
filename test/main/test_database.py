@@ -37,6 +37,7 @@ def test_add_service_record_request(session):
 
     add_service_record_request(
         {
+            "id": "testrecordid123",
             "forenames": "John",
             "lastname": "Doe",
             "requester_email": "john.doe@email.com",
@@ -48,16 +49,25 @@ def test_add_service_record_request(session):
             "payment_id": payment_id,
         }
     )
-    result = get_service_record_request(payment_id)
+    result = get_service_record_request(payment_id=payment_id)
     assert result is not None
     assert result.forenames == "John"
     assert result.requester_email == "john.doe@email.com"
 
 
-def test_get_service_record_request(session):
+def test_get_service_record_request_by_payment_id(session):
     payment_id = "testpaymentid123"
 
-    result = get_service_record_request(payment_id)
+    result = get_service_record_request(payment_id=payment_id)
+    assert result is not None
+    assert result.forenames == "John"
+    assert result.requester_email == "john.doe@email.com"
+
+
+def test_get_service_record_request_by_record_id(session):
+    record_id = "testrecordid123"
+
+    result = get_service_record_request(record_id=record_id)
     assert result is not None
     assert result.forenames == "John"
     assert result.requester_email == "john.doe@email.com"
@@ -79,9 +89,9 @@ def test_delete_service_record_request(session):
             "payment_id": payment_id,
         }
     )
-    record = get_service_record_request(payment_id)
+    record = get_service_record_request(payment_id=payment_id)
     assert record is not None
 
     delete_service_record_request(record)
-    deleted = get_service_record_request(payment_id)
+    deleted = get_service_record_request(payment_id=payment_id)
     assert deleted is None

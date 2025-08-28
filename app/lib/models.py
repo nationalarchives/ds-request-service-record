@@ -1,12 +1,12 @@
 from flask_sqlalchemy import SQLAlchemy
-
+import uuid
 db = SQLAlchemy()
 
 
 class ServiceRecordRequest(db.Model):
     __tablename__ = "service_record_requests"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     additional_information = db.Column(db.Text, nullable=True)
     case_reference_number = db.Column(db.String(64), nullable=True)
     date_of_birth = db.Column(db.String(10))
@@ -33,6 +33,6 @@ class ServiceRecordRequest(db.Model):
     service_number = db.Column(db.String(64), nullable=True)
     evidence_of_death = db.Column(
         db.String(64), nullable=True
-    )  # TODO: Needs to store UUID generated when saving file to S3
+    )
     payment_id = db.Column(db.String(64), nullable=True, unique=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())

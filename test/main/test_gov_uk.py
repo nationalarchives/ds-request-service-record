@@ -6,8 +6,9 @@ import pytest
 from app.lib.gov_uk_pay import (
     GOV_UK_PAY_EVENT_TYPES,
     create_payment,
-    is_webhook_signature_valid,
+    validate_webhook_signature,
     process_webhook_data,
+    validate_payment
 )
 
 from app import create_app
@@ -47,7 +48,7 @@ def test_create_payment_failure(mock_post, test_app):
         assert result is None
 
 
-def test_is_webhook_signature_valid(test_app):
+def test_validate_webhook_signature(test_app):
     class DummyRequest:
         def __init__(self, data, signature):
             self._data = data
@@ -61,9 +62,9 @@ def test_is_webhook_signature_valid(test_app):
         payload = b"test"
         signature = hmac.new(b"secret", payload, hashlib.sha256).hexdigest()
         req = DummyRequest(payload, signature)
-        assert is_webhook_signature_valid(req) is True
+        assert validate_webhook_signature(req) is True
         req = DummyRequest(payload, "wrong")
-        assert is_webhook_signature_valid(req) is False
+        assert validate_webhook_signature(req) is False
 
 
 def test_process_webhook_events(test_app):
@@ -89,3 +90,25 @@ def test_process_webhook_events(test_app):
                         mock_email.assert_called()
                     else:
                         mock_email.assert_not_called()
+
+
+@patch("app.lib.gov_uk_pay.get_payment_status", return_value="success")
+def test_validate_payment_success(mock_status, test_app):
+    with test_app.app_context():
+        assert validate_payment("any_id") is True
+        mock_status.assert_called_once_with("any_id")
+
+
+@patch("app.lib.gov_uk_pay.get_payment_status", return_value="failed")
+def test_validate_payment_failed(mock_status, test_app):
+    with test_app.app_context():
+        assert validate_payment("any_id") is False
+        mock_status.assert_called_once_with("any_id")
+
+
+@patch("app.lib.gov_uk_pay.get_payment_status", return_value=None)
+def test_validate_payment_status_none(mock_status, test_app):
+    with test_app.app_context():
+        assert validate_payment("any_id") is False
+        mock_status.assert_called_once_with("any_id")
+                    

@@ -1,13 +1,15 @@
 from datetime import datetime
 
+import uuid
 from app.lib.aws import upload_proof_of_death
 from app.lib.cache import cache, cache_key_prefix
 from app.lib.content import load_content
-from app.lib.db_handler import add_service_record_request
+from app.lib.db_handler import add_service_record_request, get_payment_id_from_record_id
 from app.lib.gov_uk_pay import (
     create_payment,
-    is_webhook_signature_valid,
+    validate_webhook_signature,
     process_webhook_data,
+    validate_payment,
 )
 from app.main import bp
 from app.main.forms.proceed_to_pay import ProceedToPay
@@ -62,41 +64,65 @@ def send_to_gov_pay():
     form_data = session.get("form_data", {})
     requester_email = form_data.get("requester_email", None)
 
+    id = str(uuid.uuid4())
+
     response = create_payment(
         amount=1000,
         description=content["app"]["title"],
         reference="ServiceRecordRequest",
         email=requester_email,
-        return_url=url_for("main.handle_gov_uk_pay_response", _external=True),
+        return_url=f"{url_for("main.handle_gov_uk_pay_response", _external=True)}?id={id}",
     )
 
     if not response:
         return redirect(url_for("main.payment_link_creation_failed"))
-    else:
-        payment_url = response.get("_links", {}).get("next_url", "").get("href", "")
-        payment_id = response.get("payment_id", "")
+    
+    payment_url = response.get("_links", {}).get("next_url", "").get("href", "")
+    payment_id = response.get("payment_id", "")
 
-        data = {
-            **form_data,
-            "payment_id": payment_id,
-        }
+    if not payment_url or not payment_id:
+        return redirect(url_for("main.payment_link_creation_failed"))
 
-        add_service_record_request(data)
+    date_of_birth = (
+        datetime.strptime(form_data["date_of_birth"], "%a, %d %b %Y %H:%M:%S GMT")
+        if form_data.get("date_of_birth")
+        else None
+    )
+    date_of_death = (
+        datetime.strptime(form_data["date_of_death"], "%a, %d %b %Y %H:%M:%S GMT")
+        if form_data.get("date_of_death")
+        else None
+    )
 
-        return redirect(payment_url)
+    data = {**form_data, "id": id, "payment_id": payment_id, "created_at": datetime.now()}
+
+    data["date_of_birth"] = date_of_birth
+    data["date_of_death"] = date_of_death
+
+    add_service_record_request(data)
+
+    return redirect(payment_url)
 
 
 @bp.route("/handle-gov-uk-pay-response/")
 def handle_gov_uk_pay_response():
-    # This was only temporary logic while we were storing payment_id
-    # in session data. Now it's in a DB - we will need a webhook to process
-    # the DB item later.
-    # payment_id = session.get("payment_id", "")
-    # has_paid = check_payment(payment_id)
+    id = request.args.get("id")
 
-    # if not has_paid:
-    #     return redirect(url_for("main.payment_incomplete"))
-    return redirect(url_for("main.confirm_payment_received"))
+    if not id:
+        # User got here without ID - likely manually, do something... (redirect to form?)
+        return "Shouldn't be here"
+    
+    payment_id = get_payment_id_from_record_id(id)
+
+    if payment_id is None:
+        # User got here with an ID that doesn't exist in the DB - could be our fault, or could be malicious, do something
+        return "Shouldn't be here"
+
+    if validate_payment(payment_id):
+        return redirect(url_for("main.confirm_payment_received"))
+
+    # Let the user know it failed, ask if they want to retry
+    return redirect(url_for("main.payment_incomplete"))
 
 
 @bp.route("/payment-link-creation_failed/")
@@ -120,11 +146,11 @@ def confirm_payment_received():
 @bp.route("/gov-uk-pay-webhook/", methods=["POST"])
 def gov_uk_pay_webhook():
 
-    if not is_webhook_signature_valid(request):
+    if not validate_webhook_signature(request):
         return "FAILED", 403
 
     try:
-        process_webhook_data(request.get_json())
+        process_webhook_data(request.json)
     except Exception as e:
         current_app.logger.error(f"Error processing webhook data: {e}")
         return "FAILED", 500
