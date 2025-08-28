@@ -50,7 +50,7 @@ def get_payment_data(payment_id: str) -> dict | None:
     return response.json()
 
 
-def get_payment_status(payment_id: str) -> dict | None:
+def get_payment_status(payment_id: str) -> str | None:
     data = get_payment_data(payment_id)
     if data is None:
         return None
