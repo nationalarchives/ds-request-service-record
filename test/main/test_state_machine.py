@@ -20,9 +20,9 @@ def test_continue_to_service_person_alive_form_sets_route():
 @pytest.mark.parametrize(
     "answer,expected_state,expected_route",
     [
-        ("yes", "subject_access_request_statement", MultiPageFormRoutes.MUST_SUBMIT_SUBJECT_ACCESS_REQUEST.value),
+        ("yes", "subject_access_request_page", MultiPageFormRoutes.MUST_SUBMIT_SUBJECT_ACCESS_REQUEST.value),
         ("no", "service_branch_form", MultiPageFormRoutes.SERVICE_BRANCH_FORM.value),
-        ("unsure", "only_living_subjects_can_request_their_record_statement",
+        ("unsure", "only_living_subjects_can_request_their_record_page",
          MultiPageFormRoutes.ONLY_LIVING_SUBJECTS_CAN_REQUEST_THEIR_RECORD.value),
     ],
 )
@@ -37,8 +37,8 @@ def test_continue_from_service_person_alive_form_routes_by_condition(answer, exp
     "answer,expected_state,expected_route",
     [
         ("BRITISH_ARMY", "was_service_person_officer_form", MultiPageFormRoutes.WAS_SERVICE_PERSON_OFFICER_FORM.value),
-        ("ROYAL_NAVY", "mod_have_this_record_statement", MultiPageFormRoutes.MOD_HAVE_THIS_RECORD.value),
-        ("HOME_GUARD", "check_ancestry_statement", MultiPageFormRoutes.CHECK_ANCESTRY.value),
+        ("ROYAL_NAVY", "mod_have_this_record_page", MultiPageFormRoutes.MOD_HAVE_THIS_RECORD.value),
+        ("HOME_GUARD", "check_ancestry_page", MultiPageFormRoutes.CHECK_ANCESTRY.value),
         ("ROYAL_AIR_FORCE", "was_service_person_officer_form",
          MultiPageFormRoutes.WAS_SERVICE_PERSON_OFFICER_FORM.value),
         ("BRITISH_ARMY_OTHER", "was_service_person_officer_form",
