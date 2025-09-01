@@ -31,5 +31,5 @@ class MainBlueprintTestCase(unittest.TestCase):
         rv = self.app.get("/request-a-service-record/")
         self.assertEqual(rv.status_code, 200)
         self.assertIn(
-            '<h1 class="tna-heading-xl">Request a Service Record</h1>', rv.text
+            '<h1 class="tna-heading-xl">Request a military service record</h1>', rv.text
         )

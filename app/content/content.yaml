@@ -1,5 +1,5 @@
 app:
-  title: Request a Service Record
+  title: Request a military service record
 pages:
   start:
     heading: Request a military service record
