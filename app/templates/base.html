@@ -4,9 +4,11 @@
 {%- from 'components/footer/macro.html' import tnaFooter -%}
 {%- from 'components/header/macro.html' import tnaHeader -%}
 {%- from 'components/error-summary/macro.html' import tnaErrorSummary -%}
+{%- from 'components/details/macro.html' import tnaDetails -%}
+{%- from 'components/breadcrumbs/macro.html' import tnaBreadcrumbs -%}
 
 {%- set theme = request.cookies.get('theme') or 'system' -%}
-{%- set themeAccent = themeAccent if themeAccent else 'yellow' -%}
+{%- set themeAccent = themeAccent if themeAccent else 'green' -%}
 {%- set htmlAttributes = {
   'data-ga4id': app_config.GA4_ID or '',
   'data-tna-cookies-domain': app_config.COOKIE_DOMAIN or ''
@@ -66,6 +68,11 @@
   }
 }) | indent(6) }}
 {% endblock %}
+
+{%- set breadcrumbItems = [
+          { 'text': 'Home', 'href': 'https://www.nationalarchives.gov.uk/' },
+          { 'text': content.app.title }
+        ] -%}
 
 {% block footer %}
 {{ tnaFooter({
