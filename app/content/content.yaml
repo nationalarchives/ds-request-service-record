@@ -3,6 +3,50 @@ app:
 pages:
   start:
     heading: Request a military service record
+    contents:
+      heading: Contents
+      paragraphs:
+        - Use this service to request a military service record for someone who served in the British Armed Forces after 1918 and was born before 1940.
+        - These records cover the period of the Second World War.
+    what_it_costs:
+      heading: What it costs
+      paragraph: |
+        You'll need to pay a fee to make a request. 
+        This charge recovers the costs of running the service. 
+        The fee will depend on the service you require.
+      table:
+        headers:
+          - Service option
+          - Fee
+        rows:
+          - option: Standard
+            fee: £42.75
+          - option: Standard (paper-copy)
+            fee: £47.25
+          - option: Full sensitivity check
+            fee: £48.87 plus £1.04 per page copying fee
+          - option: Full sensitivity check (paper-copy)
+            fee: £48.87 plus £1.89 per page copying fee
+    information_needed:
+      heading: Information you will need to provide
+      paragraph: To apply you'll need to tell us
+      list:
+        - The service branch that the person you’re requesting served in – such as the British Army, Royal Navy, or Home Guard
+        - Whether they were a commissioned officer or not
+    commissioned_officer_ranks:
+      title: What are the commissioned officer ranks?
+      ranks:
+        - Second Lieutenant
+        - Lieutenant
+        - Captain
+        - Major
+        - Lieutenant Colonel
+        - Colonel
+        - Brigadier
+        - Major General
+        - Lieutenant General
+        - General
+        - Field Marshal
   must_submit_subject_access_request:
     heading: Submit a data request for a living subject
   only_living_subjects_can_request_their_record:
