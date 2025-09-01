@@ -83,21 +83,7 @@ def send_to_gov_pay():
     if not payment_url or not payment_id:
         return redirect(url_for("main.payment_link_creation_failed"))
 
-    date_of_birth = (
-        datetime.strptime(form_data["date_of_birth"], "%a, %d %b %Y %H:%M:%S GMT")
-        if form_data.get("date_of_birth")
-        else None
-    )
-    date_of_death = (
-        datetime.strptime(form_data["date_of_death"], "%a, %d %b %Y %H:%M:%S GMT")
-        if form_data.get("date_of_death")
-        else None
-    )
-
     data = {**form_data, "id": id, "payment_id": payment_id, "created_at": datetime.now()}
-
-    data["date_of_birth"] = date_of_birth
-    data["date_of_death"] = date_of_death
 
     add_service_record_request(data)
 
