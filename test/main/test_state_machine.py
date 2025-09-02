@@ -9,6 +9,11 @@ def test_initial_state_has_no_route():
     assert sm.current_state.id == "initial"
     assert sm.route_for_current_state is None
 
+def test_continue_to_have_you_checked_the_catalogue_form_sets_route():
+    sm = RoutingStateMachine()
+    sm.continue_to_have_you_checked_the_catalogue_form()
+    assert sm.current_state.id == "have_you_checked_the_catalogue_form"
+    assert sm.route_for_current_state == MultiPageFormRoutes.HAVE_YOU_CHECKED_THE_CATALOGUE.value
 
 def test_continue_to_service_person_alive_form_sets_route():
     sm = RoutingStateMachine()

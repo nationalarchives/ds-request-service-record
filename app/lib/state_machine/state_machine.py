@@ -30,6 +30,7 @@ class RoutingStateMachine(StateMachine):
 
     """
     initial = State(initial=True)  # The initial state of our machine
+    have_you_checked_the_catalogue_form = State(enter="entering_have_you_checked_the_catalogue_form", final=True)
     service_person_alive_form = State(enter="entering_service_person_alive_form", final=True)
     subject_access_request_page = State(enter="entering_subject_access_request_page", final=True)
     service_branch_form = State(enter="entering_service_branch_form", final=True)
@@ -45,6 +46,9 @@ class RoutingStateMachine(StateMachine):
     that act as predicates that resolve to a boolean
     """
     continue_to_service_person_alive_form = initial.to(service_person_alive_form)
+
+    continue_to_have_you_checked_the_catalogue_form = initial.to(have_you_checked_the_catalogue_form)
+
     continue_from_service_person_alive_form = (
             initial.to(subject_access_request_page, cond="living_subject")
             | initial.to(service_branch_form, cond="deceased_subject")
@@ -55,6 +59,9 @@ class RoutingStateMachine(StateMachine):
             | initial.to(mod_have_this_record_page, cond="go_to_mod")
             | initial.to(check_ancestry_page, cond="check_ancestry")
     )
+
+    def entering_have_you_checked_the_catalogue_form(self, event, state):
+        self.route_for_current_state = MultiPageFormRoutes.HAVE_YOU_CHECKED_THE_CATALOGUE.value
 
     def entering_service_person_alive_form(self, event, state):
         self.route_for_current_state = MultiPageFormRoutes.IS_SERVICE_PERSON_ALIVE.value

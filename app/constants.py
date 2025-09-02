@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class MultiPageFormRoutes(Enum):
+    HAVE_YOU_CHECKED_THE_CATALOGUE = "main.have_you_checked_the_catalogue"
     IS_SERVICE_PERSON_ALIVE = "main.is_service_person_alive"
     MUST_SUBMIT_SUBJECT_ACCESS_REQUEST = "main.must_submit_subject_access_request"
     SERVICE_BRANCH_FORM = "main.service_branch_form"

@@ -47,6 +47,9 @@ pages:
         - Lieutenant General
         - General
         - Field Marshal
+  have_you_checked_the_catalogue:
+    heading: Have you checked if this record is available in our catalogue?
+    paragraph: A portion of the service records we hold are listed in our catalogue and are available to order from there.
   must_submit_subject_access_request:
     heading: Submit a data request for a living subject
   only_living_subjects_can_request_their_record:
@@ -112,6 +115,13 @@ forms:
   fields:
     start_now:
       call_to_action: Start now
+    have_you_checked_the_catalogue:
+      options:
+        yes: Yes
+        no: No
+      messages:
+        required: Choosing an option is required
+      call_to_action: Next
     is_service_person_alive:
       label: Is this person still alive?
       messages:
