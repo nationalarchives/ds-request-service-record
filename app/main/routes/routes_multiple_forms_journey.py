@@ -4,6 +4,7 @@ from app.main import bp
 from app.main.forms.start_now import StartNow
 from app.main.forms.is_service_person_alive import IsServicePersonAlive
 from app.main.forms.service_branch import ServiceBranch
+from app.main.forms.have_you_checked_the_catalogue import HaveYouCheckedTheCatalogue
 from flask import redirect, render_template, session, url_for
 
 
@@ -13,13 +14,25 @@ def start(state_machine):
     form = StartNow()
 
     if form.validate_on_submit():
-        state_machine.continue_to_service_person_alive_form()
+        state_machine.continue_to_have_you_checked_the_catalogue_form()
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(
         "main/multi-page-journey/start.html", form=form, content=load_content()
     )
 
+@bp.route("/have-you-checked-the-catalogue/", methods=["GET", "POST"])
+@with_state_machine
+def have_you_checked_the_catalogue(state_machine):
+    form = HaveYouCheckedTheCatalogue()
+
+    if form.validate_on_submit():
+        pass
+        # TODO: remove this line when successful submissions are handled in state machine
+
+    return render_template(
+        "main/multi-page-journey/have-you-checked-the-catalogue.html", form=form, content=load_content()
+    )
 
 @bp.route("/is-service-person-alive/", methods=["GET", "POST"])
 @with_state_machine
