@@ -50,6 +50,21 @@ pages:
   have_you_checked_the_catalogue:
     heading: Have you checked if this record is available in our catalogue?
     paragraph: A portion of the service records we hold are listed in our catalogue and are available to order from there.
+  search_the_catalogue:
+    heading: Search our catalogue
+    paragraphs:
+      - We are in the process of adding the service records we hold to our catalogue.
+      - |
+        If you locate a document reference whose description matches the details 
+        you are looking for, you can request a copy of the record directly from the catalogue.
+      - >
+        How to search for a military service record:
+    list_items:
+      - search our catalogue by surname, service number or year of birth, or by a combination of any of these
+      - if you have a service number, try searching with that alone
+      - try using just the year of birth (some records do not have a full date of birth)
+      - try variations on the spelling of the last name
+    call_to_action: Search the catalogue
   must_submit_subject_access_request:
     heading: Submit a data request for a living subject
   only_living_subjects_can_request_their_record:
