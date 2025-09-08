@@ -31,6 +31,7 @@ class RoutingStateMachine(StateMachine):
     """
     initial = State(initial=True)  # The initial state of our machine
     have_you_checked_the_catalogue_form = State(enter="entering_have_you_checked_the_catalogue_form", final=True)
+    search_the_catalogue_page = State(enter="entering_search_the_catalogue_page", final=True)
     service_person_alive_form = State(enter="entering_service_person_alive_form", final=True)
     subject_access_request_page = State(enter="entering_subject_access_request_page", final=True)
     service_branch_form = State(enter="entering_service_branch_form", final=True)
@@ -45,9 +46,13 @@ class RoutingStateMachine(StateMachine):
     In some cases, there will be a straightforward 1:1 mapping between states. In others, we pass a function (cond)
     that act as predicates that resolve to a boolean
     """
-    continue_to_service_person_alive_form = initial.to(service_person_alive_form)
 
     continue_to_have_you_checked_the_catalogue_form = initial.to(have_you_checked_the_catalogue_form)
+
+    continue_from_have_you_checked_the_catalogue_form = (
+        initial.to(service_person_alive_form, cond="has_checked_catalogue")
+        | initial.to(search_the_catalogue_page, unless="has_checked_catalogue")
+    )
 
     continue_from_service_person_alive_form = (
             initial.to(subject_access_request_page, cond="living_subject")
@@ -62,6 +67,9 @@ class RoutingStateMachine(StateMachine):
 
     def entering_have_you_checked_the_catalogue_form(self, event, state):
         self.route_for_current_state = MultiPageFormRoutes.HAVE_YOU_CHECKED_THE_CATALOGUE.value
+
+    def entering_search_the_catalogue_page(self, event, state):
+        self.route_for_current_state = MultiPageFormRoutes.SEARCH_THE_CATALOGUE.value
 
     def entering_service_person_alive_form(self, event, state):
         self.route_for_current_state = MultiPageFormRoutes.IS_SERVICE_PERSON_ALIVE.value
@@ -93,6 +101,10 @@ class RoutingStateMachine(StateMachine):
         """This method is called when exiting any state."""
         self.route_for_current_state = None
         print(f"State machine: Exiting '{state.id}' state in response to '{event}' event.")
+
+    def has_checked_catalogue(self, form):
+        """Condition method to determine if the user has checked the catalogue."""
+        return form.have_you_checked_the_catalogue.data == "yes"
 
     def living_subject(self, form):
         """Condition method to determine if the service person is alive."""
