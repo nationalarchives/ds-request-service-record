@@ -9,6 +9,7 @@ test.describe("is this person still alive", () => {
     MUST_SUBMIT_SUBJECT_ACCESS = `${basePath}/must-submit-subject-access/`,
     SELECT_SERVICE_BRANCH = `${basePath}/service-branch/`,
     ONLY_LIVING_SUBJECTS_CAN_REQUEST_THEIR_OWN_RECORD = `${basePath}/only-living-subjects-can-request-their-record/`,
+    HAVE_YOU_CHECKED_THE_CATALOGUE = `${basePath}/have-you-checked-the-catalogue/`,
   }
 
   test.beforeEach(async ({ page }) => {
@@ -82,6 +83,6 @@ test.describe("is this person still alive", () => {
     page,
   }) => {
     await page.getByRole("link", { name: "Back" }).click();
-    await expect(page).toHaveURL(Urls.JOURNEY_START_PAGE);
+    await expect(page).toHaveURL(Urls.HAVE_YOU_CHECKED_THE_CATALOGUE);
   });
 });
