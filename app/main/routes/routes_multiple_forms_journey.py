@@ -1,5 +1,5 @@
 from app.lib.content import load_content
-from app.lib.state_machine.state_machine_decorator import with_state_machine
+from app.lib.decorators.state_machine_decorator import with_state_machine
 from app.lib.decorators.with_form_prefilled_from_session import with_form_prefilled_from_session
 from app.main import bp
 from app.main.forms.start_now import StartNow
