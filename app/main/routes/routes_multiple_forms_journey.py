@@ -1,5 +1,6 @@
 from app.lib.content import load_content
-from app.lib.state_machine.state_machine_decorator import with_state_machine
+from app.lib.decorators.state_machine_decorator import with_state_machine
+from app.lib.decorators.with_form_prefilled_from_session import with_form_prefilled_from_session
 from app.main import bp
 from app.main.forms.start_now import StartNow
 from app.main.forms.is_service_person_alive import IsServicePersonAlive
@@ -10,8 +11,8 @@ from flask import redirect, render_template, session, url_for
 
 @bp.route("/start/", methods=["GET", "POST"])
 @with_state_machine
-def start(state_machine):
-    form = StartNow()
+@with_form_prefilled_from_session(StartNow)
+def start(form, state_machine):
 
     if form.validate_on_submit():
         state_machine.continue_to_have_you_checked_the_catalogue_form()
@@ -36,10 +37,11 @@ def have_you_checked_the_catalogue(state_machine):
 
 @bp.route("/is-service-person-alive/", methods=["GET", "POST"])
 @with_state_machine
-def is_service_person_alive(state_machine):
-    form = IsServicePersonAlive()
+@with_form_prefilled_from_session(IsServicePersonAlive)
+def is_service_person_alive(form, state_machine):
 
     if form.validate_on_submit():
+        session["is_service_person_alive"] = form.is_service_person_alive.data
         state_machine.continue_from_service_person_alive_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
 
@@ -64,11 +66,12 @@ def only_living_subjects_can_request_their_record():
 
 
 @bp.route("/service-branch/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(ServiceBranch)
 @with_state_machine
-def service_branch_form(state_machine):
-    form = ServiceBranch()
+def service_branch_form(form, state_machine):
 
     if form.validate_on_submit():
+        session["service_branch"] = form.service_branch.data
         state_machine.continue_from_service_branch_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
 

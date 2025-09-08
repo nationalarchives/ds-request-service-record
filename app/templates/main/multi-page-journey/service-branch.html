@@ -12,6 +12,7 @@
           {{ form.service_branch(params={'headingLevel':1, 'headingSize':'xl'}) }}
           {{ form.csrf_token }}
           <div class="tna-button-group">
+            {{ back_link(url_for('main.is_service_person_alive')) }}
             {{ form.submit }}
           </div>
         </form>

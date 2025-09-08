@@ -11,27 +11,7 @@ test.describe("What was the person's service branch?", () => {
     CHECK_ANCESTRY = `${basePath}/check-ancestry/`,
   }
 
-  test.beforeEach(async ({ page }) => {
-    await page.goto(Urls.JOURNEY_START_PAGE); // We need to go here first because we prevent direct access to mid-journey pages
-    await page.goto(Urls.SERVICE_BRANCH);
-  });
-
-  test("Shows the correct heading", async ({ page }) => {
-    await expect(page.locator("h1")).toHaveText(
-      /What was the person's service branch\?/,
-    );
-  });
-
-  test("Shows an error if no option is selected and the user clicks 'Continue'", async ({
-    page,
-  }) => {
-    await page.getByRole("button", { name: /Continue/i }).click();
-    await expect(page.locator(".tna-form__error-message")).toHaveText(
-      /The service person's service branch is required/,
-    );
-  });
-
-  [
+  const selectionMappings = [
     {
       branchLabel: "British Army",
       nextUrl: Urls.WAS_SERVICE_PERSON_OFFICER,
@@ -57,16 +37,58 @@ test.describe("What was the person's service branch?", () => {
       nextUrl: Urls.CHECK_ANCESTRY,
       expectedHeading: /Check Ancestry/,
     },
-  ].forEach(({ branchLabel, nextUrl, expectedHeading }) => {
-    test(`Presents the correct form when ${branchLabel} is selected`, async ({
-      page,
-    }) => {
-      await page.goto(Urls.JOURNEY_START_PAGE);
-      await page.goto(Urls.SERVICE_BRANCH);
-      await page.getByLabel(branchLabel, { exact: true }).check();
-      await page.getByRole("button", { name: /Continue/i }).click();
-      await expect(page).toHaveURL(nextUrl);
-      await expect(page.locator("h1")).toHaveText(expectedHeading);
+  ];
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto(Urls.JOURNEY_START_PAGE); // We need to go here first because we prevent direct access to mid-journey pages
+    await page.goto(Urls.SERVICE_BRANCH);
+  });
+
+  test("Shows the correct heading", async ({ page }) => {
+    await expect(page.locator("h1")).toHaveText(
+      /What was the person's service branch\?/,
+    );
+  });
+
+  test("Shows an error if no option is selected and the user clicks 'Continue'", async ({
+    page,
+  }) => {
+    await page.getByRole("button", { name: /Continue/i }).click();
+    await expect(page.locator(".tna-form__error-message")).toHaveText(
+      /The service person's service branch is required/,
+    );
+  });
+  test.describe("Presenting the correct form when service branch is submitted", () => {
+    selectionMappings.forEach(({ branchLabel, nextUrl, expectedHeading }) => {
+      test(`When ${branchLabel} is submitted, the user is shown ${expectedHeading}`, async ({
+        page,
+      }) => {
+        await page.goto(Urls.JOURNEY_START_PAGE);
+        await page.goto(Urls.SERVICE_BRANCH);
+        await page.getByLabel(branchLabel, { exact: true }).check();
+        await page.getByRole("button", { name: /Continue/i }).click();
+        await expect(page).toHaveURL(nextUrl);
+        await expect(page.locator("h1")).toHaveText(expectedHeading);
+      });
+    });
+  });
+
+  test.describe("When the 'back' link is clicked, the user's previous selection is shown", () => {
+    selectionMappings.forEach(({ branchLabel, nextUrl, expectedHeading }) => {
+      test(`When ${branchLabel} has been submitted, ${branchLabel} is selected when the 'Back' link is clicked`, async ({
+        page,
+      }) => {
+        await page.goto(Urls.JOURNEY_START_PAGE);
+        await page.goto(Urls.SERVICE_BRANCH);
+        await page.getByLabel(branchLabel, { exact: true }).check();
+        await page.getByRole("button", { name: /Continue/i }).click();
+        await expect(page).toHaveURL(nextUrl);
+        await page.getByRole("link", { name: "Back" }).click();
+        await expect(page).toHaveURL(Urls.SERVICE_BRANCH);
+        await expect(
+          page.getByLabel(branchLabel, { exact: true }),
+        ).toBeChecked();
+      });
     });
   });
 });
