@@ -13,7 +13,7 @@
           {{ form.is_service_person_alive(params={'headingLevel':1, 'headingSize':'xl'}) }}
           <div class="tna-button-group">
             {{ back_link(url_for('main.have_you_checked_the_catalogue')) }}
-            {{ form.submit }}
+            {{ form.submit(params={'accent':'true'}) }}
           </div>
         </form>
       </div>

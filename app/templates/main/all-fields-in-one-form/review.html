@@ -41,7 +41,7 @@
         <form action="{{ url_for('main.review') }}" method="post" novalidate>
           {{ form.csrf_token }}
           <div class="tna-button-group">
-            {{ form.submit }}
+            {{ form.submit(params={'accent':'true'}) }}
           </div>
         </form>
       </div>
