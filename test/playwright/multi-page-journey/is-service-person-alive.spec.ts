@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("is this person still alive", () => {
+test.describe("the 'Is the person still alive?' form", () => {
   const basePath = "/request-a-service-record";
 
   enum Urls {
@@ -17,17 +17,17 @@ test.describe("is this person still alive", () => {
     await page.goto(Urls.IS_SERVICE_PERSON_ALIVE);
   });
 
-  test("Shows the correct heading", async ({ page }) => {
+  test("has the correct heading", async ({ page }) => {
     await expect(page.locator("h1")).toHaveText(/Is this person still alive\?/);
   });
 
-  test("Shows an error if no option is selected and the user clicks 'Continue'", async ({
-    page,
-  }) => {
-    await page.getByRole("button", { name: /Continue/i }).click();
-    await expect(page.locator(".tna-form__error-message")).toHaveText(
-      /An answer to this question is required/,
-    );
+  test.describe("when submitted", () => {
+    test("without a submission, shows an error", async ({ page }) => {
+      await page.getByRole("button", { name: /Continue/i }).click();
+      await expect(page.locator(".tna-form__error-message")).toHaveText(
+        /An answer to this question is required/,
+      );
+    });
   });
 
   const selectionMappings = [
@@ -36,13 +36,13 @@ test.describe("is this person still alive", () => {
       url: Urls.MUST_SUBMIT_SUBJECT_ACCESS,
       heading: /Submit a data request for a living subject/,
       description:
-        "Presents the 'Data request for a living person' page when 'Yes' is selected",
+        "when 'Yes' is selected, presents the 'Data request for a living person' page ",
     },
     {
       label: "No",
       url: Urls.SELECT_SERVICE_BRANCH,
       heading: /What was the person's service branch\?/,
-      description: "Presents the 'Service branch' form when 'No' is selected",
+      description: "when 'No' is selected, presents the 'Service branch' form",
     },
     {
       label: "I don't know",
@@ -50,24 +50,24 @@ test.describe("is this person still alive", () => {
       heading:
         /Service records of living persons can only be released to themselves/,
       description:
-        "Presents the page explaining records for living persons can only be released to themselves when 'I don't know' is selected",
+        "when 'I don't know' is selected, presents the page explaining records for living persons can only be released to themselves",
     },
   ];
 
-  test.describe("Selecting an option and clicking 'Continue'", () => {
-    selectionMappings.forEach(({ label, url, heading, description }) => {
-      test(description, async ({ page }) => {
-        await page.getByLabel(label, { exact: true }).check();
-        await page.getByRole("button", { name: /Continue/i }).click();
-        await expect(page).toHaveURL(url);
-        await expect(page.locator("h1")).toHaveText(heading);
-      });
+  selectionMappings.forEach(({ label, url, heading, description }) => {
+    test(description, async ({ page }) => {
+      await page.getByLabel(label, { exact: true }).check();
+      await page.getByRole("button", { name: /Continue/i }).click();
+      await expect(page).toHaveURL(url);
+      await expect(page.locator("h1")).toHaveText(heading);
     });
   });
 
-  test.describe("Having submitted a selection, clicking the 'Back' link ", () => {
-    selectionMappings.forEach(({ label, url, heading, description }) => {
-      test(description, async ({ page }) => {
+  test.describe("clicking the 'Back' link after a submission", () => {
+    selectionMappings.forEach(({ label, url, heading }) => {
+      test(`when '${label}' was submitted, '${label}' is presented when the user returns`, async ({
+        page,
+      }) => {
         await page.getByLabel(label, { exact: true }).check();
         await page.getByRole("button", { name: /Continue/i }).click();
         await expect(page).toHaveURL(url);
@@ -79,7 +79,7 @@ test.describe("is this person still alive", () => {
     });
   });
 
-  test("clicking the 'Back' link takes the user to the start of the journey", async ({
+  test("clicking the 'Back' link takes the user to the 'Have you checked the catalogue? page'", async ({
     page,
   }) => {
     await page.getByRole("link", { name: "Back" }).click();

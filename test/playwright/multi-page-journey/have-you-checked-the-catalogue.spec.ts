@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("'Have you checked the catalogue?' form", () => {
+test.describe("The 'Have you checked the catalogue?' form", () => {
   const basePath = "/request-a-service-record";
 
   enum Urls {
@@ -10,45 +10,61 @@ test.describe("'Have you checked the catalogue?' form", () => {
     SEARCH_THE_CATALOGUE = `${basePath}/search-the-catalogue/`,
   }
 
-  test.beforeEach(async ({ page }) => {
-    await page.goto(Urls.JOURNEY_START);
-    await page.goto(Urls.HAVE_YOU_CHECKED_THE_CATALOGUE);
-  });
-
-  test("Has the right heading", async ({ page }) => {
-    await expect(page.locator("h1")).toHaveText(
-      /Have you checked if this record is available in our catalogue\?/,
-    );
-  });
-
-  test("clicking 'Continue' without having made a selection keeps the user on the page and shows a validation error", async ({
-    page,
-  }) => {
-    await page.getByRole("button", { name: /Continue/i }).click();
-    await expect(page).toHaveURL(Urls.HAVE_YOU_CHECKED_THE_CATALOGUE);
-    await expect(page.locator(".tna-form__error-message")).toHaveText(
-      /Choosing an option is required/,
-    );
-  });
-
   const selectionMappings = [
     {
       label: "Yes",
       url: Urls.IS_SERVICE_PERSON_ALIVE,
       heading: /Is this person still alive\?/,
       description:
-        "Presents the 'Is this person still alive?' page when 'Yes' is selected",
+        "when 'Yes' is selected, presents the 'Is this person still alive?' page ",
     },
     {
       label: "No",
       url: Urls.SEARCH_THE_CATALOGUE,
       heading: "Search our catalogue",
       description:
-        "Presents the 'Search our catalogue' page when 'No' is selected",
+        "when 'No' is selected, presents the 'Search our catalogue' page ",
     },
   ];
 
-  test.describe("Selecting an option and continuing", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(Urls.JOURNEY_START);
+    await page.goto(Urls.HAVE_YOU_CHECKED_THE_CATALOGUE);
+  });
+
+  test("has the correct heading", async ({ page }) => {
+    await expect(page.locator("h1")).toHaveText(
+      /Have you checked if this record is available in our catalogue\?/,
+    );
+  });
+
+  test.describe("when submitted", () => {
+    const selectionMappings = [
+      {
+        label: "Yes",
+        url: Urls.IS_SERVICE_PERSON_ALIVE,
+        heading: /Is this person still alive\?/,
+        description:
+          "when 'Yes' is selected, presents the 'Is this person still alive?' page",
+      },
+      {
+        label: "No",
+        url: Urls.SEARCH_THE_CATALOGUE,
+        heading: "Search our catalogue",
+        description:
+          "when 'No' is selected, presents the 'Search our catalogue' page",
+      },
+    ];
+    test("without a selection, keeps the user on the page and shows a validation error", async ({
+      page,
+    }) => {
+      await page.getByRole("button", { name: /Continue/i }).click();
+      await expect(page).toHaveURL(Urls.HAVE_YOU_CHECKED_THE_CATALOGUE);
+      await expect(page.locator(".tna-form__error-message")).toHaveText(
+        /Choosing an option is required/,
+      );
+    });
+
     selectionMappings.forEach(({ label, url, heading, description }) => {
       test(description, async ({ page }) => {
         await page.getByLabel(label, { exact: true }).check();
@@ -59,9 +75,11 @@ test.describe("'Have you checked the catalogue?' form", () => {
     });
   });
 
-  test.describe("Having submitted a selection, clicking the 'Back' link ", () => {
+  test.describe("clicking the 'Back' link after a submission", () => {
     selectionMappings.forEach(({ label, url, heading }) => {
-      test(`when ${label} is submitted, ${label} is selected when the user returns`, async ({ page }) => {
+      test(`when '${label}' was submitted, '${label}' is selected when the user returns`, async ({
+        page,
+      }) => {
         await page.getByLabel(label, { exact: true }).check();
         await page.getByRole("button", { name: /Continue/i }).click();
         await expect(page).toHaveURL(url);

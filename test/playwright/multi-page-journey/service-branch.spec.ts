@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("What was the person's service branch?", () => {
+test.describe("the 'What was the person's service branch?' form", () => {
   const basePath = "/request-a-service-record";
 
   enum Urls {
@@ -44,23 +44,23 @@ test.describe("What was the person's service branch?", () => {
     await page.goto(Urls.SERVICE_BRANCH);
   });
 
-  test("Shows the correct heading", async ({ page }) => {
+  test("has the correct heading", async ({ page }) => {
     await expect(page.locator("h1")).toHaveText(
       /What was the person's service branch\?/,
     );
   });
 
-  test("Shows an error if no option is selected and the user clicks 'Continue'", async ({
-    page,
-  }) => {
-    await page.getByRole("button", { name: /Continue/i }).click();
-    await expect(page.locator(".tna-form__error-message")).toHaveText(
-      /The service person's service branch is required/,
-    );
-  });
-  test.describe("Presenting the correct form when service branch is submitted", () => {
+  test.describe("when submitted", () => {
+    test("without a selection, keeps the user on the page and shows a validation error", async ({
+      page,
+    }) => {
+      await page.getByRole("button", { name: /Continue/i }).click();
+      await expect(page.locator(".tna-form__error-message")).toHaveText(
+        /The service person's service branch is required/,
+      );
+    });
     selectionMappings.forEach(({ branchLabel, nextUrl, expectedHeading }) => {
-      test(`When ${branchLabel} is submitted, the user is shown ${expectedHeading}`, async ({
+      test(`when ${branchLabel} is submitted, the user is taken to ${nextUrl}`, async ({
         page,
       }) => {
         await page.goto(Urls.JOURNEY_START_PAGE);
@@ -71,23 +71,23 @@ test.describe("What was the person's service branch?", () => {
         await expect(page.locator("h1")).toHaveText(expectedHeading);
       });
     });
-  });
 
-  test.describe("When the 'back' link is clicked, the user's previous selection is shown", () => {
-    selectionMappings.forEach(({ branchLabel, nextUrl, expectedHeading }) => {
-      test(`When ${branchLabel} has been submitted, ${branchLabel} is selected when the 'Back' link is clicked`, async ({
-        page,
-      }) => {
-        await page.goto(Urls.JOURNEY_START_PAGE);
-        await page.goto(Urls.SERVICE_BRANCH);
-        await page.getByLabel(branchLabel, { exact: true }).check();
-        await page.getByRole("button", { name: /Continue/i }).click();
-        await expect(page).toHaveURL(nextUrl);
-        await page.getByRole("link", { name: "Back" }).click();
-        await expect(page).toHaveURL(Urls.SERVICE_BRANCH);
-        await expect(
-          page.getByLabel(branchLabel, { exact: true }),
-        ).toBeChecked();
+    test.describe("when the 'back' link is clicked, the user's previous selection is shown", () => {
+      selectionMappings.forEach(({ branchLabel, nextUrl, expectedHeading }) => {
+        test(`when ${branchLabel} had been submitted, ${branchLabel} is selected when the 'Back' link is clicked`, async ({
+          page,
+        }) => {
+          await page.goto(Urls.JOURNEY_START_PAGE);
+          await page.goto(Urls.SERVICE_BRANCH);
+          await page.getByLabel(branchLabel, { exact: true }).check();
+          await page.getByRole("button", { name: /Continue/i }).click();
+          await expect(page).toHaveURL(nextUrl);
+          await page.getByRole("link", { name: "Back" }).click();
+          await expect(page).toHaveURL(Urls.SERVICE_BRANCH);
+          await expect(
+            page.getByLabel(branchLabel, { exact: true }),
+          ).toBeChecked();
+        });
       });
     });
   });
