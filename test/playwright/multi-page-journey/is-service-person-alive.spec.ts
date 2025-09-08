@@ -29,38 +29,59 @@ test.describe("is this person still alive", () => {
     );
   });
 
-  test("Presents the 'Data request for a living person' page when 'Yes' is selected", async ({
-    page,
-  }) => {
-    await page.getByLabel("Yes").check();
-    await page.getByRole("button", { name: /Continue/i }).click();
-    await expect(page).toHaveURL(Urls.MUST_SUBMIT_SUBJECT_ACCESS);
-    await expect(page.locator("h1")).toHaveText(
-      /Submit a data request for a living subject/,
-    );
+  const selectionMappings = [
+    {
+      label: "Yes",
+      url: Urls.MUST_SUBMIT_SUBJECT_ACCESS,
+      heading: /Submit a data request for a living subject/,
+      description:
+        "Presents the 'Data request for a living person' page when 'Yes' is selected",
+    },
+    {
+      label: "No",
+      url: Urls.SELECT_SERVICE_BRANCH,
+      heading: /What was the person's service branch\?/,
+      description: "Presents the 'Service branch' form when 'No' is selected",
+    },
+    {
+      label: "I don't know",
+      url: Urls.ONLY_LIVING_SUBJECTS_CAN_REQUEST_THEIR_OWN_RECORD,
+      heading:
+        /Service records of living persons can only be released to themselves/,
+      description:
+        "Presents the page explaining records for living persons can only be released to themselves when 'I don't know' is selected",
+    },
+  ];
+
+  test.describe("Selecting an option and clicking 'Continue'", () => {
+    selectionMappings.forEach(({ label, url, heading, description }) => {
+      test(description, async ({ page }) => {
+        await page.getByLabel(label, { exact: true }).check();
+        await page.getByRole("button", { name: /Continue/i }).click();
+        await expect(page).toHaveURL(url);
+        await expect(page.locator("h1")).toHaveText(heading);
+      });
+    });
   });
 
-  test("Presents the 'Service branch' form when 'No' is selected", async ({
-    page,
-  }) => {
-    await page.getByLabel("No", { exact: true }).check();
-    await page.getByRole("button", { name: /Continue/i }).click();
-    await expect(page).toHaveURL(Urls.SELECT_SERVICE_BRANCH);
-    await expect(page.locator("h1")).toHaveText(
-      /What was the person's service branch\?/,
-    );
+  test.describe("Having submitted a selection, clicking the 'Back' link ", () => {
+    selectionMappings.forEach(({ label, url, heading, description }) => {
+      test(description, async ({ page }) => {
+        await page.getByLabel(label, { exact: true }).check();
+        await page.getByRole("button", { name: /Continue/i }).click();
+        await expect(page).toHaveURL(url);
+        await expect(page.locator("h1")).toHaveText(heading);
+        await page.getByRole("link", { name: "Back" }).click();
+        await expect(page).toHaveURL(Urls.IS_SERVICE_PERSON_ALIVE);
+        await expect(page.getByLabel(label, { exact: true })).toBeChecked();
+      });
+    });
   });
 
-  test("Presents the page explaining records for living persons can only be released to themselves when 'I don't know' is selected", async ({
+  test("clicking the 'Back' link takes the user to the start of the journey", async ({
     page,
   }) => {
-    await page.getByLabel("I don't know", { exact: true }).check();
-    await page.getByRole("button", { name: /Continue/i }).click();
-    await expect(page).toHaveURL(
-      Urls.ONLY_LIVING_SUBJECTS_CAN_REQUEST_THEIR_OWN_RECORD,
-    );
-    await expect(page.locator("h1")).toHaveText(
-      /Service records of living persons can only be released to themselves/,
-    );
+    await page.getByRole("link", { name: "Back" }).click();
+    await expect(page).toHaveURL(Urls.JOURNEY_START_PAGE);
   });
 });
