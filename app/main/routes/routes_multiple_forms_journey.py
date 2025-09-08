@@ -24,12 +24,13 @@ def start(form, state_machine):
 
 @bp.route("/have-you-checked-the-catalogue/", methods=["GET", "POST"])
 @with_state_machine
-def have_you_checked_the_catalogue(state_machine):
-    form = HaveYouCheckedTheCatalogue()
+@with_form_prefilled_from_session(HaveYouCheckedTheCatalogue)
+def have_you_checked_the_catalogue(form, state_machine):
 
     if form.validate_on_submit():
-        pass
-        # TODO: remove this line when successful submissions are handled in state machine
+        session["have_you_checked_the_catalogue"] = form.have_you_checked_the_catalogue.data
+        state_machine.continue_from_have_you_checked_the_catalogue_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(
         "main/multi-page-journey/have-you-checked-the-catalogue.html", form=form, content=load_content()
@@ -79,6 +80,11 @@ def service_branch_form(form, state_machine):
         "main/multi-page-journey/service-branch.html", form=form, content=load_content()
     )
 
+@bp.route("/search-the-catalogue/", methods=["GET"])
+def search_the_catalogue():
+    return render_template(
+        "main/multi-page-journey/search-the-catalogue.html", content=load_content()
+    )
 
 @bp.route("/mod-have-this-record/", methods=["GET"])
 def mod_have_this_record():

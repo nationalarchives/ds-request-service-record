@@ -9,7 +9,7 @@ test.describe("application start page", () => {
     await page.goto(JOURNEY_START_PAGE_URL);
   });
 
-  test("Has the right heading", async ({ page }) => {
+  test("has the correct heading", async ({ page }) => {
     await expect(page.locator("h1")).toHaveText(
       /Request a military service record/,
     );
