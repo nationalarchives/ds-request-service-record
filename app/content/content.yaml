@@ -121,7 +121,7 @@ forms:
         no: No
       messages:
         required: Choosing an option is required
-      call_to_action: Next
+      call_to_action: Continue
     is_service_person_alive:
       label: Is this person still alive?
       messages:
