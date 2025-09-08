@@ -11,6 +11,9 @@
         {% for paragraph in content.pages.only_living_subjects_can_request_their_record.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
+        <div class="tna-button-group">
+          {{ back_link(url_for('main.is_service_person_alive')) }}
+        </div>
       </div>
     </div>
   </div>
