@@ -18,7 +18,9 @@ test.describe("the 'Is the person still alive?' form", () => {
   });
 
   test("has the correct heading", async ({ page }) => {
-    await expect(page.locator("h1")).toHaveText(/Is the service person still alive\?/);
+    await expect(page.locator("h1")).toHaveText(
+      /Is the service person still alive\?/,
+    );
   });
 
   test.describe("when submitted", () => {
@@ -43,14 +45,6 @@ test.describe("the 'Is the person still alive?' form", () => {
       url: Urls.SELECT_SERVICE_BRANCH,
       heading: /What was the person's service branch\?/,
       description: "when 'No' is selected, presents the 'Service branch' form",
-    },
-    {
-      label: "I don't know",
-      url: Urls.ONLY_LIVING_SUBJECTS_CAN_REQUEST_THEIR_OWN_RECORD,
-      heading:
-        /Service records of living persons can only be released to themselves/,
-      description:
-        "when 'I don't know' is selected, presents the page explaining records for living persons can only be released to themselves",
     },
   ];
 

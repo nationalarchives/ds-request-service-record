@@ -67,10 +67,6 @@ pages:
     call_to_action: Search the catalogue
   must_submit_subject_access_request:
     heading: Submit a data request for a living subject
-  only_living_subjects_can_request_their_record:
-    heading: Service records of living persons can only be released to themselves
-    paragraphs:
-      - Unfortunately we won't be able to release the record to you.
   mod_have_this_record:
     heading: The Ministry of Defence has this record
   was_service_person_an_officer:

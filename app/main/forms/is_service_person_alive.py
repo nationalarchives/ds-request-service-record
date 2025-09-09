@@ -18,7 +18,7 @@ class IsServicePersonAlive(FlaskForm):
 
     is_service_person_alive = RadioField(
         get_field_content(content, "is_service_person_alive", "label"),
-        choices=[("yes", "Yes"), ("no", "No"), ("unsure", "I don't know")],
+        choices=[("yes", "Yes"), ("no", "No")],
         validators=[
             InputRequired(
                 message=get_field_content(content, "is_service_person_alive", "messages")[
