@@ -18,7 +18,7 @@ test.describe("the 'Is the person still alive?' form", () => {
   });
 
   test("has the correct heading", async ({ page }) => {
-    await expect(page.locator("h1")).toHaveText(/Is this person still alive\?/);
+    await expect(page.locator("h1")).toHaveText(/Is the service person still alive\?/);
   });
 
   test.describe("when submitted", () => {

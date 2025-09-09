@@ -138,7 +138,7 @@ forms:
         required: Choosing an option is required
       call_to_action: Continue
     is_service_person_alive:
-      label: Is this person still alive?
+      label: Is the service person still alive?
       messages:
         required: An answer to this question is required
     forenames:
