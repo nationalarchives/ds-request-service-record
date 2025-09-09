@@ -18,6 +18,20 @@ def test_continue_to_have_you_checked_the_catalogue_form_sets_route():
 @pytest.mark.parametrize(
     "answer,expected_state,expected_route",
     [
+        ("yes", "service_person_alive_form", MultiPageFormRoutes.IS_SERVICE_PERSON_ALIVE.value),
+        ("no", "search_the_catalogue_page", MultiPageFormRoutes.SEARCH_THE_CATALOGUE.value),
+    ],
+)
+def test_continue_from_have_you_checked_the_catalogue_form_routes_by_condition(answer, expected_state, expected_route):
+    sm = RoutingStateMachine()
+    sm.continue_from_have_you_checked_the_catalogue_form(form=make_form(answer))
+    assert sm.current_state.id == expected_state
+    assert sm.route_for_current_state == expected_route
+
+
+@pytest.mark.parametrize(
+    "answer,expected_state,expected_route",
+    [
         ("yes", "subject_access_request_page", MultiPageFormRoutes.MUST_SUBMIT_SUBJECT_ACCESS_REQUEST.value),
         ("no", "service_branch_form", MultiPageFormRoutes.SERVICE_BRANCH_FORM.value),
     ],
@@ -52,5 +66,6 @@ def test_continue_from_service_branch_form_routes_by_condition(answer, expected_
 def make_form(answer: str):
     return SimpleNamespace(
         is_service_person_alive=SimpleNamespace(data=answer),
-        service_branch=SimpleNamespace(data=answer)
+        service_branch=SimpleNamespace(data=answer),
+        have_you_checked_the_catalogue=SimpleNamespace(data=answer),
     )
