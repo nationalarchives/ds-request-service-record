@@ -35,8 +35,6 @@ class RoutingStateMachine(StateMachine):
     service_person_alive_form = State(enter="entering_service_person_alive_form", final=True)
     subject_access_request_page = State(enter="entering_subject_access_request_page", final=True)
     service_branch_form = State(enter="entering_service_branch_form", final=True)
-    only_living_subjects_can_request_their_record_page = State(
-        enter="entering_only_living_subjects_can_request_their_record_page", final=True)
     was_service_person_officer_form = State(enter="entering_was_service_person_officer_form", final=True)
     mod_have_this_record_page = State(enter="entering_mod_have_this_record", final=True)
     check_ancestry_page = State(enter="entering_check_ancestry_page", final=True)
@@ -56,8 +54,7 @@ class RoutingStateMachine(StateMachine):
 
     continue_from_service_person_alive_form = (
             initial.to(subject_access_request_page, cond="living_subject")
-            | initial.to(service_branch_form, cond="deceased_subject")
-            | initial.to(only_living_subjects_can_request_their_record_page, cond="potentially_living_subject")
+            | initial.to(service_branch_form, unless="living_subject")
     )
     continue_from_service_branch_form = (
             initial.to(was_service_person_officer_form, unless="go_to_mod or check_ancestry")
@@ -117,11 +114,3 @@ class RoutingStateMachine(StateMachine):
     def check_ancestry(self, form):
         """Condition method to determine if the user should be directed to the check Ancestry."""
         return form.service_branch.data in ["HOME_GUARD"]
-
-    def deceased_subject(self, form):
-        """Condition method to determine if the service person is deceased."""
-        return form.is_service_person_alive.data == "no"
-
-    def potentially_living_subject(self, form):
-        """Condition method to determine if the service person is potentially living."""
-        return form.is_service_person_alive.data == "unsure"

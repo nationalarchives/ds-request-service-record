@@ -20,8 +20,6 @@ def test_continue_to_have_you_checked_the_catalogue_form_sets_route():
     [
         ("yes", "subject_access_request_page", MultiPageFormRoutes.MUST_SUBMIT_SUBJECT_ACCESS_REQUEST.value),
         ("no", "service_branch_form", MultiPageFormRoutes.SERVICE_BRANCH_FORM.value),
-        ("unsure", "only_living_subjects_can_request_their_record_page",
-         MultiPageFormRoutes.ONLY_LIVING_SUBJECTS_CAN_REQUEST_THEIR_RECORD.value),
     ],
 )
 def test_continue_from_service_person_alive_form_routes_by_condition(answer, expected_state, expected_route):

@@ -14,9 +14,9 @@ test.describe("The 'Have you checked the catalogue?' form", () => {
     {
       label: "Yes",
       url: Urls.IS_SERVICE_PERSON_ALIVE,
-      heading: /Is this person still alive\?/,
+      heading: /Is the service person still alive\?/,
       description:
-        "when 'Yes' is selected, presents the 'Is this person still alive?' page ",
+        "when 'Yes' is selected, presents the 'Is the service person still alive?' page ",
     },
     {
       label: "No",
@@ -43,9 +43,9 @@ test.describe("The 'Have you checked the catalogue?' form", () => {
       {
         label: "Yes",
         url: Urls.IS_SERVICE_PERSON_ALIVE,
-        heading: /Is this person still alive\?/,
+        heading: /Is the service person still alive\?/,
         description:
-          "when 'Yes' is selected, presents the 'Is this person still alive?' page",
+          "when 'Yes' is selected, presents the 'Is the service person still alive?' page",
       },
       {
         label: "No",
