@@ -15,7 +15,7 @@ test.describe("the 'What was the person's service branch?' form", () => {
     {
       branchLabel: "British Army",
       nextUrl: Urls.WAS_SERVICE_PERSON_OFFICER,
-      expectedHeading: /Was the service person an officer\?/,
+      expectedHeading: /Were they a commissioned officer\?/,
     },
     {
       branchLabel: "Royal Navy",
@@ -25,12 +25,12 @@ test.describe("the 'What was the person's service branch?' form", () => {
     {
       branchLabel: "Royal Air Force",
       nextUrl: Urls.WAS_SERVICE_PERSON_OFFICER,
-      expectedHeading: /Was the service person an officer\?/,
+      expectedHeading: /Were they a commissioned officer\?/,
     },
     {
       branchLabel: "I don't know",
       nextUrl: Urls.WAS_SERVICE_PERSON_OFFICER,
-      expectedHeading: /Was the service person an officer\?/,
+      expectedHeading: /Were they a commissioned officer\?/,
     },
     {
       branchLabel: "Home Guard",

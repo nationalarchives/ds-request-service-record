@@ -70,7 +70,7 @@ pages:
   mod_have_this_record:
     heading: The Ministry of Defence has this record
   was_service_person_an_officer:
-    heading: Was the service person an officer?
+    heading: Were they a commissioned officer?
   check_ancestry:
     heading: Check Ancestry
     paragraphs:
