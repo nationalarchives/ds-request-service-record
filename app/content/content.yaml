@@ -71,8 +71,12 @@ pages:
       - |
         You will need to use our [INSERT NAME HERE] form to request your own Ministry of Defence (MOD) 
         service personnel record, or if you are acting on behalf of a living service personnel member.
-  we_do_not_have_this_record:
-    heading: We do not have this record
+  we_do_not_have_records_for_this_service_branch:
+    heading: We do not have records for this service branch
+    paragraphs:
+      - Sorry, but here is some helpful information
+  we_do_not_have_records_for_this_rank:
+    heading: We do not have records for this rank
     paragraphs:
       - Sorry, but here is some helpful information
   was_service_person_an_officer:

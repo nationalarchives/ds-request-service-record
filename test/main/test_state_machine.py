@@ -78,8 +78,8 @@ def test_continue_from_service_person_alive_form_routes_by_condition(
         ),
         (
             "ROYAL_NAVY",
-            "we_do_not_have_this_record_page",
-            MultiPageFormRoutes.WE_DO_NOT_HAVE_THIS_RECORD.value,
+            "we_do_not_have_records_for_this_service_branch_page",
+            MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_THIS_SERVICE_BRANCH.value,
         ),
         (
             "HOME_GUARD",
@@ -127,8 +127,8 @@ def test_continue_from_service_branch_form_routes_by_condition(
         ),
         (
             "yes",
-            "we_do_not_have_this_record_page",
-            MultiPageFormRoutes.WE_DO_NOT_HAVE_THIS_RECORD.value,
+            "we_do_not_have_records_for_this_rank_page",
+            MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_THIS_RANK.value,
         ),
     ],
 )

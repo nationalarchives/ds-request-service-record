@@ -11,7 +11,8 @@ class MultiPageFormRoutes(Enum):
         "main.only_living_subjects_can_request_their_record"
     )
     WAS_SERVICE_PERSON_AN_OFFICER_FORM = "main.was_service_person_an_officer"
-    WE_DO_NOT_HAVE_THIS_RECORD = "main.we_do_not_have_this_record"
+    WE_DO_NOT_HAVE_RECORDS_FOR_THIS_SERVICE_BRANCH = "main.we_do_not_have_records_for_this_service_branch"
+    WE_DO_NOT_HAVE_RECORDS_FOR_THIS_RANK = "main.we_do_not_have_records_for_this_rank"
     WE_MAY_BE_UNABLE_TO_FIND_THIS_RECORD = "main.we_may_be_unable_to_find_this_record"
     WE_MAY_HOLD_THIS_RECORD = "main.we_may_hold_this_record"
 

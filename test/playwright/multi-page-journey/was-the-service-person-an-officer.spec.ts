@@ -6,7 +6,7 @@ test.describe("the 'Were they a commissioned officer?' form", () => {
   enum Urls {
     JOURNEY_START_PAGE = `${basePath}/start/`,
     WAS_SERVICE_PERSON_AN_OFFICER = `${basePath}/was-service-person-officer/`,
-    WE_DO_NOT_HAVE_THIS_RECORD = `${basePath}/we-do-not-have-this-record/`,
+    WE_DO_NOT_HAVE_RECORDS_FOR_THIS_RANK = `${basePath}/we-do-not-have-records-for-this-rank/`,
     WE_MAY_HOLD_THIS_RECORD = `${basePath}/we-may-hold-this-record/`,
   }
 
@@ -32,10 +32,10 @@ test.describe("the 'Were they a commissioned officer?' form", () => {
     const selectionMappings = [
       {
         branchLabel: "Yes",
-        nextUrl: Urls.WE_DO_NOT_HAVE_THIS_RECORD,
-        heading: /We do not have this record/,
+        nextUrl: Urls.WE_DO_NOT_HAVE_RECORDS_FOR_THIS_RANK,
+        heading: /We do not have records for this rank/,
         description:
-          "when 'Yes' is selected, presents the 'We do not have this record' page ",
+          "when 'Yes' is selected, presents the 'We do not have records for this rank' page ",
         destinationPageHasBackLink: false,
       },
       {

@@ -47,8 +47,11 @@ class RoutingStateMachine(StateMachine):
     was_service_person_an_officer_form = State(
         enter="entering_was_service_person_an_officer_form", final=True
     )
-    we_do_not_have_this_record_page = State(
-        enter="entering_we_do_not_have_this_record", final=True
+    we_do_not_have_records_for_this_service_branch_page = State(
+        enter="entering_we_do_not_have_records_for_this_service_branch", final=True
+    )
+    we_do_not_have_records_for_this_rank_page = State(
+        enter="entering_we_do_not_have_records_for_this_rank_page", final=True
     )
     we_may_be_unable_to_find_this_record_page = State(
         enter="entering_we_may_be_unable_to_find_this_record_page", final=True
@@ -78,7 +81,7 @@ class RoutingStateMachine(StateMachine):
         initial.to(
             was_service_person_an_officer_form, unless="go_to_mod or likely_unfindable"
         )
-        | initial.to(we_do_not_have_this_record_page, cond="go_to_mod")
+        | initial.to(we_do_not_have_records_for_this_service_branch_page, cond="go_to_mod")
         | initial.to(
             we_may_be_unable_to_find_this_record_page, cond="likely_unfindable"
         )
@@ -86,7 +89,7 @@ class RoutingStateMachine(StateMachine):
 
     continue_from_was_service_person_an_officer_form = initial.to(
         we_may_hold_this_record_page, unless="was_officer"
-    ) | initial.to(we_do_not_have_this_record_page, cond="was_officer")
+    ) | initial.to(we_do_not_have_records_for_this_rank_page, cond="was_officer")
 
     def entering_have_you_checked_the_catalogue_form(self, event, state):
         self.route_for_current_state = (
@@ -117,9 +120,14 @@ class RoutingStateMachine(StateMachine):
             MultiPageFormRoutes.WAS_SERVICE_PERSON_AN_OFFICER_FORM.value
         )
 
-    def entering_we_do_not_have_this_record(self, form):
+    def entering_we_do_not_have_records_for_this_service_branch(self, form):
         self.route_for_current_state = (
-            MultiPageFormRoutes.WE_DO_NOT_HAVE_THIS_RECORD.value
+            MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_THIS_SERVICE_BRANCH.value
+        )
+
+    def entering_we_do_not_have_records_for_this_rank_page(self, form):
+        self.route_for_current_state = (
+            MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_THIS_RANK.value
         )
 
     def entering_we_may_be_unable_to_find_this_record_page(self, form):
