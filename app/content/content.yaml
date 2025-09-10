@@ -67,8 +67,14 @@ pages:
     call_to_action: Search the catalogue
   must_submit_subject_access_request:
     heading: Submit a data request for a living subject
+    paragraphs:
+      - |
+        You will need to use our [INSERT NAME HERE] form to request your own Ministry of Defence (MOD) 
+        service personnel record, or if you are acting on behalf of a living service personnel member.
   we_do_not_have_this_record:
     heading: We do not have this record
+    paragraphs:
+      - Sorry, but here is some helpful information
   was_service_person_an_officer:
     heading: Were they a commissioned officer?
     paragraphs:
