@@ -6,7 +6,7 @@ test.describe("the 'What was the person's service branch?' form", () => {
   enum Urls {
     JOURNEY_START_PAGE = `${basePath}/start/`,
     SERVICE_BRANCH = `${basePath}/service-branch/`,
-    WAS_SERVICE_PERSON_OFFICER = `${basePath}/was-service-person-officer/`,
+    WAS_SERVICE_PERSON_AN_OFFICER = `${basePath}/was-service-person-officer/`,
     WE_DO_NOT_HAVE_THIS_RECORD = `${basePath}/we-do-not-have-this-record/`,
     WE_MAY_BE_UNABLE_TO_FIND_THIS_RECORD = `${basePath}/we-may-be-unable-to-find-this-record/`,
   }
@@ -14,7 +14,7 @@ test.describe("the 'What was the person's service branch?' form", () => {
   const selectionMappings = [
     {
       branchLabel: "British Army",
-      nextUrl: Urls.WAS_SERVICE_PERSON_OFFICER,
+      nextUrl: Urls.WAS_SERVICE_PERSON_AN_OFFICER,
       expectedHeading: /Were they a commissioned officer\?/,
       destinationPageHasBackLink: true,
     },
@@ -26,13 +26,13 @@ test.describe("the 'What was the person's service branch?' form", () => {
     },
     {
       branchLabel: "Royal Air Force",
-      nextUrl: Urls.WAS_SERVICE_PERSON_OFFICER,
+      nextUrl: Urls.WAS_SERVICE_PERSON_AN_OFFICER,
       expectedHeading: /Were they a commissioned officer\?/,
       destinationPageHasBackLink: true,
     },
     {
       branchLabel: "I don't know",
-      nextUrl: Urls.WAS_SERVICE_PERSON_OFFICER,
+      nextUrl: Urls.WAS_SERVICE_PERSON_AN_OFFICER,
       expectedHeading: /Were they a commissioned officer\?/,
       destinationPageHasBackLink: true,
     },

@@ -73,8 +73,8 @@ def test_continue_from_service_person_alive_form_routes_by_condition(
     [
         (
             "BRITISH_ARMY",
-            "was_service_person_officer_form",
-            MultiPageFormRoutes.WAS_SERVICE_PERSON_OFFICER_FORM.value,
+            "was_service_person_an_officer_form",
+            MultiPageFormRoutes.WAS_SERVICE_PERSON_AN_OFFICER_FORM.value,
         ),
         (
             "ROYAL_NAVY",
@@ -88,18 +88,18 @@ def test_continue_from_service_person_alive_form_routes_by_condition(
         ),
         (
             "ROYAL_AIR_FORCE",
-            "was_service_person_officer_form",
-            MultiPageFormRoutes.WAS_SERVICE_PERSON_OFFICER_FORM.value,
+            "was_service_person_an_officer_form",
+            MultiPageFormRoutes.WAS_SERVICE_PERSON_AN_OFFICER_FORM.value,
         ),
         (
             "BRITISH_ARMY_OTHER",
-            "was_service_person_officer_form",
-            MultiPageFormRoutes.WAS_SERVICE_PERSON_OFFICER_FORM.value,
+            "was_service_person_an_officer_form",
+            MultiPageFormRoutes.WAS_SERVICE_PERSON_AN_OFFICER_FORM.value,
         ),
         (
             "UNKNOWN",
-            "was_service_person_officer_form",
-            MultiPageFormRoutes.WAS_SERVICE_PERSON_OFFICER_FORM.value,
+            "was_service_person_an_officer_form",
+            MultiPageFormRoutes.WAS_SERVICE_PERSON_AN_OFFICER_FORM.value,
         ),
     ],
 )
@@ -132,12 +132,12 @@ def test_continue_from_service_branch_form_routes_by_condition(
         ),
     ],
 )
-def test_continue_from_was_service_person_officer_form_routes_by_condition(
+def test_continue_from_was_service_person_an_officer_form_routes_by_condition(
     answer, expected_state, expected_route
 ):
     sm = RoutingStateMachine()
-    sm.continue_from_was_service_person_officer_form(
-        form=make_form("was_service_person_officer", answer)
+    sm.continue_from_was_service_person_an_officer_form(
+        form=make_form("was_service_person_an_officer", answer)
     )
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route

@@ -101,7 +101,7 @@ def was_service_person_an_officer(form, state_machine):
         session["was_service_person_an_officer"] = (
             form.was_service_person_an_officer.data
         )
-        state_machine.continue_from_was_service_person_officer_form(form)
+        state_machine.continue_from_was_service_person_an_officer_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(
