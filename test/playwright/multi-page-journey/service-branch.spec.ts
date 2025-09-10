@@ -7,7 +7,7 @@ test.describe("the 'What was the person's service branch?' form", () => {
     JOURNEY_START_PAGE = `${basePath}/start/`,
     SERVICE_BRANCH = `${basePath}/service-branch/`,
     WAS_SERVICE_PERSON_AN_OFFICER = `${basePath}/was-service-person-officer/`,
-    WE_DO_NOT_HAVE_THIS_RECORD = `${basePath}/we-do-not-have-this-record/`,
+    WE_DO_NOT_HAVE_RECORDS_FOR_THIS_SERVICE_BRANCH = `${basePath}/we-do-not-have-records-for-this-service-branch/`,
     WE_MAY_BE_UNABLE_TO_FIND_THIS_RECORD = `${basePath}/we-may-be-unable-to-find-this-record/`,
   }
 
@@ -20,8 +20,8 @@ test.describe("the 'What was the person's service branch?' form", () => {
     },
     {
       branchLabel: "Royal Navy",
-      nextUrl: Urls.WE_DO_NOT_HAVE_THIS_RECORD,
-      expectedHeading: /We do not have this record/,
+      nextUrl: Urls.WE_DO_NOT_HAVE_RECORDS_FOR_THIS_SERVICE_BRANCH,
+      expectedHeading: /We do not have records for this service branch/,
       destinationPageHasBackLink: false,
     },
     {

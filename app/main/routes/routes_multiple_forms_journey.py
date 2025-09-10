@@ -118,10 +118,18 @@ def search_the_catalogue():
     )
 
 
-@bp.route("/we-do-not-have-this-record/", methods=["GET"])
-def we_do_not_have_this_record():
+@bp.route("/we-do-not-have-records-for-this-service-branch/", methods=["GET"])
+def we_do_not_have_records_for_this_service_branch():
     return render_template(
-        "main/multi-page-journey/we-do-not-have-this-record.html",
+        "main/multi-page-journey/we-do-not-have-records-for-this-service-branch.html",
+        content=load_content(),
+    )
+
+
+@bp.route("/we-do-not-have-records-for-this-rank/", methods=["GET"])
+def we_do_not_have_records_for_this_rank():
+    return render_template(
+        "main/multi-page-journey/we-do-not-have-records-for-this-rank.html",
         content=load_content(),
     )
 
