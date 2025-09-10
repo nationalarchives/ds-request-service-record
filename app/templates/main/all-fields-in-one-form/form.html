@@ -40,13 +40,9 @@
           {% endfor %}
 
           <ul class="tna-ul">
-            <li><a href="{{ content.pages.all_fields_in_one_form.evidence_of_death.list_one.item_one.href }}"
-                   target="_blank">{{ content.pages.all_fields_in_one_form.evidence_of_death.list_one.item_one.text }}</a>
-            </li>
-            <li>{{ content.pages.all_fields_in_one_form.evidence_of_death.list_one.item_two }}</li>
-            <li><a href="{{ content.pages.all_fields_in_one_form.evidence_of_death.list_one.item_three.href }}"
-                   target="_blank">{{ content.pages.all_fields_in_one_form.evidence_of_death.list_one.item_three.text }}</a>
-            </li>
+            {% for item in content.pages.all_fields_in_one_form.evidence_of_death.list %}
+              <li>{{ item | parse_markdown_links | safe }}</li>
+            {% endfor %}
           </ul>
           {{ form.evidence_of_death }}
 

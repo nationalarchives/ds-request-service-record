@@ -22,12 +22,15 @@ class HaveYouCheckedTheCatalogue(FlaskForm):
         choices=[("yes", "Yes"), ("no", "No")],
         validators=[
             InputRequired(
-                message=get_field_content(content, "have_you_checked_the_catalogue", "messages")[
-                    "required"
-                ]
+                message=get_field_content(
+                    content, "have_you_checked_the_catalogue", "messages"
+                )["required"]
             )
         ],
         widget=TnaRadiosWidget(),
     )
 
-    submit = SubmitField(get_field_content(content, "have_you_checked_the_catalogue", "call_to_action"), widget=TnaSubmitWidget())
+    submit = SubmitField(
+        get_field_content(content, "have_you_checked_the_catalogue", "call_to_action"),
+        widget=TnaSubmitWidget(),
+    )

@@ -265,7 +265,8 @@ class RequestAServiceRecord(FlaskForm):
         get_field_content(content, "requester_country", "label"),
         choices=[
             get_field_content(content, "requester_country", "prompt_to_select"),
-        ] + COUNTRY_CHOICES,
+        ]
+        + COUNTRY_CHOICES,
         widget=TnaSelectWidget(),
         validators=[
             InputRequired(

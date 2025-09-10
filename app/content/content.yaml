@@ -67,14 +67,39 @@ pages:
     call_to_action: Search the catalogue
   must_submit_subject_access_request:
     heading: Submit a data request for a living subject
-  mod_have_this_record:
-    heading: The Ministry of Defence has this record
-  was_service_person_an_officer:
-    heading: Was the service person an officer?
-  check_ancestry:
-    heading: Check Ancestry
     paragraphs:
-      - Home Guard records are in the process of being digitised by Ancestry. Check there first
+      - |
+        You will need to use our [INSERT NAME HERE] form to request your own Ministry of Defence (MOD) 
+        service personnel record, or if you are acting on behalf of a living service personnel member.
+  we_do_not_have_this_record:
+    heading: We do not have this record
+    paragraphs:
+      - Sorry, but here is some helpful information
+  was_service_person_an_officer:
+    heading: Were they a commissioned officer?
+    paragraphs:
+      - Sorry, but here is some helpful information
+  we_may_be_unable_to_find_this_record:
+    heading: We may have this record
+    paragraphs:
+      - We are unlikely to be able to find it
+      - We recommend using paid search
+  we_may_hold_this_record:
+    heading: We may hold this record
+    paragraphs:
+      - Based on the information you've provided, we may hold this record.
+    sub_heading: Further information you'll need to provide
+    sub_heading_paragraphs:
+      - >
+        For us to confirm we hold the record, you'll need to provide:
+    list_items:
+      - the first name and surname of the person you're requesting
+      - their service number, if you have it
+      - any further details that might help our search, such as their occupation, their place of birth, or their regiment
+      - if they are deceased and were born before 1909, a proof of death such as [death certificates](https://www.gov.uk/order-copy-birth-death-marriage-certificate) or [war dead records](https://www.cwgc.org/find-records/find-war-dead/)
+      - payment - you will need a debit or credit card
+    paragraphs_after_list:
+      - By completing this form you are requesting information from a UK public authority, The National Archives. We are therefore required to treat it as a Freedom of Information (FOI) request. [You can find out more about FOI on GOV.UK](https://www.gov.uk/make-a-freedom-of-information-request).
   all_fields_in_one_form:
     service_person_details:
       legend: Service person detail
@@ -93,14 +118,10 @@ pages:
           If you are unable to upload the document, you can send it to us by replying
           directly to the email you will receive on completion of this form.
         - Suitable forms of evidence include
-      list_one:
-        item_one:
-          text: copies of death certificates
-          href: https://www.gov.uk/order-copy-birth-death-marriage-certificate
-        item_two: published obituaries (detailing publication source, name of deceased, and date of birth and death)
-        item_three:
-          text: war dead records
-          href: https://www.cwgc.org/find-records/find-war-dead/
+      list:
+        - "[copies of death certificates](https://www.gov.uk/order-copy-birth-death-marriage-certificate)"
+        - published obituaries (detailing publication source, name of deceased, and date of birth and death)
+        - "[war dead records](https://www.cwgc.org/find-records/find-war-dead/)"
     enter_your_details:
       legend: Enter your details
   review:
@@ -137,6 +158,11 @@ forms:
       label: Is the service person still alive?
       messages:
         required: An answer to this question is required
+    was_service_person_an_officer:
+      label: Were they a commissioned officer?
+      messages:
+        required: Choosing an option is required
+      call_to_action: Continue
     forenames:
       label: Forenames (including middle names)
       messages:

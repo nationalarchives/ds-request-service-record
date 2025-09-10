@@ -16,6 +16,7 @@ from app.main.forms.proceed_to_pay import ProceedToPay
 from app.main.forms.request_a_service_record import RequestAServiceRecord
 from flask import current_app, redirect, render_template, request, session, url_for
 
+
 @bp.route("/all-fields-in-one-form/", methods=["GET", "POST"])
 def all_fields_in_one_form():
     form = RequestAServiceRecord()
@@ -54,7 +55,10 @@ def review():
         return redirect(url_for("main.send_to_gov_pay"))
 
     return render_template(
-        "main/all-fields-in-one-form/review.html", form=form, form_data=form_data, content=content
+        "main/all-fields-in-one-form/review.html",
+        form=form,
+        form_data=form_data,
+        content=content,
     )
 
 
@@ -114,7 +118,9 @@ def handle_gov_uk_pay_response():
 @bp.route("/payment-link-creation_failed/")
 def payment_link_creation_failed():
     content = load_content()
-    return render_template("main/payment/payment-link-creation-failed.html", content=content)
+    return render_template(
+        "main/payment/payment-link-creation-failed.html", content=content
+    )
 
 
 @bp.route("/payment-incomplete/")
@@ -126,7 +132,9 @@ def payment_incomplete():
 @bp.route("/confirm-payment-received/")
 def confirm_payment_received():
     content = load_content()
-    return render_template("main/payment/confirm-payment-received.html", content=content)
+    return render_template(
+        "main/payment/confirm-payment-received.html", content=content
+    )
 
 
 @bp.route("/gov-uk-pay-webhook/", methods=["POST"])

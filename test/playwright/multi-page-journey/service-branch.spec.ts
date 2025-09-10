@@ -6,36 +6,41 @@ test.describe("the 'What was the person's service branch?' form", () => {
   enum Urls {
     JOURNEY_START_PAGE = `${basePath}/start/`,
     SERVICE_BRANCH = `${basePath}/service-branch/`,
-    WAS_SERVICE_PERSON_OFFICER = `${basePath}/was-service-person-officer/`,
-    MOD_HAVE_THIS_RECORD = `${basePath}/mod-have-this-record/`,
-    CHECK_ANCESTRY = `${basePath}/check-ancestry/`,
+    WAS_SERVICE_PERSON_AN_OFFICER = `${basePath}/was-service-person-officer/`,
+    WE_DO_NOT_HAVE_THIS_RECORD = `${basePath}/we-do-not-have-this-record/`,
+    WE_MAY_BE_UNABLE_TO_FIND_THIS_RECORD = `${basePath}/we-may-be-unable-to-find-this-record/`,
   }
 
   const selectionMappings = [
     {
       branchLabel: "British Army",
-      nextUrl: Urls.WAS_SERVICE_PERSON_OFFICER,
-      expectedHeading: /Was the service person an officer\?/,
+      nextUrl: Urls.WAS_SERVICE_PERSON_AN_OFFICER,
+      expectedHeading: /Were they a commissioned officer\?/,
+      destinationPageHasBackLink: true,
     },
     {
       branchLabel: "Royal Navy",
-      nextUrl: Urls.MOD_HAVE_THIS_RECORD,
-      expectedHeading: /The Ministry of Defence has this record/,
+      nextUrl: Urls.WE_DO_NOT_HAVE_THIS_RECORD,
+      expectedHeading: /We do not have this record/,
+      destinationPageHasBackLink: false,
     },
     {
       branchLabel: "Royal Air Force",
-      nextUrl: Urls.WAS_SERVICE_PERSON_OFFICER,
-      expectedHeading: /Was the service person an officer\?/,
+      nextUrl: Urls.WAS_SERVICE_PERSON_AN_OFFICER,
+      expectedHeading: /Were they a commissioned officer\?/,
+      destinationPageHasBackLink: true,
     },
     {
       branchLabel: "I don't know",
-      nextUrl: Urls.WAS_SERVICE_PERSON_OFFICER,
-      expectedHeading: /Was the service person an officer\?/,
+      nextUrl: Urls.WAS_SERVICE_PERSON_AN_OFFICER,
+      expectedHeading: /Were they a commissioned officer\?/,
+      destinationPageHasBackLink: true,
     },
     {
       branchLabel: "Home Guard",
-      nextUrl: Urls.CHECK_ANCESTRY,
-      expectedHeading: /Check Ancestry/,
+      nextUrl: Urls.WE_MAY_BE_UNABLE_TO_FIND_THIS_RECORD,
+      expectedHeading: /We may have this record/,
+      destinationPageHasBackLink: false,
     },
   ];
 
@@ -73,22 +78,27 @@ test.describe("the 'What was the person's service branch?' form", () => {
     });
 
     test.describe("when the 'back' link is clicked, the user's previous selection is shown", () => {
-      selectionMappings.forEach(({ branchLabel, nextUrl, expectedHeading }) => {
-        test(`when ${branchLabel} had been submitted, ${branchLabel} is selected when the 'Back' link is clicked`, async ({
-          page,
-        }) => {
-          await page.goto(Urls.JOURNEY_START_PAGE);
-          await page.goto(Urls.SERVICE_BRANCH);
-          await page.getByLabel(branchLabel, { exact: true }).check();
-          await page.getByRole("button", { name: /Continue/i }).click();
-          await expect(page).toHaveURL(nextUrl);
-          await page.getByRole("link", { name: "Back" }).click();
-          await expect(page).toHaveURL(Urls.SERVICE_BRANCH);
-          await expect(
-            page.getByLabel(branchLabel, { exact: true }),
-          ).toBeChecked();
-        });
-      });
+      selectionMappings.forEach(
+        ({ branchLabel, nextUrl, destinationPageHasBackLink }) => {
+          if (!destinationPageHasBackLink) {
+            return; // Skip this iteration if the destination page does not have a back link
+          }
+          test(`when ${branchLabel} had been submitted, ${branchLabel} is selected when the 'Back' link is clicked`, async ({
+            page,
+          }) => {
+            await page.goto(Urls.JOURNEY_START_PAGE);
+            await page.goto(Urls.SERVICE_BRANCH);
+            await page.getByLabel(branchLabel, { exact: true }).check();
+            await page.getByRole("button", { name: /Continue/i }).click();
+            await expect(page).toHaveURL(nextUrl);
+            await page.getByRole("link", { name: "Back" }).click();
+            await expect(page).toHaveURL(Urls.SERVICE_BRANCH);
+            await expect(
+              page.getByLabel(branchLabel, { exact: true }),
+            ).toBeChecked();
+          });
+        },
+      );
     });
   });
 });
