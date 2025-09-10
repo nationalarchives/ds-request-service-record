@@ -8,9 +8,10 @@ class MultiPageFormRoutes(Enum):
     MUST_SUBMIT_SUBJECT_ACCESS_REQUEST = "main.must_submit_subject_access_request"
     SERVICE_BRANCH_FORM = "main.service_branch_form"
     ONLY_LIVING_SUBJECTS_CAN_REQUEST_THEIR_RECORD = "main.only_living_subjects_can_request_their_record"
-    WAS_SERVICE_PERSON_OFFICER_FORM = "main.was_service_person_officer_form"
+    WAS_SERVICE_PERSON_OFFICER_FORM = "main.was_service_person_an_officer"
     WE_DO_NOT_HAVE_THIS_RECORD = "main.we_do_not_have_this_record"
     WE_MAY_BE_UNABLE_TO_FIND_THIS_RECORD = "main.we_may_be_unable_to_find_this_record"
+    WE_MAY_HOLD_THIS_RECORD = "main.we_may_hold_this_record"
 
 
 class ServiceBranches(Enum):

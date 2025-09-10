@@ -5,7 +5,7 @@ from app.lib.context_processor import cookie_preference, now_iso_8601
 from app.lib.models import db
 from app.lib.requires_session_key import requires_session_key
 from app.lib.talisman import talisman
-from app.lib.template_filters import slugify
+from app.lib.template_filters import slugify, parse_markdown_links
 from flask import Flask
 from redis import Redis
 from flask_session.redis import RedisSessionInterface
@@ -94,6 +94,7 @@ def create_app(config_class):
     )
 
     app.add_template_filter(slugify)
+    app.add_template_filter(parse_markdown_links)
 
     @app.context_processor
     def context_processor():

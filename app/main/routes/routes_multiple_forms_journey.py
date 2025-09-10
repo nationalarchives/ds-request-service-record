@@ -94,7 +94,7 @@ def we_do_not_have_this_record():
 
 
 @bp.route("/was-service-person-officer/", methods=["GET"])
-def was_service_person_officer_form():
+def was_service_person_an_officer():
     return render_template(
         "main/multi-page-journey/was-service-person-an-officer.html", content=load_content()
     )
@@ -104,4 +104,10 @@ def was_service_person_officer_form():
 def we_may_be_unable_to_find_this_record():
     return render_template(
         "main/multi-page-journey/we-may-be-unable-to-find-this-record.html", content=load_content()
+    )
+
+@bp.route("/we-may-hold-this-record/", methods=["GET", "POST"])
+def we_may_hold_this_record():
+    return render_template(
+        "main/multi-page-journey/we-may-hold-this-record.html", content=load_content()
     )
