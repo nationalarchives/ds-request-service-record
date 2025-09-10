@@ -16,7 +16,9 @@ def parse_markdown_links(s):
         return s
     # Regex to match [text](url)
     pattern = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
+
     def replacer(match):
         text, url = match.group(1), match.group(2)
         return f'<a href="{url}">{text}</a>'
+
     return pattern.sub(replacer, s)

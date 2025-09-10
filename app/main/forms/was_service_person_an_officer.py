@@ -13,13 +13,12 @@ class WasServicePersonAnOfficer(FlaskForm):
         choices=[("yes", "Yes"), ("no", "No"), ("unknown", "I don't know")],
         validators=[
             InputRequired(
-                message=get_field_content(content, "was_service_person_an_officer", "messages")[
-                    "required"
-                ]
+                message=get_field_content(
+                    content, "was_service_person_an_officer", "messages"
+                )["required"]
             )
         ],
         widget=TnaRadiosWidget(),
     )
 
     submit = SubmitField("Continue", widget=TnaSubmitWidget())
-

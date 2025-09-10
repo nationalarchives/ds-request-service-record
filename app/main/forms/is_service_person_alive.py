@@ -21,9 +21,9 @@ class IsServicePersonAlive(FlaskForm):
         choices=[("yes", "Yes"), ("no", "No")],
         validators=[
             InputRequired(
-                message=get_field_content(content, "is_service_person_alive", "messages")[
-                    "required"
-                ]
+                message=get_field_content(
+                    content, "is_service_person_alive", "messages"
+                )["required"]
             )
         ],
         widget=TnaRadiosWidget(),
