@@ -36,7 +36,7 @@ class RoutingStateMachine(StateMachine):
     subject_access_request_page = State(enter="entering_subject_access_request_page", final=True)
     service_branch_form = State(enter="entering_service_branch_form", final=True)
     was_service_person_officer_form = State(enter="entering_was_service_person_officer_form", final=True)
-    mod_have_this_record_page = State(enter="entering_mod_have_this_record", final=True)
+    we_do_not_have_this_record_page = State(enter="entering_we_do_not_have_this_record", final=True)
     check_ancestry_page = State(enter="entering_check_ancestry_page", final=True)
     """
     These are our Events. They're called in route methods to trigger transitions between States.
@@ -58,7 +58,7 @@ class RoutingStateMachine(StateMachine):
     )
     continue_from_service_branch_form = (
             initial.to(was_service_person_officer_form, unless="go_to_mod or check_ancestry")
-            | initial.to(mod_have_this_record_page, cond="go_to_mod")
+            | initial.to(we_do_not_have_this_record_page, cond="go_to_mod")
             | initial.to(check_ancestry_page, cond="check_ancestry")
     )
 
@@ -83,8 +83,8 @@ class RoutingStateMachine(StateMachine):
     def entering_was_service_person_officer_form(self, form):
         self.route_for_current_state = MultiPageFormRoutes.WAS_SERVICE_PERSON_OFFICER_FORM.value
 
-    def entering_mod_have_this_record(self, form):
-        self.route_for_current_state = MultiPageFormRoutes.MOD_HAVE_THIS_RECORD.value
+    def entering_we_do_not_have_this_record(self, form):
+        self.route_for_current_state = MultiPageFormRoutes.WE_DO_NOT_HAVE_THIS_RECORD.value
 
     def entering_check_ancestry_page(self, form):
         self.route_for_current_state = MultiPageFormRoutes.CHECK_ANCESTRY.value

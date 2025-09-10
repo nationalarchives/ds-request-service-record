@@ -9,7 +9,7 @@ class MultiPageFormRoutes(Enum):
     SERVICE_BRANCH_FORM = "main.service_branch_form"
     ONLY_LIVING_SUBJECTS_CAN_REQUEST_THEIR_RECORD = "main.only_living_subjects_can_request_their_record"
     WAS_SERVICE_PERSON_OFFICER_FORM = "main.was_service_person_officer_form"
-    MOD_HAVE_THIS_RECORD = "main.mod_have_this_record"
+    WE_DO_NOT_HAVE_THIS_RECORD = "main.we_do_not_have_this_record"
     CHECK_ANCESTRY = "main.check_ancestry"
 
 

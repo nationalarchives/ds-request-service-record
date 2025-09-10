@@ -7,7 +7,7 @@ test.describe("the 'What was the person's service branch?' form", () => {
     JOURNEY_START_PAGE = `${basePath}/start/`,
     SERVICE_BRANCH = `${basePath}/service-branch/`,
     WAS_SERVICE_PERSON_OFFICER = `${basePath}/was-service-person-officer/`,
-    MOD_HAVE_THIS_RECORD = `${basePath}/mod-have-this-record/`,
+    WE_DO_NOT_HAVE_THIS_RECORD = `${basePath}/we-do-not-have-this-record/`,
     CHECK_ANCESTRY = `${basePath}/check-ancestry/`,
   }
 
@@ -19,8 +19,8 @@ test.describe("the 'What was the person's service branch?' form", () => {
     },
     {
       branchLabel: "Royal Navy",
-      nextUrl: Urls.MOD_HAVE_THIS_RECORD,
-      expectedHeading: /The Ministry of Defence has this record/,
+      nextUrl: Urls.WE_DO_NOT_HAVE_THIS_RECORD,
+      expectedHeading: /We do not have this record/,
     },
     {
       branchLabel: "Royal Air Force",

@@ -67,12 +67,15 @@ pages:
     call_to_action: Search the catalogue
   must_submit_subject_access_request:
     heading: Submit a data request for a living subject
-  mod_have_this_record:
-    heading: The Ministry of Defence has this record
+  we_do_not_have_this_record:
+    heading: We do not have this record
   was_service_person_an_officer:
     heading: Were they a commissioned officer?
-  check_ancestry:
-    heading: Check Ancestry
+    paragraphs:
+      - Sorry, but here is some helpful information
+  we_may_be_unable_to_find_this_record:
+    heading: We may have this record
+>>>>>>> 4a52898 (fixup! FOI-70: Change "MOD have" to "We do not have")
     paragraphs:
       - Home Guard records are in the process of being digitised by Ancestry. Check there first
   all_fields_in_one_form:

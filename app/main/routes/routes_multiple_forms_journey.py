@@ -86,10 +86,10 @@ def search_the_catalogue():
         "main/multi-page-journey/search-the-catalogue.html", content=load_content()
     )
 
-@bp.route("/mod-have-this-record/", methods=["GET"])
-def mod_have_this_record():
+@bp.route("/we-do-not-have-this-record/", methods=["GET"])
+def we_do_not_have_this_record():
     return render_template(
-        "main/multi-page-journey/mod-have-this-record.html", content=load_content()
+        "main/multi-page-journey/we-do-not-have-this-record.html", content=load_content()
     )
 
 

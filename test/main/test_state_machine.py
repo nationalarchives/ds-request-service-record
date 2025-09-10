@@ -47,7 +47,7 @@ def test_continue_from_service_person_alive_form_routes_by_condition(answer, exp
     "answer,expected_state,expected_route",
     [
         ("BRITISH_ARMY", "was_service_person_officer_form", MultiPageFormRoutes.WAS_SERVICE_PERSON_OFFICER_FORM.value),
-        ("ROYAL_NAVY", "mod_have_this_record_page", MultiPageFormRoutes.MOD_HAVE_THIS_RECORD.value),
+        ("ROYAL_NAVY", "we_do_not_have_this_record_page", MultiPageFormRoutes.WE_DO_NOT_HAVE_THIS_RECORD.value),
         ("HOME_GUARD", "check_ancestry_page", MultiPageFormRoutes.CHECK_ANCESTRY.value),
         ("ROYAL_AIR_FORCE", "was_service_person_officer_form",
          MultiPageFormRoutes.WAS_SERVICE_PERSON_OFFICER_FORM.value),
