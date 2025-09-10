@@ -24,7 +24,7 @@ def test_continue_to_have_you_checked_the_catalogue_form_sets_route():
 )
 def test_continue_from_have_you_checked_the_catalogue_form_routes_by_condition(answer, expected_state, expected_route):
     sm = RoutingStateMachine()
-    sm.continue_from_have_you_checked_the_catalogue_form(form=make_form(answer))
+    sm.continue_from_have_you_checked_the_catalogue_form(form=make_form("have_you_checked_the_catalogue", answer))
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
 
@@ -38,7 +38,7 @@ def test_continue_from_have_you_checked_the_catalogue_form_routes_by_condition(a
 )
 def test_continue_from_service_person_alive_form_routes_by_condition(answer, expected_state, expected_route):
     sm = RoutingStateMachine()
-    sm.continue_from_service_person_alive_form(form=make_form(answer))
+    sm.continue_from_service_person_alive_form(form=make_form("is_service_person_alive", answer))
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
 
@@ -58,14 +58,25 @@ def test_continue_from_service_person_alive_form_routes_by_condition(answer, exp
 )
 def test_continue_from_service_branch_form_routes_by_condition(answer, expected_state, expected_route):
     sm = RoutingStateMachine()
-    sm.continue_from_service_branch_form(form=make_form(answer))
+    sm.continue_from_service_branch_form(form=make_form("service_branch", answer))
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
 
 
-def make_form(answer: str):
-    return SimpleNamespace(
-        is_service_person_alive=SimpleNamespace(data=answer),
-        service_branch=SimpleNamespace(data=answer),
-        have_you_checked_the_catalogue=SimpleNamespace(data=answer),
-    )
+@pytest.mark.parametrize(
+    "answer,expected_state,expected_route",
+    [
+        ("no", "we_may_hold_this_record_page", MultiPageFormRoutes.WE_MAY_HOLD_THIS_RECORD.value),
+        ("unknown", "we_may_hold_this_record_page", MultiPageFormRoutes.WE_MAY_HOLD_THIS_RECORD.value),
+        ("yes", "we_do_not_have_this_record_page", MultiPageFormRoutes.WE_DO_NOT_HAVE_THIS_RECORD.value),
+    ],
+)
+def test_continue_from_was_service_person_officer_form_routes_by_condition(answer, expected_state, expected_route):
+    sm = RoutingStateMachine()
+    sm.continue_from_was_service_person_officer_form(form=make_form("was_service_person_officer", answer))
+    assert sm.current_state.id == expected_state
+    assert sm.route_for_current_state == expected_route
+
+
+def make_form(field_name: str, answer: str):
+    return SimpleNamespace(**{field_name: SimpleNamespace(data=answer)})

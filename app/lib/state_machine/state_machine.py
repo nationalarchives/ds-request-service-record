@@ -38,6 +38,7 @@ class RoutingStateMachine(StateMachine):
     was_service_person_officer_form = State(enter="entering_was_service_person_officer_form", final=True)
     we_do_not_have_this_record_page = State(enter="entering_we_do_not_have_this_record", final=True)
     we_may_be_unable_to_find_this_record_page = State(enter="entering_we_may_be_unable_to_find_this_record_page", final=True)
+    we_may_hold_this_record_page = State(enter="entering_we_may_hold_this_record_page", final=True)
     """
     These are our Events. They're called in route methods to trigger transitions between States.
 
@@ -60,6 +61,11 @@ class RoutingStateMachine(StateMachine):
             initial.to(was_service_person_officer_form, unless="go_to_mod or likely_unfindable")
             | initial.to(we_do_not_have_this_record_page, cond="go_to_mod")
             | initial.to(we_may_be_unable_to_find_this_record_page, cond="likely_unfindable")
+    )
+
+    continue_from_was_service_person_officer_form = (
+            initial.to(we_may_hold_this_record_page, unless="was_officer")
+            | initial.to(we_do_not_have_this_record_page, cond="was_officer")
     )
 
     def entering_have_you_checked_the_catalogue_form(self, event, state):
@@ -89,6 +95,9 @@ class RoutingStateMachine(StateMachine):
     def entering_we_may_be_unable_to_find_this_record_page(self, form):
         self.route_for_current_state = MultiPageFormRoutes.WE_MAY_BE_UNABLE_TO_FIND_THIS_RECORD.value
 
+    def entering_we_may_hold_this_record_page(self, form):
+        self.route_for_current_state = MultiPageFormRoutes.WE_MAY_HOLD_THIS_RECORD.value
+
     def on_enter_state(self, event, state):
         """This method is called when entering any state."""
         print(
@@ -114,3 +123,7 @@ class RoutingStateMachine(StateMachine):
     def likely_unfindable(self, form):
         """Condition method to determine if we may be unable to find the record."""
         return form.service_branch.data in ["HOME_GUARD"]
+
+    def was_officer(self, form):
+        """Condition method to determine if the service person was an officer."""
+        return form.was_service_person_officer.data == "yes"
