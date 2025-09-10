@@ -84,7 +84,7 @@ pages:
       - Based on the information you've provided, we may hold this record.
     sub_heading: Further information you'll need to provide
     sub_heading_paragraphs:
-      - > 
+      - >
         For us to confirm we hold the record, you'll need to provide:
     list_items:
       - the first name and surname of the person you're requesting
@@ -112,14 +112,10 @@ pages:
           If you are unable to upload the document, you can send it to us by replying
           directly to the email you will receive on completion of this form.
         - Suitable forms of evidence include
-      list_one:
-        item_one:
-          text: copies of death certificates
-          href: https://www.gov.uk/order-copy-birth-death-marriage-certificate
-        item_two: published obituaries (detailing publication source, name of deceased, and date of birth and death)
-        item_three:
-          text: war dead records
-          href: https://www.cwgc.org/find-records/find-war-dead/
+      list:
+        - "[copies of death certificates](https://www.gov.uk/order-copy-birth-death-marriage-certificate)"
+        - published obituaries (detailing publication source, name of deceased, and date of birth and death)
+        - "[war dead records](https://www.cwgc.org/find-records/find-war-dead/)"
     enter_your_details:
       legend: Enter your details
   review:
