@@ -100,8 +100,8 @@ def was_service_person_officer_form():
     )
 
 
-@bp.route("/check-ancestry/", methods=["GET"])
-def check_ancestry():
+@bp.route("/we-may-be-unable-to-find-this-record/", methods=["GET"])
+def we_may_be_unable_to_find_this_record():
     return render_template(
-        "main/multi-page-journey/check-ancestry.html", content=load_content()
+        "main/multi-page-journey/we-may-be-unable-to-find-this-record.html", content=load_content()
     )

@@ -75,9 +75,9 @@ pages:
       - Sorry, but here is some helpful information
   we_may_be_unable_to_find_this_record:
     heading: We may have this record
->>>>>>> 4a52898 (fixup! FOI-70: Change "MOD have" to "We do not have")
     paragraphs:
-      - Home Guard records are in the process of being digitised by Ancestry. Check there first
+      - We are unlikely to be able to find it
+      - We recommend using paid search
   all_fields_in_one_form:
     service_person_details:
       legend: Service person detail

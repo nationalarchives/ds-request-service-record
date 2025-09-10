@@ -8,7 +8,7 @@ test.describe("the 'What was the person's service branch?' form", () => {
     SERVICE_BRANCH = `${basePath}/service-branch/`,
     WAS_SERVICE_PERSON_OFFICER = `${basePath}/was-service-person-officer/`,
     WE_DO_NOT_HAVE_THIS_RECORD = `${basePath}/we-do-not-have-this-record/`,
-    CHECK_ANCESTRY = `${basePath}/check-ancestry/`,
+    WE_MAY_BE_UNABLE_TO_FIND_THIS_RECORD = `${basePath}/we-may-be-unable-to-find-this-record/`,
   }
 
   const selectionMappings = [
@@ -34,8 +34,8 @@ test.describe("the 'What was the person's service branch?' form", () => {
     },
     {
       branchLabel: "Home Guard",
-      nextUrl: Urls.CHECK_ANCESTRY,
-      expectedHeading: /Check Ancestry/,
+      nextUrl: Urls.WE_MAY_BE_UNABLE_TO_FIND_THIS_RECORD,
+      expectedHeading: /We may have this record/,
     },
   ];
 

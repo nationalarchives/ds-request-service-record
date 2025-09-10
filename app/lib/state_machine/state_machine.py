@@ -37,7 +37,7 @@ class RoutingStateMachine(StateMachine):
     service_branch_form = State(enter="entering_service_branch_form", final=True)
     was_service_person_officer_form = State(enter="entering_was_service_person_officer_form", final=True)
     we_do_not_have_this_record_page = State(enter="entering_we_do_not_have_this_record", final=True)
-    check_ancestry_page = State(enter="entering_check_ancestry_page", final=True)
+    we_may_be_unable_to_find_this_record_page = State(enter="entering_we_may_be_unable_to_find_this_record_page", final=True)
     """
     These are our Events. They're called in route methods to trigger transitions between States.
 
@@ -57,9 +57,9 @@ class RoutingStateMachine(StateMachine):
             | initial.to(service_branch_form, unless="living_subject")
     )
     continue_from_service_branch_form = (
-            initial.to(was_service_person_officer_form, unless="go_to_mod or check_ancestry")
+            initial.to(was_service_person_officer_form, unless="go_to_mod or likely_unfindable")
             | initial.to(we_do_not_have_this_record_page, cond="go_to_mod")
-            | initial.to(check_ancestry_page, cond="check_ancestry")
+            | initial.to(we_may_be_unable_to_find_this_record_page, cond="likely_unfindable")
     )
 
     def entering_have_you_checked_the_catalogue_form(self, event, state):
@@ -86,8 +86,8 @@ class RoutingStateMachine(StateMachine):
     def entering_we_do_not_have_this_record(self, form):
         self.route_for_current_state = MultiPageFormRoutes.WE_DO_NOT_HAVE_THIS_RECORD.value
 
-    def entering_check_ancestry_page(self, form):
-        self.route_for_current_state = MultiPageFormRoutes.CHECK_ANCESTRY.value
+    def entering_we_may_be_unable_to_find_this_record_page(self, form):
+        self.route_for_current_state = MultiPageFormRoutes.WE_MAY_BE_UNABLE_TO_FIND_THIS_RECORD.value
 
     def on_enter_state(self, event, state):
         """This method is called when entering any state."""
@@ -111,6 +111,6 @@ class RoutingStateMachine(StateMachine):
         """Condition method to determine if the user should be directed to the MOD."""
         return form.service_branch.data in ["ROYAL_NAVY"]
 
-    def check_ancestry(self, form):
-        """Condition method to determine if the user should be directed to the check Ancestry."""
+    def likely_unfindable(self, form):
+        """Condition method to determine if we may be unable to find the record."""
         return form.service_branch.data in ["HOME_GUARD"]

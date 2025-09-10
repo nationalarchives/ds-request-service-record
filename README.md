@@ -29,9 +29,9 @@ An example event would be `continue_from_service_branch_form`
 
 ```python
 continue_from_service_branch_form = (
-        initial.to(was_service_person_officer_form, unless="go_to_mod or check_ancestry")
+        initial.to(was_service_person_officer_form, unless="go_to_mod or likely_unfindable")
         | initial.to(we_do_not_have_this_record_page, cond="go_to_mod")
-        | initial.to(check_ancestry_page, cond="check_ancestry")
+        | initial.to(we_may_be_unable_to_find_this_record_page, cond="likely_unfindable")
 )
 ```
 
