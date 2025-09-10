@@ -152,6 +152,11 @@ forms:
       label: Is the service person still alive?
       messages:
         required: An answer to this question is required
+    was_service_person_an_officer:
+      label: Were they a commissioned officer?
+      messages:
+        required: Choosing an option is required
+      call_to_action: Continue
     forenames:
       label: Forenames (including middle names)
       messages:

@@ -6,6 +6,7 @@ from app.main.forms.start_now import StartNow
 from app.main.forms.is_service_person_alive import IsServicePersonAlive
 from app.main.forms.service_branch import ServiceBranch
 from app.main.forms.have_you_checked_the_catalogue import HaveYouCheckedTheCatalogue
+from app.main.forms.was_service_person_an_officer import WasServicePersonAnOfficer
 from flask import redirect, render_template, session, url_for
 
 
@@ -80,6 +81,21 @@ def service_branch_form(form, state_machine):
         "main/multi-page-journey/service-branch.html", form=form, content=load_content()
     )
 
+
+@bp.route("/was-service-person-officer/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(WasServicePersonAnOfficer)
+@with_state_machine
+def was_service_person_an_officer(form, state_machine):
+    if form.validate_on_submit():
+        session["was_service_person_an_officer"] = form.was_service_person_an_officer.data
+        state_machine.continue_from_was_service_person_officer_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
+
+    return render_template(
+        "main/multi-page-journey/was-service-person-an-officer.html", form=form, content=load_content()
+    )
+
+
 @bp.route("/search-the-catalogue/", methods=["GET"])
 def search_the_catalogue():
     return render_template(
@@ -90,13 +106,6 @@ def search_the_catalogue():
 def we_do_not_have_this_record():
     return render_template(
         "main/multi-page-journey/we-do-not-have-this-record.html", content=load_content()
-    )
-
-
-@bp.route("/was-service-person-officer/", methods=["GET"])
-def was_service_person_an_officer():
-    return render_template(
-        "main/multi-page-journey/was-service-person-an-officer.html", content=load_content()
     )
 
 

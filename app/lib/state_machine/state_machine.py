@@ -126,4 +126,4 @@ class RoutingStateMachine(StateMachine):
 
     def was_officer(self, form):
         """Condition method to determine if the service person was an officer."""
-        return form.was_service_person_officer.data == "yes"
+        return form.was_service_person_an_officer.data == "yes"
