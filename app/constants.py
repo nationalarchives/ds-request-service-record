@@ -15,6 +15,7 @@ class MultiPageFormRoutes(Enum):
     WE_DO_NOT_HAVE_RECORDS_FOR_THIS_RANK = "main.we_do_not_have_records_for_this_rank"
     WE_MAY_BE_UNABLE_TO_FIND_THIS_RECORD = "main.we_may_be_unable_to_find_this_record"
     WE_MAY_HOLD_THIS_RECORD = "main.we_may_hold_this_record"
+    WHAT_WAS_THEIR_DATE_OF_BIRTH = "main.what_was_their_date_of_birth"
 
 
 class ServiceBranches(Enum):

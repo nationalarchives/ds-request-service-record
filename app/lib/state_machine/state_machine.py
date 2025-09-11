@@ -59,6 +59,9 @@ class RoutingStateMachine(StateMachine):
     we_may_hold_this_record_page = State(
         enter="entering_we_may_hold_this_record_page", final=True
     )
+    what_was_their_date_of_birth = State(
+        enter="entering_what_was_their_date_of_birth", final=True
+    )
     """
     These are our Events. They're called in route methods to trigger transitions between States.
 
@@ -90,6 +93,10 @@ class RoutingStateMachine(StateMachine):
     continue_from_was_service_person_an_officer_form = initial.to(
         we_may_hold_this_record_page, unless="was_officer"
     ) | initial.to(we_do_not_have_records_for_this_rank_page, cond="was_officer")
+
+    continue_from_we_may_hold_this_record_form = initial.to(
+        what_was_their_date_of_birth
+    )
 
     def entering_have_you_checked_the_catalogue_form(self, event, state):
         self.route_for_current_state = (
@@ -137,6 +144,9 @@ class RoutingStateMachine(StateMachine):
 
     def entering_we_may_hold_this_record_page(self, form):
         self.route_for_current_state = MultiPageFormRoutes.WE_MAY_HOLD_THIS_RECORD.value
+
+    def entering_what_was_their_date_of_birth(self, form):
+        self.route_for_current_state = MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH.value
 
     def on_enter_state(self, event, state):
         """This method is called when entering any state."""

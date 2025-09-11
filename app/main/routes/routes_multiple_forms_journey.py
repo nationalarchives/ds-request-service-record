@@ -12,12 +12,13 @@ from app.main.forms.was_service_person_an_officer import WasServicePersonAnOffic
 from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
 from flask import redirect, render_template, session, url_for
 
+from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
+
 
 @bp.route("/start/", methods=["GET", "POST"])
 @with_state_machine
 @with_form_prefilled_from_session(StartNow)
 def start(form, state_machine):
-
     if form.validate_on_submit():
         state_machine.continue_to_have_you_checked_the_catalogue_form()
         return redirect(url_for(state_machine.route_for_current_state))
@@ -31,7 +32,6 @@ def start(form, state_machine):
 @with_state_machine
 @with_form_prefilled_from_session(HaveYouCheckedTheCatalogue)
 def have_you_checked_the_catalogue(form, state_machine):
-
     if form.validate_on_submit():
         session["have_you_checked_the_catalogue"] = (
             form.have_you_checked_the_catalogue.data
@@ -50,7 +50,6 @@ def have_you_checked_the_catalogue(form, state_machine):
 @with_state_machine
 @with_form_prefilled_from_session(IsServicePersonAlive)
 def is_service_person_alive(form, state_machine):
-
     if form.validate_on_submit():
         session["is_service_person_alive"] = form.is_service_person_alive.data
         state_machine.continue_from_service_person_alive_form(form)
@@ -83,7 +82,6 @@ def only_living_subjects_can_request_their_record():
 @with_form_prefilled_from_session(ServiceBranch)
 @with_state_machine
 def service_branch_form(form, state_machine):
-
     if form.validate_on_submit():
         session["service_branch"] = form.service_branch.data
         state_machine.continue_from_service_branch_form(form)
@@ -147,6 +145,20 @@ def we_may_be_unable_to_find_this_record():
 @with_form_prefilled_from_session(WeMayHoldThisRecord)
 @with_state_machine
 def we_may_hold_this_record(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_we_may_hold_this_record_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/multi-page-journey/we-may-hold-this-record.html", form=form, content=load_content()
+    )
+
+
+@bp.route("/what-was-their-date-of-birth/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(WhatWasTheirDateOfBirth)
+@with_state_machine
+def what_was_their_date_of_birth(form, state_machine):
+    if form.validate_on_submit():
+        pass
+    return render_template(
+        "main/multi-page-journey/what-was-their-date-of-birth.html", form=form, content=load_content()
     )

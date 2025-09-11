@@ -142,6 +142,15 @@ def test_continue_from_was_service_person_an_officer_form_routes_by_condition(
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
 
+def test_continue_from_we_may_hold_this_record():
+    sm = RoutingStateMachine()
+    sm.continue_from_we_may_hold_this_record_form(form=make_form("we_may_hold_this_record"))
+    assert sm.current_state.id == "what_was_their_date_of_birth"
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH.value
+    )
 
-def make_form(field_name: str, answer: str):
+
+def make_form(field_name: str, answer: str = None):
     return SimpleNamespace(**{field_name: SimpleNamespace(data=answer)})
