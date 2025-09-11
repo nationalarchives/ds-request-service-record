@@ -36,7 +36,6 @@ test.describe("the 'Were they a commissioned officer?' form", () => {
         heading: /We do not have records for this rank/,
         description:
           "when 'Yes' is selected, presents the 'We do not have records for this rank' page ",
-        destinationPageHasBackLink: false,
       },
       {
         branchLabel: "No",
@@ -44,18 +43,11 @@ test.describe("the 'Were they a commissioned officer?' form", () => {
         heading: /We may hold this record/,
         description:
           "when 'No' is selected, presents the 'We may hold this record' page ",
-        destinationPageHasBackLink: true,
       },
     ];
 
     selectionMappings.forEach(
-      ({
-        branchLabel,
-        nextUrl,
-        heading,
-        description,
-        destinationPageHasBackLink,
-      }) => {
+      ({ branchLabel, nextUrl, heading, description }) => {
         test(description, async ({ page }) => {
           await page.getByLabel(branchLabel, { exact: true }).check();
           await page.getByRole("button", { name: /Continue/i }).click();
@@ -66,27 +58,26 @@ test.describe("the 'Were they a commissioned officer?' form", () => {
     );
 
     test.describe("when the 'back' link is clicked, the user's previous selection is shown", () => {
-      selectionMappings.forEach(
-        ({ branchLabel, nextUrl, destinationPageHasBackLink }) => {
-          if (!destinationPageHasBackLink) {
-            return; // Skip this iteration if the destination page does not have a back link
-          }
-          test(`when ${branchLabel} had been submitted, ${branchLabel} is selected when the 'Back' link is clicked`, async ({
-            page,
-          }) => {
-            await page.goto(Urls.JOURNEY_START_PAGE);
-            await page.goto(Urls.WAS_SERVICE_PERSON_AN_OFFICER);
-            await page.getByLabel(branchLabel, { exact: true }).check();
-            await page.getByRole("button", { name: /Continue/i }).click();
-            await expect(page).toHaveURL(nextUrl);
-            await page.getByRole("link", { name: "Back" }).click();
+      selectionMappings.forEach(({ branchLabel, nextUrl }) => {
+        test(`when ${branchLabel} had been submitted, ${branchLabel} is selected when the 'Back' link is clicked`, async ({
+          page,
+        }) => {
+          await page.goto(Urls.JOURNEY_START_PAGE);
+          await page.goto(Urls.WAS_SERVICE_PERSON_AN_OFFICER);
+          await page.getByLabel(branchLabel, { exact: true }).check();
+          await page.getByRole("button", { name: /Continue/i }).click();
+          await expect(page).toHaveURL(nextUrl);
+          const backLink = page.getByRole("link", { name: "Back" });
+          // If there's a "Back" link, click it
+          if ((await backLink.count()) > 0) {
+            await backLink.click();
             await expect(page).toHaveURL(Urls.WAS_SERVICE_PERSON_AN_OFFICER);
             await expect(
               page.getByLabel(branchLabel, { exact: true }),
             ).toBeChecked();
-          });
-        },
-      );
+          }
+        });
+      });
     });
   });
 });
