@@ -69,7 +69,7 @@ class RoutingStateMachine(StateMachine):
     that act as predicates that resolve to a boolean
     """
 
-    continue_to_have_you_checked_the_catalogue_form = initial.to(
+    continue_from_start_form = initial.to(
         have_you_checked_the_catalogue_form
     )
 

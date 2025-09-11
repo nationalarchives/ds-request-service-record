@@ -20,7 +20,7 @@ from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 @with_form_prefilled_from_session(StartNow)
 def start(form, state_machine):
     if form.validate_on_submit():
-        state_machine.continue_to_have_you_checked_the_catalogue_form()
+        state_machine.continue_from_start_form()
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(

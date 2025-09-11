@@ -10,9 +10,9 @@ def test_initial_state_has_no_route():
     assert sm.route_for_current_state is None
 
 
-def test_continue_to_have_you_checked_the_catalogue_form_sets_route():
+def test_continue_from_start_form_sets_route():
     sm = RoutingStateMachine()
-    sm.continue_to_have_you_checked_the_catalogue_form()
+    sm.continue_from_start_form()
     assert sm.current_state.id == "have_you_checked_the_catalogue_form"
     assert (
         sm.route_for_current_state
