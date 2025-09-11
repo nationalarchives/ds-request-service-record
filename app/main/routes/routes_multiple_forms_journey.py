@@ -9,6 +9,7 @@ from app.main.forms.is_service_person_alive import IsServicePersonAlive
 from app.main.forms.service_branch import ServiceBranch
 from app.main.forms.have_you_checked_the_catalogue import HaveYouCheckedTheCatalogue
 from app.main.forms.was_service_person_an_officer import WasServicePersonAnOfficer
+from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
 from flask import redirect, render_template, session, url_for
 
 
@@ -143,7 +144,9 @@ def we_may_be_unable_to_find_this_record():
 
 
 @bp.route("/we-may-hold-this-record/", methods=["GET", "POST"])
-def we_may_hold_this_record():
+@with_form_prefilled_from_session(WeMayHoldThisRecord)
+@with_state_machine
+def we_may_hold_this_record(form, state_machine):
     return render_template(
-        "main/multi-page-journey/we-may-hold-this-record.html", content=load_content()
+        "main/multi-page-journey/we-may-hold-this-record.html", form=form, content=load_content()
     )

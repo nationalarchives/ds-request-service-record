@@ -167,6 +167,8 @@ forms:
       messages:
         required: Choosing an option is required
       call_to_action: Continue
+    we_may_hold_this_record:
+      call_to_action: Continue
     forenames:
       label: Forenames (including middle names)
       messages:

@@ -23,9 +23,13 @@
         {% for paragraph in content.pages.we_may_hold_this_record.paragraphs_after_list %}
           <p>{{ paragraph | parse_markdown_links | safe }}</p>
         {% endfor %}
-        <div class="tna-button-group">
-          {{ back_link(url_for('main.was_service_person_an_officer')) }}
-        </div>
+        <form action="{{ url_for('main.we_may_hold_this_record') }}" method="post" novalidate>
+          {{ form.csrf_token }}
+          <div class="tna-button-group">
+            {{ back_link(url_for('main.was_service_person_an_officer')) }}
+            {{ form.submit(params={'accent':'true'}) }}
+          </div>
+        </form>
       </div>
     </div>
   </div>
