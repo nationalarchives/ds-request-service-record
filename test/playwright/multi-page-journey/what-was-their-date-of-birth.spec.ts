@@ -6,6 +6,10 @@ test.describe("the 'What was their date of birth?' form", () => {
   enum Urls {
     JOURNEY_START_PAGE = `${basePath}/start/`,
     WHAT_WAS_THEIR_DATE_OF_BIRTH = `${basePath}/what-was-their-date-of-birth/`,
+    SERVICE_PERSON_DETAILS = `${basePath}/service-person-details/`,
+    WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE = `${basePath}/we-do-not-have-records-for-people-born-before/`,
+    WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER = `${basePath}/we-do-not-have-records-for-people-born-after/`,
+    DO_YOU_HAVE_TO_PROVIDE_PROOF_OF_DEATH = `${basePath}/do-you-have-to-provide-a-proof-of-death/`,
   }
 
   test.beforeEach(async ({ page }) => {
@@ -20,46 +24,105 @@ test.describe("the 'What was their date of birth?' form", () => {
   });
 
   test.describe("when submitted", () => {
-    test("without any input, the correct validation message is shown", async ({
-      page,
-    }) => {
-      await page.getByRole("button", { name: /Continue/i }).click();
-      await expect(page.locator(".tna-form__error-message")).toHaveText(
-        /The service person's date of birth is required/,
+    test.describe("with invalid input", () => {
+      test("without any input, the correct validation message is shown", async ({
+        page,
+      }) => {
+        await page.getByRole("button", { name: /Continue/i }).click();
+        await expect(page.locator(".tna-form__error-message")).toHaveText(
+          /The service person's date of birth is required/,
+        );
+      });
+
+      test("with a date in the future, the correct validation message is shown", async ({
+        page,
+      }) => {
+        const nextYear = (new Date().getFullYear() + 1).toString();
+
+        await page.getByLabel("Day").fill("01");
+        await page.getByLabel("Month").fill("01");
+        await page.getByLabel("Year").fill(nextYear);
+        await page.getByRole("button", { name: /Continue/i }).click();
+        await expect(page.locator(".tna-form__error-message")).toHaveText(
+          /The service person's date of birth must be in the past/,
+        );
+      });
+
+      test.describe("with invalid dates, the correct validation message is shown", () => {
+        const invalidDates = [
+          { day: "31", month: "02", year: "2000" },
+          { day: "00", month: "01", year: "2000" },
+          { day: "15", month: "13", year: "2000" },
+          { day: "aa", month: "bb", year: "cccc" },
+        ];
+
+        for (const { day, month, year } of invalidDates) {
+          test(`with day='${day}', month='${month}', year='${year}'`, async ({
+            page,
+          }) => {
+            await page.getByLabel("Day").fill(day);
+            await page.getByLabel("Month").fill(month);
+            await page.getByLabel("Year").fill(year);
+            await page.getByRole("button", { name: /Continue/i }).click();
+            await expect(page.locator(".tna-form__error-message")).toHaveText(
+              /must be a real date/,
+            );
+          });
+        }
+      });
+    });
+    test.describe("with valid input", () => {
+      const validSubmissionMappings = [
+        {
+          month: "01",
+          day: "01",
+          year: "1890",
+          nextUrl: Urls.SERVICE_PERSON_DETAILS,
+          heading: /Service person details/,
+          description:
+            "when the year of birth is 1890, the 'Service person details' page is shown",
+        },
+        {
+          month: "01",
+          day: "01",
+          year: "1690",
+          nextUrl: Urls.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE,
+          heading: /We do not have records for people born before/,
+          description:
+            "when the year of birth is 1690, the 'We do not have records for people born before' page is shown",
+        },
+        {
+          month: "01",
+          day: "01",
+          year: "1950",
+          nextUrl: Urls.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER,
+          heading: /We do not have records for people born after/,
+          description:
+            "when the year of birth is 1950, the 'We do not have records for people born after' page is shown",
+        },
+        {
+          month: "01",
+          day: "01",
+          year: "1925",
+          nextUrl: Urls.DO_YOU_HAVE_TO_PROVIDE_PROOF_OF_DEATH,
+          heading: /Provide a proof of death/,
+          description:
+            "when the year of birth is 1925, the 'Provide proof of death' page is shown",
+        },
+      ];
+
+      validSubmissionMappings.forEach(
+        ({ day, month, year, nextUrl, heading, description }) => {
+          test(description, async ({ page }) => {
+            await page.getByLabel("Day").fill(day);
+            await page.getByLabel("Month").fill(month);
+            await page.getByLabel("Year").fill(year);
+            await page.getByRole("button", { name: /Continue/i }).click();
+            await expect(page).toHaveURL(nextUrl);
+            await expect(page.locator("h1")).toHaveText(heading);
+          });
+        },
       );
     });
-
-    test("with a date in the future, the correct validation message is shown", async ({
-      page,
-    }) => {
-      const nextYear = (new Date().getFullYear() + 1).toString();
-
-      await page.getByLabel("Day").fill("01");
-      await page.getByLabel("Month").fill("01");
-      await page.getByLabel("Year").fill(nextYear);
-      await page.getByRole("button", { name: /Continue/i }).click();
-      await expect(page.locator(".tna-form__error-message")).toHaveText(
-        /The service person's date of birth must be in the past/,
-      );
-    });
-
-test.describe("with invalid dates, the correct validation message is shown", () => {
-  const invalidDates = [
-    { day: "31", month: "02", year: "2000" },
-    { day: "00", month: "01", year: "2000" },
-    { day: "15", month: "13", year: "2000" },
-    { day: "aa", month: "bb", year: "cccc" },
-  ];
-
-  for (const { day, month, year } of invalidDates) {
-    test(`with day='${day}', month='${month}', year='${year}'`, async ({ page }) => {
-      await page.getByLabel("Day").fill(day);
-      await page.getByLabel("Month").fill(month);
-      await page.getByLabel("Year").fill(year);
-      await page.getByRole("button", { name: /Continue/i }).click();
-      await expect(page.locator(".tna-form__error-message")).toHaveText(/must be a real date/);
-    });
-  }
-});
   });
 });

@@ -1,4 +1,5 @@
 import pytest
+from datetime import date
 from types import SimpleNamespace
 from app.constants import MultiPageFormRoutes
 from app.lib.state_machine.state_machine import RoutingStateMachine
@@ -142,6 +143,7 @@ def test_continue_from_was_service_person_an_officer_form_routes_by_condition(
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
 
+
 def test_continue_from_we_may_hold_this_record():
     sm = RoutingStateMachine()
     sm.continue_from_we_may_hold_this_record_form(form=make_form("we_may_hold_this_record"))
@@ -151,6 +153,23 @@ def test_continue_from_we_may_hold_this_record():
         == MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH.value
     )
 
+@pytest.mark.parametrize(
+    "date_of_birth,expected_state,expected_route",
+    [
+        (date(year, 1, 1), "we_do_not_have_records_for_people_born_after_page", MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER.value) for year in range(1940, 2000)
+    ] + [
+        (date(year, 1, 1), "we_do_not_have_records_for_people_born_before", MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE.value) for year in range(1750, 1800)
+    ] + [
+        (date(year, 1, 1), "service_person_details_form", MultiPageFormRoutes.SERVICE_PERSON_DETAILS.value) for year in range(1800, 1910)
+    ] + [
+        (date(year, 1, 1), "do_you_have_to_provide_a_proof_of_death", MultiPageFormRoutes.DO_YOU_HAVE_TO_PROVIDE_PROOF_OF_DEATH.value) for year in range(1911, 1939)
+    ]
+)
+def test_continue_from_what_was_their_date_of_birth_form(date_of_birth, expected_state, expected_route):
+    sm = RoutingStateMachine()
+    sm.continue_from_what_was_their_date_of_birth_form(form=make_form("what_was_their_date_of_birth", date_of_birth))
+    assert sm.current_state.id == expected_state
+    assert sm.route_for_current_state == expected_route
 
 def make_form(field_name: str, answer: str = None):
     return SimpleNamespace(**{field_name: SimpleNamespace(data=answer)})
