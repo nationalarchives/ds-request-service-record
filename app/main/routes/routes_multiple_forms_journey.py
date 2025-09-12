@@ -9,16 +9,18 @@ from app.main.forms.is_service_person_alive import IsServicePersonAlive
 from app.main.forms.service_branch import ServiceBranch
 from app.main.forms.have_you_checked_the_catalogue import HaveYouCheckedTheCatalogue
 from app.main.forms.was_service_person_an_officer import WasServicePersonAnOfficer
+from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
 from flask import redirect, render_template, session, url_for
+
+from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 
 
 @bp.route("/start/", methods=["GET", "POST"])
 @with_state_machine
 @with_form_prefilled_from_session(StartNow)
 def start(form, state_machine):
-
     if form.validate_on_submit():
-        state_machine.continue_to_have_you_checked_the_catalogue_form()
+        state_machine.continue_from_start_form()
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(
@@ -30,7 +32,6 @@ def start(form, state_machine):
 @with_state_machine
 @with_form_prefilled_from_session(HaveYouCheckedTheCatalogue)
 def have_you_checked_the_catalogue(form, state_machine):
-
     if form.validate_on_submit():
         session["have_you_checked_the_catalogue"] = (
             form.have_you_checked_the_catalogue.data
@@ -49,7 +50,6 @@ def have_you_checked_the_catalogue(form, state_machine):
 @with_state_machine
 @with_form_prefilled_from_session(IsServicePersonAlive)
 def is_service_person_alive(form, state_machine):
-
     if form.validate_on_submit():
         session["is_service_person_alive"] = form.is_service_person_alive.data
         state_machine.continue_from_service_person_alive_form(form)
@@ -82,7 +82,6 @@ def only_living_subjects_can_request_their_record():
 @with_form_prefilled_from_session(ServiceBranch)
 @with_state_machine
 def service_branch_form(form, state_machine):
-
     if form.validate_on_submit():
         session["service_branch"] = form.service_branch.data
         state_machine.continue_from_service_branch_form(form)
@@ -143,7 +142,55 @@ def we_may_be_unable_to_find_this_record():
 
 
 @bp.route("/we-may-hold-this-record/", methods=["GET", "POST"])
-def we_may_hold_this_record():
+@with_form_prefilled_from_session(WeMayHoldThisRecord)
+@with_state_machine
+def we_may_hold_this_record(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_we_may_hold_this_record_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/multi-page-journey/we-may-hold-this-record.html", content=load_content()
+        "main/multi-page-journey/we-may-hold-this-record.html", form=form, content=load_content()
+    )
+
+
+@bp.route("/what-was-their-date-of-birth/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(WhatWasTheirDateOfBirth)
+@with_state_machine
+def what_was_their_date_of_birth(form, state_machine):
+    if form.validate_on_submit():
+        session["date_of_birth"] = form.what_was_their_date_of_birth.data
+        state_machine.continue_from_what_was_their_date_of_birth_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
+    return render_template(
+        "main/multi-page-journey/what-was-their-date-of-birth.html",
+        form=form,
+        content=load_content(),
+    )
+
+
+@bp.route("/we-do-not-have-records-for-people-born-before/", methods=["GET"])
+def we_do_not_have_records_for_people_born_before():
+    return render_template(
+        "main/multi-page-journey/we-do-not-have-records-for-people-born-before.html",
+        content=load_content(),
+    )
+
+
+@bp.route("/we-do-not-have-records-for-people-born-after/", methods=["GET"])
+def we_do_not_have_records_for_people_born_after():
+    return render_template(
+        "main/multi-page-journey/we-do-not-have-records-for-people-born-after.html",
+        content=load_content(),
+    )
+
+@bp.route("/service-person-details/", methods=["GET"])
+def service_person_details():
+    return render_template(
+        "main/multi-page-journey/service-person-details.html", content=load_content()
+    )
+
+@bp.route("/do-you-have-to-provide-a-proof-of-death/", methods=["GET"])
+def do_you_have_to_provide_proof_of_death():
+    return render_template(
+        "main/multi-page-journey/do-you-have-to-provide-a-proof-of-death.html", content=load_content()
     )

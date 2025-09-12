@@ -11,10 +11,21 @@ class MultiPageFormRoutes(Enum):
         "main.only_living_subjects_can_request_their_record"
     )
     WAS_SERVICE_PERSON_AN_OFFICER_FORM = "main.was_service_person_an_officer"
-    WE_DO_NOT_HAVE_RECORDS_FOR_THIS_SERVICE_BRANCH = "main.we_do_not_have_records_for_this_service_branch"
+    WE_DO_NOT_HAVE_RECORDS_FOR_THIS_SERVICE_BRANCH = (
+        "main.we_do_not_have_records_for_this_service_branch"
+    )
     WE_DO_NOT_HAVE_RECORDS_FOR_THIS_RANK = "main.we_do_not_have_records_for_this_rank"
     WE_MAY_BE_UNABLE_TO_FIND_THIS_RECORD = "main.we_may_be_unable_to_find_this_record"
     WE_MAY_HOLD_THIS_RECORD = "main.we_may_hold_this_record"
+    WHAT_WAS_THEIR_DATE_OF_BIRTH = "main.what_was_their_date_of_birth"
+    WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE = (
+        "main.we_do_not_have_records_for_people_born_before"
+    )
+    WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER = (
+        "main.we_do_not_have_records_for_people_born_after"
+    )
+    SERVICE_PERSON_DETAILS = "main.service_person_details"
+    DO_YOU_HAVE_TO_PROVIDE_PROOF_OF_DEATH = "main.do_you_have_to_provide_proof_of_death"
 
 
 class ServiceBranches(Enum):

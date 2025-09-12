@@ -79,6 +79,14 @@ pages:
     heading: We do not have records for this rank
     paragraphs:
       - Sorry, but here is some helpful information
+  we_do_not_have_records_for_people_born_before:
+    heading: We do not have records for people born before 1800
+    paragraphs:
+      - Sorry, but here is some helpful information
+  we_do_not_have_records_for_people_born_after:
+    heading: We do not have records for people born after 1939
+    paragraphs:
+      - Sorry, but here is some helpful information
   was_service_person_an_officer:
     heading: Were they a commissioned officer?
     paragraphs:
@@ -104,6 +112,14 @@ pages:
       - payment - you will need a debit or credit card
     paragraphs_after_list:
       - By completing this form you are requesting information from a UK public authority, The National Archives. We are therefore required to treat it as a Freedom of Information (FOI) request. [You can find out more about FOI on GOV.UK](https://www.gov.uk/make-a-freedom-of-information-request).
+  service_person_details:
+    heading: Service person details
+    paragraphs:
+      - Service person details content to go here
+  do_you_have_to_provide_proof_of_death:
+    heading: Provide a proof of death
+    paragraphs:
+      - Proof of death content to go here
   all_fields_in_one_form:
     service_person_details:
       legend: Service person detail
@@ -167,6 +183,8 @@ forms:
       messages:
         required: Choosing an option is required
       call_to_action: Continue
+    we_may_hold_this_record:
+      call_to_action: Continue
     forenames:
       label: Forenames (including middle names)
       messages:
@@ -177,12 +195,13 @@ forms:
         required: The service person's last name is required
     other_last_names:
       label: Other last names (optional)
-    dob:
-      label: Date of birth
-      description: Enter the service person's date of birth in the format DD MM YYYY
+    date_of_birth:
+      label: What was their date of birth?
+      description: For example, 31 3 1910. A year of birth is required, the day and month are optional
       messages:
         required: The service person's date of birth is required
         past_date: The service person's date of birth must be in the past
+      call_to_action: Continue
     place_of_birth:
       label: Place of birth (optional)
     date_of_death:
