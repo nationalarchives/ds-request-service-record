@@ -59,7 +59,7 @@ class RoutingStateMachine(StateMachine):
     we_may_hold_this_record_page = State(
         enter="entering_we_may_hold_this_record_page", final=True
     )
-    what_was_their_date_of_birth = State(
+    what_was_their_date_of_birth_form = State(
         enter="entering_what_was_their_date_of_birth_page", final=True
     )
     service_person_details_form = State(
@@ -68,11 +68,11 @@ class RoutingStateMachine(StateMachine):
     we_do_not_have_records_for_people_born_after_page = State(
         enter="entering_we_do_not_have_records_for_people_born_after_page", final=True
     )
-    we_do_not_have_records_for_people_born_before = State(
-        enter="entering_we_do_not_have_records_for_people_born_before", final=True
+    we_do_not_have_records_for_people_born_before_page = State(
+        enter="entering_we_do_not_have_records_for_people_born_before_page", final=True
     )
-    do_you_have_to_provide_a_proof_of_death = State(
-        enter="entering_do_you_have_to_provide_a_proof_of_death", final=True
+    do_you_have_a_proof_of_death_form = State(
+        enter="entering_do_you_have_a_proof_of_death_form", final=True
     )
 
     """
@@ -108,14 +108,14 @@ class RoutingStateMachine(StateMachine):
     ) | initial.to(we_do_not_have_records_for_this_rank_page, cond="was_officer")
 
     continue_from_we_may_hold_this_record_form = initial.to(
-        what_was_their_date_of_birth
+        what_was_their_date_of_birth_form
     )
 
     continue_from_what_was_their_date_of_birth_form = initial.to(
         service_person_details_form, unless="born_too_late or born_too_early or birth_year_requires_proof_of_death"
     ) | initial.to(we_do_not_have_records_for_people_born_after_page, cond="born_too_late") | initial.to(
-        we_do_not_have_records_for_people_born_before, cond="born_too_early") | initial.to(
-        do_you_have_to_provide_a_proof_of_death, cond="birth_year_requires_proof_of_death")
+        we_do_not_have_records_for_people_born_before_page, cond="born_too_early") | initial.to(
+        do_you_have_a_proof_of_death_form, cond="birth_year_requires_proof_of_death")
 
     def entering_have_you_checked_the_catalogue_form(self, event, state):
         self.route_for_current_state = (
@@ -173,10 +173,10 @@ class RoutingStateMachine(StateMachine):
     def entering_we_do_not_have_records_for_people_born_after_page(self, form):
         self.route_for_current_state = MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER.value
 
-    def entering_we_do_not_have_records_for_people_born_before(self, form):
+    def entering_we_do_not_have_records_for_people_born_before_page(self, form):
         self.route_for_current_state = MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE.value
 
-    def entering_do_you_have_to_provide_a_proof_of_death(self, form):
+    def entering_do_you_have_a_proof_of_death_form(self, form):
         self.route_for_current_state = MultiPageFormRoutes.DO_YOU_HAVE_TO_PROVIDE_PROOF_OF_DEATH.value
 
     def on_enter_state(self, event, state):

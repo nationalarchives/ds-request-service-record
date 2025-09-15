@@ -1,9 +1,20 @@
-import pytest
+import pytest, re
 from datetime import date
 from types import SimpleNamespace
 from app.constants import MultiPageFormRoutes
 from app.lib.state_machine.state_machine import RoutingStateMachine
 
+def test_all_states_have_the_expected_suffix():
+    sm = RoutingStateMachine()
+    for state in sm.states:
+        assert re.search(r"(_form|_page|initial)$", state.id), \
+            f"State ID {state.id} does not end with 'initial', '_form' or '_page'"
+
+def test_all_events_have_the_expected_suffix():
+    sm = RoutingStateMachine()
+    for event in sm.events:
+        assert re.search(r"(_form|_page)$", event.id), \
+            f"Event ID {event.id} does not end with '_form' or '_page'"
 
 def test_initial_state_has_no_route():
     sm = RoutingStateMachine()
@@ -147,7 +158,7 @@ def test_continue_from_was_service_person_an_officer_form_routes_by_condition(
 def test_continue_from_we_may_hold_this_record():
     sm = RoutingStateMachine()
     sm.continue_from_we_may_hold_this_record_form(form=make_form("we_may_hold_this_record"))
-    assert sm.current_state.id == "what_was_their_date_of_birth"
+    assert sm.current_state.id == "what_was_their_date_of_birth_form"
     assert (
         sm.route_for_current_state
         == MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH.value
@@ -158,11 +169,11 @@ def test_continue_from_we_may_hold_this_record():
     [
         (date(year, 1, 1), "we_do_not_have_records_for_people_born_after_page", MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER.value) for year in range(1940, 2000)
     ] + [
-        (date(year, 1, 1), "we_do_not_have_records_for_people_born_before", MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE.value) for year in range(1750, 1800)
+        (date(year, 1, 1), "we_do_not_have_records_for_people_born_before_page", MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE.value) for year in range(1750, 1800)
     ] + [
         (date(year, 1, 1), "service_person_details_form", MultiPageFormRoutes.SERVICE_PERSON_DETAILS.value) for year in range(1800, 1910)
     ] + [
-        (date(year, 1, 1), "do_you_have_to_provide_a_proof_of_death", MultiPageFormRoutes.DO_YOU_HAVE_TO_PROVIDE_PROOF_OF_DEATH.value) for year in range(1911, 1939)
+        (date(year, 1, 1), "do_you_have_a_proof_of_death_form", MultiPageFormRoutes.DO_YOU_HAVE_TO_PROVIDE_PROOF_OF_DEATH.value) for year in range(1911, 1939)
     ]
 )
 def test_continue_from_what_was_their_date_of_birth_form(date_of_birth, expected_state, expected_route):
