@@ -193,9 +193,7 @@ class RoutingStateMachine(StateMachine):
         )
 
     def entering_do_you_have_a_proof_of_death_form(self, form):
-        self.route_for_current_state = (
-            MultiPageFormRoutes.DO_YOU_HAVE_TO_PROVIDE_PROOF_OF_DEATH.value
-        )
+        self.route_for_current_state = MultiPageFormRoutes.DO_YOU_HAVE_A_PROOF_OF_DEATH.value
 
     def on_enter_state(self, event, state):
         """This method is called when entering any state."""

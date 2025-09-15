@@ -204,7 +204,7 @@ def test_continue_from_we_may_hold_this_record():
         (
             date(year, 1, 1),
             "do_you_have_a_proof_of_death_form",
-            MultiPageFormRoutes.DO_YOU_HAVE_TO_PROVIDE_PROOF_OF_DEATH.value,
+            MultiPageFormRoutes.DO_YOU_HAVE_A_PROOF_OF_DEATH.value,
         )
         for year in range(1911, 1939)
     ],

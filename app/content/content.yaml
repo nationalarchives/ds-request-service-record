@@ -84,9 +84,10 @@ pages:
     paragraphs:
       - Sorry, but here is some helpful information
   we_do_not_have_records_for_people_born_after:
-    heading: We do not have records for people born after 1939
+    heading: We do not have this record
     paragraphs:
-      - Sorry, but here is some helpful information
+      - You will need to request the service record from the Ministry of Defence.
+    call_to_action: Apply for MOD records
   was_service_person_an_officer:
     heading: Were they a commissioned officer?
     paragraphs:
@@ -116,10 +117,17 @@ pages:
     heading: Service person details
     paragraphs:
       - Service person details content to go here
-  do_you_have_to_provide_proof_of_death:
+  do_you_have_a_proof_of_death_form:
     heading: Provide a proof of death
     paragraphs:
-      - Proof of death content to go here
+      - You will need to upload a digital copy of a proof of death for the service person.
+      - >
+        Suitable forms of evidence include:
+    list_items:
+      - "[copies of death certificates](https://www.gov.uk/order-copy-birth-death-marriage-certificate)"
+      - published obituaries (detailing publication source, name of deceased, and date of birth and death)
+      - "[war dead records](https://www.cwgc.org/find-records/find-war-dead/)"
+    warning: If you do not send a proof of death when required, it is likely that we will withold all of the requested information and cannot provide the record.
   all_fields_in_one_form:
     service_person_details:
       legend: Service person detail
