@@ -5,10 +5,9 @@ from app.lib.context_processor import cookie_preference, now_iso_8601
 from app.lib.models import db
 from app.lib.requires_session_key import requires_session_key
 from app.lib.talisman import talisman
-from app.lib.template_filters import slugify, parse_markdown_links
+from app.lib.template_filters import parse_markdown_links, slugify
 from flask import Flask
-from redis import Redis
-from flask_session.redis import RedisSessionInterface
+from flask_session import Session
 from jinja2 import ChoiceLoader, PackageLoader
 from tna_frontend_jinja.wtforms.helpers import WTFormsHelpers
 
@@ -19,15 +18,8 @@ def create_app(config_class):
 
     requires_session_key(app)
 
-    if app.config.get("REDIS_HOST"):
-        redis = Redis(
-            host=app.config["REDIS_HOST"],
-            port=app.config["REDIS_PORT"],
-            db=app.config["REDIS_DB"],
-            username=app.config["REDIS_USERNAME"],
-            password=app.config["REDIS_PASSWORD"],
-        )
-        app.session_interface = RedisSessionInterface(app=app, client=redis)
+    if app.config.get("SESSION_TYPE") and app.config.get("SESSION_REDIS"):
+        Session(app)
 
     gunicorn_error_logger = logging.getLogger("gunicorn.error")
     app.logger.handlers.extend(gunicorn_error_logger.handlers)
@@ -40,6 +32,7 @@ def create_app(config_class):
             "CACHE_DEFAULT_TIMEOUT": app.config.get("CACHE_DEFAULT_TIMEOUT"),
             "CACHE_IGNORE_ERRORS": app.config.get("CACHE_IGNORE_ERRORS"),
             "CACHE_DIR": app.config.get("CACHE_DIR"),
+            "CACHE_REDIS_URL": app.config.get("CACHE_REDIS_URL"),
         },
     )
 

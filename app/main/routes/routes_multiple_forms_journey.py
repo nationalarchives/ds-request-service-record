@@ -4,15 +4,14 @@ from app.lib.decorators.with_form_prefilled_from_session import (
     with_form_prefilled_from_session,
 )
 from app.main import bp
-from app.main.forms.start_now import StartNow
+from app.main.forms.have_you_checked_the_catalogue import HaveYouCheckedTheCatalogue
 from app.main.forms.is_service_person_alive import IsServicePersonAlive
 from app.main.forms.service_branch import ServiceBranch
-from app.main.forms.have_you_checked_the_catalogue import HaveYouCheckedTheCatalogue
+from app.main.forms.start_now import StartNow
 from app.main.forms.was_service_person_an_officer import WasServicePersonAnOfficer
 from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
-from flask import redirect, render_template, session, url_for
-
 from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
+from flask import redirect, render_template, session, url_for
 
 
 @bp.route("/start/", methods=["GET", "POST"])
@@ -149,7 +148,9 @@ def we_may_hold_this_record(form, state_machine):
         state_machine.continue_from_we_may_hold_this_record_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/multi-page-journey/we-may-hold-this-record.html", form=form, content=load_content()
+        "main/multi-page-journey/we-may-hold-this-record.html",
+        form=form,
+        content=load_content(),
     )
 
 
@@ -183,14 +184,17 @@ def we_do_not_have_records_for_people_born_after():
         content=load_content(),
     )
 
+
 @bp.route("/service-person-details/", methods=["GET"])
 def service_person_details():
     return render_template(
         "main/multi-page-journey/service-person-details.html", content=load_content()
     )
 
+
 @bp.route("/do-you-have-to-provide-a-proof-of-death/", methods=["GET"])
 def do_you_have_to_provide_proof_of_death():
     return render_template(
-        "main/multi-page-journey/do-you-have-a-proof-of-death.html", content=load_content()
+        "main/multi-page-journey/do-you-have-a-proof-of-death.html",
+        content=load_content(),
     )

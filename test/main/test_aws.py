@@ -1,11 +1,11 @@
 import io
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
+from app.lib.aws import upload_file_to_s3
 from werkzeug.datastructures import FileStorage
 
 from app import create_app
-from app.lib.aws import upload_file_to_s3
 
 
 @pytest.fixture(scope="module")
@@ -57,12 +57,14 @@ def test_upload_file_to_s3_valid_file_returns_filename(context):
         region_name="eu-west-2",
     )
     mock_s3.upload_fileobj.assert_called_once()
-    
+
 
 def test_upload_file_to_s3_invalid_empty_file_returns_none(context):
     # Arrange: empty file (read() -> b'')
     empty_stream = io.BytesIO(b"")
-    fs = FileStorage(stream=empty_stream, filename="empty.png", content_type="image/png")
+    fs = FileStorage(
+        stream=empty_stream, filename="empty.png", content_type="image/png"
+    )
 
     # Because the function returns early for empty content, boto3 should never be called
     with patch("app.lib.aws.boto3.client") as mock_client:

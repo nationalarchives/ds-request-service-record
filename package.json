@@ -9,7 +9,7 @@
     "lint:fix": "prettier --write . && stylelint --fix 'src/styles/**/*.scss' && eslint --fix 'src/scripts/**/*.js'",
     "test:all": "npm run test:lint && npm run test:playwright",
     "test:lint": "prettier --check . && stylelint 'src/styles/**/*.scss' && eslint 'src/scripts/**/*.js'",
-    "test:playwright": "npx playwright install && npx playwright test",
+    "test:playwright": "npx playwright install && CI=true npx playwright test",
     "test:playwright:ui": "npx playwright install && npx playwright test --ui"
   },
   "dependencies": {
