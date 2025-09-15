@@ -25,9 +25,14 @@
             {{ content.pages.do_you_have_a_proof_of_death_form.warning }}
           </div>
         </div>
-        <div class="tna-button-group">
-          {{ back_link(url_for('main.what_was_their_date_of_birth')) }}
-        </div>
+        <form action="{{ url_for('main.do_you_have_a_proof_of_death_form') }}" method="post" novalidate>
+          {{ form.csrf_token }}
+          {{ form.do_you_have_a_proof_of_death(params={'headingLevel':2, 'headingSize':'l'}) }}
+          <div class="tna-button-group">
+            {{ back_link(url_for('main.what_was_their_date_of_birth')) }}
+            {{ form.submit(params={'accent':'true', 'icon': 'chevron-right', 'rightAlignIcon': 'true'}) }}
+          </div>
+        </form>
       </div>
     </div>
   </div>
