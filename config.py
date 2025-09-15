@@ -2,6 +2,7 @@ import json
 import os
 
 from app.lib.util import strtobool
+from redis import Redis
 
 
 class Features:
@@ -68,6 +69,9 @@ class Production(Features):
     )
 
     SESSION_REDIS_URL: str = os.environ.get("SESSION_REDIS_URL", "")
+    if SESSION_REDIS_URL:
+        SESSION_TYPE: str = "redis"
+        SESSION_REDIS = Redis.from_url(SESSION_REDIS_URL)
 
     AWS_ACCESS_KEY_ID: str = os.environ.get("AWS_ACCESS_KEY_ID", "")
     AWS_SECRET_ACCESS_KEY: str = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
