@@ -192,5 +192,5 @@ def service_person_details():
 @bp.route("/do-you-have-to-provide-a-proof-of-death/", methods=["GET"])
 def do_you_have_to_provide_proof_of_death():
     return render_template(
-        "main/multi-page-journey/do-you-have-to-provide-a-proof-of-death.html", content=load_content()
+        "main/multi-page-journey/do-you-have-a-proof-of-death.html", content=load_content()
     )
