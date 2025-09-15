@@ -1,13 +1,13 @@
 from app.lib.content import get_field_content, load_content
 from flask_wtf import FlaskForm
 from tna_frontend_jinja.wtforms import (
-    TnaSubmitWidget,
     TnaDateField,
+    TnaSubmitWidget,
 )
+from tna_frontend_jinja.wtforms import validators as tna_frontend_validators
 from wtforms import (
     SubmitField,
 )
-from tna_frontend_jinja.wtforms import validators as tna_frontend_validators
 from wtforms.validators import InputRequired
 
 
@@ -19,10 +19,14 @@ class WhatWasTheirDateOfBirth(FlaskForm):
         description=get_field_content(content, "date_of_birth", "description"),
         validators=[
             InputRequired(
-                message=get_field_content(content, "date_of_birth", "messages")["required"]
+                message=get_field_content(content, "date_of_birth", "messages")[
+                    "required"
+                ]
             ),
             tna_frontend_validators.PastDate(
-                message=get_field_content(content, "date_of_birth", "messages")["past_date"]
+                message=get_field_content(content, "date_of_birth", "messages")[
+                    "past_date"
+                ]
             ),
         ],
     )

@@ -54,17 +54,14 @@ In addition to the [base Docker image variables](https://github.com/nationalarch
 | `CACHE_TYPE`                     | https://flask-caching.readthedocs.io/en/latest/#configuring-flask-caching   | _none_                                                    |
 | `CACHE_DEFAULT_TIMEOUT`          | The number of seconds to cache pages for                                    | production: `300`, staging: `60`, develop: `0`, test: `0` |
 | `CACHE_DIR`                      | Directory for storing cached responses when using `FileSystemCache`         | `/tmp`                                                    |
+| `CACHE_REDIS_URL`                | The connection string for Redis when using `CACHE_TYPE=RedisCache`          | _none_                                                    |
 | `GA4_ID`                         | The Google Analytics 4 ID                                                   | _none_                                                    |
 | `GOV_UK_PAY_API_KEY`             | GOV.UK Pay API key                                                          | _none_ (required for payments)                            |
 | `GOV_UK_PAY_API_URL`             | GOV.UK Pay create payment endpoint URL                                      | _none_ (required for payments)                            |
 | `GOV_UK_PAY_SIGNING_SECRET`      | GOV.UK Pay webhook HMAC signing secret                                      | _none_ (required for webhooks)                            |
 | `SQLALCHEMY_DATABASE_URI`        | SQLAlchemy database connection string                                       | _none_ (required)                                         |
 | `SQLALCHEMY_TRACK_MODIFICATIONS` | SQLAlchemy event system toggle                                              | `False`                                                   |
-| `REDIS_HOST`                     | Redis host for sessions/cache                                               | _none_                                                    |
-| `REDIS_PORT`                     | Redis port                                                                  | `6379`                                                    |
-| `REDIS_DB`                       | Redis database index                                                        | `0`                                                       |
-| `REDIS_USERNAME`                 | Redis username                                                              | _none_                                                    |
-| `REDIS_PASSWORD`                 | Redis password                                                              | _none_                                                    |
+| `SESSION_REDIS_URL`              | Redis URL connection string for sessions                                    | _none_                                                    |
 | `AWS_ACCESS_KEY_ID`              | AWS access key                                                              | _none_                                                    |
 | `AWS_SECRET_ACCESS_KEY`          | AWS secret key                                                              | _none_                                                    |
 | `AWS_SESSION_TOKEN`              | AWS session token                                                           | _none_                                                    |

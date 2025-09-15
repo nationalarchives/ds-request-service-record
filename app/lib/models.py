@@ -1,5 +1,7 @@
-from flask_sqlalchemy import SQLAlchemy
 import uuid
+
+from flask_sqlalchemy import SQLAlchemy
+
 db = SQLAlchemy()
 
 
@@ -31,8 +33,6 @@ class ServiceRecordRequest(db.Model):
     requester_town_city = db.Column(db.String(128))
     service_branch = db.Column(db.String(64))
     service_number = db.Column(db.String(64), nullable=True)
-    evidence_of_death = db.Column(
-        db.String(64), nullable=True
-    )
+    evidence_of_death = db.Column(db.String(64), nullable=True)
     payment_id = db.Column(db.String(64), nullable=True, unique=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())

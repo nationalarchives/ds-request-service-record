@@ -54,6 +54,7 @@ class Production(Features):
     CACHE_DEFAULT_TIMEOUT: int = int(os.environ.get("CACHE_DEFAULT_TIMEOUT", "300"))
     CACHE_IGNORE_ERRORS: bool = True
     CACHE_DIR: str = os.environ.get("CACHE_DIR", "/tmp")
+    CACHE_REDIS_URL: str = os.environ.get("CACHE_REDIS_URL", "")
 
     GA4_ID: str = os.environ.get("GA4_ID", "")
 
@@ -66,11 +67,7 @@ class Production(Features):
         os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS", "False")
     )
 
-    REDIS_HOST: str = os.environ.get("REDIS_HOST", "")
-    REDIS_PORT: int = int(os.environ.get("REDIS_PORT", "6379"))
-    REDIS_DB: int = int(os.environ.get("REDIS_DB", "0"))
-    REDIS_USERNAME: str = os.environ.get("REDIS_USERNAME", None)
-    REDIS_PASSWORD: str = os.environ.get("REDIS_PASSWORD", "")
+    SESSION_REDIS_URL: str = os.environ.get("SESSION_REDIS_URL", "")
 
     AWS_ACCESS_KEY_ID: str = os.environ.get("AWS_ACCESS_KEY_ID", "")
     AWS_SECRET_ACCESS_KEY: str = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
@@ -81,6 +78,7 @@ class Production(Features):
 
     EMAIL_FROM: str = os.environ.get("EMAIL_FROM", "")
     DYNAMICS_INBOX: str = os.environ.get("DYNAMICS_INBOX", "")
+
 
 class Staging(Production):
     CACHE_DEFAULT_TIMEOUT: int = int(os.environ.get("CACHE_DEFAULT_TIMEOUT", "60"))

@@ -6,9 +6,9 @@ import pytest
 from app.lib.gov_uk_pay import (
     GOV_UK_PAY_EVENT_TYPES,
     create_payment,
-    validate_webhook_signature,
     process_webhook_data,
-    validate_payment
+    validate_payment,
+    validate_webhook_signature,
 )
 
 from app import create_app
@@ -111,4 +111,3 @@ def test_validate_payment_status_none(mock_status, test_app):
     with test_app.app_context():
         assert validate_payment("any_id") is False
         mock_status.assert_called_once_with("any_id")
-                    

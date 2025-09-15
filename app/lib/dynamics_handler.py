@@ -1,7 +1,6 @@
-from flask import current_app
 from app.lib.aws import send_email
 from app.lib.models import ServiceRecordRequest
-
+from flask import current_app
 
 DYNAMICS_FIELD_MAP = [
     ("enquiry_id", "id"),
@@ -24,7 +23,10 @@ DYNAMICS_FIELD_MAP = [
     ("regiment", "regiment"),
     ("mandatory_upload_file_name", "evidence_of_death"),
     ("enquiry", "additional_information"),
-    ("mandatory_catalogue_reference", None), # TODO: this comes automatically from the catalogue, currently
+    (
+        "mandatory_catalogue_reference",
+        None,
+    ),  # TODO: this comes automatically from the catalogue, currently
     ("certificate_othernames", "other_last_names"),
     ("date_of_death", "date_of_death"),
     ("mod_barcode_number", "mod_reference"),
@@ -42,9 +44,9 @@ def send_data_to_dynamics(record: ServiceRecordRequest) -> None:
     send_email(
         to=current_app.config["DYNAMICS_INBOX"],
         subject=f"New Service Record Request: {record.id}",
-        body=tagged_data
+        body=tagged_data,
     )
-    
+
 
 def generate_tagged_data(record: ServiceRecordRequest) -> str:
     chunks = []

@@ -1,8 +1,6 @@
 import pytest
 from app.lib.template_filters import parse_markdown_links
 
-import html
-
 
 @pytest.mark.parametrize(
     "input_str,expected",

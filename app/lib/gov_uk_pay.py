@@ -13,22 +13,18 @@ class GOV_UK_PAY_EVENT_TYPES(Enum):
     FAILED = "card_payment_failed"
     SUCCEEDED = "card_payment_succeeded"
 
-SUCCESS_PAYMENT_STATUSES: set[str] = {
-    "success"
-}
+
+SUCCESS_PAYMENT_STATUSES: set[str] = {"success"}
 
 IN_PROGRESS_PAYMENT_STATUSES: set[str] = {
     "created",
     "submitted",
     "started",
-    "capturable"
+    "capturable",
 }
 
-FAILED_PAYMENT_STATUSES: set[str] = {
-    "failed",
-    "cancelled",
-    "error"
-}
+FAILED_PAYMENT_STATUSES: set[str] = {"failed", "cancelled", "error"}
+
 
 def get_payment_data(payment_id: str) -> dict | None:
     headers = {
@@ -37,8 +33,7 @@ def get_payment_data(payment_id: str) -> dict | None:
     }
 
     response = requests.get(
-        f"{current_app.config["GOV_UK_PAY_API_URL"]}/{payment_id}",
-        headers=headers
+        f"{current_app.config["GOV_UK_PAY_API_URL"]}/{payment_id}", headers=headers
     )
 
     try:

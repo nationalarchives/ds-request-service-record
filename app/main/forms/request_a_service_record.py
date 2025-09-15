@@ -58,10 +58,14 @@ class RequestAServiceRecord(FlaskForm):
         description=get_field_content(content, "date_of_birth", "description"),
         validators=[
             InputRequired(
-                message=get_field_content(content, "date_of_birth", "messages")["required"]
+                message=get_field_content(content, "date_of_birth", "messages")[
+                    "required"
+                ]
             ),
             tna_frontend_validators.PastDate(
-                message=get_field_content(content, "date_of_birth", "messages")["past_date"]
+                message=get_field_content(content, "date_of_birth", "messages")[
+                    "past_date"
+                ]
             ),
         ],
     )

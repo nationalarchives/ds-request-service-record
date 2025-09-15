@@ -1,5 +1,5 @@
-from statemachine import StateMachine, State
 from app.constants import MultiPageFormRoutes
+from statemachine import State, StateMachine
 
 
 class RoutingStateMachine(StateMachine):
@@ -23,11 +23,11 @@ class RoutingStateMachine(StateMachine):
     can think of a state as representing a form or page being presented to the user.
 
     The 'enter' parameter is the method called when entering the state. We use these to set the route
-    for the current state. 
-    
+    for the current state.
+
     Naming can be important for us humans when working with state machines, because it can be difficult
-    to tell if something is a state or a transition. What I've tried to do here is use the convention of 
-    appending either "_form" or "_page" to the end of all states. 
+    to tell if something is a state or a transition. What I've tried to do here is use the convention of
+    appending either "_form" or "_page" to the end of all states.
 
     """
     initial = State(initial=True)  # The initial state of our machine
@@ -82,9 +82,7 @@ class RoutingStateMachine(StateMachine):
     that act as predicates that resolve to a boolean
     """
 
-    continue_from_start_form = initial.to(
-        have_you_checked_the_catalogue_form
-    )
+    continue_from_start_form = initial.to(have_you_checked_the_catalogue_form)
 
     continue_from_have_you_checked_the_catalogue_form = initial.to(
         service_person_alive_form, cond="has_checked_catalogue"
@@ -94,13 +92,15 @@ class RoutingStateMachine(StateMachine):
         subject_access_request_page, cond="living_subject"
     ) | initial.to(service_branch_form, unless="living_subject")
     continue_from_service_branch_form = (
-            initial.to(
-                was_service_person_an_officer_form, unless="go_to_mod or likely_unfindable"
-            )
-            | initial.to(we_do_not_have_records_for_this_service_branch_page, cond="go_to_mod")
-            | initial.to(
-        we_may_be_unable_to_find_this_record_page, cond="likely_unfindable"
-    )
+        initial.to(
+            was_service_person_an_officer_form, unless="go_to_mod or likely_unfindable"
+        )
+        | initial.to(
+            we_do_not_have_records_for_this_service_branch_page, cond="go_to_mod"
+        )
+        | initial.to(
+            we_may_be_unable_to_find_this_record_page, cond="likely_unfindable"
+        )
     )
 
     continue_from_was_service_person_an_officer_form = initial.to(
@@ -111,11 +111,21 @@ class RoutingStateMachine(StateMachine):
         what_was_their_date_of_birth_form
     )
 
-    continue_from_what_was_their_date_of_birth_form = initial.to(
-        service_person_details_form, unless="born_too_late or born_too_early or birth_year_requires_proof_of_death"
-    ) | initial.to(we_do_not_have_records_for_people_born_after_page, cond="born_too_late") | initial.to(
-        we_do_not_have_records_for_people_born_before_page, cond="born_too_early") | initial.to(
-        do_you_have_a_proof_of_death_form, cond="birth_year_requires_proof_of_death")
+    continue_from_what_was_their_date_of_birth_form = (
+        initial.to(
+            service_person_details_form,
+            unless="born_too_late or born_too_early or birth_year_requires_proof_of_death",
+        )
+        | initial.to(
+            we_do_not_have_records_for_people_born_after_page, cond="born_too_late"
+        )
+        | initial.to(
+            we_do_not_have_records_for_people_born_before_page, cond="born_too_early"
+        )
+        | initial.to(
+            do_you_have_a_proof_of_death_form, cond="birth_year_requires_proof_of_death"
+        )
+    )
 
     def entering_have_you_checked_the_catalogue_form(self, event, state):
         self.route_for_current_state = (
@@ -165,19 +175,27 @@ class RoutingStateMachine(StateMachine):
         self.route_for_current_state = MultiPageFormRoutes.WE_MAY_HOLD_THIS_RECORD.value
 
     def entering_what_was_their_date_of_birth_page(self, form):
-        self.route_for_current_state = MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH.value
+        self.route_for_current_state = (
+            MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH.value
+        )
 
     def entering_service_person_details_form(self, form):
         self.route_for_current_state = MultiPageFormRoutes.SERVICE_PERSON_DETAILS.value
 
     def entering_we_do_not_have_records_for_people_born_after_page(self, form):
-        self.route_for_current_state = MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER.value
+        self.route_for_current_state = (
+            MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER.value
+        )
 
     def entering_we_do_not_have_records_for_people_born_before_page(self, form):
-        self.route_for_current_state = MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE.value
+        self.route_for_current_state = (
+            MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE.value
+        )
 
     def entering_do_you_have_a_proof_of_death_form(self, form):
-        self.route_for_current_state = MultiPageFormRoutes.DO_YOU_HAVE_TO_PROVIDE_PROOF_OF_DEATH.value
+        self.route_for_current_state = (
+            MultiPageFormRoutes.DO_YOU_HAVE_TO_PROVIDE_PROOF_OF_DEATH.value
+        )
 
     def on_enter_state(self, event, state):
         """This method is called when entering any state."""

@@ -1,15 +1,14 @@
+import uuid
 from datetime import datetime
 
-import uuid
 from app.lib.aws import upload_proof_of_death
-from app.lib.cache import cache, cache_key_prefix
 from app.lib.content import load_content
 from app.lib.db_handler import add_service_record_request, get_payment_id_from_record_id
 from app.lib.gov_uk_pay import (
     create_payment,
-    validate_webhook_signature,
     process_webhook_data,
     validate_payment,
+    validate_webhook_signature,
 )
 from app.main import bp
 from app.main.forms.proceed_to_pay import ProceedToPay
@@ -33,7 +32,7 @@ def all_fields_in_one_form():
                         if file is None:
                             # Redirect back to file upload form with error message "file failed to upload, try again"
                             return redirect(url_for("main.all_fields_in_one_form"))
-                    
+
                         session["form_data"][field_name] = file if file else None
                 else:
                     session["form_data"][field_name] = field.data
@@ -80,14 +79,19 @@ def send_to_gov_pay():
 
     if not response:
         return redirect(url_for("main.payment_link_creation_failed"))
-    
+
     payment_url = response.get("_links", {}).get("next_url", "").get("href", "")
     payment_id = response.get("payment_id", "")
 
     if not payment_url or not payment_id:
         return redirect(url_for("main.payment_link_creation_failed"))
 
-    data = {**form_data, "id": id, "payment_id": payment_id, "created_at": datetime.now()}
+    data = {
+        **form_data,
+        "id": id,
+        "payment_id": payment_id,
+        "created_at": datetime.now(),
+    }
 
     add_service_record_request(data)
 
@@ -101,7 +105,7 @@ def handle_gov_uk_pay_response():
     if not id:
         # User got here without ID - likely manually, do something... (redirect to form?)
         return "Shouldn't be here"
-    
+
     payment_id = get_payment_id_from_record_id(id)
 
     if payment_id is None:
