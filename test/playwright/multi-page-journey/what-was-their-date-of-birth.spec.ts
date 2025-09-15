@@ -9,7 +9,7 @@ test.describe("the 'What was their date of birth?' form", () => {
     SERVICE_PERSON_DETAILS = `${basePath}/service-person-details/`,
     WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE = `${basePath}/we-do-not-have-records-for-people-born-before/`,
     WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER = `${basePath}/we-do-not-have-records-for-people-born-after/`,
-    DO_YOU_HAVE_TO_PROVIDE_PROOF_OF_DEATH = `${basePath}/do-you-have-to-provide-a-proof-of-death/`,
+    DO_YOU_HAVE_A_PROOF_OF_DEATH = `${basePath}/do-you-have-a-proof-of-death/`,
   }
 
   test.beforeEach(async ({ page }) => {
@@ -80,7 +80,7 @@ test.describe("the 'What was their date of birth?' form", () => {
           nextUrl: Urls.SERVICE_PERSON_DETAILS,
           heading: /Service person details/,
           description:
-            "when the year of birth is 1890, the 'Service person details' page is shown",
+            "when the year of birth is 1890, the 'Service person details' page is shown and any 'Back' links work as expected",
         },
         {
           month: "01",
@@ -89,25 +89,25 @@ test.describe("the 'What was their date of birth?' form", () => {
           nextUrl: Urls.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE,
           heading: /We do not have records for people born before/,
           description:
-            "when the year of birth is 1690, the 'We do not have records for people born before' page is shown",
+            "when the year of birth is 1690, the 'We do not have records for people born before' page is shown and any 'Back' links work as expected",
         },
         {
           month: "01",
           day: "01",
           year: "1950",
           nextUrl: Urls.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER,
-          heading: /We do not have records for people born after/,
+          heading: /We do not have this record/,
           description:
-            "when the year of birth is 1950, the 'We do not have records for people born after' page is shown",
+            "when the year of birth is 1950, the 'We do not have this record' page is shown and any 'Back' links work as expected",
         },
         {
           month: "01",
           day: "01",
           year: "1925",
-          nextUrl: Urls.DO_YOU_HAVE_TO_PROVIDE_PROOF_OF_DEATH,
+          nextUrl: Urls.DO_YOU_HAVE_A_PROOF_OF_DEATH,
           heading: /Provide a proof of death/,
           description:
-            "when the year of birth is 1925, the 'Provide proof of death' page is shown",
+            "when the year of birth is 1925, the 'Provide proof of death' page is shown and any 'Back' links work as expected",
         },
       ];
 
@@ -120,6 +120,12 @@ test.describe("the 'What was their date of birth?' form", () => {
             await page.getByRole("button", { name: /Continue/i }).click();
             await expect(page).toHaveURL(nextUrl);
             await expect(page.locator("h1")).toHaveText(heading);
+            const backLink = page.getByRole("link", { name: "Back" });
+            // If there's a "Back" link, click it
+            if ((await backLink.count()) > 0) {
+              await backLink.click();
+              await expect(page).toHaveURL(Urls.WHAT_WAS_THEIR_DATE_OF_BIRTH);
+            }
           });
         },
       );

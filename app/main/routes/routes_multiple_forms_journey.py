@@ -191,9 +191,8 @@ def service_person_details():
         "main/multi-page-journey/service-person-details.html", content=load_content()
     )
 
-
-@bp.route("/do-you-have-to-provide-a-proof-of-death/", methods=["GET"])
-def do_you_have_to_provide_proof_of_death():
+@bp.route("/do-you-have-a-proof-of-death/", methods=["GET"])
+def do_you_have_a_proof_of_death_form():
     return render_template(
         "main/multi-page-journey/do-you-have-a-proof-of-death.html",
         content=load_content(),
