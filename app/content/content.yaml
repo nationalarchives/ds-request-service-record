@@ -217,6 +217,11 @@ forms:
       description: Enter the service person's date of death in the format DD MM YYYY
       messages:
         past_date: The service person's date of death must be in the past
+    do_you_have_a_proof_of_death:
+      label: Do you have a proof of death?
+      messages:
+        required: Choosing an option is required
+      call_to_action: Continue
     service_number:
       label: Service number (optional)
     regiment:

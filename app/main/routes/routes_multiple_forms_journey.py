@@ -4,6 +4,7 @@ from app.lib.decorators.with_form_prefilled_from_session import (
     with_form_prefilled_from_session,
 )
 from app.main import bp
+from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
 from app.main.forms.have_you_checked_the_catalogue import HaveYouCheckedTheCatalogue
 from app.main.forms.is_service_person_alive import IsServicePersonAlive
 from app.main.forms.service_branch import ServiceBranch
@@ -191,9 +192,14 @@ def service_person_details():
         "main/multi-page-journey/service-person-details.html", content=load_content()
     )
 
-@bp.route("/do-you-have-a-proof-of-death/", methods=["GET"])
-def do_you_have_a_proof_of_death_form():
+@bp.route("/do-you-have-a-proof-of-death/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(DoYouHaveAProofOfDeath)
+@with_state_machine
+def do_you_have_a_proof_of_death_form(form, state_machine):
+    if form.validate_on_submit():
+        pass
     return render_template(
         "main/multi-page-journey/do-you-have-a-proof-of-death.html",
+        form=form,
         content=load_content(),
     )

@@ -16,4 +16,13 @@ test.describe("The 'Do you have a proof of death?' form", () => {
   test("has the correct heading", async ({ page }) => {
     await expect(page.locator("h1")).toHaveText(/Provide a proof of death/);
   });
+
+  test.describe("when submitted", () => {
+    test("without a submission, shows an error", async ({ page }) => {
+      await page.getByRole("button", { name: /Continue/i }).click();
+      await expect(page.locator(".tna-form__error-message")).toHaveText(
+        /Choosing an option is required/,
+      );
+    });
+  });
 });
