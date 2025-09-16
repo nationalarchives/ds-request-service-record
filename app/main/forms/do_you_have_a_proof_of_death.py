@@ -21,4 +21,7 @@ class DoYouHaveAProofOfDeath(FlaskForm):
         widget=TnaRadiosWidget(),
     )
 
-    submit = SubmitField(get_field_content(content, "do_you_have_a_proof_of_death", "call_to_action"), widget=TnaSubmitWidget())
+    submit = SubmitField(
+        get_field_content(content, "do_you_have_a_proof_of_death", "call_to_action"),
+        widget=TnaSubmitWidget(),
+    )

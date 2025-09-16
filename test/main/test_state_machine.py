@@ -220,5 +220,31 @@ def test_continue_from_what_was_their_date_of_birth_form(
     assert sm.route_for_current_state == expected_route
 
 
+@pytest.mark.parametrize(
+    "has_proof_of_death,expected_state,expected_route",
+    [
+        (
+            "no",
+            "upload_a_proof_of_death_form",
+            MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH.value,
+        ),
+        (
+            "yes",
+            "upload_a_proof_of_death_form",
+            MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH.value,
+        ),
+    ],
+)
+def test_continue_from_upload_a_proof_of_death(
+    has_proof_of_death, expected_state, expected_route
+):
+    sm = RoutingStateMachine()
+    sm.continue_from_do_you_have_a_proof_of_death_form(
+        form=make_form("upload_a_proof_of_death", has_proof_of_death)
+    )
+    assert sm.current_state.id == expected_state
+    assert sm.route_for_current_state == expected_route
+
+
 def make_form(field_name: str, answer: str = None):
     return SimpleNamespace(**{field_name: SimpleNamespace(data=answer)})

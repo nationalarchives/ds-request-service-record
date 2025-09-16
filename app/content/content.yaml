@@ -113,11 +113,20 @@ pages:
       - payment - you will need a debit or credit card
     paragraphs_after_list:
       - By completing this form you are requesting information from a UK public authority, The National Archives. We are therefore required to treat it as a Freedom of Information (FOI) request. [You can find out more about FOI on GOV.UK](https://www.gov.uk/make-a-freedom-of-information-request).
+  upload_a_proof_of_death:
+    heading: Upload a proof of death
+    paragraphs:
+      - >
+        The file must be:
+    list_items:
+      - JPG, PNG or PDF
+      - no more than 5MB
+      - clear and show all the death certificate
   service_person_details:
     heading: Service person details
     paragraphs:
       - Service person details content to go here
-  do_you_have_a_proof_of_death_form:
+  do_you_have_a_proof_of_death:
     heading: Provide a proof of death
     paragraphs:
       - You will need to upload a digital copy of a proof of death for the service person.
@@ -221,6 +230,13 @@ forms:
       label: Do you have a proof of death?
       messages:
         required: Choosing an option is required
+      call_to_action: Continue
+    upload_a_proof_of_death:
+      label: Upload a file
+      messages:
+        required: Uploading a file is required
+        file_size: The maximum file size is 5MB
+        file_allowed: Files must be in JPG, PNG or PDF format
       call_to_action: Continue
     service_number:
       label: Service number (optional)
