@@ -7,12 +7,12 @@
     <div class="tna-container">
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
-        <h1 class="tna-heading-xl">{{ content.pages.do_you_have_a_proof_of_death_form.heading }}</h1>
-        {% for paragraph in content.pages.do_you_have_a_proof_of_death_form.paragraphs %}
+        <h1 class="tna-heading-xl">{{ content.pages.do_you_have_a_proof_of_death.heading }}</h1>
+        {% for paragraph in content.pages.do_you_have_a_proof_of_death.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
         <ul class="tna-ul">
-          {% for item in content.pages.do_you_have_a_proof_of_death_form.list_items %}
+          {% for item in content.pages.do_you_have_a_proof_of_death.list_items %}
             <li>{{ item | parse_markdown_links | safe }}</li>
           {% endfor %}
         </ul>
@@ -22,10 +22,10 @@
                                                                                 aria-hidden="true">!</span>
           </h2>
           <div class="tna-warning__body">
-            {{ content.pages.do_you_have_a_proof_of_death_form.warning }}
+            {{ content.pages.do_you_have_a_proof_of_death.warning }}
           </div>
         </div>
-        <form action="{{ url_for('main.do_you_have_a_proof_of_death_form') }}" method="post" novalidate>
+        <form action="{{ url_for('main.do_you_have_a_proof_of_death') }}" method="post" novalidate>
           {{ form.csrf_token }}
           {{ form.do_you_have_a_proof_of_death(params={'headingLevel':2, 'headingSize':'l'}) }}
           <div class="tna-button-group">

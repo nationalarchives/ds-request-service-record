@@ -74,6 +74,9 @@ class RoutingStateMachine(StateMachine):
     do_you_have_a_proof_of_death_form = State(
         enter="entering_do_you_have_a_proof_of_death_form", final=True
     )
+    upload_a_proof_of_death_form = State(
+        enter="entering_upload_a_proof_of_death_form", final=True
+    )
 
     """
     These are our Events. They're called in route methods to trigger transitions between States.
@@ -125,6 +128,10 @@ class RoutingStateMachine(StateMachine):
         | initial.to(
             do_you_have_a_proof_of_death_form, cond="birth_year_requires_proof_of_death"
         )
+    )
+
+    continue_from_do_you_have_a_proof_of_death_form = initial.to(
+        upload_a_proof_of_death_form
     )
 
     def entering_have_you_checked_the_catalogue_form(self, event, state):
@@ -193,7 +200,12 @@ class RoutingStateMachine(StateMachine):
         )
 
     def entering_do_you_have_a_proof_of_death_form(self, form):
-        self.route_for_current_state = MultiPageFormRoutes.DO_YOU_HAVE_A_PROOF_OF_DEATH.value
+        self.route_for_current_state = (
+            MultiPageFormRoutes.DO_YOU_HAVE_A_PROOF_OF_DEATH.value
+        )
+
+    def entering_upload_a_proof_of_death_form(self, form):
+        self.route_for_current_state = MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH.value
 
     def on_enter_state(self, event, state):
         """This method is called when entering any state."""

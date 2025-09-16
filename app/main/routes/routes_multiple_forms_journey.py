@@ -12,6 +12,7 @@ from app.main.forms.start_now import StartNow
 from app.main.forms.was_service_person_an_officer import WasServicePersonAnOfficer
 from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
 from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
+from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
 from flask import redirect, render_template, session, url_for
 
 
@@ -192,14 +193,30 @@ def service_person_details():
         "main/multi-page-journey/service-person-details.html", content=load_content()
     )
 
+
 @bp.route("/do-you-have-a-proof-of-death/", methods=["GET", "POST"])
 @with_form_prefilled_from_session(DoYouHaveAProofOfDeath)
 @with_state_machine
-def do_you_have_a_proof_of_death_form(form, state_machine):
+def do_you_have_a_proof_of_death(form, state_machine):
     if form.validate_on_submit():
-        pass
+        session["do_you_have_a_proof_of_death"] = form.do_you_have_a_proof_of_death.data
+        state_machine.continue_from_do_you_have_a_proof_of_death_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/multi-page-journey/do-you-have-a-proof-of-death.html",
+        form=form,
+        content=load_content(),
+    )
+
+
+@bp.route("/upload-a-proof-of-death/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(UploadAProofOfDeath)
+@with_state_machine
+def upload_a_proof_of_death(form, state_machine):
+    if form.validate_on_submit():
+        return redirect(url_for("main.service_person_details"))
+    return render_template(
+        "main/multi-page-journey/upload-a-proof-of-death.html",
         form=form,
         content=load_content(),
     )
