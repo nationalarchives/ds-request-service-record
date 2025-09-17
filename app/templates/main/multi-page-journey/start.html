@@ -3,16 +3,7 @@
 {%- set pageTitle = content.app.title -%}
 
 {% block content %}
-<div class="tna-section tna-!--padding-top-xs tna-!--padding-bottom-s tna-background-accent-light">
-  <div class="tna-container">
-    <div
-      class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
-      {{ tnaBreadcrumbs({
-        'items': breadcrumbItems
-      }) }}
-    </div>
-  </div>
-</div>
+{{ modFoiBreadcrumbs({'breadcrumbItems': breadcrumbItems, 'hasAccentBackground': true}) }}
 <div class="tna-section tna-background-accent-light">
   <div class="tna-container">
     <div

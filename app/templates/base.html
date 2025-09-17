@@ -5,9 +5,9 @@
 {%- from 'components/header/macro.html' import tnaHeader -%}
 {%- from 'components/error-summary/macro.html' import tnaErrorSummary -%}
 {%- from 'components/details/macro.html' import tnaDetails -%}
-{%- from 'components/breadcrumbs/macro.html' import tnaBreadcrumbs -%}
 
-{%- from 'macros/back-link.html' import back_link %}
+{%- from 'macros/back-link.html' import backLink %}
+{%- from 'macros/mod-foi-breadcrumbs.html' import modFoiBreadcrumbs  %}
 
 {%- set theme = request.cookies.get('theme') or 'system' -%}
 {%- set themeAccent = themeAccent if themeAccent else 'green' -%}

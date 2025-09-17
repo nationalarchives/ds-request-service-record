@@ -3,6 +3,7 @@
 {%- set pageTitle = content.app.title -%}
 
 {% block content %}
+  {{ modFoiBreadcrumbs({'breadcrumbItems': breadcrumbItems}) }}
   <div class="tna-section">
     <div class="tna-container">
       <div
@@ -17,7 +18,7 @@
           {% endfor %}
         </ul>
         <div class="tna-button-group">
-          {{ back_link(url_for('main.have_you_checked_the_catalogue')) }}
+          {{ backLink(url_for('main.have_you_checked_the_catalogue')) }}
           <a href="https://discovery.nationalarchives.gov.uk/" class="tna-button tna-button--accent">
             <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
             {{ content.pages.search_the_catalogue.call_to_action }}

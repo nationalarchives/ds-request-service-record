@@ -3,6 +3,7 @@
 {%- set pageTitle = content.app.title -%}
 
 {% block content %}
+  {{ modFoiBreadcrumbs({'breadcrumbItems': breadcrumbItems}) }}
   <div class="tna-section">
     <div class="tna-container">
       <div
@@ -29,7 +30,7 @@
           {{ form.csrf_token }}
           {{ form.do_you_have_a_proof_of_death(params={'headingLevel':2, 'headingSize':'l'}) }}
           <div class="tna-button-group">
-            {{ back_link(url_for('main.what_was_their_date_of_birth')) }}
+            {{ backLink(url_for('main.what_was_their_date_of_birth')) }}
             {{ form.submit(params={'accent':'true', 'icon': 'chevron-right', 'rightAlignIcon': 'true'}) }}
           </div>
         </form>
