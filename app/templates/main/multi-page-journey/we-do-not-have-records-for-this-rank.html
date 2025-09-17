@@ -3,6 +3,7 @@
 {%- set pageTitle = content.app.title -%}
 
 {% block content %}
+  {{ modFoiBreadcrumbs({'breadcrumbItems': breadcrumbItems}) }}
   <div class="tna-section">
     <div class="tna-container">
       <div
