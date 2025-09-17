@@ -11,7 +11,7 @@
           {{ form.csrf_token }}
           {{ form.what_was_their_date_of_birth(params={'headingLevel':1, 'headingSize':'xl'}) }}
           <div class="tna-button-group">
-            {{ backLink(url_for('main.was_service_person_an_officer')) }}
+            {{ backLink(url_for('main.we_may_hold_this_record')) }}
             {{ form.submit(params={'accent':'true'}) }}
           </div>
         </form>

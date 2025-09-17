@@ -28,5 +28,14 @@ test.describe("the 'We may hold this record' form", () => {
         /What was their date of birth?/,
       );
     });
+
+  test("clicking 'Back' from 'What was their date of birth?' brings the user back to the 'We may hold this record' page", async ({
+    page,
+  }) => {
+    await page.getByRole("button", { name: /Continue/i }).click();
+    await expect(page).toHaveURL(Urls.WHAT_WAS_THEIR_DATE_OF_BIRTH);
+    await page.getByRole("link", { name: "Back" }).click();
+    await expect(page).toHaveURL(Urls.WE_MAY_HOLD_THIS_RECORD);
+  });
   });
 });
