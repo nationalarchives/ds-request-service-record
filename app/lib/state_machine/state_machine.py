@@ -134,6 +134,8 @@ class RoutingStateMachine(StateMachine):
         upload_a_proof_of_death_form
     )
 
+    continue_from_upload_a_proof_of_death_form = initial.to(service_person_details_form)
+
     def entering_have_you_checked_the_catalogue_form(self, event, state):
         self.route_for_current_state = (
             MultiPageFormRoutes.HAVE_YOU_CHECKED_THE_CATALOGUE.value

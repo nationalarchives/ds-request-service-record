@@ -214,7 +214,20 @@ def do_you_have_a_proof_of_death(form, state_machine):
 @with_state_machine
 def upload_a_proof_of_death(form, state_machine):
     if form.validate_on_submit():
-        return redirect(url_for("main.service_person_details"))
+        # Note: We should probably call the API from the state machine (as part of the continue_from_* method)
+        #       so that it is the state machine that decides what state the user should be in
+        #       next (this is easy to extend too because we can have the state machine do different
+        #       things based on different conditions - one state for the API being down, another for
+        #       the upload being successful but virus scanning identifying a problem, etc.)
+
+        #       My sense is that this will probably be best achieved a dedicated page initially, but
+        #       it's for UCD to decide how best to handle this from a user experience perspective.
+        #       The key point is that this is probably not best treated as validation error on the form
+        #       because:
+        #         1. it's not necessarily a problem with the data the user has provided
+        #         2. it will likely require us to communicate next steps to the user
+        state_machine.continue_from_upload_a_proof_of_death_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/multi-page-journey/upload-a-proof-of-death.html",
         form=form,

@@ -19,6 +19,7 @@
         </ul>
         <form action="{{ url_for('main.upload_a_proof_of_death') }}" method="post" enctype="multipart/form-data" novalidate>
           {{ form.proof_of_death }}
+          {{ form.csrf_token }}
           <div class="tna-button-group">
             {{ form.submit(params={'accent':'true', 'icon':'chevron-right', 'rightAlignIcon':'true'}) }}
           </div>

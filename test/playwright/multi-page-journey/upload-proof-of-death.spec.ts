@@ -6,6 +6,7 @@ test.describe("The 'Upload proof of death' form", () => {
   enum Urls {
     JOURNEY_START = `${basePath}/start/`,
     UPLOAD_A_PROOF_OF_DEATH = `${basePath}/upload-a-proof-of-death/`,
+    SERVICE_PERSON_DETAILS = `${basePath}/service-person-details/`,
   }
 
   test.beforeEach(async ({ page }) => {
@@ -50,7 +51,7 @@ test.describe("The 'Upload proof of death' form", () => {
     });
 
     ["jpg", "png", "pdf"].forEach((extension) => {
-      test(`with a valid filetype (of .${extension}) which is above the size limit, shows an error`, async ({
+      test(`with a valid extension (of .${extension}) which is above the size limit, shows an error`, async ({
         page,
       }) => {
         await page.getByLabel("Upload a file").setInputFiles({
@@ -62,6 +63,17 @@ test.describe("The 'Upload proof of death' form", () => {
         await expect(page.locator(".tna-form__error-message")).toHaveText(
           /The maximum file size is 5MB/,
         );
+      });
+      test(`with a file that has a valid extention (of .${extension}) and is below the size limit, presents next page`, async ({
+        page,
+      }) => {
+        await page.getByLabel("Upload a file").setInputFiles({
+          name: `image.${extension}`,
+          mimeType: "text/plain",
+          buffer: Buffer.alloc(2 * 1024 * 1024),
+        });
+        await page.getByRole("button", { name: /Continue/i }).click();
+        await expect(page).toHaveURL(Urls.SERVICE_PERSON_DETAILS);
       });
     });
   });

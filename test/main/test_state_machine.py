@@ -235,7 +235,7 @@ def test_continue_from_what_was_their_date_of_birth_form(
         ),
     ],
 )
-def test_continue_from_upload_a_proof_of_death(
+def test_continue_from_do_you_have_a_proof_of_death(
     has_proof_of_death, expected_state, expected_route
 ):
     sm = RoutingStateMachine()
@@ -244,6 +244,15 @@ def test_continue_from_upload_a_proof_of_death(
     )
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
+
+
+def test_continue_from_upload_a_proof_of_death():
+    sm = RoutingStateMachine()
+    sm.continue_from_upload_a_proof_of_death_form(
+        form=make_form("upload_a_proof_of_death")
+    )
+    assert sm.current_state.id == "service_person_details_form"
+    assert sm.route_for_current_state == "main.service_person_details"
 
 
 def make_form(field_name: str, answer: str = None):
