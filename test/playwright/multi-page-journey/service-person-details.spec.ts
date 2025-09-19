@@ -6,6 +6,7 @@ test.describe("the 'About the service person form?' form", () => {
   enum Urls {
     JOURNEY_START_PAGE = `${basePath}/start/`,
     SERVICE_PERSON_DETAILS = `${basePath}/service-person-details/`,
+    HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST = `${basePath}/have-you-previously-made-a-request/`,
   }
 
   test.beforeEach(async ({ page }) => {
@@ -38,6 +39,26 @@ test.describe("the 'About the service person form?' form", () => {
         await expect(
           page.locator(".tna-form__error-message").nth(1),
         ).toHaveText(/The service person's last name is required/);
+      });
+    });
+    test.describe("with valid input", () => {
+      test("with only the required fields filled in, the user is taken to the next page", async ({
+        page,
+      }) => {
+        await page.getByLabel("First name").fill("Thomas");
+        await page.getByLabel("Last name").fill("Duffus");
+        await page.getByRole("button", { name: /Continue/i }).click();
+        await expect(page).toHaveURL(Urls.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
+      });
+      test("with all fields filled in, the user is taken to the next page", async ({
+        page,
+      }) => {
+        await page.getByLabel("First name").fill("Thomas");
+        await page.getByLabel("Middle names").fill("Duffus");
+        await page.getByLabel("Last name").fill("Hardy");
+        await page.getByLabel("Service number").fill("123456");
+        await page.getByRole("button", { name: /Continue/i }).click();
+        await expect(page).toHaveURL(Urls.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
       });
     });
   });

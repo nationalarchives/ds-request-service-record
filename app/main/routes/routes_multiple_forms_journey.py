@@ -197,9 +197,19 @@ def service_person_details(form, state_machine):
         for field_name, field in form._fields.items():
             if field_name not in ["csrf_token", "submit"]:
                 session["form_data"][field_name] = field.data
+        state_machine.continue_from_service_person_details_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/multi-page-journey/service-person-details.html",
         form=form,
+        content=load_content(),
+    )
+
+
+@bp.route("/have-you-previously-made-a-request/", methods=["GET"])
+def have_you_previously_made_a_request():
+    return render_template(
+        "main/multi-page-journey/have-you-previously-made-a-request.html",
         content=load_content(),
     )
 

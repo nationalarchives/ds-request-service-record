@@ -50,6 +50,8 @@ pages:
   have_you_checked_the_catalogue:
     heading: Have you checked if this record is available in our catalogue?
     paragraph: A portion of the service records we hold are listed in our catalogue and are available to order from there.
+  have_you_previously_made_a_request:
+    heading: Have you previously made a request?
   search_the_catalogue:
     heading: Search our catalogue
     paragraphs:
