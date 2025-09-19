@@ -13,6 +13,7 @@ from app.main.forms.was_service_person_an_officer import WasServicePersonAnOffic
 from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
 from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
+from app.main.forms.service_person_details import ServicePersonDetails
 from flask import redirect, render_template, session, url_for
 
 
@@ -187,10 +188,29 @@ def we_do_not_have_records_for_people_born_after():
     )
 
 
-@bp.route("/service-person-details/", methods=["GET"])
-def service_person_details():
+@bp.route("/service-person-details/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(ServicePersonDetails)
+@with_state_machine
+def service_person_details(form, state_machine):
+    if form.validate_on_submit():
+        session["form_data"] = {}
+        for field_name, field in form._fields.items():
+            if field_name not in ["csrf_token", "submit"]:
+                session["form_data"][field_name] = field.data
+        state_machine.continue_from_service_person_details_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/multi-page-journey/service-person-details.html", content=load_content()
+        "main/multi-page-journey/service-person-details.html",
+        form=form,
+        content=load_content(),
+    )
+
+
+@bp.route("/have-you-previously-made-a-request/", methods=["GET"])
+def have_you_previously_made_a_request():
+    return render_template(
+        "main/multi-page-journey/have-you-previously-made-a-request.html",
+        content=load_content(),
     )
 
 
@@ -214,7 +234,20 @@ def do_you_have_a_proof_of_death(form, state_machine):
 @with_state_machine
 def upload_a_proof_of_death(form, state_machine):
     if form.validate_on_submit():
-        return redirect(url_for("main.service_person_details"))
+        # Note: We should probably call the API from the state machine (as part of the continue_from_* method)
+        #       so that it is the state machine that decides what state the user should be in
+        #       next (this is easy to extend too because we can have the state machine do different
+        #       things based on different conditions - one state for the API being down, another for
+        #       the upload being successful but virus scanning identifying a problem, etc.)
+
+        #       My sense is that this will probably be best achieved a dedicated page initially, but
+        #       it's for UCD to decide how best to handle this from a user experience perspective.
+        #       The key point is that this is probably not best treated as validation error on the form
+        #       because:
+        #         1. it's not necessarily a problem with the data the user has provided
+        #         2. it will likely require us to communicate next steps to the user
+        state_machine.continue_from_upload_a_proof_of_death_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/multi-page-journey/upload-a-proof-of-death.html",
         form=form,

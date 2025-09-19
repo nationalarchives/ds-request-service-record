@@ -50,6 +50,8 @@ pages:
   have_you_checked_the_catalogue:
     heading: Have you checked if this record is available in our catalogue?
     paragraph: A portion of the service records we hold are listed in our catalogue and are available to order from there.
+  have_you_previously_made_a_request:
+    heading: Have you previously made a request?
   search_the_catalogue:
     heading: Search our catalogue
     paragraphs:
@@ -123,9 +125,7 @@ pages:
       - no more than 5MB
       - clear and show all the death certificate
   service_person_details:
-    heading: Service person details
-    paragraphs:
-      - Service person details content to go here
+    heading: About the service person
   do_you_have_a_proof_of_death:
     heading: Provide a proof of death
     paragraphs:
@@ -206,6 +206,12 @@ forms:
       label: Forenames (including middle names)
       messages:
         required: The service person's first name is required
+    first_name:
+      label: First name
+      messages:
+        required: The service person's first name is required
+    middle_names:
+      label: Middle names (optional)
     last_name:
       label: Last name
       messages:
@@ -260,7 +266,7 @@ forms:
         file_allowed: File type not allowed. Only .jpg, .png, .gif files are accepted.
         file_size: File size must be less than 20MB.
     died_in_service:
-      label: Do you believe the individual may have died in service?
+      label: Did they die in service? (optional)
       messages:
         required: Choosing an option for death in service is required
     case_reference_number:
