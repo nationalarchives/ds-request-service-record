@@ -78,9 +78,9 @@ test.describe("the 'What was their date of birth?' form", () => {
           day: "01",
           year: "1890",
           nextUrl: Urls.SERVICE_PERSON_DETAILS,
-          heading: /Service person details/,
+          heading: /About the service person/,
           description:
-            "when the year of birth is 1890, the 'Service person details' page is shown and any 'Back' links work as expected",
+            "when the year of birth is 1890, the 'About the service person' page is shown and any 'Back' links work as expected",
         },
         {
           month: "01",

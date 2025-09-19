@@ -13,6 +13,7 @@ from app.main.forms.was_service_person_an_officer import WasServicePersonAnOffic
 from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
 from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
+from app.main.forms.service_person_details import ServicePersonDetails
 from flask import redirect, render_template, session, url_for
 
 
@@ -187,10 +188,19 @@ def we_do_not_have_records_for_people_born_after():
     )
 
 
-@bp.route("/service-person-details/", methods=["GET"])
-def service_person_details():
+@bp.route("/service-person-details/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(ServicePersonDetails)
+@with_state_machine
+def service_person_details(form, state_machine):
+    if form.validate_on_submit():
+        session["form_data"] = {}
+        for field_name, field in form._fields.items():
+            if field_name not in ["csrf_token", "submit"]:
+                session["form_data"][field_name] = field.data
     return render_template(
-        "main/multi-page-journey/service-person-details.html", content=load_content()
+        "main/multi-page-journey/service-person-details.html",
+        form=form,
+        content=load_content(),
     )
 
 
