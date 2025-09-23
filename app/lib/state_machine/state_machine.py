@@ -80,6 +80,7 @@ class RoutingStateMachine(StateMachine):
     have_you_previously_made_a_request_form = State(
         enter="entering_have_you_previously_made_a_request_form", final=True
     )
+    your_details_form = State(enter="entering_your_details_form", final=True)
 
     """
     These are our Events. They're called in route methods to trigger transitions between States.
@@ -141,6 +142,10 @@ class RoutingStateMachine(StateMachine):
 
     continue_from_service_person_details_form = initial.to(
         have_you_previously_made_a_request_form
+    )
+
+    continue_from_have_you_previously_made_a_request_form = initial.to(
+        your_details_form
     )
 
     def entering_have_you_checked_the_catalogue_form(self, event, state):
@@ -220,6 +225,9 @@ class RoutingStateMachine(StateMachine):
         self.route_for_current_state = (
             MultiPageFormRoutes.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST.value
         )
+
+    def entering_your_details_form(self, form):
+        self.route_for_current_state = MultiPageFormRoutes.YOUR_DETAILS.value
 
     def on_enter_state(self, event, state):
         """This method is called when entering any state."""

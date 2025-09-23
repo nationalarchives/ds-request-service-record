@@ -180,6 +180,8 @@ pages:
     heading: Payment incomplete
     paragraphs:
       - Your payment was not completed successfully.
+  your_details:
+    heading: Your details
 forms:
   fields:
     start_now:
@@ -269,6 +271,14 @@ forms:
       label: Did they die in service? (optional)
       messages:
         required: Choosing an option for death in service is required
+    have_you_previously_made_a_request:
+      with_mod:
+        label: Have you made a request for this record with the Ministry of Defence before? (optional)
+        hint_text: If so, please provide your reference number. This might start with 'APV' followed by a series of numbers.
+      with_tna:
+        label: Have you made a request for this record with us before? (optional)
+        hint_text: If so, provide your case reference number. This might start with 'CAS' or 'SPR' followed by a series of numbers.
+      call_to_action: Continue
     case_reference_number:
       label: Case reference number (optional)
       description: If you have contacted us before and have a case reference number, please enter it here. This might start with 'CAS' or 'SPR'

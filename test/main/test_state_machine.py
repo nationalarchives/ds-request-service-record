@@ -59,7 +59,7 @@ def test_continue_from_have_you_checked_the_catalogue_form_routes_by_condition(
 ):
     sm = RoutingStateMachine()
     sm.continue_from_have_you_checked_the_catalogue_form(
-        form=make_form("have_you_checked_the_catalogue", answer)
+        form=make_form(have_you_checked_the_catalogue=answer)
     )
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
@@ -81,7 +81,7 @@ def test_continue_from_service_person_alive_form_routes_by_condition(
 ):
     sm = RoutingStateMachine()
     sm.continue_from_service_person_alive_form(
-        form=make_form("is_service_person_alive", answer)
+        form=make_form(is_service_person_alive=answer)
     )
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
@@ -126,7 +126,7 @@ def test_continue_from_service_branch_form_routes_by_condition(
     answer, expected_state, expected_route
 ):
     sm = RoutingStateMachine()
-    sm.continue_from_service_branch_form(form=make_form("service_branch", answer))
+    sm.continue_from_service_branch_form(form=make_form(service_branch=answer))
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
 
@@ -156,7 +156,7 @@ def test_continue_from_was_service_person_an_officer_form_routes_by_condition(
 ):
     sm = RoutingStateMachine()
     sm.continue_from_was_service_person_an_officer_form(
-        form=make_form("was_service_person_an_officer", answer)
+        form=make_form(was_service_person_an_officer=answer)
     )
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
@@ -165,7 +165,7 @@ def test_continue_from_was_service_person_an_officer_form_routes_by_condition(
 def test_continue_from_we_may_hold_this_record():
     sm = RoutingStateMachine()
     sm.continue_from_we_may_hold_this_record_form(
-        form=make_form("we_may_hold_this_record")
+        form=make_form(we_may_hold_this_record=None)
     )
     assert sm.current_state.id == "what_was_their_date_of_birth_form"
     assert (
@@ -214,7 +214,7 @@ def test_continue_from_what_was_their_date_of_birth_form(
 ):
     sm = RoutingStateMachine()
     sm.continue_from_what_was_their_date_of_birth_form(
-        form=make_form("what_was_their_date_of_birth", date_of_birth)
+        form=make_form(what_was_their_date_of_birth=date_of_birth)
     )
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
@@ -240,7 +240,7 @@ def test_continue_from_do_you_have_a_proof_of_death(
 ):
     sm = RoutingStateMachine()
     sm.continue_from_do_you_have_a_proof_of_death_form(
-        form=make_form("upload_a_proof_of_death", has_proof_of_death)
+        form=make_form(upload_a_proof_of_death=has_proof_of_death)
     )
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
@@ -249,7 +249,7 @@ def test_continue_from_do_you_have_a_proof_of_death(
 def test_continue_from_upload_a_proof_of_death():
     sm = RoutingStateMachine()
     sm.continue_from_upload_a_proof_of_death_form(
-        form=make_form("upload_a_proof_of_death")
+        form=make_form(upload_a_proof_of_death=None)
     )
     assert sm.current_state.id == "service_person_details_form"
     assert sm.route_for_current_state == "main.service_person_details"
@@ -258,7 +258,7 @@ def test_continue_from_upload_a_proof_of_death():
 def test_continue_from_service_person_details():
     sm = RoutingStateMachine()
     sm.continue_from_service_person_details_form(
-        form=make_form("service_person_details")
+        form=make_form(service_person_details=None)
     )
     assert sm.current_state.id == "have_you_previously_made_a_request_form"
     assert (
@@ -267,5 +267,24 @@ def test_continue_from_service_person_details():
     )
 
 
-def make_form(field_name: str, answer: str = None):
-    return SimpleNamespace(**{field_name: SimpleNamespace(data=answer)})
+def test_continue_from_have_you_previously_made_a_request():
+    sm = RoutingStateMachine()
+
+    sm.continue_from_have_you_previously_made_a_request_form(
+        form=make_form(
+            first_name=None,
+            middle_names=None,
+            last_name=None,
+            place_of_birth=None,
+            date_of_death=None,
+            died_in_service=None,
+            service_number=None,
+            regiment=None,
+            additional_information=None,
+            submit=None,
+        )
+    )
+
+
+def make_form(**fields):
+    return SimpleNamespace(**{k: SimpleNamespace(data=v) for k, v in fields.items()})
