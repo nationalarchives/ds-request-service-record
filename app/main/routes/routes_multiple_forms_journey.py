@@ -6,6 +6,9 @@ from app.lib.decorators.with_form_prefilled_from_session import (
 from app.main import bp
 from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
 from app.main.forms.have_you_checked_the_catalogue import HaveYouCheckedTheCatalogue
+from app.main.forms.have_you_previously_made_a_request import (
+    HaveYouPreviouslyMadeARequest,
+)
 from app.main.forms.is_service_person_alive import IsServicePersonAlive
 from app.main.forms.service_branch import ServiceBranch
 from app.main.forms.start_now import StartNow
@@ -206,11 +209,31 @@ def service_person_details(form, state_machine):
     )
 
 
-@bp.route("/have-you-previously-made-a-request/", methods=["GET"])
-def have_you_previously_made_a_request():
+@bp.route("/have-you-previously-made-a-request/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(HaveYouPreviouslyMadeARequest)
+@with_state_machine
+def have_you_previously_made_a_request(form, state_machine):
+    if form.validate_on_submit():
+        session["have_you_previously_made_a_request_with_mod"] = (
+            form.with_mod.data if form.with_mod.data else None
+        )
+        session["have_you_previously_made_a_request_with_tna"] = (
+            form.with_tna.data if form.with_tna.data else None
+        )
+        state_machine.continue_from_have_you_previously_made_a_request_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
+
     return render_template(
         "main/multi-page-journey/have-you-previously-made-a-request.html",
+        form=form,
         content=load_content(),
+    )
+
+
+@bp.route("/your-details/", methods=["GET"])
+def your_details():
+    return render_template(
+        "main/multi-page-journey/your-details.html", content=load_content()
     )
 
 
