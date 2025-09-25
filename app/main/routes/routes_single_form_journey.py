@@ -6,6 +6,7 @@ from app.lib.content import load_content
 from app.lib.db_handler import add_service_record_request, get_payment_id_from_record_id
 from app.lib.gov_uk_pay import (
     create_payment,
+    process_valid_request,
     process_webhook_data,
     validate_payment,
     validate_webhook_signature,
@@ -113,6 +114,12 @@ def handle_gov_uk_pay_response():
         return "Shouldn't be here"
 
     if validate_payment(payment_id):
+        try:
+            process_valid_request(payment_id)
+        except Exception as e:
+            current_app.logger.error(
+                f"Error processing valid request of payment ID {payment_id}: {e}"
+            )
         return redirect(url_for("main.confirm_payment_received"))
 
     # Let the user know it failed, ask if they want to retry

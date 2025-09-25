@@ -4,12 +4,10 @@ from tna_frontend_jinja.wtforms import (
     TnaSubmitWidget,
     TnaTextInputWidget,
 )
-from tna_frontend_jinja.wtforms import validators as tna_frontend_validators
 from wtforms import (
     StringField,
     SubmitField,
 )
-from wtforms.validators import Email, InputRequired
 
 
 class HaveYouPreviouslyMadeARequest(FlaskForm):

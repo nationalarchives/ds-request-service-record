@@ -118,3 +118,14 @@ def process_webhook_data(data: dict) -> None:
         send_data_to_dynamics(record)
 
     delete_service_record_request(record)
+
+
+def process_valid_request(payment_id: str) -> None:
+    record = get_service_record_request(payment_id=payment_id)
+
+    if record is None:
+        raise ValueError(f"Service record not found for payment ID: {payment_id}")
+
+    send_data_to_dynamics(record)
+
+    delete_service_record_request(record)

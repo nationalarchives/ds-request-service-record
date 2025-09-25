@@ -2,7 +2,6 @@ from app.lib.content import get_field_content, load_content
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileSize
 from tna_frontend_jinja.wtforms import TnaDroppableFileInputWidget, TnaSubmitWidget
-from tna_frontend_jinja.wtforms import validators as tna_frontend_validators
 from wtforms import (
     FileField,
     SubmitField,
