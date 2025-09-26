@@ -2,10 +2,13 @@ import { test, expect } from "@playwright/test";
 
 test.describe("your details", () => {
   const basePath = "/request-a-service-record";
+
   enum Urls {
     START_PAGE = `${basePath}/start/`,
     HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST = `${basePath}/have-you-previously-made-a-request/`,
     YOUR_DETAILS = `${basePath}/your-details/`,
+    YOUR_POSTAL_ADDRESS = `${basePath}/your-postal-address/`,
+    HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED = `${basePath}/how-do-you-want-your-order-processed/`,
   }
 
   test.beforeEach(async ({ page }) => {
@@ -18,7 +21,9 @@ test.describe("your details", () => {
   });
 
   test.describe("when submitted", () => {
-    test("without a submission, shows an error", async ({ page }) => {
+    test("without the form having been completed, shows an error", async ({
+      page,
+    }) => {
       await page.getByRole("button", { name: /Continue/i }).click();
       await expect(page.locator(".tna-form__error-message")).toHaveCount(2);
       await expect(page.locator(".tna-form__error-message").first()).toHaveText(
@@ -29,7 +34,27 @@ test.describe("your details", () => {
       );
     });
 
-    test("clicking 'Back' from 'Have you previously made a request?' brings the user back to the 'Service person details' page", async ({
+    test.describe("with the form completed", () => {
+      test("takes the user to the 'Your postal address' page if the user doesn't have an email address", async ({
+        page,
+      }) => {
+        await page.getByLabel("First name").fill("John");
+        await page.getByLabel("Last name").fill("Doe");
+        await page.getByLabel("I do not have an email address").check();
+        await page.getByRole("button", { name: /Continue/i }).click();
+        await expect(page).toHaveURL(Urls.YOUR_POSTAL_ADDRESS);
+      });
+      test("takes the user to the 'How would you like your order processed' page if the user does have an email address", async ({
+        page,
+      }) => {
+        await page.getByLabel("First name").fill("John");
+        await page.getByLabel("Last name").fill("Doe");
+        await page.getByRole("button", { name: /Continue/i }).click();
+        await expect(page).toHaveURL(Urls.HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED);
+      });
+    });
+
+    test("clicking 'Back' from 'Your details' brings the user back to the 'Have you previously made a request?' page", async ({
       page,
     }) => {
       await page.getByRole("link", { name: "Back" }).click();

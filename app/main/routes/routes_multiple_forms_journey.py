@@ -9,6 +9,7 @@ from app.lib.save_submitted_form_fields_to_session import (
 from app.main import bp
 from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
 from app.main.forms.have_you_checked_the_catalogue import HaveYouCheckedTheCatalogue
+from app.main.forms.your_postal_address import YourPostalAddress
 from app.main.forms.have_you_previously_made_a_request import (
     HaveYouPreviouslyMadeARequest,
 )
@@ -20,6 +21,7 @@ from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
 from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
 from app.main.forms.service_person_details import ServicePersonDetails
+from app.main.forms.your_postal_address import YourPostalAddress
 from app.main.forms.your_details import YourDetails
 from flask import redirect, render_template, session, url_for
 
@@ -228,6 +230,8 @@ def have_you_previously_made_a_request(form, state_machine):
 def your_details(form, state_machine):
     if form.validate_on_submit():
         save_submitted_form_fields_to_session(form)
+        state_machine.continue_from_your_details_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/multi-page-journey/your-details.html", form=form, content=load_content()
     )
@@ -244,6 +248,27 @@ def do_you_have_a_proof_of_death(form, state_machine):
     return render_template(
         "main/multi-page-journey/do-you-have-a-proof-of-death.html",
         form=form,
+        content=load_content(),
+    )
+
+
+@bp.route("/your-postal-address/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(YourPostalAddress)
+@with_state_machine
+def your_postal_address(form, state_machine):
+    if form.validate_on_submit():
+        pass
+    return render_template(
+        "main/multi-page-journey/your-postal-address.html",
+        form=form,
+        content=load_content(),
+    )
+
+
+@bp.route("/how-do-you-want-your-order-processed/", methods=["GET"])
+def how_do_you_want_your_order_processed():
+    return render_template(
+        "main/multi-page-journey/how-do-you-want-your-order-processed.html",
         content=load_content(),
     )
 

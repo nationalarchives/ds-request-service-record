@@ -81,6 +81,12 @@ class RoutingStateMachine(StateMachine):
         enter="entering_have_you_previously_made_a_request_form", final=True
     )
     your_details_form = State(enter="entering_your_details_form", final=True)
+    your_postal_address_form = State(
+        enter="entering_your_postal_address_form", final=True
+    )
+    how_do_you_want_your_order_processed_form = State(
+        enter="entering_how_do_you_want_your_order_processed_form", final=True
+    )
 
     """
     These are our Events. They're called in route methods to trigger transitions between States.
@@ -147,6 +153,10 @@ class RoutingStateMachine(StateMachine):
     continue_from_have_you_previously_made_a_request_form = initial.to(
         your_details_form
     )
+
+    continue_from_your_details_form = initial.to(
+        your_postal_address_form, cond="does_not_have_email"
+    ) | initial.to(how_do_you_want_your_order_processed_form)
 
     def entering_have_you_checked_the_catalogue_form(self, event, state):
         self.route_for_current_state = (
@@ -229,6 +239,14 @@ class RoutingStateMachine(StateMachine):
     def entering_your_details_form(self, form):
         self.route_for_current_state = MultiPageFormRoutes.YOUR_DETAILS.value
 
+    def entering_your_postal_address_form(self, form):
+        self.route_for_current_state = MultiPageFormRoutes.YOUR_POSTAL_ADDRESS.value
+
+    def entering_how_do_you_want_your_order_processed_form(self, form):
+        self.route_for_current_state = (
+            MultiPageFormRoutes.HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED.value
+        )
+
     def on_enter_state(self, event, state):
         """This method is called when entering any state."""
         print(
@@ -270,3 +288,6 @@ class RoutingStateMachine(StateMachine):
 
     def birth_year_requires_proof_of_death(self, form):
         return form.what_was_their_date_of_birth.data.year > 1910
+
+    def does_not_have_email(self, form):
+        return form.does_not_have_email.data
