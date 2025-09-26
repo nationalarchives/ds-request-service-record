@@ -11,12 +11,13 @@ from app.main.forms.have_you_previously_made_a_request import (
 )
 from app.main.forms.is_service_person_alive import IsServicePersonAlive
 from app.main.forms.service_branch import ServiceBranch
-from app.main.forms.service_person_details import ServicePersonDetails
 from app.main.forms.start_now import StartNow
-from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
 from app.main.forms.was_service_person_an_officer import WasServicePersonAnOfficer
 from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
 from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
+from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
+from app.main.forms.service_person_details import ServicePersonDetails
+from app.main.forms.your_details import YourDetails
 from flask import redirect, render_template, session, url_for
 
 
@@ -230,10 +231,14 @@ def have_you_previously_made_a_request(form, state_machine):
     )
 
 
-@bp.route("/your-details/", methods=["GET"])
-def your_details():
+@bp.route("/your-details/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(YourDetails)
+@with_state_machine
+def your_details(form, state_machine):
+    if form.validate_on_submit():
+        pass
     return render_template(
-        "main/multi-page-journey/your-details.html", content=load_content()
+        "main/multi-page-journey/your-details.html", form=form, content=load_content()
     )
 
 

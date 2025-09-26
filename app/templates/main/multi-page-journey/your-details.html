@@ -9,8 +9,20 @@
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
         <h1 class="tna-heading-xl">{{ content.pages.your_details.heading }}</h1>
+        <form action="{{ url_for('main.your_details') }}" method="post" novalidate>
+          {{ form.csrf_token }}
+          {{ form.requester_first_name(params={'headingLevel':2, 'size':'m', 'autocomplete':'given-name'}) }}
+          {{ form.requester_last_name(params={'headingLevel':2, 'size':'m', 'autocomplete':'family-name'}) }}
+          {{ form.requester_email(params={'headingLevel':2, 'size':'m', 'autocomplete':'email'}) }}
+          <div class="hide-legend tna-!--margin-top-m">
+            {{ form.does_not_have_email(params={'headingLevel':2, 'size':'m'}) }}
+          </div>
+          <div class="tna-button-group">
+            {{ backLink(url_for('main.have_you_previously_made_a_request')) }}
+            {{ form.submit(params={'accent':'true'}) }}
+          </div>
+        </form>
       </div>
     </div>
-  </div>
   </div>
 {% endblock %}
