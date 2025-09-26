@@ -286,5 +286,37 @@ def test_continue_from_have_you_previously_made_a_request():
     )
 
 
+@pytest.mark.parametrize(
+    "does_not_have_email,current_state_id,route_for_current_state",
+    [
+        (
+            True,
+            "your_postal_address_form",
+            MultiPageFormRoutes.YOUR_POSTAL_ADDRESS.value,
+        ),
+        (
+            False,
+            "how_do_you_want_your_order_processed_form",
+            MultiPageFormRoutes.HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED.value,
+        ),
+    ],
+)
+def test_continue_from_your_details(
+    does_not_have_email, current_state_id, route_for_current_state
+):
+    sm = RoutingStateMachine()
+    sm.continue_from_your_details_form(
+        form=make_form(
+            requester_first_name=None,
+            requester_last_name=None,
+            does_not_have_email=does_not_have_email,
+            requester_email=None,
+            submit=None,
+        )
+    )
+    assert sm.current_state.id == current_state_id
+    assert sm.route_for_current_state == route_for_current_state
+
+
 def make_form(**fields):
     return SimpleNamespace(**{k: SimpleNamespace(data=v) for k, v in fields.items()})

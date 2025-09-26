@@ -3,9 +3,13 @@ from app.lib.decorators.state_machine_decorator import with_state_machine
 from app.lib.decorators.with_form_prefilled_from_session import (
     with_form_prefilled_from_session,
 )
+from app.lib.save_submitted_form_fields_to_session import (
+    save_submitted_form_fields_to_session,
+)
 from app.main import bp
 from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
 from app.main.forms.have_you_checked_the_catalogue import HaveYouCheckedTheCatalogue
+from app.main.forms.your_postal_address import YourPostalAddress
 from app.main.forms.have_you_previously_made_a_request import (
     HaveYouPreviouslyMadeARequest,
 )
@@ -17,6 +21,7 @@ from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
 from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
 from app.main.forms.service_person_details import ServicePersonDetails
+from app.main.forms.your_postal_address import YourPostalAddress
 from app.main.forms.your_details import YourDetails
 from flask import redirect, render_template, session, url_for
 
@@ -39,9 +44,7 @@ def start(form, state_machine):
 @with_form_prefilled_from_session(HaveYouCheckedTheCatalogue)
 def have_you_checked_the_catalogue(form, state_machine):
     if form.validate_on_submit():
-        session["have_you_checked_the_catalogue"] = (
-            form.have_you_checked_the_catalogue.data
-        )
+        save_submitted_form_fields_to_session(form)
         state_machine.continue_from_have_you_checked_the_catalogue_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
 
@@ -57,7 +60,7 @@ def have_you_checked_the_catalogue(form, state_machine):
 @with_form_prefilled_from_session(IsServicePersonAlive)
 def is_service_person_alive(form, state_machine):
     if form.validate_on_submit():
-        session["is_service_person_alive"] = form.is_service_person_alive.data
+        save_submitted_form_fields_to_session(form)
         state_machine.continue_from_service_person_alive_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
 
@@ -89,7 +92,7 @@ def only_living_subjects_can_request_their_record():
 @with_state_machine
 def service_branch_form(form, state_machine):
     if form.validate_on_submit():
-        session["service_branch"] = form.service_branch.data
+        save_submitted_form_fields_to_session(form)
         state_machine.continue_from_service_branch_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
 
@@ -103,9 +106,7 @@ def service_branch_form(form, state_machine):
 @with_state_machine
 def was_service_person_an_officer(form, state_machine):
     if form.validate_on_submit():
-        session["was_service_person_an_officer"] = (
-            form.was_service_person_an_officer.data
-        )
+        save_submitted_form_fields_to_session(form)
         state_machine.continue_from_was_service_person_an_officer_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
 
@@ -166,7 +167,7 @@ def we_may_hold_this_record(form, state_machine):
 @with_state_machine
 def what_was_their_date_of_birth(form, state_machine):
     if form.validate_on_submit():
-        session["date_of_birth"] = form.what_was_their_date_of_birth.data
+        save_submitted_form_fields_to_session(form)
         state_machine.continue_from_what_was_their_date_of_birth_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
@@ -197,10 +198,7 @@ def we_do_not_have_records_for_people_born_after():
 @with_state_machine
 def service_person_details(form, state_machine):
     if form.validate_on_submit():
-        session["form_data"] = {}
-        for field_name, field in form._fields.items():
-            if field_name not in ["csrf_token", "submit"]:
-                session["form_data"][field_name] = field.data
+        save_submitted_form_fields_to_session(form)
         state_machine.continue_from_service_person_details_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
@@ -215,12 +213,7 @@ def service_person_details(form, state_machine):
 @with_state_machine
 def have_you_previously_made_a_request(form, state_machine):
     if form.validate_on_submit():
-        session["have_you_previously_made_a_request_with_mod"] = (
-            form.with_mod.data if form.with_mod.data else None
-        )
-        session["have_you_previously_made_a_request_with_tna"] = (
-            form.with_tna.data if form.with_tna.data else None
-        )
+        save_submitted_form_fields_to_session(form)
         state_machine.continue_from_have_you_previously_made_a_request_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
 
@@ -236,7 +229,9 @@ def have_you_previously_made_a_request(form, state_machine):
 @with_state_machine
 def your_details(form, state_machine):
     if form.validate_on_submit():
-        pass
+        save_submitted_form_fields_to_session(form)
+        state_machine.continue_from_your_details_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/multi-page-journey/your-details.html", form=form, content=load_content()
     )
@@ -247,12 +242,33 @@ def your_details(form, state_machine):
 @with_state_machine
 def do_you_have_a_proof_of_death(form, state_machine):
     if form.validate_on_submit():
-        session["do_you_have_a_proof_of_death"] = form.do_you_have_a_proof_of_death.data
+        save_submitted_form_fields_to_session(form)
         state_machine.continue_from_do_you_have_a_proof_of_death_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/multi-page-journey/do-you-have-a-proof-of-death.html",
         form=form,
+        content=load_content(),
+    )
+
+
+@bp.route("/your-postal-address/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(YourPostalAddress)
+@with_state_machine
+def your_postal_address(form, state_machine):
+    if form.validate_on_submit():
+        pass
+    return render_template(
+        "main/multi-page-journey/your-postal-address.html",
+        form=form,
+        content=load_content(),
+    )
+
+
+@bp.route("/how-do-you-want-your-order-processed/", methods=["GET"])
+def how_do_you_want_your_order_processed():
+    return render_template(
+        "main/multi-page-journey/how-do-you-want-your-order-processed.html",
         content=load_content(),
     )
 

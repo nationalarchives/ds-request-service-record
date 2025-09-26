@@ -179,6 +179,12 @@ pages:
       - Your payment was not completed successfully.
   your_details:
     heading: Your details
+  your_postal_address:
+    heading: Your postal address
+    paragraphs:
+      - Please provide a postal address so we can contact you.
+  how_do_you_want_your_order_processed:
+    heading: How do you want your order processed?
 forms:
   fields:
     start_now:
