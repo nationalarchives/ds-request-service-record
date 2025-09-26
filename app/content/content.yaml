@@ -8,25 +8,22 @@ pages:
       paragraphs:
         - Use this service to request a military service record for someone who served in the British Armed Forces after 1918 and was born before 1940.
         - These records cover the period of the Second World War.
-    what_it_costs:
-      heading: What it costs
+    service_options:
+      heading: █████████████
       paragraph: |
-        You'll need to pay a fee to make a request. 
-        This charge recovers the costs of running the service. 
-        The fee will depend on the service you require.
+        █████████████
       table:
         headers:
           - Service option
-          - Fee
         rows:
           - option: Standard
-            fee: £42.75
+            fee: █████████████
           - option: Standard (paper-copy)
-            fee: £47.25
+            fee: █████████████
           - option: Full sensitivity check
-            fee: £48.87 plus £1.04 per page copying fee
+            fee: █████████████
           - option: Full sensitivity check (paper-copy)
-            fee: £48.87 plus £1.89 per page copying fee
+            fee: █████████████
     information_needed:
       heading: Information you will need to provide
       paragraph: To apply you'll need to tell us
@@ -285,17 +282,21 @@ forms:
     requester_title:
       label: Title (optional)
     requester_first_name:
-      label: First name (optional)
+      label: First name
+      messages:
+        required: Your first name is required
     requester_last_name:
       label: Last name
       messages:
         required: Your last name is required
+    does_not_have_email:
+      label: I do not have an email address
     contact_preferences:
       label: How would you like to be contacted?
       messages:
         required: Choosing how you would like to be contacted is required
     requester_email:
-      label: Email address
+      label: Email
       messages:
         required: Your email address is required
         address_format: Please enter a valid email address
