@@ -37,7 +37,7 @@ DYNAMICS_FIELD_MAP = [
 
 
 def send_data_to_dynamics(record: ServiceRecordRequest) -> None:
-    # Check "status" of record, based on defined logic (used in Dynamics email subject, e.g. FOICD, DPA, etc)
+    # TODO: Check "status" of record, based on defined logic (used in Dynamics email subject, e.g. FOICD, DPA, etc)
 
     tagged_data = generate_tagged_data(record)
 

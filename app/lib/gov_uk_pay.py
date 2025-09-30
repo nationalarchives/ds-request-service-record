@@ -14,15 +14,6 @@ class GOV_UK_PAY_EVENT_TYPES(Enum):
     SUCCEEDED = "card_payment_succeeded"
 
 
-SUCCESS_PAYMENT_STATUSES: set[str] = {"success"}
-
-IN_PROGRESS_PAYMENT_STATUSES: set[str] = {
-    "created",
-    "submitted",
-    "started",
-    "capturable",
-}
-
 FAILED_PAYMENT_STATUSES: set[str] = {"failed", "cancelled", "error"}
 
 
@@ -53,7 +44,7 @@ def get_payment_status(payment_id: str) -> str | None:
 
 
 def validate_payment(payment_id: str) -> bool:
-    return get_payment_status(payment_id) in SUCCESS_PAYMENT_STATUSES
+    return get_payment_status(payment_id) == "success"
 
 
 def create_payment(

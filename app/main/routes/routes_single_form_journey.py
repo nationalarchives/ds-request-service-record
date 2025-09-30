@@ -3,7 +3,7 @@ from datetime import datetime
 
 from app.lib.aws import upload_proof_of_death
 from app.lib.content import load_content
-from app.lib.db_handler import add_service_record_request, get_payment_id_from_record_id
+from app.lib.db_handler import add_dynamics_payment, add_service_record_request, get_payment_id_from_record_id
 from app.lib.gov_uk_pay import (
     create_payment,
     process_valid_request,
@@ -161,3 +161,36 @@ def gov_uk_pay_webhook():
         return "FAILED", 500
 
     return "SUCCESS", 200
+
+
+@bp.route("/create-payment/", methods=["POST"])
+def create_payment_endpoint():
+    data = request.json
+    required = ["amount", "description", "reference", "payee_email"]
+
+    if missing := [field for field in required if field not in data]:
+        return {"error": f"Missing required fields: {', '.join(missing)}"}, 400
+
+    try:
+        data["amount"] = int(data["amount"])
+        if data["amount"] <= 0:
+            return {"error": "Amount must be greater than zero"}, 400
+    except (ValueError, TypeError):
+        return {"error": "Invalid amount format"}, 400
+    
+    # Exclude any extra fields to avoid unexpected errors
+    data = {
+        "amount": data["amount"],
+        "description": data["description"],
+        "reference": data["reference"],
+        "payee_email": data["payee_email"],
+    }
+
+    try:
+        payment = add_dynamics_payment(data)
+        if payment is None:
+            return {"error": "Failed to create payment"}, 500
+    except:
+        return {"error": "Failed to create payment"}, 500
+
+    return {"message": f"Payment created successfully: {payment}"}, 201
