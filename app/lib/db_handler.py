@@ -1,4 +1,4 @@
-from app.lib.models import ServiceRecordRequest, db
+from app.lib.models import DynamicsPayment, ServiceRecordRequest, db
 from flask import current_app
 
 
@@ -57,3 +57,15 @@ def delete_service_record_request(record: ServiceRecordRequest) -> None:
     except Exception as e:
         current_app.logger.error(f"Error deleting service record request: {e}")
         db.session.rollback()
+
+
+def add_dynamics_payment(data: dict) -> None:
+    try:
+        payment = DynamicsPayment(**data)
+        db.session.add(payment)
+        db.session.commit()
+    except Exception as e:
+        current_app.logger.error(f"Error adding dynamics payment: {e}")
+        db.session.rollback()
+    
+    return payment.id
