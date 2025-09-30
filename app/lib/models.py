@@ -6,6 +6,9 @@ db = SQLAlchemy()
 
 
 class ServiceRecordRequest(db.Model):
+    """
+    Table to store requests for service records (for the initial payment/form)
+    """
     __tablename__ = "service_record_requests"
 
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
@@ -35,4 +38,31 @@ class ServiceRecordRequest(db.Model):
     service_number = db.Column(db.String(64), nullable=True)
     evidence_of_death = db.Column(db.String(64), nullable=True)
     payment_id = db.Column(db.String(64), nullable=True, unique=True)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+
+class DynamicsPayment(db.Model):
+    """
+    Table to store payment requests sent by Dynamics for payees to pay for record copying 
+    """
+    __tablename__ = "dynamics_payments"
+
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    reference = db.Column(db.String(64), nullable=False)
+    payee_email = db.Column(db.String(256), nullable=False)
+    amount = db.Column(db.Integer, nullable=False) # amount in pence
+    status = db.Column(db.String(1), nullable=False, default="C") # C - created, S - sent, P - paid
+    description = db.Column(db.String(256), nullable=False)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+
+class GOVUKDynamicsPayment(db.Model):
+    """
+    Table to store GOV.UK Pay payment attempts for Dynamics payment requests
+    """
+    __tablename__ = "govuk_dynamics_payments"
+
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    dynamics_payment_id = db.Column(db.String(36), db.ForeignKey('dynamics_payments.id'), nullable=False)
+    govuk_payment_id = db.Column(db.String(64), nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
