@@ -3,7 +3,7 @@ from datetime import datetime
 
 from app.lib.aws import upload_proof_of_death
 from app.lib.content import load_content
-from app.lib.db_handler import add_dynamics_payment, add_service_record_request, get_payment_id_from_record_id
+from app.lib.db_handler import add_dynamics_payment, add_gov_uk_dynamics_payment, add_service_record_request, get_dynamics_payment, get_gov_uk_dynamics_payment, get_payment_id_from_record_id
 from app.lib.gov_uk_pay import (
     create_payment,
     process_valid_request,
@@ -102,24 +102,39 @@ def send_to_gov_pay():
 @bp.route("/handle-gov-uk-pay-response/")
 def handle_gov_uk_pay_response():
     id = request.args.get("id")
+    response_type = request.args.get("response_type")
 
-    if not id:
+    if not id or not response_type:
         # User got here without ID - likely manually, do something... (redirect to form?)
         return "Shouldn't be here"
-
-    payment_id = get_payment_id_from_record_id(id)
+    
+    if response_type == "request":
+        payment_id = get_payment_id_from_record_id(id)
+    elif response_type == "payment":
+        payment_id = get_gov_uk_dynamics_payment(id).govuk_payment_id if get_gov_uk_dynamics_payment(id) else None
 
     if payment_id is None:
         # User got here with an ID that doesn't exist in the DB - could be our fault, or could be malicious, do something
         return "Shouldn't be here"
 
     if validate_payment(payment_id):
-        try:
-            process_valid_request(payment_id)
-        except Exception as e:
-            current_app.logger.error(
-                f"Error processing valid request of payment ID {payment_id}: {e}"
-            )
+        if response_type == "request":
+            try:
+                process_valid_request(payment_id)
+            except Exception as e:
+                current_app.logger.error(
+                    f"Error processing valid request of payment ID {payment_id}: {e}"
+                )
+        elif response_type == "payment":
+            try:
+                # TODO: Do something with Dynamics after a valid Dynamics payment has been made
+                # process_valid_payment(payment_id)
+                print("Valid Dynamics payment received!")
+            except Exception as e:
+                current_app.logger.error(
+                    f"Error processing valid payment of payment ID {payment_id}: {e}"
+                )
+
         return redirect(url_for("main.confirm_payment_received"))
 
     # Let the user know it failed, ask if they want to retry
@@ -194,3 +209,50 @@ def create_payment_endpoint():
         return {"error": "Failed to create payment"}, 500
 
     return {"message": f"Payment created successfully: {payment}"}, 201
+
+@bp.route("/payment/<id>/", methods=["GET"])
+def make_payment(id):
+    payment = get_dynamics_payment(id)
+
+    if payment is None:
+        return "Payment not found"
+    
+    # 
+    return f"Make payment for £{payment.amount/100:.2f} to {payment.payee_email}"
+
+@bp.route("/payment-redirect/<id>/", methods=["GET"])
+def gov_uk_pay_redirect(id):
+    payment = get_dynamics_payment(id)
+    
+    if payment is None:
+        return "Payment not found"
+    
+    id = str(uuid.uuid4())
+
+    response = create_payment(
+        amount=payment.amount,
+        description=payment.description,
+        reference=payment.reference,
+        email=payment.payee_email,
+        return_url=f"{url_for("main.handle_gov_uk_pay_response", _external=True)}?id={id}",
+    )
+
+    if not response:
+        return redirect(url_for("main.payment_link_creation_failed"))
+
+    gov_uk_payment_url = response.get("_links", {}).get("next_url", "").get("href", "")
+    gov_uk_payment_id = response.get("payment_id", "")
+
+    if not gov_uk_payment_url or not gov_uk_payment_id:
+        return redirect(url_for("main.payment_link_creation_failed"))
+
+    data = {
+        "id": id,
+        "dynamics_payment_id": payment.id,
+        "payment_id": gov_uk_payment_id,
+        "created_at": datetime.now(),
+    }
+
+    add_gov_uk_dynamics_payment(data)
+
+    return redirect(gov_uk_payment_url)
