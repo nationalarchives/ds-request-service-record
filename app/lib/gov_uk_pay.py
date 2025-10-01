@@ -3,8 +3,9 @@ import hmac
 from enum import Enum
 
 import requests
-from app.lib.db_handler import delete_service_record_request, get_service_record_request
+from app.lib.db_handler import delete_service_record_request, get_dynamics_payment, get_gov_uk_dynamics_payment, get_service_record_request
 from app.lib.dynamics_handler import send_data_to_dynamics
+from app.lib.models import db
 from flask import current_app
 
 
@@ -120,3 +121,13 @@ def process_valid_request(payment_id: str) -> None:
     send_data_to_dynamics(record)
 
     delete_service_record_request(record)
+
+def process_valid_payment(payment_id: str) -> None:
+    payment = get_gov_uk_dynamics_payment(payment_id=payment_id)
+
+    if payment is None:
+        raise ValueError(f"Payment not found for GOV.UK payment ID: {payment_id}")
+
+    get_dynamics_payment(payment.dynamics_payment_id).status = "P"
+    db.session.commit()
+    

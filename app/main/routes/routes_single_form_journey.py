@@ -6,6 +6,7 @@ from app.lib.content import load_content
 from app.lib.db_handler import add_dynamics_payment, add_gov_uk_dynamics_payment, add_service_record_request, get_dynamics_payment, get_gov_uk_dynamics_payment, get_payment_id_from_record_id
 from app.lib.gov_uk_pay import (
     create_payment,
+    process_valid_payment,
     process_valid_request,
     process_webhook_data,
     validate_payment,
@@ -75,7 +76,7 @@ def send_to_gov_pay():
         description=content["app"]["title"],
         reference="ServiceRecordRequest",
         email=requester_email,
-        return_url=f"{url_for("main.handle_gov_uk_pay_response", _external=True)}?id={id}",
+        return_url=f"{url_for("main.handle_gov_uk_pay_response", _external=True)}?id={id}&response_type=request",
     )
 
     if not response:
@@ -111,7 +112,8 @@ def handle_gov_uk_pay_response():
     if response_type == "request":
         payment_id = get_payment_id_from_record_id(id)
     elif response_type == "payment":
-        payment_id = get_gov_uk_dynamics_payment(id).govuk_payment_id if get_gov_uk_dynamics_payment(id) else None
+        payment = get_gov_uk_dynamics_payment(payment_id=id)
+        payment_id = payment.gov_uk_payment_id if payment else None
 
     if payment_id is None:
         # User got here with an ID that doesn't exist in the DB - could be our fault, or could be malicious, do something
@@ -127,9 +129,8 @@ def handle_gov_uk_pay_response():
                 )
         elif response_type == "payment":
             try:
-                # TODO: Do something with Dynamics after a valid Dynamics payment has been made
-                # process_valid_payment(payment_id)
-                print("Valid Dynamics payment received!")
+                process_valid_payment(payment.id)
+                print("Valid Dynamics payment received and handled!")
             except Exception as e:
                 current_app.logger.error(
                     f"Error processing valid payment of payment ID {payment_id}: {e}"
@@ -210,16 +211,27 @@ def create_payment_endpoint():
 
     return {"message": f"Payment created successfully: {payment}"}, 201
 
-@bp.route("/payment/<id>/", methods=["GET"])
+    
+@bp.route("/payment/<id>/", methods=["GET", "POST"])
 def make_payment(id):
+    form = ProceedToPay()
     payment = get_dynamics_payment(id)
+    content = load_content()
 
     if payment is None:
         return "Payment not found"
     
-    # 
-    return f"Make payment for £{payment.amount/100:.2f} to {payment.payee_email}"
+    if form.validate_on_submit():
+        return redirect(url_for("main.gov_uk_pay_redirect", id=payment.id))
 
+    return render_template(
+        "main/all-fields-in-one-form/dynamics-payment.html",
+        form=form,
+        payment=payment,
+        content=content,
+    )
+
+    
 @bp.route("/payment-redirect/<id>/", methods=["GET"])
 def gov_uk_pay_redirect(id):
     payment = get_dynamics_payment(id)
@@ -234,7 +246,7 @@ def gov_uk_pay_redirect(id):
         description=payment.description,
         reference=payment.reference,
         email=payment.payee_email,
-        return_url=f"{url_for("main.handle_gov_uk_pay_response", _external=True)}?id={id}",
+        return_url=f"{url_for("main.handle_gov_uk_pay_response", _external=True)}?id={id}&response_type=payment",
     )
 
     if not response:
@@ -249,7 +261,7 @@ def gov_uk_pay_redirect(id):
     data = {
         "id": id,
         "dynamics_payment_id": payment.id,
-        "payment_id": gov_uk_payment_id,
+        "gov_uk_payment_id": gov_uk_payment_id,
         "created_at": datetime.now(),
     }
 
