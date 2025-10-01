@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{%- set pageTitle = 'Submission successful' -%}
+
+{% block content %}
+  <div class="tna-section">
+    <div class="tna-container">
+      <div
+        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+        {% if form.errors %}
+          {{ tnaErrorSummary(wtforms_errors(form)) }}
+        {% endif %}
+        <h1 class="tna-heading-xl">Payment for something title</h1>
+
+        {% for field_name, field_value in payment.__dict__.items() if field_name != '_sa_instance_state' %}
+          <p><strong>{{ field_name }}:</strong> {{ field_value }}</p>
+        {% endfor %}
+
+      </div>
+      <div class="tna-!--margin-top-m">
+        <form action="{{ url_for('main.make_payment', id=payment.id) }}" method="post" novalidate>
+          {{ form.csrf_token }}
+          <div class="tna-button-group">
+            {{ form.submit(params={'accent':'true'}) }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
