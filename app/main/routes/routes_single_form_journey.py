@@ -110,22 +110,22 @@ def handle_gov_uk_pay_response():
         return "Shouldn't be here"
     
     if response_type == "request":
-        payment_id = get_payment_id_from_record_id(id)
+        gov_uk_payment_id = get_payment_id_from_record_id(id)
     elif response_type == "payment":
-        payment = get_gov_uk_dynamics_payment(payment_id=id)
-        payment_id = payment.gov_uk_payment_id if payment else None
+        payment = get_gov_uk_dynamics_payment(id)
+        gov_uk_payment_id = payment.gov_uk_payment_id if payment else None
 
-    if payment_id is None:
+    if gov_uk_payment_id is None:
         # User got here with an ID that doesn't exist in the DB - could be our fault, or could be malicious, do something
         return "Shouldn't be here"
 
-    if validate_payment(payment_id):
+    if validate_payment(gov_uk_payment_id):
         if response_type == "request":
             try:
-                process_valid_request(payment_id)
+                process_valid_request(gov_uk_payment_id)
             except Exception as e:
                 current_app.logger.error(
-                    f"Error processing valid request of payment ID {payment_id}: {e}"
+                    f"Error processing valid request of payment ID {gov_uk_payment_id}: {e}"
                 )
         elif response_type == "payment":
             try:
@@ -133,7 +133,7 @@ def handle_gov_uk_pay_response():
                 print("Valid Dynamics payment received and handled!")
             except Exception as e:
                 current_app.logger.error(
-                    f"Error processing valid payment of payment ID {payment_id}: {e}"
+                    f"Error processing valid payment of payment ID {gov_uk_payment_id}: {e}"
                 )
 
         return redirect(url_for("main.confirm_payment_received"))

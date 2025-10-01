@@ -122,11 +122,11 @@ def process_valid_request(payment_id: str) -> None:
 
     delete_service_record_request(record)
 
-def process_valid_payment(payment_id: str) -> None:
-    payment = get_gov_uk_dynamics_payment(payment_id=payment_id)
+def process_valid_payment(id: str) -> None:
+    payment = get_gov_uk_dynamics_payment(id)
 
     if payment is None:
-        raise ValueError(f"Payment not found for GOV.UK payment ID: {payment_id}")
+        raise ValueError(f"Payment not found for GOV.UK payment ID: {id}")
 
     get_dynamics_payment(payment.dynamics_payment_id).status = "P"
     db.session.commit()

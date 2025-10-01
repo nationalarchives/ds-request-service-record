@@ -88,28 +88,12 @@ def add_gov_uk_dynamics_payment(data: dict) -> None:
         current_app.logger.error(f"Error adding GOV.UK dynamics payment: {e}")
         db.session.rollback()
 
-def get_gov_uk_dynamics_payment(*, payment_id: str | None = None, gov_uk_payment_id: str | None = None) -> GOVUKDynamicsPayment | None:  
-    if (payment_id is None and gov_uk_payment_id is None) or (
-        payment_id is not None and gov_uk_payment_id is not None
-    ):
-        raise ValueError("Invalid parameters: provide either payment_id or gov_uk_payment_id.")
-
+def get_gov_uk_dynamics_payment(id: str) -> GOVUKDynamicsPayment | None:
     try:
-        if payment_id is not None:
-            payment = db.session.get(GOVUKDynamicsPayment, payment_id)
-        else:
-            payment = (
-                db.session.query(GOVUKDynamicsPayment)
-                .filter_by(gov_uk_payment_id=gov_uk_payment_id)
-                .first()
-            )
+        payment = db.session.get(GOVUKDynamicsPayment, id)
+        if not payment:
+            current_app.logger.error(f"GOV UK payment not found for ID: {id}")
+        return payment
     except Exception as e:
-        current_app.logger.error(f"Error fetching service record request: {e}")
+        current_app.logger.error(f"Error fetching GOV UK payment: {e}")
         return None
-
-    if not payment:
-        current_app.logger.error(
-            f"GOV UK Pay payment not found for: {gov_uk_payment_id or payment_id}"
-        )
-
-    return payment
