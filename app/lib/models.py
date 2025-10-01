@@ -60,9 +60,9 @@ class GOVUKDynamicsPayment(db.Model):
     """
     Table to store GOV.UK Pay payment attempts for Dynamics payment requests
     """
-    __tablename__ = "govuk_dynamics_payments"
+    __tablename__ = "gov_uk_dynamics_payments"
 
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     dynamics_payment_id = db.Column(db.String(36), db.ForeignKey('dynamics_payments.id'), nullable=False)
-    govuk_payment_id = db.Column(db.String(64), nullable=False)
+    gov_uk_payment_id = db.Column(db.String(64), nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
