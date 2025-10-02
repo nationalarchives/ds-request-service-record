@@ -3,6 +3,7 @@ import hmac
 from enum import Enum
 
 import requests
+from app.lib.aws import send_email
 from app.lib.db_handler import (
     delete_service_record_request,
     get_dynamics_payment,
@@ -136,3 +137,9 @@ def process_valid_payment(id: str) -> None:
 
     get_dynamics_payment(payment.dynamics_payment_id).status = "P"
     db.session.commit()
+
+    send_email(
+        to=current_app.config["DYNAMICS_INBOX"],
+        subject=f"Payment received for Dynamics payment ID: {payment.dynamics_payment_id}",
+        body=f"Payment with GOV.UK payment ID {payment.gov_uk_payment_id} has been successfully processed.",
+        )
