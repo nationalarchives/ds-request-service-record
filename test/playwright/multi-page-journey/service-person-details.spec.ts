@@ -46,7 +46,7 @@ test.describe("the 'About the service person form?' form", () => {
         page,
       }) => {
         await page.getByLabel("First name").fill("Thomas");
-        await page.getByLabel("Last name").fill("Duffus");
+        await page.getByLabel("Last name", { exact: true }).fill("Duffus");
         await page.getByRole("button", { name: /Continue/i }).click();
         await expect(page).toHaveURL(Urls.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
       });
@@ -55,7 +55,7 @@ test.describe("the 'About the service person form?' form", () => {
       }) => {
         await page.getByLabel("First name").fill("Thomas");
         await page.getByLabel("Middle names").fill("Duffus");
-        await page.getByLabel("Last name").fill("Hardy");
+        await page.getByLabel("Last name", { exact: true }).fill("Hardy");
         await page.getByLabel("Service number").fill("123456");
         await page.getByRole("button", { name: /Continue/i }).click();
         await expect(page).toHaveURL(Urls.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);

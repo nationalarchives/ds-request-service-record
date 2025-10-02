@@ -46,6 +46,12 @@ class ServicePersonDetails(FlaskForm):
         ],
     )
 
+    other_last_names = StringField(
+        get_field_content(content, "other_last_names", "label"),
+        widget=TnaTextInputWidget(),
+        validators=[],
+    )
+
     place_of_birth = StringField(
         get_field_content(content, "place_of_birth", "label"),
         widget=TnaTextInputWidget(),
