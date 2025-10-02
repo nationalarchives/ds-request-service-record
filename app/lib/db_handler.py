@@ -1,4 +1,9 @@
-from app.lib.models import DynamicsPayment, GOVUKDynamicsPayment, ServiceRecordRequest, db
+from app.lib.models import (
+    DynamicsPayment,
+    GOVUKDynamicsPayment,
+    ServiceRecordRequest,
+    db,
+)
 from flask import current_app
 
 
@@ -58,6 +63,7 @@ def delete_service_record_request(record: ServiceRecordRequest) -> None:
         current_app.logger.error(f"Error deleting service record request: {e}")
         db.session.rollback()
 
+
 def get_dynamics_payment(id: str) -> DynamicsPayment | None:
     try:
         payment = db.session.get(DynamicsPayment, id)
@@ -68,6 +74,7 @@ def get_dynamics_payment(id: str) -> DynamicsPayment | None:
         current_app.logger.error(f"Error fetching dynamics payment: {e}")
         return None
 
+
 def add_dynamics_payment(data: dict) -> str | None:
     try:
         payment = DynamicsPayment(**data)
@@ -76,8 +83,9 @@ def add_dynamics_payment(data: dict) -> str | None:
     except Exception as e:
         current_app.logger.error(f"Error adding dynamics payment: {e}")
         db.session.rollback()
-    
+
     return payment.id
+
 
 def add_gov_uk_dynamics_payment(data: dict) -> None:
     try:
@@ -87,6 +95,7 @@ def add_gov_uk_dynamics_payment(data: dict) -> None:
     except Exception as e:
         current_app.logger.error(f"Error adding GOV.UK dynamics payment: {e}")
         db.session.rollback()
+
 
 def get_gov_uk_dynamics_payment(id: str) -> GOVUKDynamicsPayment | None:
     try:

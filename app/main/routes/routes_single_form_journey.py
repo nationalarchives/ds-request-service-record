@@ -1,9 +1,16 @@
 import uuid
 from datetime import datetime
 
-from app.lib.aws import upload_proof_of_death
+from app.lib.aws import send_email, upload_proof_of_death
 from app.lib.content import load_content
-from app.lib.db_handler import add_dynamics_payment, add_gov_uk_dynamics_payment, add_service_record_request, get_dynamics_payment, get_gov_uk_dynamics_payment, get_payment_id_from_record_id
+from app.lib.db_handler import (
+    add_dynamics_payment,
+    add_gov_uk_dynamics_payment,
+    add_service_record_request,
+    get_dynamics_payment,
+    get_gov_uk_dynamics_payment,
+    get_payment_id_from_record_id,
+)
 from app.lib.gov_uk_pay import (
     create_payment,
     process_valid_payment,
@@ -108,7 +115,7 @@ def handle_gov_uk_pay_response():
     if not id or not response_type:
         # User got here without ID - likely manually, do something... (redirect to form?)
         return "Shouldn't be here"
-    
+
     if response_type == "request":
         gov_uk_payment_id = get_payment_id_from_record_id(id)
     elif response_type == "payment":
@@ -193,7 +200,7 @@ def create_payment_endpoint():
             return {"error": "Amount must be greater than zero"}, 400
     except (ValueError, TypeError):
         return {"error": "Invalid amount format"}, 400
-    
+
     # Exclude any extra fields to avoid unexpected errors
     data = {
         "amount": data["amount"],
@@ -206,12 +213,19 @@ def create_payment_endpoint():
         payment = add_dynamics_payment(data)
         if payment is None:
             return {"error": "Failed to create payment"}, 500
-    except:
+    except Exception as e:
+        current_app.logger.error(f"Error creating payment: {e}")
         return {"error": "Failed to create payment"}, 500
-
-    return {"message": f"Payment created successfully: {payment}"}, 201
-
     
+    send_email(
+        to=data["payee_email"],
+        subject="Payment for Service Record Request",
+        body=f"You have been requested to make a payment for a service record request. Please visit the following link to complete your payment: {url_for('main.make_payment', id=payment, _external=True)}",
+    )
+
+    return {"message": f"Payment created and sent successfully: {payment}"}, 201
+
+
 @bp.route("/payment/<id>/", methods=["GET", "POST"])
 def make_payment(id):
     form = ProceedToPay()
@@ -220,7 +234,7 @@ def make_payment(id):
 
     if payment is None:
         return "Payment not found"
-    
+
     if form.validate_on_submit():
         return redirect(url_for("main.gov_uk_pay_redirect", id=payment.id))
 
@@ -231,14 +245,14 @@ def make_payment(id):
         content=content,
     )
 
-    
+
 @bp.route("/payment-redirect/<id>/", methods=["GET"])
 def gov_uk_pay_redirect(id):
     payment = get_dynamics_payment(id)
-    
+
     if payment is None:
         return "Payment not found"
-    
+
     id = str(uuid.uuid4())
 
     response = create_payment(
