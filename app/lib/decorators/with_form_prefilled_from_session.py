@@ -13,7 +13,11 @@ def with_form_prefilled_from_session(form_class):
                 form_data = session.get("form_data", {})
                 if not isinstance(form_data, dict):
                     form_data = {}
-                data = {k: v for k, v in form_data.items() if k not in excluded_form_data_fields}
+                data = {
+                    k: v
+                    for k, v in form_data.items()
+                    if k not in excluded_form_data_fields
+                }
                 form = form_class(data=data)
             else:
                 form = form_class()

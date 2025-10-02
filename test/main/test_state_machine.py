@@ -11,8 +11,8 @@ def test_all_states_have_the_expected_suffix():
     sm = RoutingStateMachine()
     for state in sm.states:
         assert re.search(
-            r"(_form|_page|initial)$", state.id
-        ), f"State ID {state.id} does not end with 'initial', '_form' or '_page'"
+            r"(_redirect|_form|_page|initial)$", state.id
+        ), f"State ID {state.id} does not end with '_form', '_page', '_redirect', or 'initial'"
 
 
 def test_all_events_have_the_expected_suffix():
@@ -317,6 +317,40 @@ def test_continue_from_your_details(
     assert sm.current_state.id == current_state_id
     assert sm.route_for_current_state == route_for_current_state
 
+
+def test_continue_from_your_postal_address():
+    sm = RoutingStateMachine()
+    sm.continue_from_your_postal_address_form(
+        form=make_form(
+            address_line_1=None,
+            address_line_2=None,
+            address_line_3=None,
+            town_or_city=None,
+            county=None,
+            postcode=None,
+            country=None,
+            submit=None,
+        )
+    )
+    assert sm.current_state.id == "how_do_you_want_your_order_processed_form"
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED.value
+    )
+
+@pytest.mark.parametrize("processing_option", ["standard", "full"])
+def test_continue_from_how_do_you_want_your_order_processed(processing_option):
+    sm = RoutingStateMachine()
+    sm.continue_from_how_do_you_want_your_order_processed_form(
+        form=make_form(
+            processing_option=processing_option,
+            how_do_you_want_your_order_processed_standard=None,
+            how_do_you_want_your_order_processed_full=None,
+            submit=None,
+        )
+    )
+    assert sm.current_state.id == "gov_uk_pay_redirect"
+    assert sm.route_for_current_state == MultiPageFormRoutes.SEND_TO_GOV_PAY.value
 
 def make_form(**fields):
     return SimpleNamespace(**{k: SimpleNamespace(data=v) for k, v in fields.items()})

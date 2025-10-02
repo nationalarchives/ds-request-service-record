@@ -31,6 +31,7 @@ class MultiPageFormRoutes(Enum):
     YOUR_DETAILS = "main.your_details"
     YOUR_POSTAL_ADDRESS = "main.your_postal_address"
     HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED = "main.how_do_you_want_your_order_processed"
+    SEND_TO_GOV_PAY = "main.send_to_gov_pay"
 
 
 class ServiceBranches(Enum):
