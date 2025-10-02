@@ -6,3 +6,9 @@
     @include a11y.visually-hidden;
   }
 }
+
+.form-separator {
+  border-block-end: 3px solid black;
+
+  padding-bottom: 3rem;
+}

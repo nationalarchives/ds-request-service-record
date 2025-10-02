@@ -22,6 +22,9 @@ from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
 from app.main.forms.service_person_details import ServicePersonDetails
 from app.main.forms.your_postal_address import YourPostalAddress
+from app.main.forms.how_do_you_want_your_order_processed import (
+    HowDoYouWantYourOrderProcessed,
+)
 from app.main.forms.your_details import YourDetails
 from flask import redirect, render_template, session, url_for
 
@@ -257,7 +260,9 @@ def do_you_have_a_proof_of_death(form, state_machine):
 @with_state_machine
 def your_postal_address(form, state_machine):
     if form.validate_on_submit():
-        pass
+        save_submitted_form_fields_to_session(form)
+        state_machine.continue_from_your_postal_address_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/multi-page-journey/your-postal-address.html",
         form=form,
@@ -265,10 +270,17 @@ def your_postal_address(form, state_machine):
     )
 
 
-@bp.route("/how-do-you-want-your-order-processed/", methods=["GET"])
-def how_do_you_want_your_order_processed():
+@bp.route("/how-do-you-want-your-order-processed/", methods=["GET", "POST"])
+@with_state_machine
+def how_do_you_want_your_order_processed(state_machine):
+    form = HowDoYouWantYourOrderProcessed()
+    if form.validate_on_submit():
+        save_submitted_form_fields_to_session(form)
+        state_machine.continue_from_how_do_you_want_your_order_processed_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/multi-page-journey/how-do-you-want-your-order-processed.html",
+        form=form,
         content=load_content(),
     )
 

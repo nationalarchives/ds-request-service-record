@@ -87,6 +87,7 @@ class RoutingStateMachine(StateMachine):
     how_do_you_want_your_order_processed_form = State(
         enter="entering_how_do_you_want_your_order_processed_form", final=True
     )
+    gov_uk_pay_redirect = State(enter="entering_gov_uk_pay_redirect", final=True)
 
     """
     These are our Events. They're called in route methods to trigger transitions between States.
@@ -157,6 +158,14 @@ class RoutingStateMachine(StateMachine):
     continue_from_your_details_form = initial.to(
         your_postal_address_form, cond="does_not_have_email"
     ) | initial.to(how_do_you_want_your_order_processed_form)
+
+    continue_from_your_postal_address_form = initial.to(
+        how_do_you_want_your_order_processed_form
+    )
+
+    continue_from_how_do_you_want_your_order_processed_form = initial.to(
+        gov_uk_pay_redirect
+    )
 
     def entering_have_you_checked_the_catalogue_form(self, event, state):
         self.route_for_current_state = (
@@ -246,6 +255,9 @@ class RoutingStateMachine(StateMachine):
         self.route_for_current_state = (
             MultiPageFormRoutes.HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED.value
         )
+
+    def entering_gov_uk_pay_redirect(self, form):
+        self.route_for_current_state = MultiPageFormRoutes.SEND_TO_GOV_PAY.value
 
     def on_enter_state(self, event, state):
         """This method is called when entering any state."""
