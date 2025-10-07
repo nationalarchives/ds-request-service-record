@@ -27,10 +27,10 @@ test.describe("how do you want your order processed", () => {
         await page
           .getByRole("button", { name: /Continue with a standard order/i })
           .click();
-        await expect(page.locator(".tna-form__error-message")).toHaveCount(1);
-        await expect(
-          page.locator(".tna-form__error-message").first(),
-        ).toHaveText(/You must select a processing option to continue/);
+        await expect(page.locator(".tna-fieldset__error")).toHaveCount(1);
+        await expect(page.locator(".tna-fieldset__error").first()).toHaveText(
+          /You must select a processing option to continue/,
+        );
       });
       ["Digital standard", "Printed standard"].forEach((option) => {
         test(`with "${option}" selected, there is no error`, async ({
@@ -40,7 +40,7 @@ test.describe("how do you want your order processed", () => {
           await page
             .getByRole("button", { name: /Continue with a standard order/i })
             .click();
-          await expect(page.locator(".tna-form__error-message")).toHaveCount(0);
+          await expect(page.locator(".tna-fieldset__error")).toHaveCount(0);
         });
       });
     });
@@ -53,10 +53,10 @@ test.describe("how do you want your order processed", () => {
             name: /Continue with a full record check order/i,
           })
           .click();
-        await expect(page.locator(".tna-form__error-message")).toHaveCount(1);
-        await expect(
-          page.locator(".tna-form__error-message").first(),
-        ).toHaveText(/You must select a processing option to continue/);
+        await expect(page.locator(".tna-fieldset__error")).toHaveCount(1);
+        await expect(page.locator(".tna-fieldset__error").first()).toHaveText(
+          /You must select a processing option to continue/,
+        );
       });
       ["Digital full record check", "Printed full record check"].forEach(
         (option) => {
@@ -69,9 +69,7 @@ test.describe("how do you want your order processed", () => {
                 name: /Continue with a full record check order/i,
               })
               .click();
-            await expect(page.locator(".tna-form__error-message")).toHaveCount(
-              0,
-            );
+            await expect(page.locator(".tna-fieldset__error")).toHaveCount(0);
           });
         },
       );

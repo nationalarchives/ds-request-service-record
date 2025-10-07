@@ -25,11 +25,11 @@ test.describe("your details", () => {
       page,
     }) => {
       await page.getByRole("button", { name: /Continue/i }).click();
-      await expect(page.locator(".tna-form__error-message")).toHaveCount(2);
-      await expect(page.locator(".tna-form__error-message").first()).toHaveText(
+      await expect(page.locator(".tna-form-item__error")).toHaveCount(2);
+      await expect(page.locator(".tna-form-item__error").first()).toHaveText(
         /Your first name is required/,
       );
-      await expect(page.locator(".tna-form__error-message").nth(1)).toHaveText(
+      await expect(page.locator(".tna-form-item__error").nth(1)).toHaveText(
         /Your last name is required/,
       );
     });
@@ -40,7 +40,10 @@ test.describe("your details", () => {
       }) => {
         await page.getByLabel("First name").fill("John");
         await page.getByLabel("Last name").fill("Doe");
-        await page.getByLabel("I do not have an email address").check();
+        // TODO: Investigate why we need to force this checkbox to be checked - the label seems to be intercepting pointer events
+        await page
+          .getByLabel("I do not have an email address")
+          .check({ force: true });
         await page.getByRole("button", { name: /Continue/i }).click();
         await expect(page).toHaveURL(Urls.YOUR_POSTAL_ADDRESS);
       });

@@ -1,16 +1,15 @@
-from app.lib.content import get_field_content, load_content
 from app.constants import COUNTRY_CHOICES
+from app.lib.content import get_field_content, load_content
 from flask_wtf import FlaskForm
 from tna_frontend_jinja.wtforms import (
+    TnaSelectWidget,
     TnaSubmitWidget,
     TnaTextInputWidget,
-    TnaSelectWidget,
 )
-from tna_frontend_jinja.wtforms import validators as tna_frontend_validators
 from wtforms import (
+    SelectField,
     StringField,
     SubmitField,
-    SelectField,
 )
 from wtforms.validators import InputRequired
 

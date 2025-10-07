@@ -1,9 +1,9 @@
 import pytest
-from flask import Flask, session as flask_session
-
 from app.lib.save_submitted_form_fields_to_session import (
     save_submitted_form_fields_to_session,
 )
+from flask import Flask
+from flask import session as flask_session
 
 
 class DummyField:

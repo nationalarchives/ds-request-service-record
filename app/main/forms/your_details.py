@@ -5,12 +5,11 @@ from tna_frontend_jinja.wtforms import (
     TnaSubmitWidget,
     TnaTextInputWidget,
 )
-from tna_frontend_jinja.wtforms import validators as tna_frontend_validators
 from wtforms import (
+    BooleanField,
     EmailField,
     StringField,
     SubmitField,
-    BooleanField,
 )
 from wtforms.validators import Email, InputRequired, Optional
 
@@ -57,6 +56,7 @@ class YourDetails(FlaskForm):
 
     does_not_have_email = BooleanField(
         get_field_content(content, "does_not_have_email", "label"),
+        description=get_field_content(content, "does_not_have_email", "description"),
         widget=TnaCheckboxWidget(),
         validators=[],
     )

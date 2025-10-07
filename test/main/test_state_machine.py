@@ -338,6 +338,7 @@ def test_continue_from_your_postal_address():
         == MultiPageFormRoutes.HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED.value
     )
 
+
 @pytest.mark.parametrize("processing_option", ["standard", "full"])
 def test_continue_from_how_do_you_want_your_order_processed(processing_option):
     sm = RoutingStateMachine()
@@ -351,6 +352,7 @@ def test_continue_from_how_do_you_want_your_order_processed(processing_option):
     )
     assert sm.current_state.id == "gov_uk_pay_redirect"
     assert sm.route_for_current_state == MultiPageFormRoutes.SEND_TO_GOV_PAY.value
+
 
 def make_form(**fields):
     return SimpleNamespace(**{k: SimpleNamespace(data=v) for k, v in fields.items()})

@@ -31,7 +31,7 @@ test.describe("The 'Upload proof of death' form", () => {
   test.describe("when submitted", () => {
     test("without a an uploaded file, shows an error", async ({ page }) => {
       await page.getByRole("button", { name: /Continue/i }).click();
-      await expect(page.locator(".tna-form__error-message")).toHaveText(
+      await expect(page.locator(".tna-form-item__error")).toHaveText(
         /Uploading a file is required/,
       );
     });
@@ -45,7 +45,7 @@ test.describe("The 'Upload proof of death' form", () => {
         buffer: Buffer.from("this is a test file"),
       });
       await page.getByRole("button", { name: /Continue/i }).click();
-      await expect(page.locator(".tna-form__error-message")).toHaveText(
+      await expect(page.locator(".tna-form-item__error")).toHaveText(
         /Files must be in JPG, PNG or PDF format/,
       );
     });
@@ -60,7 +60,7 @@ test.describe("The 'Upload proof of death' form", () => {
           buffer: Buffer.alloc(6 * 1024 * 1024),
         });
         await page.getByRole("button", { name: /Continue/i }).click();
-        await expect(page.locator(".tna-form__error-message")).toHaveText(
+        await expect(page.locator(".tna-form-item__error")).toHaveText(
           /The maximum file size is 5MB/,
         );
       });

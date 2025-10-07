@@ -23,11 +23,11 @@ test.describe("your postal address", () => {
       page,
     }) => {
       await page.getByRole("button", { name: /Continue/i }).click();
-      await expect(page.locator(".tna-form__error-message")).toHaveCount(2);
-      await expect(page.locator(".tna-form__error-message").first()).toHaveText(
+      await expect(page.locator(".tna-form-item__error")).toHaveCount(2);
+      await expect(page.locator(".tna-form-item__error").first()).toHaveText(
         /First line of your address is required/,
       );
-      await expect(page.locator(".tna-form__error-message").nth(1)).toHaveText(
+      await expect(page.locator(".tna-form-item__error").nth(1)).toHaveText(
         /Your town or city is required/,
       );
     });

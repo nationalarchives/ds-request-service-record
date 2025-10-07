@@ -9,24 +9,23 @@ from app.lib.save_submitted_form_fields_to_session import (
 from app.main import bp
 from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
 from app.main.forms.have_you_checked_the_catalogue import HaveYouCheckedTheCatalogue
-from app.main.forms.your_postal_address import YourPostalAddress
 from app.main.forms.have_you_previously_made_a_request import (
     HaveYouPreviouslyMadeARequest,
 )
-from app.main.forms.is_service_person_alive import IsServicePersonAlive
-from app.main.forms.service_branch import ServiceBranch
-from app.main.forms.start_now import StartNow
-from app.main.forms.was_service_person_an_officer import WasServicePersonAnOfficer
-from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
-from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
-from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
-from app.main.forms.service_person_details import ServicePersonDetails
-from app.main.forms.your_postal_address import YourPostalAddress
 from app.main.forms.how_do_you_want_your_order_processed import (
     HowDoYouWantYourOrderProcessed,
 )
+from app.main.forms.is_service_person_alive import IsServicePersonAlive
+from app.main.forms.service_branch import ServiceBranch
+from app.main.forms.service_person_details import ServicePersonDetails
+from app.main.forms.start_now import StartNow
+from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
+from app.main.forms.was_service_person_an_officer import WasServicePersonAnOfficer
+from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
+from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 from app.main.forms.your_details import YourDetails
-from flask import redirect, render_template, session, url_for
+from app.main.forms.your_postal_address import YourPostalAddress
+from flask import redirect, render_template, url_for
 
 
 @bp.route("/start/", methods=["GET", "POST"])

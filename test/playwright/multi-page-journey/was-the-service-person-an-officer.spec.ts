@@ -24,7 +24,7 @@ test.describe("the 'Were they a commissioned officer?' form", () => {
   test.describe("when submitted", () => {
     test("without a submission, shows an error", async ({ page }) => {
       await page.getByRole("button", { name: /Continue/i }).click();
-      await expect(page.locator(".tna-form__error-message")).toHaveText(
+      await expect(page.locator(".tna-fieldset__error")).toHaveText(
         /Choosing an option is required/,
       );
     });

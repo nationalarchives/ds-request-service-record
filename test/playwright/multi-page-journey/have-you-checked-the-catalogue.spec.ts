@@ -60,7 +60,7 @@ test.describe("The 'Have you checked the catalogue?' form", () => {
     }) => {
       await page.getByRole("button", { name: /Continue/i }).click();
       await expect(page).toHaveURL(Urls.HAVE_YOU_CHECKED_THE_CATALOGUE);
-      await expect(page.locator(".tna-form__error-message")).toHaveText(
+      await expect(page.locator(".tna-fieldset__error")).toHaveText(
         /Choosing an option is required/,
       );
     });

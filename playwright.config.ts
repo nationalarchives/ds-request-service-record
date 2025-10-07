@@ -8,6 +8,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: 2,
   workers: process.env.CI ? 1 : undefined,
+  timeout: process.env.CI ? 30000 : 5000,
   reporter: process.env.CI
     ? [
         ["dot"],

@@ -21,7 +21,7 @@ from wtforms import (
     SubmitField,
     TextAreaField,
 )
-from wtforms.validators import Email, InputRequired
+from wtforms.validators import Email, InputRequired, Optional
 
 
 class RequestAServiceRecord(FlaskForm):
@@ -80,6 +80,7 @@ class RequestAServiceRecord(FlaskForm):
         get_field_content(content, "date_of_death", "label"),
         description=get_field_content(content, "date_of_death", "description"),
         validators=[
+            Optional(),
             tna_frontend_validators.PastDate(
                 message=get_field_content(content, "date_of_death", "messages")[
                     "past_date"

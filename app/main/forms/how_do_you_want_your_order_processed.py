@@ -1,4 +1,7 @@
 from app.lib.content import get_field_content, load_content
+from app.main.forms.validation_helpers.radio_conditionally_required import (
+    radio_conditionally_required,
+)
 from flask_wtf import FlaskForm
 from tna_frontend_jinja.wtforms import (
     TnaRadiosWidget,
@@ -7,10 +10,6 @@ from tna_frontend_jinja.wtforms import (
 from wtforms import (
     RadioField,
     SubmitField,
-)
-
-from app.main.forms.validation_helpers.radio_conditionally_required import (
-    radio_conditionally_required,
 )
 
 

@@ -32,13 +32,13 @@ test.describe("the 'About the service person form?' form", () => {
         page,
       }) => {
         await page.getByRole("button", { name: /Continue/i }).click();
-        await expect(page.locator(".tna-form__error-message")).toHaveCount(2);
-        await expect(
-          page.locator(".tna-form__error-message").first(),
-        ).toHaveText(/The service person's first name is required/);
-        await expect(
-          page.locator(".tna-form__error-message").nth(1),
-        ).toHaveText(/The service person's last name is required/);
+        await expect(page.locator(".tna-form-item__error")).toHaveCount(2);
+        await expect(page.locator(".tna-form-item__error").first()).toHaveText(
+          /The service person's first name is required/,
+        );
+        await expect(page.locator(".tna-form-item__error").nth(1)).toHaveText(
+          /The service person's last name is required/,
+        );
       });
     });
     test.describe("with valid input", () => {

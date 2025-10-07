@@ -29,7 +29,7 @@ test.describe("the 'What was their date of birth?' form", () => {
         page,
       }) => {
         await page.getByRole("button", { name: /Continue/i }).click();
-        await expect(page.locator(".tna-form__error-message")).toHaveText(
+        await expect(page.locator(".tna-fieldset__error")).toHaveText(
           /The service person's date of birth is required/,
         );
       });
@@ -43,7 +43,7 @@ test.describe("the 'What was their date of birth?' form", () => {
         await page.getByLabel("Month").fill("01");
         await page.getByLabel("Year").fill(nextYear);
         await page.getByRole("button", { name: /Continue/i }).click();
-        await expect(page.locator(".tna-form__error-message")).toHaveText(
+        await expect(page.locator(".tna-fieldset__error")).toHaveText(
           /The service person's date of birth must be in the past/,
         );
       });
@@ -64,7 +64,7 @@ test.describe("the 'What was their date of birth?' form", () => {
             await page.getByLabel("Month").fill(month);
             await page.getByLabel("Year").fill(year);
             await page.getByRole("button", { name: /Continue/i }).click();
-            await expect(page.locator(".tna-form__error-message")).toHaveText(
+            await expect(page.locator(".tna-fieldset__error")).toHaveText(
               /must be a real date/,
             );
           });

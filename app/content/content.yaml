@@ -325,7 +325,8 @@ forms:
       messages:
         required: Your last name is required
     does_not_have_email:
-      label: I do not have an email address
+      label: Email address
+      description: I do not have an email address
     contact_preferences:
       label: How would you like to be contacted?
       messages:

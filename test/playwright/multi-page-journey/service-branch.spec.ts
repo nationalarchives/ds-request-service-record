@@ -55,7 +55,7 @@ test.describe("the 'What was the person's service branch?' form", () => {
       page,
     }) => {
       await page.getByRole("button", { name: /Continue/i }).click();
-      await expect(page.locator(".tna-form__error-message")).toHaveText(
+      await expect(page.locator(".tna-fieldset__error")).toHaveText(
         /The service person's service branch is required/,
       );
     });
