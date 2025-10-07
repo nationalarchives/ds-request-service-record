@@ -253,7 +253,7 @@ forms:
       label: Other last names (optional)
     date_of_birth:
       label: What was their date of birth?
-      description: For example, 31 3 1910. A year of birth is required, the day and month are optional
+      description: For example, 31 3 1910.
       messages:
         required: The service person's date of birth is required
         past_date: The service person's date of birth must be in the past
