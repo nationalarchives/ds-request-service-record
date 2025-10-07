@@ -15,6 +15,7 @@ pages:
       table:
         headers:
           - Service option
+          - Cost
         rows:
           - option: Standard
             fee: █████████████

@@ -66,7 +66,7 @@ class ServicePersonDetails(FlaskForm):
                 message=get_field_content(content, "date_of_death", "messages")[
                     "past_date"
                 ],
-                include_today=True,
+                include_now=True,
             ),
         ],
     )

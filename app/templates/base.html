@@ -2,7 +2,7 @@
 
 {%- from 'components/cookie-banner/macro.html' import tnaCookieBanner -%}
 {%- from 'components/footer/macro.html' import tnaFooter -%}
-{%- from 'components/header/macro.html' import tnaHeader -%}
+{%- from 'components/global-header/macro.html' import tnaGlobalHeader -%}
 {%- from 'components/error-summary/macro.html' import tnaErrorSummary -%}
 {%- from 'components/details/macro.html' import tnaDetails -%}
 
@@ -63,11 +63,8 @@
 {% endblock %}
 
 {% block header %}
-{{ tnaHeader({
-  'logo': {
-    'href': url_for('main.index'),
-    'title': 'Service home page'
-  }
+{{ tnaGlobalHeader({
+  'defaultContent': True
 }) | indent(6) }}
 {% endblock %}
 
@@ -80,6 +77,7 @@
 {{ tnaFooter({
   'themeSelector': True,
   'currentTheme': theme,
+  'defaultContent': True,
   'classes': 'tna-!--margin-top-l'
 }) | indent(4) }}
 {% endblock %}
