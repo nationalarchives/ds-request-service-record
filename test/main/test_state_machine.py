@@ -19,8 +19,8 @@ def test_all_events_have_the_expected_suffix():
     sm = RoutingStateMachine()
     for event in sm.events:
         assert re.search(
-            r"(_form|_page)$", event.id
-        ), f"Event ID {event.id} does not end with '_form' or '_page'"
+            r"(_form|_page|_redirect)$", event.id
+        ), f"Event ID {event.id} does not end with '_form', '_page' or '_redirect'"
 
 
 def test_initial_state_has_no_route():
@@ -352,6 +352,13 @@ def test_continue_from_how_do_you_want_your_order_processed(processing_option):
     )
     assert sm.current_state.id == "gov_uk_pay_redirect"
     assert sm.route_for_current_state == MultiPageFormRoutes.SEND_TO_GOV_PAY.value
+
+
+def test_continue_from_gov_uk_pay():
+    sm = RoutingStateMachine()
+    sm.continue_on_return_from_gov_uk_redirect()
+    assert sm.current_state.id == "request_submitted_page"
+    assert sm.route_for_current_state == MultiPageFormRoutes.REQUEST_SUBMITTED.value
 
 
 def make_form(**fields):

@@ -308,3 +308,19 @@ def upload_a_proof_of_death(form, state_machine):
         form=form,
         content=load_content(),
     )
+
+
+@bp.route("/return-from-gov-uk-pay/")
+@with_state_machine
+def return_from_gov_uk_pay(state_machine):
+    state_machine.continue_on_return_from_gov_uk_redirect()
+    return redirect(url_for(state_machine.route_for_current_state))
+
+
+@bp.route("/request-submitted/", methods=["GET"])
+def request_submitted():
+    return render_template(
+        "main/multi-page-journey/request-submitted.html",
+        reference_number="123456",
+        content=load_content(),
+    )
