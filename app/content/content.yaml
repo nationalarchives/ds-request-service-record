@@ -214,6 +214,11 @@ pages:
           data: We cannot confirm when you will receive the record. However, we will aim to respond to your request within 30 working days.
         - header: ████ ██████ ███
           data: █████ ██ ██████ ████ ██████ ███
+  request_submitted:
+    heading: Request submitted
+    paragraphs:
+      - Your request has been received and is being processed.
+      - Your reference number is [reference_number]
 forms:
   fields:
     start_now:
