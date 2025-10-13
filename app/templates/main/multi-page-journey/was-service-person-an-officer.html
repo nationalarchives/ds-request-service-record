@@ -8,6 +8,9 @@
     <div class="tna-container">
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+        {% if form.errors %}
+          {{ tnaErrorSummary(wtforms_errors(form)) }}
+        {% endif %}
         <form action="{{ url_for('main.was_service_person_an_officer') }}" method="post" novalidate>
           {{ form.csrf_token }}
           {{ form.was_service_person_an_officer(params={'headingLevel':1, 'headingSize':'xl'}) }}

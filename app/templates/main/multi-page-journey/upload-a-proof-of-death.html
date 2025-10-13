@@ -8,6 +8,9 @@
     <div class="tna-container">
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+        {% if form.errors %}
+          {{ tnaErrorSummary(wtforms_errors(form)) }}
+        {% endif %}
         <h1 class="tna-heading-xl">{{ content.pages.upload_a_proof_of_death.heading }}</h1>
         {% for paragraph in content.pages.upload_a_proof_of_death.paragraphs %}
           <p>{{ paragraph }}</p>
