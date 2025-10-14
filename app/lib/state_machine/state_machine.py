@@ -146,7 +146,7 @@ class RoutingStateMachine(StateMachine):
         upload_a_proof_of_death_form
     )
 
-    continue_from_upload_a_proof_of_death_form = initial.to(service_person_details_form)
+    continue_from_upload_a_proof_of_death_form = initial.to(service_person_details_form, cond="proof_of_death_uploaded_to_s3") | initial.to(upload_a_proof_of_death_form)
 
     continue_from_service_person_details_form = initial.to(
         have_you_previously_made_a_request_form
@@ -309,3 +309,6 @@ class RoutingStateMachine(StateMachine):
 
     def does_not_have_email(self, form):
         return form.does_not_have_email.data
+
+    def proof_of_death_uploaded_to_s3(self, form):
+        return False
