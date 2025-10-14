@@ -61,7 +61,6 @@ In addition to the [base Docker image variables](https://github.com/nationalarch
 | `GA4_ID`                         | The Google Analytics 4 ID                                                   | _none_                                                    |
 | `GOV_UK_PAY_API_KEY`             | GOV.UK Pay API key                                                          | _none_ (required for payments)                            |
 | `GOV_UK_PAY_API_URL`             | GOV.UK Pay create payment endpoint URL                                      | _none_ (required for payments)                            |
-| `GOV_UK_PAY_SIGNING_SECRET`      | GOV.UK Pay webhook HMAC signing secret                                      | _none_ (required for webhooks)                            |
 | `SQLALCHEMY_DATABASE_URI`        | SQLAlchemy database connection string                                       | _none_ (required)                                         |
 | `SQLALCHEMY_TRACK_MODIFICATIONS` | SQLAlchemy event system toggle                                              | `False`                                                   |
 | `SESSION_REDIS_URL`              | Redis URL connection string for sessions                                    | _none_                                                    |

@@ -7,9 +7,7 @@ from app.lib.db_handler import add_service_record_request, get_payment_id_from_r
 from app.lib.gov_uk_pay import (
     create_payment,
     process_valid_request,
-    process_webhook_data,
     validate_payment,
-    validate_webhook_signature,
 )
 from app.main import bp
 from app.main.forms.proceed_to_pay import ProceedToPay
@@ -146,18 +144,3 @@ def confirm_payment_received():
     return render_template(
         "main/payment/confirm-payment-received.html", content=content
     )
-
-
-@bp.route("/gov-uk-pay-webhook/", methods=["POST"])
-def gov_uk_pay_webhook():
-
-    if not validate_webhook_signature(request):
-        return "FAILED", 403
-
-    try:
-        process_webhook_data(request.json)
-    except Exception as e:
-        current_app.logger.error(f"Error processing webhook data: {e}")
-        return "FAILED", 500
-
-    return "SUCCESS", 200

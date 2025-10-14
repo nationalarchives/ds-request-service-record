@@ -1,5 +1,3 @@
-import hashlib
-import hmac
 from enum import Enum
 
 import requests
@@ -85,39 +83,6 @@ def create_payment(
         return None
 
     return response.json()
-
-
-def validate_webhook_signature(request: requests.Request) -> bool:
-    signing_secret = current_app.config["GOV_UK_PAY_SIGNING_SECRET"]
-    pay_signature = request.headers.get("Pay-Signature", "")
-    body = request.get_data()
-
-    hmac_obj = hmac.new(signing_secret.encode("utf-8"), body, hashlib.sha256)
-
-    generated_signature = hmac_obj.hexdigest()
-
-    if pay_signature != generated_signature:
-        return False
-
-    return True
-
-
-def process_webhook_data(data: dict) -> None:
-    payment_id = data.get("resource_id", "")
-    event_type = data.get("event_type", "")
-
-    record = get_service_record_request(payment_id=payment_id)
-
-    if record is None:
-        raise ValueError(f"Service record not found for payment ID: {payment_id}")
-
-    if event_type not in [type.value for type in GOV_UK_PAY_EVENT_TYPES]:
-        raise ValueError(f"Unknown event type received: {event_type}")
-
-    if event_type == GOV_UK_PAY_EVENT_TYPES.SUCCEEDED.value:
-        send_data_to_dynamics(record)
-
-    delete_service_record_request(record)
 
 
 def process_valid_request(payment_id: str) -> None:
