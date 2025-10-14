@@ -10,7 +10,6 @@ class RoutingStateMachine(StateMachine):
     """
 
     _route_for_current_state = None
-    _s3_file_id = None
 
     @property
     def route_for_current_state(self):
@@ -19,14 +18,6 @@ class RoutingStateMachine(StateMachine):
     @route_for_current_state.setter
     def route_for_current_state(self, value):
         self._route_for_current_state = value
-
-    @property
-    def s3_file_id(self):
-        return self._s3_file_id
-    
-    @s3_file_id.setter
-    def s3_file_id(self, value):
-        self._s3_file_id = value
 
     """
     These are our States. They represent the different stages of the user journey. In most cases, you
@@ -326,6 +317,6 @@ class RoutingStateMachine(StateMachine):
             file = upload_proof_of_death(file=file_data)
 
             if file:
-                self.s3_file_id = file
+                form.proof_of_death.data = file
                 return True
         return False
