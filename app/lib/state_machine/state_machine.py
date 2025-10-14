@@ -1,5 +1,6 @@
 from app.constants import MultiPageFormRoutes
 from statemachine import State, StateMachine
+from app.lib.aws import upload_proof_of_death
 
 
 class RoutingStateMachine(StateMachine):
@@ -9,6 +10,7 @@ class RoutingStateMachine(StateMachine):
     """
 
     _route_for_current_state = None
+    _s3_file_id = None
 
     @property
     def route_for_current_state(self):
@@ -17,6 +19,14 @@ class RoutingStateMachine(StateMachine):
     @route_for_current_state.setter
     def route_for_current_state(self, value):
         self._route_for_current_state = value
+
+    @property
+    def s3_file_id(self):
+        return self._s3_file_id
+    
+    @s3_file_id.setter
+    def s3_file_id(self, value):
+        self._s3_file_id = value
 
     """
     These are our States. They represent the different stages of the user journey. In most cases, you
@@ -311,4 +321,11 @@ class RoutingStateMachine(StateMachine):
         return form.does_not_have_email.data
 
     def proof_of_death_uploaded_to_s3(self, form):
+        if file_data := form.proof_of_death.data:
+
+            file = upload_proof_of_death(file=file_data)
+
+            if file:
+                self.s3_file_id = file
+                return True
         return False
