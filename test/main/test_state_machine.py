@@ -1,9 +1,9 @@
 import re
 from datetime import date
 from types import SimpleNamespace
+from unittest.mock import patch
 
 import pytest
-from unittest.mock import patch
 from app.constants import MultiPageFormRoutes
 from app.lib.state_machine.state_machine import RoutingStateMachine
 
@@ -246,6 +246,7 @@ def test_continue_from_do_you_have_a_proof_of_death(
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
 
+
 # In the real world, upload_proof_of_death interacts with AWS S3, so we mock it here. In this case
 # we test the scenario where it returns None, simulating a failed upload.
 @patch("app.lib.state_machine.state_machine.upload_proof_of_death", return_value=None)
@@ -258,6 +259,7 @@ def test_continue_from_upload_a_proof_of_death_where_upload_proof_of_death_retur
     )
     assert sm.current_state.id == "upload_a_proof_of_death_form"
     assert sm.route_for_current_state == "main.upload_a_proof_of_death"
+
 
 # In this test we are again mocking upload_proof_of_death, but this time we simulate a successful
 # upload by having it return a filename.
@@ -274,6 +276,7 @@ def test_continue_from_upload_a_proof_of_death_where_upload_proof_of_death_retur
     )
     assert sm.current_state.id == "service_person_details_form"
     assert sm.route_for_current_state == "main.service_person_details"
+
 
 # In this case we are again testing sm.continue_from_upload_a_proof_of_death_form but there is no
 # need to mock upload_proof_of_death as the form's proof_of_death field is None, simulating

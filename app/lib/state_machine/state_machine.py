@@ -1,6 +1,7 @@
 from app.constants import MultiPageFormRoutes
-from statemachine import State, StateMachine
 from app.lib.aws import upload_proof_of_death
+from flask import current_app
+from statemachine import State, StateMachine
 
 
 class RoutingStateMachine(StateMachine):
@@ -18,6 +19,26 @@ class RoutingStateMachine(StateMachine):
     @route_for_current_state.setter
     def route_for_current_state(self, value):
         self._route_for_current_state = value
+
+    def get_form_field_data(self, form, field_name):
+        """Helper method to get the data for a specific field from the form with error handling."""
+        try:
+            return getattr(form, field_name).data
+        except AttributeError:
+            current_app.logger.error(
+                f"Form ({form}) does not have field '{field_name}'"
+            )
+            return None
+
+    def set_form_field_data(self, form, field_name, value):
+        """Helper method to set the data for a specific field in the form with error handling."""
+        try:
+            form_field = getattr(form, field_name)
+            form_field.data = value
+        except AttributeError:
+            current_app.logger.error(
+                f"Form ({form}) does not have field '{field_name}'"
+            )
 
     """
     These are our States. They represent the different stages of the user journey. In most cases, you
@@ -283,42 +304,47 @@ class RoutingStateMachine(StateMachine):
 
     def has_checked_catalogue(self, form):
         """Condition method to determine if the user has checked the catalogue."""
-        return form.have_you_checked_the_catalogue.data == "yes"
+        return self.get_form_field_data(form, "have_you_checked_the_catalogue") == "yes"
 
     def living_subject(self, form):
         """Condition method to determine if the service person is alive."""
-        return form.is_service_person_alive.data == "yes"
+        return self.get_form_field_data(form, "is_service_person_alive") == "yes"
 
     def go_to_mod(self, form):
         """Condition method to determine if the user should be directed to the MOD."""
-        return form.service_branch.data in ["ROYAL_NAVY"]
+        return self.get_form_field_data(form, "service_branch") in ["ROYAL_NAVY"]
 
     def likely_unfindable(self, form):
         """Condition method to determine if we may be unable to find the record."""
-        return form.service_branch.data in ["HOME_GUARD"]
+        return self.get_form_field_data(form, "service_branch") in ["HOME_GUARD"]
 
     def was_officer(self, form):
         """Condition method to determine if the service person was an officer."""
-        return form.was_service_person_an_officer.data == "yes"
+        return self.get_form_field_data(form, "was_service_person_an_officer") == "yes"
 
     def born_too_late(self, form):
-        return form.what_was_their_date_of_birth.data.year > 1939
+        return (
+            self.get_form_field_data(form, "what_was_their_date_of_birth").year > 1939
+        )
 
     def born_too_early(self, form):
-        return form.what_was_their_date_of_birth.data.year < 1800
+        return (
+            self.get_form_field_data(form, "what_was_their_date_of_birth").year < 1800
+        )
 
     def birth_year_requires_proof_of_death(self, form):
-        return form.what_was_their_date_of_birth.data.year > 1910
+        return (
+            self.get_form_field_data(form, "what_was_their_date_of_birth").year > 1910
+        )
 
     def does_not_have_email(self, form):
-        return form.does_not_have_email.data
+        return self.get_form_field_data(form, "does_not_have_email")
 
     def proof_of_death_uploaded_to_s3(self, form):
-        if file_data := form.proof_of_death.data:
-
+        if file_data := self.get_form_field_data(form, "proof_of_death"):
             file = upload_proof_of_death(file=file_data)
-
             if file:
-                form.proof_of_death.data = file
+                self.set_form_field_data(form, "proof_of_death", file)
                 return True
+            self.set_form_field_data(form, "proof_of_death", None)
         return False
