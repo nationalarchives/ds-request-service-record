@@ -1,0 +1,27 @@
+export const basePath: string = "/request-a-military-service-record";
+
+export const Paths = {
+  DO_YOU_HAVE_A_PROOF_OF_DEATH: `${basePath}/do-you-have-a-proof-of-death/`,
+  HAVE_YOU_CHECKED_THE_CATALOGUE: `${basePath}/have-you-checked-the-catalogue/`,
+  HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST: `${basePath}/have-you-previously-made-a-request/`,
+  HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED: `${basePath}/how-do-you-want-your-order-processed/`,
+  IS_SERVICE_PERSON_ALIVE: `${basePath}/is-service-person-alive/`,
+  JOURNEY_START: `${basePath}/`,
+  MUST_SUBMIT_SUBJECT_ACCESS: `${basePath}/must-submit-subject-access/`,
+  REQUEST_SUBMITTED: `${basePath}/request-submitted/`,
+  SEARCH_THE_CATALOGUE: `${basePath}/search-the-catalogue/`,
+  SELECT_SERVICE_BRANCH: `${basePath}/service-branch/`,
+  SERVICE_BRANCH: `${basePath}/service-branch/`,
+  SERVICE_PERSON_DETAILS: `${basePath}/service-person-details/`,
+  UPLOAD_A_PROOF_OF_DEATH: `${basePath}/upload-a-proof-of-death/`,
+  WAS_SERVICE_PERSON_AN_OFFICER: `${basePath}/was-service-person-officer/`,
+  WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER: `${basePath}/we-do-not-have-records-for-people-born-after/`,
+  WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE: `${basePath}/we-do-not-have-records-for-people-born-before/`,
+  WE_DO_NOT_HAVE_RECORDS_FOR_THIS_RANK: `${basePath}/we-do-not-have-records-for-this-rank/`,
+  WE_DO_NOT_HAVE_RECORDS_FOR_THIS_SERVICE_BRANCH: `${basePath}/we-do-not-have-records-for-this-service-branch/`,
+  WE_MAY_BE_UNABLE_TO_FIND_THIS_RECORD: `${basePath}/we-may-be-unable-to-find-this-record/`,
+  WE_MAY_HOLD_THIS_RECORD: `${basePath}/we-may-hold-this-record/`,
+  WHAT_WAS_THEIR_DATE_OF_BIRTH: `${basePath}/what-was-their-date-of-birth/`,
+  YOUR_DETAILS: `${basePath}/your-details/`,
+  YOUR_POSTAL_ADDRESS: `${basePath}/your-postal-address/`,
+};

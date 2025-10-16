@@ -1,16 +1,10 @@
 import { test, expect } from "@playwright/test";
+import { Paths } from "../lib/constants";
 
 test.describe("how do you want your order processed", () => {
-  const basePath = "/request-a-service-record";
-
-  enum Urls {
-    START_PAGE = `${basePath}/start/`,
-    YOUR_POSTAL_ADDRESS = `${basePath}/how-do-you-want-your-order-processed/`,
-  }
-
   test.beforeEach(async ({ page }) => {
-    await page.goto(Urls.START_PAGE);
-    await page.goto(Urls.YOUR_POSTAL_ADDRESS);
+    await page.goto(Paths.JOURNEY_START);
+    await page.goto(Paths.HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED);
   });
 
   test("has the correct heading", async ({ page }) => {

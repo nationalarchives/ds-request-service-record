@@ -1,16 +1,10 @@
 import { test, expect } from "@playwright/test";
+import { Paths } from "../lib/constants";
 
 test.describe("request submitted", () => {
-  const basePath = "/request-a-service-record";
-
-  enum Urls {
-    START_PAGE = `${basePath}/start/`,
-    REQUEST_SUBMITTED = `${basePath}/request-submitted/`,
-  }
-
   test.beforeEach(async ({ page }) => {
-    await page.goto(Urls.START_PAGE);
-    await page.goto(Urls.REQUEST_SUBMITTED);
+    await page.goto(Paths.JOURNEY_START);
+    await page.goto(Paths.REQUEST_SUBMITTED);
   });
 
   test("has the correct heading", async ({ page }) => {

@@ -1,17 +1,10 @@
 import { test, expect } from "@playwright/test";
+import { Paths } from "../lib/constants";
 
 test.describe("the 'About the service person form?' form", () => {
-  const basePath = "/request-a-service-record";
-
-  enum Urls {
-    JOURNEY_START_PAGE = `${basePath}/start/`,
-    SERVICE_PERSON_DETAILS = `${basePath}/service-person-details/`,
-    HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST = `${basePath}/have-you-previously-made-a-request/`,
-  }
-
   test.beforeEach(async ({ page }) => {
-    await page.goto(Urls.JOURNEY_START_PAGE); // We need to go here first because we prevent direct access to mid-journey pages
-    await page.goto(Urls.SERVICE_PERSON_DETAILS);
+    await page.goto(Paths.JOURNEY_START); // We need to go here first because we prevent direct access to mid-journey pages
+    await page.goto(Paths.SERVICE_PERSON_DETAILS);
   });
 
   test("has the correct heading", async ({ page }) => {
@@ -48,7 +41,7 @@ test.describe("the 'About the service person form?' form", () => {
         await page.getByLabel("First name").fill("Thomas");
         await page.getByLabel("Last name", { exact: true }).fill("Duffus");
         await page.getByRole("button", { name: /Continue/i }).click();
-        await expect(page).toHaveURL(Urls.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
+        await expect(page).toHaveURL(Paths.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
       });
       test("with all fields filled in, the user is taken to the next page", async ({
         page,
@@ -58,7 +51,7 @@ test.describe("the 'About the service person form?' form", () => {
         await page.getByLabel("Last name", { exact: true }).fill("Hardy");
         await page.getByLabel("Service number").fill("123456");
         await page.getByRole("button", { name: /Continue/i }).click();
-        await expect(page).toHaveURL(Urls.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
+        await expect(page).toHaveURL(Paths.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
       });
     });
   });

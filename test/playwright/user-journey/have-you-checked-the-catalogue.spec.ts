@@ -1,26 +1,18 @@
 import { test, expect } from "@playwright/test";
+import { Paths } from "../lib/constants";
 
 test.describe("The 'Have you checked the catalogue?' form", () => {
-  const basePath = "/request-a-service-record";
-
-  enum Urls {
-    JOURNEY_START = `${basePath}/start/`,
-    HAVE_YOU_CHECKED_THE_CATALOGUE = `${basePath}/have-you-checked-the-catalogue/`,
-    IS_SERVICE_PERSON_ALIVE = `${basePath}/is-service-person-alive/`,
-    SEARCH_THE_CATALOGUE = `${basePath}/search-the-catalogue/`,
-  }
-
   const selectionMappings = [
     {
       label: "Yes",
-      url: Urls.IS_SERVICE_PERSON_ALIVE,
+      url: Paths.IS_SERVICE_PERSON_ALIVE,
       heading: /Is the service person still alive\?/,
       description:
         "when 'Yes' is selected, presents the 'Is the service person still alive?' page ",
     },
     {
       label: "No",
-      url: Urls.SEARCH_THE_CATALOGUE,
+      url: Paths.SEARCH_THE_CATALOGUE,
       heading: "Search our catalogue",
       description:
         "when 'No' is selected, presents the 'Search our catalogue' page ",
@@ -28,8 +20,8 @@ test.describe("The 'Have you checked the catalogue?' form", () => {
   ];
 
   test.beforeEach(async ({ page }) => {
-    await page.goto(Urls.JOURNEY_START);
-    await page.goto(Urls.HAVE_YOU_CHECKED_THE_CATALOGUE);
+    await page.goto(Paths.JOURNEY_START);
+    await page.goto(Paths.HAVE_YOU_CHECKED_THE_CATALOGUE);
   });
 
   test("has the correct heading", async ({ page }) => {
@@ -42,14 +34,14 @@ test.describe("The 'Have you checked the catalogue?' form", () => {
     const selectionMappings = [
       {
         label: "Yes",
-        url: Urls.IS_SERVICE_PERSON_ALIVE,
+        url: Paths.IS_SERVICE_PERSON_ALIVE,
         heading: /Is the service person still alive\?/,
         description:
           "when 'Yes' is selected, presents the 'Is the service person still alive?' page",
       },
       {
         label: "No",
-        url: Urls.SEARCH_THE_CATALOGUE,
+        url: Paths.SEARCH_THE_CATALOGUE,
         heading: "Search our catalogue",
         description:
           "when 'No' is selected, presents the 'Search our catalogue' page",
@@ -59,7 +51,7 @@ test.describe("The 'Have you checked the catalogue?' form", () => {
       page,
     }) => {
       await page.getByRole("button", { name: /Continue/i }).click();
-      await expect(page).toHaveURL(Urls.HAVE_YOU_CHECKED_THE_CATALOGUE);
+      await expect(page).toHaveURL(Paths.HAVE_YOU_CHECKED_THE_CATALOGUE);
       await expect(page.locator(".tna-fieldset__error")).toHaveText(
         /Choosing an option is required/,
       );
@@ -85,7 +77,7 @@ test.describe("The 'Have you checked the catalogue?' form", () => {
         await expect(page).toHaveURL(url);
         await expect(page.locator("h1")).toHaveText(heading);
         await page.getByRole("link", { name: "Back" }).click();
-        await expect(page).toHaveURL(Urls.HAVE_YOU_CHECKED_THE_CATALOGUE);
+        await expect(page).toHaveURL(Paths.HAVE_YOU_CHECKED_THE_CATALOGUE);
         await expect(page.getByLabel(label, { exact: true })).toBeChecked();
       });
     });

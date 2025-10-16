@@ -1,19 +1,9 @@
 import { test, expect } from "@playwright/test";
-
+import { Paths } from "../lib/constants";
 test.describe("your details", () => {
-  const basePath = "/request-a-service-record";
-
-  enum Urls {
-    START_PAGE = `${basePath}/start/`,
-    HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST = `${basePath}/have-you-previously-made-a-request/`,
-    YOUR_DETAILS = `${basePath}/your-details/`,
-    YOUR_POSTAL_ADDRESS = `${basePath}/your-postal-address/`,
-    HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED = `${basePath}/how-do-you-want-your-order-processed/`,
-  }
-
   test.beforeEach(async ({ page }) => {
-    await page.goto(Urls.START_PAGE);
-    await page.goto(Urls.YOUR_DETAILS);
+    await page.goto(Paths.JOURNEY_START);
+    await page.goto(Paths.YOUR_DETAILS);
   });
 
   test("has the correct heading", async ({ page }) => {
@@ -44,11 +34,16 @@ test.describe("your details", () => {
         await page.getByLabel("First name").fill("John");
         await page.getByLabel("Last name").fill("Doe");
         // TODO: Investigate why we need to force this checkbox to be checked - the label seems to be intercepting pointer events
+        // Update 16 October 2025:
+        // - Spent some time today investigating this but it's not clear what's causing the issue.
+        // - Some online searching suggests interception of pointer events seems is affecting other Playwright users too.
+        // - What I did find is that replacing `.check()` with `.dispatchEvent('click')` fixes the problem, so that's something
+        //   we might want to try if we can't get to the bottom of this.
         await page
           .getByLabel("I do not have an email address")
           .check({ force: true });
         await page.getByRole("button", { name: /Continue/i }).click();
-        await expect(page).toHaveURL(Urls.YOUR_POSTAL_ADDRESS);
+        await expect(page).toHaveURL(Paths.YOUR_POSTAL_ADDRESS);
       });
       test("takes the user to the 'How would you like your order processed' page if the user does have an email address", async ({
         page,
@@ -57,7 +52,9 @@ test.describe("your details", () => {
         await page.getByLabel("Last name").fill("Doe");
         await page.getByLabel("Email", { exact: true }).fill("john@doe.com");
         await page.getByRole("button", { name: /Continue/i }).click();
-        await expect(page).toHaveURL(Urls.HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED);
+        await expect(page).toHaveURL(
+          Paths.HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED,
+        );
       });
     });
 
@@ -65,7 +62,7 @@ test.describe("your details", () => {
       page,
     }) => {
       await page.getByRole("link", { name: "Back" }).click();
-      await expect(page).toHaveURL(Urls.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
+      await expect(page).toHaveURL(Paths.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
     });
   });
 });

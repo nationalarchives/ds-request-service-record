@@ -1,17 +1,10 @@
 import { test, expect } from "@playwright/test";
+import { Paths } from "../lib/constants";
 
 test.describe("your postal address", () => {
-  const basePath = "/request-a-service-record";
-
-  enum Urls {
-    START_PAGE = `${basePath}/start/`,
-    YOUR_POSTAL_ADDRESS = `${basePath}/your-postal-address/`,
-    YOUR_DETAILS = `${basePath}/your-details/`,
-  }
-
   test.beforeEach(async ({ page }) => {
-    await page.goto(Urls.START_PAGE);
-    await page.goto(Urls.YOUR_POSTAL_ADDRESS);
+    await page.goto(Paths.JOURNEY_START);
+    await page.goto(Paths.YOUR_POSTAL_ADDRESS);
   });
 
   test("has the correct heading", async ({ page }) => {
@@ -45,7 +38,7 @@ test.describe("your postal address", () => {
       page,
     }) => {
       await page.getByRole("link", { name: "Back" }).click();
-      await expect(page).toHaveURL(Urls.YOUR_DETAILS);
+      await expect(page).toHaveURL(Paths.YOUR_DETAILS);
     });
   });
 });
