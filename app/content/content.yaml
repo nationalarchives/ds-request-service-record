@@ -339,7 +339,7 @@ forms:
     requester_email:
       label: Email
       messages:
-        required: Your email address is required
+        required: Your email address is required so that we can contact you. If you do not have an email address, please select 'I do not have an email address' below
         address_format: Please enter a valid email address
     requester_address_line_1:
       label: Address line 1

@@ -25,12 +25,15 @@ test.describe("your details", () => {
       page,
     }) => {
       await page.getByRole("button", { name: /Continue/i }).click();
-      await expect(page.locator(".tna-form-item__error")).toHaveCount(2);
+      await expect(page.locator(".tna-form-item__error")).toHaveCount(3);
       await expect(page.locator(".tna-form-item__error").first()).toHaveText(
         /Your first name is required/,
       );
       await expect(page.locator(".tna-form-item__error").nth(1)).toHaveText(
         /Your last name is required/,
+      );
+      await expect(page.locator(".tna-form-item__error").nth(2)).toHaveText(
+        /Your email address is required so that we can contact you. If you do not have an email address, please select 'I do not have an email address' below/,
       );
     });
 
@@ -52,6 +55,7 @@ test.describe("your details", () => {
       }) => {
         await page.getByLabel("First name").fill("John");
         await page.getByLabel("Last name").fill("Doe");
+        await page.getByLabel("Email", { exact: true }).fill("john@doe.com");
         await page.getByRole("button", { name: /Continue/i }).click();
         await expect(page).toHaveURL(Urls.HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED);
       });
