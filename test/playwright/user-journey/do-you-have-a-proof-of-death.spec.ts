@@ -1,17 +1,10 @@
 import { test, expect } from "@playwright/test";
+import { Paths } from "../lib/constants";
 
 test.describe("The 'Do you have a proof of death?' form", () => {
-  const basePath = "/request-a-military-service-record";
-
-  enum Urls {
-    JOURNEY_START = `${basePath}/start/`,
-    DO_YOU_HAVE_A_PROOF_OF_DEATH = `${basePath}/do-you-have-a-proof-of-death/`,
-    UPLOAD_A_PROOF_OF_DEATH = `${basePath}/upload-a-proof-of-death/`,
-  }
-
   test.beforeEach(async ({ page }) => {
-    await page.goto(Urls.JOURNEY_START);
-    await page.goto(Urls.DO_YOU_HAVE_A_PROOF_OF_DEATH);
+    await page.goto(Paths.JOURNEY_START);
+    await page.goto(Paths.DO_YOU_HAVE_A_PROOF_OF_DEATH);
   });
 
   test("has the correct heading", async ({ page }) => {
@@ -29,14 +22,14 @@ test.describe("The 'Do you have a proof of death?' form", () => {
     const selectionMappings = [
       {
         label: "Yes",
-        url: Urls.UPLOAD_A_PROOF_OF_DEATH,
+        url: Paths.UPLOAD_A_PROOF_OF_DEATH,
         heading: /Upload a proof of death/,
         description:
           'when "Yes" is selected, the user is directed to "Upload a proof of death" form',
       },
       {
         label: "No",
-        url: Urls.UPLOAD_A_PROOF_OF_DEATH,
+        url: Paths.UPLOAD_A_PROOF_OF_DEATH,
         heading: /Upload a proof of death/,
         description:
           'when "No" is selected, the user is directed to "Upload a proof of death" form',

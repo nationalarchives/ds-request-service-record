@@ -1,20 +1,10 @@
 import { test, expect } from "@playwright/test";
+import { Paths } from "../lib/constants";
 
 test.describe("the 'What was their date of birth?' form", () => {
-  const basePath = "/request-a-military-service-record";
-
-  enum Urls {
-    JOURNEY_START_PAGE = `${basePath}/start/`,
-    WHAT_WAS_THEIR_DATE_OF_BIRTH = `${basePath}/what-was-their-date-of-birth/`,
-    SERVICE_PERSON_DETAILS = `${basePath}/service-person-details/`,
-    WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE = `${basePath}/we-do-not-have-records-for-people-born-before/`,
-    WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER = `${basePath}/we-do-not-have-records-for-people-born-after/`,
-    DO_YOU_HAVE_A_PROOF_OF_DEATH = `${basePath}/do-you-have-a-proof-of-death/`,
-  }
-
   test.beforeEach(async ({ page }) => {
-    await page.goto(Urls.JOURNEY_START_PAGE); // We need to go here first because we prevent direct access to mid-journey pages
-    await page.goto(Urls.WHAT_WAS_THEIR_DATE_OF_BIRTH);
+    await page.goto(Paths.JOURNEY_START); // We need to go here first because we prevent direct access to mid-journey pages
+    await page.goto(Paths.WHAT_WAS_THEIR_DATE_OF_BIRTH);
   });
 
   test("has the correct heading", async ({ page }) => {
@@ -77,7 +67,7 @@ test.describe("the 'What was their date of birth?' form", () => {
           month: "01",
           day: "01",
           year: "1890",
-          nextUrl: Urls.SERVICE_PERSON_DETAILS,
+          nextUrl: Paths.SERVICE_PERSON_DETAILS,
           heading: /About the service person/,
           description:
             "when the year of birth is 1890, the 'About the service person' page is shown and any 'Back' links work as expected",
@@ -86,7 +76,7 @@ test.describe("the 'What was their date of birth?' form", () => {
           month: "01",
           day: "01",
           year: "1690",
-          nextUrl: Urls.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE,
+          nextUrl: Paths.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE,
           heading: /We do not have records for people born before/,
           description:
             "when the year of birth is 1690, the 'We do not have records for people born before' page is shown and any 'Back' links work as expected",
@@ -95,7 +85,7 @@ test.describe("the 'What was their date of birth?' form", () => {
           month: "01",
           day: "01",
           year: "1950",
-          nextUrl: Urls.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER,
+          nextUrl: Paths.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER,
           heading: /We do not have this record/,
           description:
             "when the year of birth is 1950, the 'We do not have this record' page is shown and any 'Back' links work as expected",
@@ -104,7 +94,7 @@ test.describe("the 'What was their date of birth?' form", () => {
           month: "01",
           day: "01",
           year: "1925",
-          nextUrl: Urls.DO_YOU_HAVE_A_PROOF_OF_DEATH,
+          nextUrl: Paths.DO_YOU_HAVE_A_PROOF_OF_DEATH,
           heading: /Provide a proof of death/,
           description:
             "when the year of birth is 1925, the 'Provide proof of death' page is shown and any 'Back' links work as expected",
@@ -124,7 +114,7 @@ test.describe("the 'What was their date of birth?' form", () => {
             // If there's a "Back" link, click it
             if ((await backLink.count()) > 0) {
               await backLink.click();
-              await expect(page).toHaveURL(Urls.WHAT_WAS_THEIR_DATE_OF_BIRTH);
+              await expect(page).toHaveURL(Paths.WHAT_WAS_THEIR_DATE_OF_BIRTH);
             }
           });
         },

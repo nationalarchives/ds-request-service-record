@@ -1,17 +1,10 @@
 import { test, expect } from "@playwright/test";
+import { Paths } from "../lib/constants";
 
 test.describe("The 'Upload proof of death' form", () => {
-  const basePath = "/request-a-military-service-record";
-
-  enum Urls {
-    JOURNEY_START = `${basePath}/start/`,
-    UPLOAD_A_PROOF_OF_DEATH = `${basePath}/upload-a-proof-of-death/`,
-    SERVICE_PERSON_DETAILS = `${basePath}/service-person-details/`,
-  }
-
   test.beforeEach(async ({ page }) => {
-    await page.goto(Urls.JOURNEY_START);
-    await page.goto(Urls.UPLOAD_A_PROOF_OF_DEATH);
+    await page.goto(Paths.JOURNEY_START);
+    await page.goto(Paths.UPLOAD_A_PROOF_OF_DEATH);
   });
 
   test("has the correct heading", async ({ page }) => {
@@ -73,7 +66,7 @@ test.describe("The 'Upload proof of death' form", () => {
           buffer: Buffer.alloc(2 * 1024 * 1024),
         });
         await page.getByRole("button", { name: /Continue/i }).click();
-        await expect(page).toHaveURL(Urls.SERVICE_PERSON_DETAILS);
+        await expect(page).toHaveURL(Paths.SERVICE_PERSON_DETAILS);
       });
     });
   });
