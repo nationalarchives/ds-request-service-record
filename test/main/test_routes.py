@@ -19,16 +19,16 @@ class MainBlueprintTestCase(unittest.TestCase):
         self.assertEqual(rv.location, f"{self.domain}/healthcheck/live/")
 
     def test_requires_session_key_redirects(self):
-        rv = self.app.get("/request-a-service-record/all-fields-form/")
+        rv = self.app.get("/request-a-service-record/service-branch/")
         self.assertEqual(rv.status_code, 302)
-        self.assertEqual(rv.location, "/request-a-service-record/")
+        self.assertEqual(rv.location, "/request-a-military-service-record/")
 
     def test_requires_session_key_does_not_redirect(self):
-        rv = self.app.get("/request-a-service-record/")
+        rv = self.app.get("/request-a-military-service-record/")
         self.assertEqual(rv.status_code, 200)
 
     def test_homepage(self):
-        rv = self.app.get("/request-a-service-record/")
+        rv = self.app.get("/request-a-military-service-record/")
         self.assertEqual(rv.status_code, 200)
         self.assertIn(
             '<h1 class="tna-heading-xl">Request a military service record</h1>', rv.text

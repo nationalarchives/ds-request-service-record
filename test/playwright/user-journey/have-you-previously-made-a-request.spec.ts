@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("have you previously made a request", () => {
-  const basePath = "/request-a-service-record";
+  const basePath = "/request-a-military-service-record";
   enum Urls {
     START_PAGE = `${basePath}/start/`,
     HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST = `${basePath}/have-you-previously-made-a-request/`,

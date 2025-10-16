@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("how do you want your order processed", () => {
-  const basePath = "/request-a-service-record";
+  const basePath = "/request-a-military-service-record";
 
   enum Urls {
     START_PAGE = `${basePath}/start/`,

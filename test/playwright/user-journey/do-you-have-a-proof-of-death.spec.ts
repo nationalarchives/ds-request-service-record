@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("The 'Do you have a proof of death?' form", () => {
-  const basePath = "/request-a-service-record";
+  const basePath = "/request-a-military-service-record";
 
   enum Urls {
     JOURNEY_START = `${basePath}/start/`,

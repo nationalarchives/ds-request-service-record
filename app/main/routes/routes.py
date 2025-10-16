@@ -27,8 +27,7 @@ from app.main.forms.your_details import YourDetails
 from app.main.forms.your_postal_address import YourPostalAddress
 from flask import redirect, render_template, url_for
 
-
-@bp.route("/start/", methods=["GET", "POST"])
+@bp.route("/", methods=["GET", "POST"])
 @with_state_machine
 @with_form_prefilled_from_session(StartNow)
 def start(form, state_machine):
@@ -37,7 +36,7 @@ def start(form, state_machine):
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(
-        "main/multi-page-journey/start.html", form=form, content=load_content()
+        "main/start.html", form=form, content=load_content()
     )
 
 
@@ -51,7 +50,7 @@ def have_you_checked_the_catalogue(form, state_machine):
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(
-        "main/multi-page-journey/have-you-checked-the-catalogue.html",
+        "main/have-you-checked-the-catalogue.html",
         form=form,
         content=load_content(),
     )
@@ -67,7 +66,7 @@ def is_service_person_alive(form, state_machine):
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(
-        "main/multi-page-journey/is-service-person-alive.html",
+        "main/is-service-person-alive.html",
         form=form,
         content=load_content(),
     )
@@ -76,7 +75,7 @@ def is_service_person_alive(form, state_machine):
 @bp.route("/must-submit-subject-access/", methods=["GET"])
 def must_submit_subject_access_request():
     return render_template(
-        "main/multi-page-journey/must-submit-subject-access-request.html",
+        "main/must-submit-subject-access-request.html",
         content=load_content(),
     )
 
@@ -84,7 +83,7 @@ def must_submit_subject_access_request():
 @bp.route("/only-living-subjects-can-request-their-record/", methods=["GET"])
 def only_living_subjects_can_request_their_record():
     return render_template(
-        "main/multi-page-journey/only-living-subjects-can-request-their-record.html",
+        "main/only-living-subjects-can-request-their-record.html",
         content=load_content(),
     )
 
@@ -99,7 +98,7 @@ def service_branch_form(form, state_machine):
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(
-        "main/multi-page-journey/service-branch.html", form=form, content=load_content()
+        "main/service-branch.html", form=form, content=load_content()
     )
 
 
@@ -113,7 +112,7 @@ def was_service_person_an_officer(form, state_machine):
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(
-        "main/multi-page-journey/was-service-person-an-officer.html",
+        "main/was-service-person-an-officer.html",
         form=form,
         content=load_content(),
     )
@@ -122,14 +121,14 @@ def was_service_person_an_officer(form, state_machine):
 @bp.route("/search-the-catalogue/", methods=["GET"])
 def search_the_catalogue():
     return render_template(
-        "main/multi-page-journey/search-the-catalogue.html", content=load_content()
+        "main/search-the-catalogue.html", content=load_content()
     )
 
 
 @bp.route("/we-do-not-have-records-for-this-service-branch/", methods=["GET"])
 def we_do_not_have_records_for_this_service_branch():
     return render_template(
-        "main/multi-page-journey/we-do-not-have-records-for-this-service-branch.html",
+        "main/we-do-not-have-records-for-this-service-branch.html",
         content=load_content(),
     )
 
@@ -137,7 +136,7 @@ def we_do_not_have_records_for_this_service_branch():
 @bp.route("/we-do-not-have-records-for-this-rank/", methods=["GET"])
 def we_do_not_have_records_for_this_rank():
     return render_template(
-        "main/multi-page-journey/we-do-not-have-records-for-this-rank.html",
+        "main/we-do-not-have-records-for-this-rank.html",
         content=load_content(),
     )
 
@@ -145,7 +144,7 @@ def we_do_not_have_records_for_this_rank():
 @bp.route("/we-may-be-unable-to-find-this-record/", methods=["GET"])
 def we_may_be_unable_to_find_this_record():
     return render_template(
-        "main/multi-page-journey/we-may-be-unable-to-find-this-record.html",
+        "main/we-may-be-unable-to-find-this-record.html",
         content=load_content(),
     )
 
@@ -158,7 +157,7 @@ def we_may_hold_this_record(form, state_machine):
         state_machine.continue_from_we_may_hold_this_record_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/multi-page-journey/we-may-hold-this-record.html",
+        "main/we-may-hold-this-record.html",
         form=form,
         content=load_content(),
     )
@@ -173,7 +172,7 @@ def what_was_their_date_of_birth(form, state_machine):
         state_machine.continue_from_what_was_their_date_of_birth_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/multi-page-journey/what-was-their-date-of-birth.html",
+        "main/what-was-their-date-of-birth.html",
         form=form,
         content=load_content(),
     )
@@ -182,7 +181,7 @@ def what_was_their_date_of_birth(form, state_machine):
 @bp.route("/we-do-not-have-records-for-people-born-before/", methods=["GET"])
 def we_do_not_have_records_for_people_born_before():
     return render_template(
-        "main/multi-page-journey/we-do-not-have-records-for-people-born-before.html",
+        "main/we-do-not-have-records-for-people-born-before.html",
         content=load_content(),
     )
 
@@ -190,7 +189,7 @@ def we_do_not_have_records_for_people_born_before():
 @bp.route("/we-do-not-have-records-for-people-born-after/", methods=["GET"])
 def we_do_not_have_records_for_people_born_after():
     return render_template(
-        "main/multi-page-journey/we-do-not-have-records-for-people-born-after.html",
+        "main/we-do-not-have-records-for-people-born-after.html",
         content=load_content(),
     )
 
@@ -204,7 +203,7 @@ def service_person_details(form, state_machine):
         state_machine.continue_from_service_person_details_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/multi-page-journey/service-person-details.html",
+        "main/service-person-details.html",
         form=form,
         content=load_content(),
     )
@@ -220,7 +219,7 @@ def have_you_previously_made_a_request(form, state_machine):
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(
-        "main/multi-page-journey/have-you-previously-made-a-request.html",
+        "main/have-you-previously-made-a-request.html",
         form=form,
         content=load_content(),
     )
@@ -235,7 +234,7 @@ def your_details(form, state_machine):
         state_machine.continue_from_your_details_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/multi-page-journey/your-details.html", form=form, content=load_content()
+        "main/your-details.html", form=form, content=load_content()
     )
 
 
@@ -248,7 +247,7 @@ def do_you_have_a_proof_of_death(form, state_machine):
         state_machine.continue_from_do_you_have_a_proof_of_death_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/multi-page-journey/do-you-have-a-proof-of-death.html",
+        "main/do-you-have-a-proof-of-death.html",
         form=form,
         content=load_content(),
     )
@@ -263,7 +262,7 @@ def your_postal_address(form, state_machine):
         state_machine.continue_from_your_postal_address_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/multi-page-journey/your-postal-address.html",
+        "main/your-postal-address.html",
         form=form,
         content=load_content(),
     )
@@ -278,7 +277,7 @@ def how_do_you_want_your_order_processed(state_machine):
         state_machine.continue_from_how_do_you_want_your_order_processed_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/multi-page-journey/how-do-you-want-your-order-processed.html",
+        "main/how-do-you-want-your-order-processed.html",
         form=form,
         content=load_content(),
     )
@@ -304,7 +303,7 @@ def upload_a_proof_of_death(form, state_machine):
         state_machine.continue_from_upload_a_proof_of_death_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/multi-page-journey/upload-a-proof-of-death.html",
+        "main/upload-a-proof-of-death.html",
         form=form,
         content=load_content(),
     )
@@ -320,7 +319,7 @@ def return_from_gov_uk_pay(state_machine):
 @bp.route("/request-submitted/", methods=["GET"])
 def request_submitted():
     return render_template(
-        "main/multi-page-journey/request-submitted.html",
+        "main/request-submitted.html",
         reference_number="123456",
         content=load_content(),
     )
