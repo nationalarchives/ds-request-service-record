@@ -308,6 +308,90 @@ def upload_a_proof_of_death(form, state_machine):
         content=load_content(),
     )
 
+@bp.route("/send-to-gov-uk-pay/")
+def send_to_gov_pay():
+    content = load_content()
+    form_data = session.get("form_data", {})
+    requester_email = form_data.get("requester_email", None)
+
+    id = str(uuid.uuid4())
+
+    response = create_payment(
+        amount=1000,
+        description=content["app"]["title"],
+        reference="ServiceRecordRequest",
+        email=requester_email,
+        return_url=f"{url_for("main.handle_gov_uk_pay_response", _external=True)}?id={id}",
+    )
+
+    if not response:
+        return redirect(url_for("main.payment_link_creation_failed"))
+
+    payment_url = response.get("_links", {}).get("next_url", "").get("href", "")
+    payment_id = response.get("payment_id", "")
+
+    if not payment_url or not payment_id:
+        return redirect(url_for("main.payment_link_creation_failed"))
+
+    data = {
+        **form_data,
+        "id": id,
+        "payment_id": payment_id,
+        "created_at": datetime.now(),
+    }
+
+    add_service_record_request(data)
+
+    return redirect(payment_url)
+
+
+@bp.route("/handle-gov-uk-pay-response/")
+def handle_gov_uk_pay_response():
+    id = request.args.get("id")
+
+    if not id:
+        # User got here without ID - likely manually, do something... (redirect to form?)
+        return "Shouldn't be here"
+
+    payment_id = get_payment_id_from_record_id(id)
+
+    if payment_id is None:
+        # User got here with an ID that doesn't exist in the DB - could be our fault, or could be malicious, do something
+        return "Shouldn't be here"
+
+    if validate_payment(payment_id):
+        try:
+            process_valid_request(payment_id)
+        except Exception as e:
+            current_app.logger.error(
+                f"Error processing valid request of payment ID {payment_id}: {e}"
+            )
+        return redirect(url_for("main.confirm_payment_received"))
+
+    # Let the user know it failed, ask if they want to retry
+    return redirect(url_for("main.payment_incomplete"))
+
+
+@bp.route("/payment-link-creation_failed/")
+def payment_link_creation_failed():
+    content = load_content()
+    return render_template(
+        "main/payment/payment-link-creation-failed.html", content=content
+    )
+
+
+@bp.route("/payment-incomplete/")
+def payment_incomplete():
+    content = load_content()
+    return render_template("main/payment/payment-incomplete.html", content=content)
+
+
+@bp.route("/confirm-payment-received/")
+def confirm_payment_received():
+    content = load_content()
+    return render_template(
+        "main/payment/confirm-payment-received.html", content=content
+    )
 
 @bp.route("/return-from-gov-uk-pay/")
 @with_state_machine
