@@ -8,8 +8,11 @@
   | map('replace', '[reference_number]', reference_number_html)
   | join('</p><p>')) ~ '</p>' -%}
 
-{% block content %}
+{% block beforeContent %}
   {{ modFoiBreadcrumbs({'breadcrumbItems': breadcrumbItems}) }}
+{% endblock %}
+
+{% block content %}
   <div class="tna-section">
     <div class="tna-container">
       <div
