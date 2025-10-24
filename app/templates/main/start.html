@@ -2,8 +2,11 @@
 
 {%- set pageTitle = content.app.title -%}
 
+{% block beforeContent %}
+  {{ modFoiBreadcrumbs({'breadcrumbItems': breadcrumbItems, 'hasAccentBackground': true}) }}
+{% endblock %}
+
 {% block content %}
-{{ modFoiBreadcrumbs({'breadcrumbItems': breadcrumbItems, 'hasAccentBackground': true}) }}
 <div class="tna-section tna-background-accent-light">
   <div class="tna-container">
     <div

@@ -2,8 +2,11 @@
 
 {%- set pageTitle = content.app.title -%}
 
-{% block content %}
+{% block beforeContent %}
   {{ modFoiBreadcrumbs({'breadcrumbItems': breadcrumbItems}) }}
+{% endblock %}
+
+{% block content %}
   <div class="tna-section">
     <div class="tna-container">
       <div
