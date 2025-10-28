@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{%- set pageTitle = content.app.title -%}
+
+{% block beforeContent %}
+  {{ modFoiBreadcrumbs({'breadcrumbItems': breadcrumbItems, 'hasAccentBackground': true}) }}
+{% endblock %}
+
+{% block content %}
+<div class="tna-section tna-background-accent-light">
+  <div class="tna-container">
+    <div
+      class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+      <h1 class="tna-heading-xl">{{ content.pages.start.heading }}</h1>
+    </div>
+  </div>
+</div>
+<div class="tna-section">
+  <div class="tna-container">
+    <div
+      class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+      <h2 class="tna-heading-m">{{ content.pages.start.contents.heading }}</h2>
+      <ul class="tna-ul tna-ul--dashed">
+        <li><a href="#what-it-costs">{{ content.pages.start.service_options.heading }}</a></li>
+        <li><a href="#information-you-will-need-to-provide">{{ content.pages.start.information_needed.heading }}</a>
+        </li>
+      </ul>
+      {% for paragraph in content.pages.start.contents.paragraphs %}
+        <p>{{ paragraph }}</p>
+      {% endfor %}
+      <h2 class="tna-heading-l" id="what-it-costs">{{ content.pages.start.service_options.heading }}</h2>
+      <p>{{ content.pages.start.service_options.paragraph }}</p>
+
+      <table class="tna-table">
+        <thead class="tna-table__head">
+        <tr class="tna-table__row">
+          {% for header in content.pages.start.service_options.table.headers %}
+            <th class="tna-table__header">{{ header }}</th>
+          {% endfor %}
+        </tr>
+        </thead>
+        <tbody class="tna-table__body">
+        {% for row in content.pages.start.service_options.table.rows %}
+          <tr class="tna-table__row">
+            <td class="tna-table__header">{{ row.option }}</td>
+            <td class="tna-table__header">{{ row.fee }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+
+      <h2 class="tna-heading-l"
+          id="information-you-will-need-to-provide">{{ content.pages.start.information_needed.heading }}</h2>
+      <p>{{ content.pages.start.information_needed.paragraph }}</p>
+
+      <ul class="tna-ul">
+        {% for item in content.pages.start.information_needed.list %}
+          <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+
+      {%- set title = content.pages.start.commissioned_officer_ranks.title -%}
+      {%- set ranks_list = content.pages.start.commissioned_officer_ranks.ranks -%}
+
+      {% set ranks_list %}
+      <ul class="tna-ul">
+        {% for rank in content.pages.start.commissioned_officer_ranks.ranks %}
+          <li>{{ rank }}</li>
+        {% endfor %}
+      </ul>
+      {% endset %}
+
+      {{ tnaDetails({
+          'title': title,
+          'body': ranks_list
+        }) }}
+
+      <div class="tna-!--margin-top-m">
+        <form action="{{ url_for('main.start') }}" method="post" novalidate>
+          {{ form.csrf_token }}
+          <div class="tna-button-group">
+            {{ form.submit(params={'accent':'true'}) }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

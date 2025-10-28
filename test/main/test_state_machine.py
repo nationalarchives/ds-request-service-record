@@ -11,16 +11,16 @@ def test_all_states_have_the_expected_suffix():
     sm = RoutingStateMachine()
     for state in sm.states:
         assert re.search(
-            r"(_form|_page|initial)$", state.id
-        ), f"State ID {state.id} does not end with 'initial', '_form' or '_page'"
+            r"(_redirect|_form|_page|initial)$", state.id
+        ), f"State ID {state.id} does not end with '_form', '_page', '_redirect', or 'initial'"
 
 
 def test_all_events_have_the_expected_suffix():
     sm = RoutingStateMachine()
     for event in sm.events:
         assert re.search(
-            r"(_form|_page)$", event.id
-        ), f"Event ID {event.id} does not end with '_form' or '_page'"
+            r"(_form|_page|_redirect)$", event.id
+        ), f"Event ID {event.id} does not end with '_form', '_page' or '_redirect'"
 
 
 def test_initial_state_has_no_route():
@@ -284,6 +284,81 @@ def test_continue_from_have_you_previously_made_a_request():
             submit=None,
         )
     )
+
+
+@pytest.mark.parametrize(
+    "does_not_have_email,current_state_id,route_for_current_state",
+    [
+        (
+            True,
+            "your_postal_address_form",
+            MultiPageFormRoutes.YOUR_POSTAL_ADDRESS.value,
+        ),
+        (
+            False,
+            "how_do_you_want_your_order_processed_form",
+            MultiPageFormRoutes.HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED.value,
+        ),
+    ],
+)
+def test_continue_from_your_details(
+    does_not_have_email, current_state_id, route_for_current_state
+):
+    sm = RoutingStateMachine()
+    sm.continue_from_your_details_form(
+        form=make_form(
+            requester_first_name=None,
+            requester_last_name=None,
+            does_not_have_email=does_not_have_email,
+            requester_email=None,
+            submit=None,
+        )
+    )
+    assert sm.current_state.id == current_state_id
+    assert sm.route_for_current_state == route_for_current_state
+
+
+def test_continue_from_your_postal_address():
+    sm = RoutingStateMachine()
+    sm.continue_from_your_postal_address_form(
+        form=make_form(
+            address_line_1=None,
+            address_line_2=None,
+            address_line_3=None,
+            town_or_city=None,
+            county=None,
+            postcode=None,
+            country=None,
+            submit=None,
+        )
+    )
+    assert sm.current_state.id == "how_do_you_want_your_order_processed_form"
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED.value
+    )
+
+
+@pytest.mark.parametrize("processing_option", ["standard", "full"])
+def test_continue_from_how_do_you_want_your_order_processed(processing_option):
+    sm = RoutingStateMachine()
+    sm.continue_from_how_do_you_want_your_order_processed_form(
+        form=make_form(
+            processing_option=processing_option,
+            how_do_you_want_your_order_processed_standard=None,
+            how_do_you_want_your_order_processed_full=None,
+            submit=None,
+        )
+    )
+    assert sm.current_state.id == "gov_uk_pay_redirect"
+    assert sm.route_for_current_state == MultiPageFormRoutes.SEND_TO_GOV_PAY.value
+
+
+def test_continue_from_gov_uk_pay():
+    sm = RoutingStateMachine()
+    sm.continue_on_return_from_gov_uk_redirect()
+    assert sm.current_state.id == "request_submitted_page"
+    assert sm.route_for_current_state == MultiPageFormRoutes.REQUEST_SUBMITTED.value
 
 
 def make_form(**fields):

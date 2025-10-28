@@ -33,6 +33,10 @@ class Production(Features):
 
     DEBUG: bool = strtobool(os.getenv("DEBUG", "False"))
 
+    SENTRY_DSN: str = os.getenv("SENTRY_DSN", "")
+    SENTRY_JS_ID: str = os.getenv("SENTRY_JS_ID", "")
+    SENTRY_SAMPLE_RATE: float = float(os.getenv("SENTRY_SAMPLE_RATE", "0.1"))
+
     COOKIE_DOMAIN: str = os.environ.get("COOKIE_DOMAIN", "")
 
     CSP_IMG_SRC: list[str] = os.environ.get("CSP_IMG_SRC", "'self'").split(",")
@@ -85,18 +89,27 @@ class Production(Features):
 
 
 class Staging(Production):
+    SENTRY_SAMPLE_RATE: float = float(os.getenv("SENTRY_SAMPLE_RATE", "1"))
+
     CACHE_DEFAULT_TIMEOUT: int = int(os.environ.get("CACHE_DEFAULT_TIMEOUT", "60"))
 
 
 class Develop(Production):
+    SENTRY_SAMPLE_RATE: float = float(os.getenv("SENTRY_SAMPLE_RATE", "0"))
+
     CACHE_DEFAULT_TIMEOUT: int = int(os.environ.get("CACHE_DEFAULT_TIMEOUT", "1"))
 
 
 class Test(Production):
+    ENVIRONMENT_NAME = "test"
+
     SECRET_KEY: str = "abc123"
     DEBUG: bool = True
     TESTING: bool = True
     EXPLAIN_TEMPLATE_LOADING: bool = True
+
+    SENTRY_DSN: str = ""
+    SENTRY_SAMPLE_RATE: float = 0
 
     CACHE_TYPE: str = "SimpleCache"
     CACHE_DEFAULT_TIMEOUT: int = 1

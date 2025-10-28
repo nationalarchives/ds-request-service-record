@@ -29,6 +29,10 @@ class MultiPageFormRoutes(Enum):
     UPLOAD_A_PROOF_OF_DEATH = "main.upload_a_proof_of_death"
     HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST = "main.have_you_previously_made_a_request"
     YOUR_DETAILS = "main.your_details"
+    YOUR_POSTAL_ADDRESS = "main.your_postal_address"
+    HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED = "main.how_do_you_want_your_order_processed"
+    SEND_TO_GOV_PAY = "main.send_to_gov_pay"
+    REQUEST_SUBMITTED = "main.request_submitted"
 
 
 class ServiceBranches(Enum):

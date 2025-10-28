@@ -1,0 +1,235 @@
+import uuid
+from datetime import datetime
+
+from app.lib.aws import send_email
+from app.lib.content import load_content
+from app.lib.db_handler import (
+    add_dynamics_payment,
+    add_gov_uk_dynamics_payment,
+    add_service_record_request,
+    get_dynamics_payment,
+    get_gov_uk_dynamics_payment,
+    get_payment_id_from_record_id,
+)
+from app.lib.gov_uk_pay import (
+    create_payment,
+    process_valid_payment,
+    process_valid_request,
+    validate_payment,
+)
+from app.main import bp
+from app.main.forms.proceed_to_pay import ProceedToPay
+from flask import current_app, redirect, render_template, request, session, url_for
+
+@bp.route("/send-to-gov-uk-pay/")
+def send_to_gov_pay():
+    content = load_content()
+    form_data = session.get("form_data", {})
+    requester_email = form_data.get("requester_email", None)
+
+    id = str(uuid.uuid4())
+
+    response = create_payment(
+        amount=1000,
+        description=content["app"]["title"],
+        reference="ServiceRecordRequest",
+        email=requester_email,
+        return_url=f"{url_for("main.handle_gov_uk_pay_response", _external=True)}?id={id}&response_type=request",
+    )
+
+    if not response:
+        return redirect(url_for("main.payment_link_creation_failed"))
+
+    payment_url = response.get("_links", {}).get("next_url", "").get("href", "")
+    payment_id = response.get("payment_id", "")
+
+    if not payment_url or not payment_id:
+        return redirect(url_for("main.payment_link_creation_failed"))
+
+    data = {
+        **form_data,
+        "id": id,
+        "payment_id": payment_id,
+        "created_at": datetime.now(),
+    }
+
+    add_service_record_request(data)
+
+    return redirect(payment_url)
+
+
+@bp.route("/handle-gov-uk-pay-response/")
+def handle_gov_uk_pay_response():
+    id = request.args.get("id")
+    response_type = request.args.get("response_type")
+
+    if not id or not response_type:
+        # User got here without ID - likely manually, do something... (redirect to form?)
+        return "Shouldn't be here"
+
+    if response_type == "request":
+        gov_uk_payment_id = get_payment_id_from_record_id(id)
+    elif response_type == "payment":
+        payment = get_gov_uk_dynamics_payment(id)
+        gov_uk_payment_id = payment.gov_uk_payment_id if payment else None
+
+    if gov_uk_payment_id is None:
+        # User got here with an ID that doesn't exist in the DB - could be our fault, or could be malicious, do something
+        return "Shouldn't be here"
+
+    if validate_payment(gov_uk_payment_id):
+        if response_type == "request":
+            try:
+                process_valid_request(gov_uk_payment_id)
+            except Exception as e:
+                current_app.logger.error(
+                    f"Error processing valid request of payment ID {gov_uk_payment_id}: {e}"
+                )
+        elif response_type == "payment":
+            try:
+                process_valid_payment(payment.id)
+                print("Valid Dynamics payment received and handled!")
+            except Exception as e:
+                current_app.logger.error(
+                    f"Error processing valid payment of payment ID {gov_uk_payment_id}: {e}"
+                )
+
+        return redirect(url_for("main.confirm_payment_received"))
+
+    # Let the user know it failed, ask if they want to retry
+    return redirect(url_for("main.payment_incomplete"))
+
+
+@bp.route("/payment-link-creation_failed/")
+def payment_link_creation_failed():
+    content = load_content()
+    return render_template(
+        "main/payment/payment-link-creation-failed.html", content=content
+    )
+
+
+@bp.route("/payment-incomplete/")
+def payment_incomplete():
+    content = load_content()
+    return render_template("main/payment/payment-incomplete.html", content=content)
+
+
+@bp.route("/confirm-payment-received/")
+def confirm_payment_received():
+    content = load_content()
+    return render_template(
+        "main/payment/confirm-payment-received.html", content=content
+    )
+
+
+@bp.route("/gov-uk-pay-webhook/", methods=["POST"])
+def gov_uk_pay_webhook():
+
+    if not validate_webhook_signature(request):
+        return "FAILED", 403
+
+    try:
+        process_webhook_data(request.json)
+    except Exception as e:
+        current_app.logger.error(f"Error processing webhook data: {e}")
+        return "FAILED", 500
+
+    return "SUCCESS", 200
+
+
+@bp.route("/create-payment/", methods=["POST"])
+def create_payment_endpoint():
+    data = request.json
+    required = ["amount", "description", "reference", "payee_email"]
+
+    if missing := [field for field in required if field not in data]:
+        return {"error": f"Missing required fields: {', '.join(missing)}"}, 400
+
+    try:
+        data["amount"] = int(data["amount"])
+        if data["amount"] <= 0:
+            return {"error": "Amount must be greater than zero"}, 400
+    except (ValueError, TypeError):
+        return {"error": "Invalid amount format"}, 400
+
+    # Exclude any extra fields to avoid unexpected errors
+    data = {
+        "amount": data["amount"],
+        "description": data["description"],
+        "reference": data["reference"],
+        "payee_email": data["payee_email"],
+    }
+
+    try:
+        payment = add_dynamics_payment(data)
+        if payment is None:
+            return {"error": "Failed to create payment"}, 500
+    except Exception as e:
+        current_app.logger.error(f"Error creating payment: {e}")
+        return {"error": "Failed to create payment"}, 500
+    
+    send_email(
+        to=data["payee_email"],
+        subject="Payment for Service Record Request",
+        body=f"You have been requested to make a payment for a service record request. Please visit the following link to complete your payment: {url_for('main.make_payment', id=payment, _external=True)}",
+    )
+
+    return {"message": f"Payment created and sent successfully: {payment}"}, 201
+
+
+@bp.route("/payment/<id>/", methods=["GET", "POST"])
+def make_payment(id):
+    form = ProceedToPay()
+    payment = get_dynamics_payment(id)
+    content = load_content()
+
+    if payment is None:
+        return "Payment not found"
+
+    if form.validate_on_submit():
+        return redirect(url_for("main.gov_uk_pay_redirect", id=payment.id))
+
+    return render_template(
+        "main/all-fields-in-one-form/dynamics-payment.html",
+        form=form,
+        payment=payment,
+        content=content,
+    )
+
+
+@bp.route("/payment-redirect/<id>/", methods=["GET"])
+def gov_uk_pay_redirect(id):
+    payment = get_dynamics_payment(id)
+
+    if payment is None:
+        return "Payment not found"
+
+    id = str(uuid.uuid4())
+
+    response = create_payment(
+        amount=payment.amount,
+        description=payment.description,
+        reference=payment.reference,
+        email=payment.payee_email,
+        return_url=f"{url_for("main.handle_gov_uk_pay_response", _external=True)}?id={id}&response_type=payment",
+    )
+
+    if not response:
+        return redirect(url_for("main.payment_link_creation_failed"))
+
+    gov_uk_payment_url = response.get("_links", {}).get("next_url", "").get("href", "")
+    gov_uk_payment_id = response.get("payment_id", "")
+
+    if not gov_uk_payment_url or not gov_uk_payment_id:
+        return redirect(url_for("main.payment_link_creation_failed"))
+
+    data = {
+        "id": id,
+        "dynamics_payment_id": payment.id,
+        "gov_uk_payment_id": gov_uk_payment_id,
+        "created_at": datetime.now(),
+    }
+
+    add_gov_uk_dynamics_payment(data)
+
+    return redirect(gov_uk_payment_url)

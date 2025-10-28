@@ -14,7 +14,7 @@ from wtforms import (
     SubmitField,
     TextAreaField,
 )
-from wtforms.validators import InputRequired
+from wtforms.validators import InputRequired, Optional
 
 
 class ServicePersonDetails(FlaskForm):
@@ -46,6 +46,12 @@ class ServicePersonDetails(FlaskForm):
         ],
     )
 
+    other_last_names = StringField(
+        get_field_content(content, "other_last_names", "label"),
+        widget=TnaTextInputWidget(),
+        validators=[],
+    )
+
     place_of_birth = StringField(
         get_field_content(content, "place_of_birth", "label"),
         widget=TnaTextInputWidget(),
@@ -56,11 +62,12 @@ class ServicePersonDetails(FlaskForm):
         get_field_content(content, "date_of_death", "label"),
         description=get_field_content(content, "date_of_death", "description"),
         validators=[
+            Optional(),
             tna_frontend_validators.PastDate(
                 message=get_field_content(content, "date_of_death", "messages")[
                     "past_date"
                 ],
-                include_today=True,
+                include_now=True,
             ),
         ],
     )
