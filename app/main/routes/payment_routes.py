@@ -22,6 +22,7 @@ from app.main import bp
 from app.main.forms.proceed_to_pay import ProceedToPay
 from flask import current_app, redirect, render_template, request, session, url_for
 
+
 @bp.route("/send-to-gov-uk-pay/")
 def send_to_gov_pay():
     content = load_content()
@@ -160,7 +161,7 @@ def create_payment_endpoint():
     except Exception as e:
         current_app.logger.error(f"Error creating payment: {e}")
         return {"error": "Failed to create payment"}, 500
-    
+
     send_email(
         to=data["payee_email"],
         subject="Payment for Service Record Request",

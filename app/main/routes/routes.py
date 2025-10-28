@@ -27,6 +27,7 @@ from app.main.forms.your_details import YourDetails
 from app.main.forms.your_postal_address import YourPostalAddress
 from flask import redirect, render_template, url_for
 
+
 @bp.route("/", methods=["GET", "POST"])
 @with_state_machine
 @with_form_prefilled_from_session(StartNow)
@@ -35,9 +36,7 @@ def start(form, state_machine):
         state_machine.continue_from_start_form()
         return redirect(url_for(state_machine.route_for_current_state))
 
-    return render_template(
-        "main/start.html", form=form, content=load_content()
-    )
+    return render_template("main/start.html", form=form, content=load_content())
 
 
 @bp.route("/have-you-checked-the-catalogue/", methods=["GET", "POST"])
@@ -120,9 +119,7 @@ def was_service_person_an_officer(form, state_machine):
 
 @bp.route("/search-the-catalogue/", methods=["GET"])
 def search_the_catalogue():
-    return render_template(
-        "main/search-the-catalogue.html", content=load_content()
-    )
+    return render_template("main/search-the-catalogue.html", content=load_content())
 
 
 @bp.route("/we-do-not-have-records-for-this-service-branch/", methods=["GET"])
@@ -233,9 +230,7 @@ def your_details(form, state_machine):
         save_submitted_form_fields_to_session(form)
         state_machine.continue_from_your_details_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
-    return render_template(
-        "main/your-details.html", form=form, content=load_content()
-    )
+    return render_template("main/your-details.html", form=form, content=load_content())
 
 
 @bp.route("/do-you-have-a-proof-of-death/", methods=["GET", "POST"])

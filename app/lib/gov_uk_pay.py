@@ -107,4 +107,4 @@ def process_valid_payment(id: str) -> None:
         to=current_app.config["DYNAMICS_INBOX"],
         subject=f"Payment received for Dynamics payment ID: {payment.dynamics_payment_id}",
         body=f"Payment with GOV.UK payment ID {payment.gov_uk_payment_id} has been successfully processed.",
-        )
+    )
