@@ -140,25 +140,50 @@ def return_from_gov_uk_pay(state_machine):
 
 @bp.route("/create-payment/", methods=["POST"])
 def create_payment_endpoint():
+    """
+    Required params:
+    - case_number
+    - reference
+    - net_amount
+    - payee_email
+
+    Optional params:
+    - delivery_amount
+    - first_name
+    - last_name
+    - details
+    """
     data = request.json
-    required = ["amount", "description", "reference", "payee_email"]
+    required = ["case_number", "reference", "net_amount", "payee_email"]
 
     if missing := [field for field in required if field not in data]:
         return {"error": f"Missing required fields: {', '.join(missing)}"}, 400
 
     try:
-        data["amount"] = int(data["amount"])
-        if data["amount"] <= 0:
-            return {"error": "Amount must be greater than zero"}, 400
+        data["net_amount"] = int(data["net_amount"])
+        if data["net_amount"] <= 0:
+            return {"error": "Net amount must be greater than zero"}, 400
     except (ValueError, TypeError):
-        return {"error": "Invalid amount format"}, 400
+        return {"error": "Invalid net amount format"}, 400
+    
+    if "delivery_amount" in data:
+        try:
+            data["delivery_amount"] = int(data["delivery_amount"])
+            if data["delivery_amount"] <= 0:
+                return {"error": "Delivery amount must be greater than zero"}, 400
+        except (ValueError, TypeError):
+            return {"error": "Invalid delivery amount format"}, 400
 
     # Exclude any extra fields to avoid unexpected errors
     data = {
-        "amount": data["amount"],
-        "description": data["description"],
+        "case_number": data["case_number"],
         "reference": data["reference"],
+        "net_amount": data["net_amount"],
         "payee_email": data["payee_email"],
+        "first_name": data.get("first_name", ""),
+        "last_name": data.get("last_name", ""),
+        "delivery_amount": data.get("delivery_amount", 0),
+        "details": data.get("details", ""),
     }
 
     try:

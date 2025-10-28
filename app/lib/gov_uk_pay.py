@@ -93,9 +93,6 @@ def process_valid_payment(id: str) -> None:
     if payment is None:
         raise ValueError(f"Payment not found for GOV.UK payment ID: {id}")
 
-    get_dynamics_payment(payment.dynamics_payment_id).status = "P"
-    db.session.commit()
-
     send_email(
         to=current_app.config["DYNAMICS_INBOX"],
         subject=f"Payment received for Dynamics payment ID: {payment.dynamics_payment_id}",
