@@ -57,6 +57,7 @@ class DynamicsPayment(db.Model):
     first_name = db.Column(db.String(128), nullable=True)
     last_name = db.Column(db.String(128), nullable=True)
     details = db.Column(db.String(256), nullable=True)
+    status = db.Column(db.String(1), nullable=False, default="N")  # N=New, S=Sent, P=Paid
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
 
