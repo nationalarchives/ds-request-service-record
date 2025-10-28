@@ -53,6 +53,7 @@ class DynamicsPayment(db.Model):
     reference = db.Column(db.String(64), nullable=False)
     net_amount = db.Column(db.Integer, nullable=False)  # amount in pence
     delivery_amount = db.Column(db.Integer, nullable=True)  # postage/delivery amount in pence
+    total_amount = db.Column(db.Integer, nullable=False)  # total amount in pence
     payee_email = db.Column(db.String(256), nullable=False)
     first_name = db.Column(db.String(128), nullable=True)
     last_name = db.Column(db.String(128), nullable=True)

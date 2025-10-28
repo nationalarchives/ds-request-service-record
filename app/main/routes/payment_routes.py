@@ -160,7 +160,7 @@ def create_payment_endpoint():
         return {"error": f"Missing required fields: {', '.join(missing)}"}, 400
 
     try:
-        data["net_amount"] = int(data["net_amount"])
+        data["net_amount"] = int(data["net_amount"]*100)  # Convert to pence
         if data["net_amount"] <= 0:
             return {"error": "Net amount must be greater than zero"}, 400
     except (ValueError, TypeError):
@@ -168,7 +168,7 @@ def create_payment_endpoint():
     
     if "delivery_amount" in data:
         try:
-            data["delivery_amount"] = int(data["delivery_amount"])
+            data["delivery_amount"] = int(data["delivery_amount"]*100)  # Convert to pence
             if data["delivery_amount"] <= 0:
                 return {"error": "Delivery amount must be greater than zero"}, 400
         except (ValueError, TypeError):
@@ -179,6 +179,7 @@ def create_payment_endpoint():
         "case_number": data["case_number"],
         "reference": data["reference"],
         "net_amount": data["net_amount"],
+        "total_amount": data["net_amount"] + data.get("delivery_amount", 0),
         "payee_email": data["payee_email"],
         "first_name": data.get("first_name", ""),
         "last_name": data.get("last_name", ""),
@@ -233,8 +234,8 @@ def gov_uk_pay_redirect(id):
     id = str(uuid.uuid4())
 
     response = create_payment(
-        amount=payment.amount,
-        description=payment.description,
+        amount=payment.total_amount,
+        description=f"{payment.case_number}{': ' + payment.details if payment.details else ''}",
         reference=payment.reference,
         email=payment.payee_email,
         return_url=f"{url_for("main.handle_gov_uk_pay_response", _external=True)}?id={id}&response_type=payment",

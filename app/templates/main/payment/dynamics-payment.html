@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{%- set pageTitle = 'Submission successful' -%}
+{%- set pageTitle = 'Payment for ' + payment.case_number -%}
 
 {% block content %}
   <div class="tna-section">
@@ -10,11 +10,24 @@
         {% if form.errors %}
           {{ tnaErrorSummary(wtforms_errors(form)) }}
         {% endif %}
-        <h1 class="tna-heading-xl">Payment for something title</h1>
+        <h1 class="tna-heading-xl">Payment for {{ payment.case_number }}</h1>
         
+        <b>####### DEBUGGING #######</b>
         {% for field_name, field_value in payment.__dict__.items() if field_name != '_sa_instance_state' %}
           <p><strong>{{ field_name }}:</strong> {{ field_value }}</p>
         {% endfor %}
+        <b>####### DEBUGGING ENDED #######</b>
+        
+        {# TODO: Content for this page #}
+        <p>Your total amount due is: <strong>£{{ '%.2f' | format(payment.total_amount / 100) }}</strong></p>
+        <p>The breakdown of this amount is as follows:</p>
+        <ul>
+          <li>Net amount: £{{ '%.2f' | format(payment.net_amount / 100) }}</li>
+          {% if payment.delivery_amount %}
+          <li>Delivery amount: £{{ '%.2f' | format(payment.delivery_amount / 100) }}</li>
+          {% endif %}
+        </ul>
+        <p>Click the button below to make your payment securely through our payment provider.</p>
 
       </div>
       <div class="tna-!--margin-top-m">
