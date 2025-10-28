@@ -11,6 +11,7 @@ from app.lib.db_handler import (
     get_gov_uk_dynamics_payment,
     get_payment_id_from_record_id,
 )
+from app.lib.decorators.state_machine_decorator import with_state_machine
 from app.lib.gov_uk_pay import (
     create_payment,
     process_valid_payment,
@@ -122,19 +123,11 @@ def confirm_payment_received():
     )
 
 
-@bp.route("/gov-uk-pay-webhook/", methods=["POST"])
-def gov_uk_pay_webhook():
-
-    if not validate_webhook_signature(request):
-        return "FAILED", 403
-
-    try:
-        process_webhook_data(request.json)
-    except Exception as e:
-        current_app.logger.error(f"Error processing webhook data: {e}")
-        return "FAILED", 500
-
-    return "SUCCESS", 200
+@bp.route("/return-from-gov-uk-pay/")
+@with_state_machine
+def return_from_gov_uk_pay(state_machine):
+    state_machine.continue_on_return_from_gov_uk_redirect()
+    return redirect(url_for(state_machine.route_for_current_state))
 
 
 @bp.route("/create-payment/", methods=["POST"])
@@ -190,7 +183,7 @@ def make_payment(id):
         return redirect(url_for("main.gov_uk_pay_redirect", id=payment.id))
 
     return render_template(
-        "main/all-fields-in-one-form/dynamics-payment.html",
+        "main/payment/dynamics-payment.html",
         form=form,
         payment=payment,
         content=content,
