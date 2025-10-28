@@ -14,6 +14,7 @@ from app.lib.db_handler import (
 from app.lib.decorators.state_machine_decorator import with_state_machine
 from app.lib.gov_uk_pay import (
     create_payment,
+    get_payment_data,
     process_valid_payment,
     process_valid_request,
     validate_payment,
@@ -78,8 +79,15 @@ def handle_gov_uk_pay_response():
     if gov_uk_payment_id is None:
         # User got here with an ID that doesn't exist in the DB - could be our fault, or could be malicious, do something
         return "Shouldn't be here"
-
-    if validate_payment(gov_uk_payment_id):
+    
+    gov_uk_payment_data = get_payment_data(gov_uk_payment_id)
+    
+    if gov_uk_payment_data is None:
+        # Could not retrieve payment data from GOV.UK Pay - log and inform user
+        current_app.logger.error(f"Could not retrieve payment data for GOV.UK payment ID: {gov_uk_payment_id}")
+        return "Some sort of error" # TODO: We need to make a proper error page for this to show we couldn't connect to GOV.UK Pay API - maybe provide the GOV.UK Pay ID and to contact webmaster?
+    
+    if validate_payment(gov_uk_payment_data):
         if response_type == "request":
             try:
                 process_valid_request(gov_uk_payment_id)
@@ -90,7 +98,6 @@ def handle_gov_uk_pay_response():
         elif response_type == "payment":
             try:
                 process_valid_payment(payment.id)
-                print("Valid Dynamics payment received and handled!")
             except Exception as e:
                 current_app.logger.error(
                     f"Error processing valid payment of payment ID {gov_uk_payment_id}: {e}"
