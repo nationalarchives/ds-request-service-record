@@ -75,7 +75,7 @@ def get_dynamics_payment(id: str) -> DynamicsPayment | None:
         return None
 
 
-def add_dynamics_payment(data: dict) -> str | None:
+def add_dynamics_payment(data: dict) -> DynamicsPayment | None:
     try:
         payment = DynamicsPayment(**data)
         db.session.add(payment)
@@ -84,7 +84,7 @@ def add_dynamics_payment(data: dict) -> str | None:
         current_app.logger.error(f"Error adding dynamics payment: {e}")
         db.session.rollback()
 
-    return payment.id
+    return payment
 
 
 def delete_dynamics_payment(record: DynamicsPayment) -> None:
