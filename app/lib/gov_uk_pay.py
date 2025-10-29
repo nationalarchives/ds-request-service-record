@@ -8,7 +8,7 @@ from app.lib.db_handler import (
     get_gov_uk_dynamics_payment,
     get_service_record_request,
 )
-from app.lib.dynamics_handler import send_data_to_dynamics
+from app.lib.dynamics_handler import send_request_to_dynamics
 from app.lib.models import db
 from flask import current_app
 
@@ -82,7 +82,7 @@ def process_valid_request(payment_id: str) -> None:
     if record is None:
         raise ValueError(f"Service record not found for payment ID: {payment_id}")
 
-    send_data_to_dynamics(record)
+    send_request_to_dynamics(record)
 
     delete_service_record_request(record)
 
@@ -95,9 +95,12 @@ def process_valid_payment(id: str) -> None:
 
     get_dynamics_payment(payment.dynamics_payment_id).status = "P"
     db.session.commit()
-
-    send_email(
-        to=current_app.config["DYNAMICS_INBOX"],
-        subject=f"Payment received for Dynamics payment ID: {payment.dynamics_payment_id}",
-        body=f"Payment with GOV.UK payment ID {payment.gov_uk_payment_id} has been successfully processed.",
-    )
+    
+    try:
+        send_email(
+            to=current_app.config["DYNAMICS_INBOX"],
+            subject=f"Payment received for Dynamics payment ID: {payment.dynamics_payment_id}",
+            body=f"Payment with GOV.UK payment ID {payment.gov_uk_payment_id} has been successfully processed.",
+        )
+    except Exception as e:
+        current_app.logger.error(f"Error sending email for payment ID {payment.id}: {e}")
