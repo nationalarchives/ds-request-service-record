@@ -92,16 +92,17 @@ def handle_gov_uk_pay_response():
         return "Some sort of error"  # TODO: We need to make a proper error page for this to show we couldn't connect to GOV.UK Pay API - maybe provide the GOV.UK Pay ID and to contact webmaster?
 
     if validate_payment(gov_uk_payment_data):
+        provider_id = gov_uk_payment_data.get("provider_id", None)
         if response_type == "request":
             try:
-                process_valid_request(gov_uk_payment_id)
+                process_valid_request(gov_uk_payment_id, provider_id)
             except Exception as e:
                 current_app.logger.error(
                     f"Error processing valid request of payment ID {gov_uk_payment_id}: {e}"
                 )
         elif response_type == "payment":
             try:
-                process_valid_payment(payment.id)
+                process_valid_payment(payment.id, provider_id)
             except Exception as e:
                 current_app.logger.error(
                     f"Error processing valid payment of payment ID {gov_uk_payment_id}: {e}"

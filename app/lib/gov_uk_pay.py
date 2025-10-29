@@ -76,7 +76,7 @@ def create_payment(
     return response.json()
 
 
-def process_valid_request(payment_id: str) -> None:
+def process_valid_request(payment_id: str, provider_id: str) -> None:
     record = get_service_record_request(payment_id=payment_id)
 
     if record is None:
@@ -87,13 +87,14 @@ def process_valid_request(payment_id: str) -> None:
     delete_service_record_request(record)
 
 
-def process_valid_payment(id: str) -> None:
+def process_valid_payment(id: str, provider_id: str) -> None:
     payment = get_gov_uk_dynamics_payment(id)
 
     if payment is None:
         raise ValueError(f"Payment not found for GOV.UK payment ID: {id}")
 
     get_dynamics_payment(payment.dynamics_payment_id).status = "P"
+    get_dynamics_payment(payment.dynamics_payment_id).provider_id = provider_id
     db.session.commit()
 
     send_payment_to_dynamics(get_dynamics_payment(payment.dynamics_payment_id))
