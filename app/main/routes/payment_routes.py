@@ -213,8 +213,6 @@ def create_payment_endpoint():
         delete_dynamics_payment(payment)
         return {"error": "Failed to create payment"}, 500
 
-    
-
     return {"message": f"Payment created and sent successfully: {payment.id}"}, 201
 
 

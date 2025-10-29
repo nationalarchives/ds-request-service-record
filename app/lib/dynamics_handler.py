@@ -1,7 +1,8 @@
+from datetime import datetime
+
 from app.lib.aws import send_email
 from app.lib.models import DynamicsPayment, ServiceRecordRequest
 from flask import current_app
-from datetime import datetime
 
 DYNAMICS_REQUEST_FIELD_MAP = [
     ("enquiry_id", "id"),
@@ -56,6 +57,7 @@ def send_request_to_dynamics(record: ServiceRecordRequest) -> None:
         body=tagged_data,
     )
 
+
 def send_payment_to_dynamics(payment: DynamicsPayment) -> None:
     tagged_data = generate_tagged_payment(payment)
 
@@ -64,6 +66,7 @@ def send_payment_to_dynamics(payment: DynamicsPayment) -> None:
         subject=f"Payment received for Dynamics payment ID: {payment.id}",
         body=tagged_data + f"\n<paid_at>{datetime.now()}</paid_at>",
     )
+
 
 def _generate_tagged_data(mapping: list[tuple[str, str | None]], obj) -> str:
     chunks = []
@@ -74,8 +77,10 @@ def _generate_tagged_data(mapping: list[tuple[str, str | None]], obj) -> str:
             chunks.append(f"<{tag}>{text}</{tag}>")
     return "\n".join(chunks)
 
+
 def generate_tagged_request(record: ServiceRecordRequest) -> str:
     return _generate_tagged_data(DYNAMICS_REQUEST_FIELD_MAP, record)
+
 
 def generate_tagged_payment(record: DynamicsPayment) -> str:
     return _generate_tagged_data(DYNAMICS_PAYMENT_FIELD_MAP, record)

@@ -1,7 +1,6 @@
 from enum import Enum
 
 import requests
-from app.lib.aws import send_email
 from app.lib.db_handler import (
     delete_service_record_request,
     get_dynamics_payment,
