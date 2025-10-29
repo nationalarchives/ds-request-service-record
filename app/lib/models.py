@@ -64,6 +64,7 @@ class DynamicsPayment(db.Model):
     status = db.Column(
         db.String(1), nullable=False, default="N"
     )  # N=New, S=Sent, P=Paid
+    provider_id = db.Column(db.String(64), nullable=True)  # GOV.UK Pay payment ID if paid
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
 
