@@ -87,6 +87,15 @@ def add_dynamics_payment(data: dict) -> str | None:
     return payment.id
 
 
+def delete_dynamics_payment(record: DynamicsPayment) -> None:
+    try:
+        db.session.delete(record)
+        db.session.commit()
+    except Exception as e:
+        current_app.logger.error(f"Error deleting dynamics payment: {e}")
+        db.session.rollback()
+
+
 def add_gov_uk_dynamics_payment(data: dict) -> None:
     try:
         payment = GOVUKDynamicsPayment(**data)

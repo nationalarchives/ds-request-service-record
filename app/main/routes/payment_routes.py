@@ -7,6 +7,7 @@ from app.lib.db_handler import (
     add_dynamics_payment,
     add_gov_uk_dynamics_payment,
     add_service_record_request,
+    delete_dynamics_payment,
     get_dynamics_payment,
     get_gov_uk_dynamics_payment,
     get_payment_id_from_record_id,
@@ -19,6 +20,7 @@ from app.lib.gov_uk_pay import (
     process_valid_request,
     validate_payment,
 )
+from app.lib.models import db
 from app.main import bp
 from app.main.forms.proceed_to_pay import ProceedToPay
 from flask import current_app, redirect, render_template, request, session, url_for
@@ -79,14 +81,16 @@ def handle_gov_uk_pay_response():
     if gov_uk_payment_id is None:
         # User got here with an ID that doesn't exist in the DB - could be our fault, or could be malicious, do something
         return "Shouldn't be here"
-    
+
     gov_uk_payment_data = get_payment_data(gov_uk_payment_id)
-    
+
     if gov_uk_payment_data is None:
         # Could not retrieve payment data from GOV.UK Pay - log and inform user
-        current_app.logger.error(f"Could not retrieve payment data for GOV.UK payment ID: {gov_uk_payment_id}")
-        return "Some sort of error" # TODO: We need to make a proper error page for this to show we couldn't connect to GOV.UK Pay API - maybe provide the GOV.UK Pay ID and to contact webmaster?
-    
+        current_app.logger.error(
+            f"Could not retrieve payment data for GOV.UK payment ID: {gov_uk_payment_id}"
+        )
+        return "Some sort of error"  # TODO: We need to make a proper error page for this to show we couldn't connect to GOV.UK Pay API - maybe provide the GOV.UK Pay ID and to contact webmaster?
+
     if validate_payment(gov_uk_payment_data):
         if response_type == "request":
             try:
@@ -160,15 +164,17 @@ def create_payment_endpoint():
         return {"error": f"Missing required fields: {', '.join(missing)}"}, 400
 
     try:
-        data["net_amount"] = int(data["net_amount"]*100)  # Convert to pence
+        data["net_amount"] = int(data["net_amount"] * 100)  # Convert to pence
         if data["net_amount"] <= 0:
             return {"error": "Net amount must be greater than zero"}, 400
     except (ValueError, TypeError):
         return {"error": "Invalid net amount format"}, 400
-    
+
     if "delivery_amount" in data:
         try:
-            data["delivery_amount"] = int(data["delivery_amount"]*100)  # Convert to pence
+            data["delivery_amount"] = int(
+                data["delivery_amount"] * 100
+            )  # Convert to pence
             if data["delivery_amount"] <= 0:
                 return {"error": "Delivery amount must be greater than zero"}, 400
         except (ValueError, TypeError):
@@ -195,11 +201,21 @@ def create_payment_endpoint():
         current_app.logger.error(f"Error creating payment: {e}")
         return {"error": "Failed to create payment"}, 500
 
-    send_email(
-        to=data["payee_email"],
-        subject="Payment for Service Record Request",
-        body=f"You have been requested to make a payment for a service record request. Please visit the following link to complete your payment: {url_for('main.make_payment', id=payment, _external=True)}",
-    )
+    try:
+        send_email(
+            to=data["payee_email"],
+            subject="Payment for Service Record Request",
+            body=f"You have been requested to make a payment for a service record request. Please visit the following link to complete your payment: {url_for('main.make_payment', id=payment, _external=True)}",
+        )
+    except Exception as e:
+        current_app.logger.error(
+            f"Error sending payment email: {e}, deleting payment record."
+        )
+        delete_dynamics_payment(payment)
+        return {"error": "Failed to create payment"}, 500
+
+    payment.status = "S"  # Mark as Sent
+    db.session.commit()
 
     return {"message": f"Payment created and sent successfully: {payment}"}, 201
 

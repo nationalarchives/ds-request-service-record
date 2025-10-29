@@ -46,19 +46,24 @@ class DynamicsPayment(db.Model):
     """
     Table to store payment requests sent by Dynamics for payees to pay for record copying
     """
+
     __tablename__ = "dynamics_payments"
 
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     case_number = db.Column(db.String(64), nullable=False)
     reference = db.Column(db.String(64), nullable=False)
     net_amount = db.Column(db.Integer, nullable=False)  # amount in pence
-    delivery_amount = db.Column(db.Integer, nullable=True)  # postage/delivery amount in pence
+    delivery_amount = db.Column(
+        db.Integer, nullable=True
+    )  # postage/delivery amount in pence
     total_amount = db.Column(db.Integer, nullable=False)  # total amount in pence
     payee_email = db.Column(db.String(256), nullable=False)
     first_name = db.Column(db.String(128), nullable=True)
     last_name = db.Column(db.String(128), nullable=True)
     details = db.Column(db.String(256), nullable=True)
-    status = db.Column(db.String(1), nullable=False, default="N")  # N=New, S=Sent, P=Paid
+    status = db.Column(
+        db.String(1), nullable=False, default="N"
+    )  # N=New, S=Sent, P=Paid
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
 
