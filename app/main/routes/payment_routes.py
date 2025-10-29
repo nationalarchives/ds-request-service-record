@@ -198,11 +198,13 @@ def create_payment_endpoint():
         return {"error": "Failed to create payment"}, 500
 
     try:
+        payment.status = "S"  # Mark as Sent
         send_email(
             to=data["payee_email"],
             subject="Payment for Service Record Request",
-            body=f"You have been requested to make a payment for a service record request. Please visit the following link to complete your payment: {url_for('main.make_payment', id=payment, _external=True)}",
+            body=f"You have been requested to make a payment for a service record request. Please visit the following link to complete your payment: {url_for('main.make_payment', id=payment.id, _external=True)}",
         )
+        db.session.commit()
     except Exception as e:
         current_app.logger.error(
             f"Error sending payment email: {e}, deleting payment record."
@@ -210,10 +212,9 @@ def create_payment_endpoint():
         delete_dynamics_payment(payment)
         return {"error": "Failed to create payment"}, 500
 
-    payment.status = "S"  # Mark as Sent
-    db.session.commit()
+    
 
-    return {"message": f"Payment created and sent successfully: {payment}"}, 201
+    return {"message": f"Payment created and sent successfully: {payment.id}"}, 201
 
 
 @bp.route("/payment/<id>/", methods=["GET", "POST"])
