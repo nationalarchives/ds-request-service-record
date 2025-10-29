@@ -193,12 +193,8 @@ def create_payment_endpoint():
         "details": data.get("details", ""),
     }
 
-    try:
-        payment = add_dynamics_payment(data)
-        if payment is None:
-            return {"error": "Failed to create payment"}, 500
-    except Exception as e:
-        current_app.logger.error(f"Error creating payment: {e}")
+    payment = add_dynamics_payment(data)
+    if payment is None:
         return {"error": "Failed to create payment"}, 500
 
     try:
