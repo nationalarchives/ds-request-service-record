@@ -63,6 +63,14 @@ def send_request_to_dynamics(record: ServiceRecordRequest) -> None:
         body=tagged_data,
     )
 
+def send_payment_to_dynamics(payment: DynamicsPayment) -> None:
+    tagged_data = generate_tagged_payment(payment)
+
+    send_email(
+        to=current_app.config["DYNAMICS_INBOX"],
+        subject=f"Payment received for Dynamics payment ID: {payment.id}",
+        body=tagged_data,
+    )
 
 def _generate_tagged_data(mapping: list[tuple[str, str | None]], obj) -> str:
     chunks = []

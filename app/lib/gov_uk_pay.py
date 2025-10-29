@@ -8,7 +8,7 @@ from app.lib.db_handler import (
     get_gov_uk_dynamics_payment,
     get_service_record_request,
 )
-from app.lib.dynamics_handler import send_request_to_dynamics
+from app.lib.dynamics_handler import send_payment_to_dynamics, send_request_to_dynamics
 from app.lib.models import db
 from flask import current_app
 
@@ -95,12 +95,5 @@ def process_valid_payment(id: str) -> None:
 
     get_dynamics_payment(payment.dynamics_payment_id).status = "P"
     db.session.commit()
-    
-    try:
-        send_email(
-            to=current_app.config["DYNAMICS_INBOX"],
-            subject=f"Payment received for Dynamics payment ID: {payment.dynamics_payment_id}",
-            body=f"Payment with GOV.UK payment ID {payment.gov_uk_payment_id} has been successfully processed.",
-        )
-    except Exception as e:
-        current_app.logger.error(f"Error sending email for payment ID {payment.id}: {e}")
+
+    send_payment_to_dynamics(get_dynamics_payment(payment.dynamics_payment_id))
