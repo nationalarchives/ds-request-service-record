@@ -43,22 +43,19 @@ def test_create_payment_failure(mock_post, test_app):
         assert result is None
 
 
-@patch("app.lib.gov_uk_pay.get_payment_status", return_value="success")
-def test_validate_payment_success(mock_status, test_app):
+def test_validate_payment_success(test_app):
     with test_app.app_context():
-        assert validate_payment("any_id") is True
-        mock_status.assert_called_once_with("any_id")
+        data = {"state": {"status": "success"}}
+        assert validate_payment(data) is True
 
 
-@patch("app.lib.gov_uk_pay.get_payment_status", return_value="failed")
-def test_validate_payment_failed(mock_status, test_app):
+def test_validate_payment_failed(test_app):
     with test_app.app_context():
-        assert validate_payment("any_id") is False
-        mock_status.assert_called_once_with("any_id")
+        data = {"state": {"status": "failed"}}
+        assert validate_payment(data) is False
 
 
-@patch("app.lib.gov_uk_pay.get_payment_status", return_value=None)
-def test_validate_payment_status_none(mock_status, test_app):
+def test_validate_payment_status_none(test_app):
     with test_app.app_context():
-        assert validate_payment("any_id") is False
-        mock_status.assert_called_once_with("any_id")
+        data = {"state": {"status": None}}
+        assert validate_payment(data) is False
