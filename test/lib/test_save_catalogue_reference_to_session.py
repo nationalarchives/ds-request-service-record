@@ -1,7 +1,9 @@
 import pytest
+from app.lib.save_catalogue_reference_to_session import (
+    save_catalogue_reference_to_session,
+)
 from flask import Flask, request
 from flask import session as flask_session
-from app.lib.save_catalogue_reference_to_session import save_catalogue_reference_to_session
 
 
 def make_app():
@@ -23,7 +25,7 @@ def test_ignores_when_method_not_get():
     session_obj = {}
     with app.test_request_context("/x?catalogue_reference=WO 95", method="POST"):
         save_catalogue_reference_to_session(request, session_obj=session_obj)
-    assert session_obj.get("form_data") == {} # session["form_data"] is empty
+    assert session_obj.get("form_data") == {}  # session["form_data"] is empty
 
 
 def test_ignores_when_param_missing():
@@ -39,7 +41,7 @@ def test_ignores_empty_string_value():
     session_obj = {}
     with app.test_request_context("/x?catalogue_reference=", method="GET"):
         save_catalogue_reference_to_session(request, session_obj=session_obj)
-    assert session_obj.get("form_data") == {} # session["form_data"] is empty
+    assert session_obj.get("form_data") == {}  # session["form_data"] is empty
 
 
 def test_merges_with_existing_preserving_other_keys():
@@ -47,15 +49,27 @@ def test_merges_with_existing_preserving_other_keys():
     session_obj = {"form_data": {"something_else": "x"}}
     with app.test_request_context("/x?catalogue_reference=WO 1234", method="GET"):
         save_catalogue_reference_to_session(request, session_obj=session_obj)
-    assert session_obj["form_data"] == {"something_else": "x", "catalogue_reference": "WO 1234"}
+    assert session_obj["form_data"] == {
+        "something_else": "x",
+        "catalogue_reference": "WO 1234",
+    }
 
 
 @pytest.mark.parametrize(
     "raw,expected",
     [
-        ("<script>alert(document.cookie)</script>", "&lt;script&gt;alert(document.cookie)&lt;/script&gt;"),
-        ("<iframe src='' onmouseover='alert(document.cookie)'></iframe>","&lt;iframe src=&#39;&#39; onmouseover=&#39;alert(document.cookie)&#39;&gt;&lt;/iframe&gt;"),
-        ("<a href='javascript:alert(String.fromCharCode(88,83,83))'>Click Me!</a>","&lt;a href=&#39;javascript:alert(String.fromCharCode(88,83,83))&#39;&gt;Click Me!&lt;/a&gt;"),
+        (
+            "<script>alert(document.cookie)</script>",
+            "&lt;script&gt;alert(document.cookie)&lt;/script&gt;",
+        ),
+        (
+            "<iframe src='' onmouseover='alert(document.cookie)'></iframe>",
+            "&lt;iframe src=&#39;&#39; onmouseover=&#39;alert(document.cookie)&#39;&gt;&lt;/iframe&gt;",
+        ),
+        (
+            "<a href='javascript:alert(String.fromCharCode(88,83,83))'>Click Me!</a>",
+            "&lt;a href=&#39;javascript:alert(String.fromCharCode(88,83,83))&#39;&gt;Click Me!&lt;/a&gt;",
+        ),
         ("WO 123", "WO 123"),
     ],
 )

@@ -39,7 +39,7 @@ def send_to_gov_pay():
         description=content["app"]["title"],
         reference="ServiceRecordRequest",
         email=requester_email,
-        return_url=f"{url_for("main.handle_gov_uk_pay_response", _external=True)}?id={id}&response_type=request",
+        return_url=f"{url_for("main.handle_gov_uk_pay_request_response", _external=True)}?id={id}",
     )
 
     if not response:
@@ -63,20 +63,53 @@ def send_to_gov_pay():
     return redirect(payment_url)
 
 
-@bp.route("/handle-gov-uk-pay-response/")
-def handle_gov_uk_pay_response():
+@bp.route("/handle-gov-uk-pay-payment-response/")
+def handle_gov_uk_pay_payment_response():
     id = request.args.get("id")
-    response_type = request.args.get("response_type")
 
-    if not id or not response_type:
+    if not id:
         # User got here without ID - likely manually, do something... (redirect to form?)
         return "Shouldn't be here"
 
-    if response_type == "request":
-        gov_uk_payment_id = get_payment_id_from_record_id(id)
-    elif response_type == "payment":
-        payment = get_gov_uk_dynamics_payment(id)
-        gov_uk_payment_id = payment.gov_uk_payment_id if payment else None
+    payment = get_gov_uk_dynamics_payment(id)
+    if payment is None:
+        # User got here with an ID that doesn't exist in the DB - could be our fault, or could be malicious, do something
+        return "Shouldn't be here"
+
+    gov_uk_payment_id = payment.gov_uk_payment_id
+    gov_uk_payment_data = get_payment_data(gov_uk_payment_id)
+
+    if gov_uk_payment_data is None:
+        # Could not retrieve payment data from GOV.UK Pay - log and inform user
+        current_app.logger.error(
+            f"Could not retrieve payment data for GOV.UK payment ID: {gov_uk_payment_id}"
+        )
+        return "Some sort of error"  # TODO: We need to make a proper error page for this to show we couldn't connect to GOV.UK Pay API - maybe provide the GOV.UK Pay ID and to contact webmaster?
+
+    if validate_payment(gov_uk_payment_data):
+        provider_id = gov_uk_payment_data.get("provider_id", None)
+        try:
+            process_valid_payment(payment.id, provider_id)
+        except Exception as e:
+            current_app.logger.error(
+                f"Error processing valid payment of payment ID {gov_uk_payment_id}: {e}"
+            )
+
+        return redirect(url_for("main.confirm_payment_received"))
+
+    # Let the user know it failed, ask if they want to retry
+    return redirect(url_for("main.payment_incomplete"))
+
+
+@bp.route("/handle-gov-uk-pay-request-response/")
+def handle_gov_uk_pay_request_response():
+    id = request.args.get("id")
+
+    if not id:
+        # User got here without ID - likely manually, do something... (redirect to form?)
+        return "Shouldn't be here"
+
+    gov_uk_payment_id = get_payment_id_from_record_id(id)
 
     if gov_uk_payment_id is None:
         # User got here with an ID that doesn't exist in the DB - could be our fault, or could be malicious, do something
@@ -93,20 +126,12 @@ def handle_gov_uk_pay_response():
 
     if validate_payment(gov_uk_payment_data):
         provider_id = gov_uk_payment_data.get("provider_id", None)
-        if response_type == "request":
-            try:
-                process_valid_request(gov_uk_payment_id, provider_id)
-            except Exception as e:
-                current_app.logger.error(
-                    f"Error processing valid request of payment ID {gov_uk_payment_id}: {e}"
-                )
-        elif response_type == "payment":
-            try:
-                process_valid_payment(payment.id, provider_id)
-            except Exception as e:
-                current_app.logger.error(
-                    f"Error processing valid payment of payment ID {gov_uk_payment_id}: {e}"
-                )
+        try:
+            process_valid_request(gov_uk_payment_id, provider_id)
+        except Exception as e:
+            current_app.logger.error(
+                f"Error processing valid request of payment ID {gov_uk_payment_id}: {e}"
+            )
 
         return redirect(url_for("main.confirm_payment_received"))
 
@@ -250,7 +275,7 @@ def gov_uk_pay_redirect(id):
         description=f"{payment.case_number}{': ' + payment.details if payment.details else ''}",
         reference=payment.reference,
         email=payment.payee_email,
-        return_url=f"{url_for("main.handle_gov_uk_pay_response", _external=True)}?id={id}&response_type=payment",
+        return_url=f"{url_for("main.handle_gov_uk_pay_payment_response", _external=True)}?id={id}",
     )
 
     if not response:

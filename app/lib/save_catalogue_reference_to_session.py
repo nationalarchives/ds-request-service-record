@@ -11,9 +11,7 @@ def save_catalogue_reference_to_session(
         session_obj = flask_session
     data = {}
     if request.method == "GET" and request.args.get("catalogue_reference"):
-        safe_catalogue_reference = escape(
-            request.args.get("catalogue_reference", "")
-        )
+        safe_catalogue_reference = escape(request.args.get("catalogue_reference", ""))
         data["catalogue_reference"] = str(safe_catalogue_reference)
 
     # We need to merge with existing data (if any) instead of overwriting - this caught me out initially

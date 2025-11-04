@@ -3,11 +3,11 @@ from app.lib.decorators.state_machine_decorator import with_state_machine
 from app.lib.decorators.with_form_prefilled_from_session import (
     with_form_prefilled_from_session,
 )
+from app.lib.save_catalogue_reference_to_session import (
+    save_catalogue_reference_to_session,
+)
 from app.lib.save_submitted_form_fields_to_session import (
     save_submitted_form_fields_to_session,
-)
-from app.lib.save_catalogue_reference_to_session import (
-    save_catalogue_reference_to_session
 )
 from app.main import bp
 from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
@@ -28,7 +28,7 @@ from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
 from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 from app.main.forms.your_details import YourDetails
 from app.main.forms.your_postal_address import YourPostalAddress
-from flask import redirect, render_template, url_for, request
+from flask import redirect, render_template, request, url_for
 
 
 @bp.route("/", methods=["GET", "POST"])
