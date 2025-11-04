@@ -17,8 +17,8 @@
         {% if payment.details %}
           <p>This payment is for: {{ payment.details }}</p>
         {% endif %}
-        {% if payment.id %}
-          <p>Your payment id is: <strong>{{ payment.id }}</strong></p>
+        {% if payment.reference %}
+          <p>Your payment reference is: <strong>{{ payment.reference }}</strong></p>
         {% endif %}
         <p>Your total amount due is: <strong>£{{ '%.2f' | format(payment.total_amount / 100) }}</strong></p>
         <p>The breakdown of this amount is as follows:</p>
