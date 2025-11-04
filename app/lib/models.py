@@ -42,7 +42,7 @@ class ServiceRecordRequest(db.Model):
     provider_id = db.Column(db.String(64), nullable=True)
     payment_date = db.Column(db.DateTime, nullable=True)
     delivery_type = db.Column(db.String(32), nullable=True)
-    process_type = db.Column(db.String(32), nullable=True)
+    processing_option = db.Column(db.String(32), nullable=True)
     payment_reference = db.Column(db.String(64), nullable=True)
     amount_received = db.Column(db.Integer, nullable=True)  # amount in pence
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
