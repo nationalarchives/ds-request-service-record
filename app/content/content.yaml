@@ -4,18 +4,17 @@ pages:
   start:
     heading: Request a military service record
     contents:
-      heading: Contents
       paragraphs:
-        - Use this service to request a military service record for someone who served in the British Armed Forces after 1918 and was born before 1940.
-        - These records cover the period of the Second World War.
+        - Use this service to make a request to the National Archives to search for a military service record for someone who served in the British Armed Forces after 1918 and was born before 1940.
+        - These records predominantly cover the period of the Second World War.
     service_options:
-      heading: █████████████
+      heading: ████ ██ ████
       paragraph: |
-        █████████████
+        ████████ █████ █ ███ █████ █ ███ ████████ █████
       table:
         headers:
           - Service option
-          - Cost
+          - ██
         rows:
           - option: Standard
             fee: █████████████
@@ -25,26 +24,21 @@ pages:
             fee: █████████████
           - option: Full sensitivity check (paper-copy)
             fee: █████████████
-    information_needed:
-      heading: Information you will need to provide
-      paragraph: To apply you'll need to tell us
-      list:
-        - The service branch that the person you’re requesting served in – such as the British Army, Royal Navy, or Home Guard
-        - Whether they were a commissioned officer or not
-    commissioned_officer_ranks:
-      title: What are the commissioned officer ranks?
-      ranks:
-        - Second Lieutenant
-        - Lieutenant
-        - Captain
-        - Major
-        - Lieutenant Colonel
-        - Colonel
-        - Brigadier
-        - Major General
-        - Lieutenant General
-        - General
-        - Field Marshal
+  how_the_process_works:
+    heading: How the process works
+    paragraphs:
+      - |
+        We are currently in the process of receiving 10 million paper records over a five-year period from the Ministry 
+        of Defence. The information you provide allows our advisors to check if we have received the paper record, and 
+        if we do have it, find the record in our repositories and scan it for you.
+    sub_heading: "Once you have submitted your request:"
+    steps:
+      advisor_check: An advisor will check the database for a matching service record
+      box_retrieved: If there is a match, the box with the record will be received
+      transported_to_us: If offsite, this box will be transported by van to us
+      scanned: Upon arrival the record will be scanned
+      sensitivity_review: The scanned file will be sensitivity reviewed and redacted by a case officer
+      sent_to_you: The reviewed record will be emailed to you
   have_you_checked_the_catalogue:
     heading: Have you checked if this record is available in our catalogue?
     paragraph: A portion of the service records we hold are listed in our catalogue and are available to order from there.
@@ -242,8 +236,10 @@ pages:
       - Your reference number is [reference_number]
 forms:
   fields:
-    start_now:
-      call_to_action: Start now
+    start:
+      call_to_action: Continue
+    how_the_process_works:
+      call_to_action: Continue
     have_you_checked_the_catalogue:
       options:
         yes: Yes
