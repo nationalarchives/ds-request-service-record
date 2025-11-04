@@ -27,7 +27,7 @@ from flask import current_app, redirect, render_template, request, session, url_
 
 
 @bp.route("/send-to-gov-uk-pay/")
-def send_to_gov_pay():
+def send_to_gov_uk_pay():
     content = load_content()
     form_data = session.get("form_data", {})
     requester_email = form_data.get("requester_email", None)

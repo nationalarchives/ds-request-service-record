@@ -260,7 +260,7 @@ class RoutingStateMachine(StateMachine):
         )
 
     def entering_gov_uk_pay_redirect(self, form):
-        self.route_for_current_state = MultiPageFormRoutes.SEND_TO_GOV_PAY.value
+        self.route_for_current_state = MultiPageFormRoutes.SEND_TO_GOV_UK_PAY.value
 
     def entering_request_submitted_page(self):
         self.route_for_current_state = MultiPageFormRoutes.REQUEST_SUBMITTED.value
