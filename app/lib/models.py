@@ -21,6 +21,7 @@ class ServiceRecordRequest(db.Model):
     forenames = db.Column(db.String(128))
     lastname = db.Column(db.String(128))
     mod_reference = db.Column(db.String(64), nullable=True)
+    catalogue_reference = db.Column(db.String(64), nullable=True)
     other_last_names = db.Column(db.String(128), nullable=True)
     place_of_birth = db.Column(db.String(128), nullable=True)
     regiment = db.Column(db.String(128), nullable=True)
@@ -33,12 +34,17 @@ class ServiceRecordRequest(db.Model):
     requester_first_name = db.Column(db.String(128), nullable=True)
     requester_last_name = db.Column(db.String(128))
     requester_postcode = db.Column(db.String(32), nullable=True)
-    requester_title = db.Column(db.String(32), nullable=True)
     requester_town_city = db.Column(db.String(128))
     service_branch = db.Column(db.String(64))
     service_number = db.Column(db.String(64), nullable=True)
     evidence_of_death = db.Column(db.String(64), nullable=True)
     payment_id = db.Column(db.String(64), nullable=True, unique=True)
+    provider_id = db.Column(db.String(64), nullable=True)
+    payment_date = db.Column(db.DateTime, nullable=True)
+    delivery_type = db.Column(db.String(32), nullable=True)
+    process_type = db.Column(db.String(32), nullable=True)
+    payment_reference = db.Column(db.String(64), nullable=True)
+    amount_received = db.Column(db.Integer, nullable=True)  # amount in pence
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
 
