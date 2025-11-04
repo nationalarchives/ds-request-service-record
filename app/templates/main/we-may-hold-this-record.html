@@ -30,7 +30,7 @@
         <form action="{{ url_for('main.we_may_hold_this_record') }}" method="post" novalidate>
           {{ form.csrf_token }}
           <div class="tna-button-group">
-            {{ backLink(url_for('main.was_service_person_an_officer')) }}
+            {{ backLink(url_for('main.were_they_a_commissioned_officer')) }}
             {{ form.submit(params={'accent':'true'}) }}
           </div>
         </form>

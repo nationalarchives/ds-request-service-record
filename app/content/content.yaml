@@ -72,9 +72,11 @@ pages:
         You will need to use our [INSERT NAME HERE] form to request your own Ministry of Defence (MOD) 
         service personnel record, or if you are acting on behalf of a living service personnel member.
   we_do_not_have_records_for_this_service_branch:
-    heading: We do not have records for this service branch
+    heading: We do not hold this record
     paragraphs:
-      - Sorry, but here is some helpful information
+      - |
+        The Royal Navy service personnel records will not be transferred to us until after April 2026. 
+        Please use the Ministry of Defence service to request access to Royal Navy records.
   we_do_not_have_records_for_this_rank:
     heading: We do not have records for this rank
     paragraphs:
@@ -88,15 +90,34 @@ pages:
     paragraphs:
       - You will need to request the service record from the Ministry of Defence.
     call_to_action: Apply for MOD records
-  was_service_person_an_officer:
+  were_they_a_commissioned_officer:
     heading: Were they a commissioned officer?
     paragraphs:
-      - Sorry, but here is some helpful information
-  we_may_be_unable_to_find_this_record:
-    heading: We may have this record
+      - |
+        Service records are often categorised as either 'Commissioned Officers' or 
+        'Other Ranks'. Information on whether the service person was a Commissioned 
+        Officer will help confirm if the service record has been transferred to The 
+        National Archives or is still with the Ministry of Defence.
+  we_are_unlikely_to_find_this_record:
+    heading: We are unlikely to be able to locate this record
     paragraphs:
-      - We are unlikely to be able to find it
-      - We recommend using paid search
+      - |
+        Due to the high volume of Home Guard records, 
+        with over 4 million transferred to The National Archives, 
+        and the storage method used for these records, 
+        it is unlikely that we will be able to locate the record 
+        of interest within a reasonable timeframe.
+      - |
+        Records relating to the Durham Home Guard are currently 
+        available in our catalogue.
+      - |
+        The remaining Home Guard records will be made available via 
+        our partner, Ancestry. We expect all Home Guard records that 
+        have been transferred will be available via Ancestry by September 2027.
+      - |
+        Please only proceed if you are unable to wait until September 2027 by 
+        requesting a paid search. You will then receive a quotation based on 
+        the estimated amount of time it will take to locate the record.
   we_may_hold_this_record:
     heading: We may hold this record
     paragraphs:
@@ -234,7 +255,7 @@ forms:
       label: Is the service person still alive?
       messages:
         required: An answer to this question is required
-    was_service_person_an_officer:
+    were_they_a_commissioned_officer:
       label: Were they a commissioned officer?
       messages:
         required: Choosing an option is required
@@ -288,9 +309,9 @@ forms:
     regiment:
       label: Regiment (optional)
     service_branch:
-      label: What was the person's service branch?
+      label: Which military branch did the person serve in?
       messages:
-        required: The service person's service branch is required
+        required: The person's service branch is required
     additional_information:
       label: Additional information (optional)
       description: |

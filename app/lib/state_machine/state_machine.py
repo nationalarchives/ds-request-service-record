@@ -44,8 +44,8 @@ class RoutingStateMachine(StateMachine):
         enter="entering_subject_access_request_page", final=True
     )
     service_branch_form = State(enter="entering_service_branch_form", final=True)
-    was_service_person_an_officer_form = State(
-        enter="entering_was_service_person_an_officer_form", final=True
+    were_they_a_commissioned_officer_form = State(
+        enter="entering_were_they_a_commissioned_officer_form", final=True
     )
     we_do_not_have_records_for_this_service_branch_page = State(
         enter="entering_we_do_not_have_records_for_this_service_branch", final=True
@@ -53,8 +53,8 @@ class RoutingStateMachine(StateMachine):
     we_do_not_have_records_for_this_rank_page = State(
         enter="entering_we_do_not_have_records_for_this_rank_page", final=True
     )
-    we_may_be_unable_to_find_this_record_page = State(
-        enter="entering_we_may_be_unable_to_find_this_record_page", final=True
+    we_are_unlikely_to_find_this_record_page = State(
+        enter="entering_we_are_unlikely_to_find_this_record_page", final=True
     )
     we_may_hold_this_record_page = State(
         enter="entering_we_may_hold_this_record_page", final=True
@@ -108,17 +108,17 @@ class RoutingStateMachine(StateMachine):
     ) | initial.to(service_branch_form, unless="living_subject")
     continue_from_service_branch_form = (
         initial.to(
-            was_service_person_an_officer_form, unless="go_to_mod or likely_unfindable"
+            were_they_a_commissioned_officer_form, unless="go_to_mod or likely_unfindable"
         )
         | initial.to(
             we_do_not_have_records_for_this_service_branch_page, cond="go_to_mod"
         )
         | initial.to(
-            we_may_be_unable_to_find_this_record_page, cond="likely_unfindable"
+            we_are_unlikely_to_find_this_record_page, cond="likely_unfindable"
         )
     )
 
-    continue_from_was_service_person_an_officer_form = initial.to(
+    continue_from_were_they_a_commissioned_officer_form = initial.to(
         we_may_hold_this_record_page, unless="was_officer"
     ) | initial.to(we_do_not_have_records_for_this_rank_page, cond="was_officer")
 
@@ -194,9 +194,9 @@ class RoutingStateMachine(StateMachine):
             MultiPageFormRoutes.ONLY_LIVING_SUBJECTS_CAN_REQUEST_THEIR_RECORD.value
         )
 
-    def entering_was_service_person_an_officer_form(self, form):
+    def entering_were_they_a_commissioned_officer_form(self, form):
         self.route_for_current_state = (
-            MultiPageFormRoutes.WAS_SERVICE_PERSON_AN_OFFICER_FORM.value
+            MultiPageFormRoutes.WERE_THEY_A_COMMISSIONED_OFFICER_FORM.value
         )
 
     def entering_we_do_not_have_records_for_this_service_branch(self, form):
@@ -209,9 +209,9 @@ class RoutingStateMachine(StateMachine):
             MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_THIS_RANK.value
         )
 
-    def entering_we_may_be_unable_to_find_this_record_page(self, form):
+    def entering_we_are_unlikely_to_find_this_record_page(self, form):
         self.route_for_current_state = (
-            MultiPageFormRoutes.WE_MAY_BE_UNABLE_TO_FIND_THIS_RECORD.value
+            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_FIND_THIS_RECORD.value
         )
 
     def entering_we_may_hold_this_record_page(self, form):
@@ -296,7 +296,7 @@ class RoutingStateMachine(StateMachine):
 
     def was_officer(self, form):
         """Condition method to determine if the service person was an officer."""
-        return form.was_service_person_an_officer.data == "yes"
+        return form.were_they_a_commissioned_officer.data == "yes"
 
     def born_too_late(self, form):
         return form.what_was_their_date_of_birth.data.year > 1939
