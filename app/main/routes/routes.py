@@ -3,11 +3,11 @@ from app.lib.decorators.state_machine_decorator import with_state_machine
 from app.lib.decorators.with_form_prefilled_from_session import (
     with_form_prefilled_from_session,
 )
+from app.lib.save_catalogue_reference_to_session import (
+    save_catalogue_reference_to_session,
+)
 from app.lib.save_submitted_form_fields_to_session import (
     save_submitted_form_fields_to_session,
-)
-from app.lib.save_catalogue_reference_to_session import (
-    save_catalogue_reference_to_session
 )
 from app.main import bp
 from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
@@ -28,7 +28,8 @@ from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
 from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 from app.main.forms.your_details import YourDetails
 from app.main.forms.your_postal_address import YourPostalAddress
-from flask import redirect, render_template, url_for, request
+from flask import redirect, render_template, request, url_for
+
 
 @bp.route("/", methods=["GET", "POST"])
 @with_state_machine
@@ -39,9 +40,7 @@ def start(form, state_machine):
         state_machine.continue_from_start_form()
         return redirect(url_for(state_machine.route_for_current_state))
 
-    return render_template(
-        "main/start.html", form=form, content=load_content()
-    )
+    return render_template("main/start.html", form=form, content=load_content())
 
 
 @bp.route("/have-you-checked-the-catalogue/", methods=["GET", "POST"])
@@ -124,9 +123,7 @@ def were_they_a_commissioned_officer(form, state_machine):
 
 @bp.route("/search-the-catalogue/", methods=["GET"])
 def search_the_catalogue():
-    return render_template(
-        "main/search-the-catalogue.html", content=load_content()
-    )
+    return render_template("main/search-the-catalogue.html", content=load_content())
 
 
 @bp.route("/we-do-not-have-records-for-this-service-branch/", methods=["GET"])
@@ -237,9 +234,7 @@ def your_details(form, state_machine):
         save_submitted_form_fields_to_session(form)
         state_machine.continue_from_your_details_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
-    return render_template(
-        "main/your-details.html", form=form, content=load_content()
-    )
+    return render_template("main/your-details.html", form=form, content=load_content())
 
 
 @bp.route("/do-you-have-a-proof-of-death/", methods=["GET", "POST"])
@@ -311,97 +306,6 @@ def upload_a_proof_of_death(form, state_machine):
         form=form,
         content=load_content(),
     )
-
-@bp.route("/send-to-gov-uk-pay/")
-def send_to_gov_pay():
-    content = load_content()
-    form_data = session.get("form_data", {})
-    requester_email = form_data.get("requester_email", None)
-
-    id = str(uuid.uuid4())
-
-    response = create_payment(
-        amount=1000,
-        description=content["app"]["title"],
-        reference="ServiceRecordRequest",
-        email=requester_email,
-        return_url=f"{url_for("main.handle_gov_uk_pay_response", _external=True)}?id={id}",
-    )
-
-    if not response:
-        return redirect(url_for("main.payment_link_creation_failed"))
-
-    payment_url = response.get("_links", {}).get("next_url", "").get("href", "")
-    payment_id = response.get("payment_id", "")
-
-    if not payment_url or not payment_id:
-        return redirect(url_for("main.payment_link_creation_failed"))
-
-    data = {
-        **form_data,
-        "id": id,
-        "payment_id": payment_id,
-        "created_at": datetime.now(),
-    }
-
-    add_service_record_request(data)
-
-    return redirect(payment_url)
-
-
-@bp.route("/handle-gov-uk-pay-response/")
-def handle_gov_uk_pay_response():
-    id = request.args.get("id")
-
-    if not id:
-        # User got here without ID - likely manually, do something... (redirect to form?)
-        return "Shouldn't be here"
-
-    payment_id = get_payment_id_from_record_id(id)
-
-    if payment_id is None:
-        # User got here with an ID that doesn't exist in the DB - could be our fault, or could be malicious, do something
-        return "Shouldn't be here"
-
-    if validate_payment(payment_id):
-        try:
-            process_valid_request(payment_id)
-        except Exception as e:
-            current_app.logger.error(
-                f"Error processing valid request of payment ID {payment_id}: {e}"
-            )
-        return redirect(url_for("main.confirm_payment_received"))
-
-    # Let the user know it failed, ask if they want to retry
-    return redirect(url_for("main.payment_incomplete"))
-
-
-@bp.route("/payment-link-creation_failed/")
-def payment_link_creation_failed():
-    content = load_content()
-    return render_template(
-        "main/payment/payment-link-creation-failed.html", content=content
-    )
-
-
-@bp.route("/payment-incomplete/")
-def payment_incomplete():
-    content = load_content()
-    return render_template("main/payment/payment-incomplete.html", content=content)
-
-
-@bp.route("/confirm-payment-received/")
-def confirm_payment_received():
-    content = load_content()
-    return render_template(
-        "main/payment/confirm-payment-received.html", content=content
-    )
-
-@bp.route("/return-from-gov-uk-pay/")
-@with_state_machine
-def return_from_gov_uk_pay(state_machine):
-    state_machine.continue_on_return_from_gov_uk_redirect()
-    return redirect(url_for(state_machine.route_for_current_state))
 
 
 @bp.route("/request-submitted/", methods=["GET"])

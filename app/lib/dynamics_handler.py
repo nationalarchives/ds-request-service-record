@@ -1,8 +1,10 @@
+from datetime import datetime
+
 from app.lib.aws import send_email
-from app.lib.models import ServiceRecordRequest
+from app.lib.models import DynamicsPayment, ServiceRecordRequest
 from flask import current_app
 
-DYNAMICS_FIELD_MAP = [
+DYNAMICS_REQUEST_FIELD_MAP = [
     ("enquiry_id", "id"),
     ("title", "requester_title"),
     ("mandatory_forename", "requester_first_name"),
@@ -35,11 +37,19 @@ DYNAMICS_FIELD_MAP = [
     ("prior_contact_reference", "case_reference_number"),
 ]
 
+DYNAMICS_PAYMENT_FIELD_MAP = [
+    ("payment_id", "id"),
+    ("case_number", "case_number"),
+    ("reference", "reference"),
+    ("provider_id", "provider_id"),
+    ("total_amount_pence", "total_amount"),
+]
 
-def send_data_to_dynamics(record: ServiceRecordRequest) -> None:
-    # Check "status" of record, based on defined logic (used in Dynamics email subject, e.g. FOICD, DPA, etc)
 
-    tagged_data = generate_tagged_data(record)
+def send_request_to_dynamics(record: ServiceRecordRequest) -> None:
+    # TODO: Check "status" of record, based on defined logic (used in Dynamics email subject, e.g. FOICD, DPA, etc)
+
+    tagged_data = generate_tagged_request(record)
 
     send_email(
         to=current_app.config["DYNAMICS_INBOX"],
@@ -48,11 +58,29 @@ def send_data_to_dynamics(record: ServiceRecordRequest) -> None:
     )
 
 
-def generate_tagged_data(record: ServiceRecordRequest) -> str:
+def send_payment_to_dynamics(payment: DynamicsPayment) -> None:
+    tagged_data = generate_tagged_payment(payment)
+
+    send_email(
+        to=current_app.config["DYNAMICS_INBOX"],
+        subject=f"Payment received for Dynamics payment ID: {payment.id}",
+        body=tagged_data + f"\n<paid_at>{datetime.now()}</paid_at>",
+    )
+
+
+def _generate_tagged_data(mapping: list[tuple[str, str | None]], obj) -> str:
     chunks = []
-    for tag, attr in DYNAMICS_FIELD_MAP:
-        value = getattr(record, attr) if attr else None
+    for tag, attr in mapping:
+        value = getattr(obj, attr) if attr else None
         if value:
             text = str(value)
             chunks.append(f"<{tag}>{text}</{tag}>")
     return "\n".join(chunks)
+
+
+def generate_tagged_request(record: ServiceRecordRequest) -> str:
+    return _generate_tagged_data(DYNAMICS_REQUEST_FIELD_MAP, record)
+
+
+def generate_tagged_payment(record: DynamicsPayment) -> str:
+    return _generate_tagged_data(DYNAMICS_PAYMENT_FIELD_MAP, record)

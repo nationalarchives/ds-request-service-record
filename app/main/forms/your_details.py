@@ -14,7 +14,7 @@ from wtforms import (
     StringField,
     SubmitField,
 )
-from wtforms.validators import Email, InputRequired, Optional
+from wtforms.validators import Email, InputRequired
 
 
 class YourDetails(FlaskForm):

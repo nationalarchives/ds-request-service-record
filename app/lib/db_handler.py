@@ -1,4 +1,9 @@
-from app.lib.models import ServiceRecordRequest, db
+from app.lib.models import (
+    DynamicsPayment,
+    GOVUKDynamicsPayment,
+    ServiceRecordRequest,
+    db,
+)
 from flask import current_app
 
 
@@ -29,7 +34,7 @@ def get_service_record_request(
 
     if not record:
         current_app.logger.error(
-            f"Service record not found for payment_id: {payment_id}"
+            f"Service record not found for: {payment_id or record_id}"
         )
 
     return record
@@ -57,3 +62,56 @@ def delete_service_record_request(record: ServiceRecordRequest) -> None:
     except Exception as e:
         current_app.logger.error(f"Error deleting service record request: {e}")
         db.session.rollback()
+
+
+def get_dynamics_payment(id: str) -> DynamicsPayment | None:
+    try:
+        payment = db.session.get(DynamicsPayment, id)
+        if not payment:
+            current_app.logger.error(f"Dynamics payment not found for ID: {id}")
+        return payment
+    except Exception as e:
+        current_app.logger.error(f"Error fetching dynamics payment: {e}")
+        return None
+
+
+def add_dynamics_payment(data: dict) -> DynamicsPayment | None:
+    try:
+        payment = DynamicsPayment(**data)
+        db.session.add(payment)
+        db.session.commit()
+    except Exception as e:
+        current_app.logger.error(f"Error adding dynamics payment: {e}")
+        db.session.rollback()
+
+    return payment
+
+
+def delete_dynamics_payment(record: DynamicsPayment) -> None:
+    try:
+        db.session.delete(record)
+        db.session.commit()
+    except Exception as e:
+        current_app.logger.error(f"Error deleting dynamics payment: {e}")
+        db.session.rollback()
+
+
+def add_gov_uk_dynamics_payment(data: dict) -> None:
+    try:
+        payment = GOVUKDynamicsPayment(**data)
+        db.session.add(payment)
+        db.session.commit()
+    except Exception as e:
+        current_app.logger.error(f"Error adding GOV.UK dynamics payment: {e}")
+        db.session.rollback()
+
+
+def get_gov_uk_dynamics_payment(id: str) -> GOVUKDynamicsPayment | None:
+    try:
+        payment = db.session.get(GOVUKDynamicsPayment, id)
+        if not payment:
+            current_app.logger.error(f"GOV UK payment not found for ID: {id}")
+        return payment
+    except Exception as e:
+        current_app.logger.error(f"Error fetching GOV UK payment: {e}")
+        return None
