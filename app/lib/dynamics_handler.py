@@ -34,7 +34,7 @@ DYNAMICS_REQUEST_FIELD_MAP = [
     ("prior_contact_reference", "case_reference_number"),
     ("payment_date", "payment_date"),
     ("delivery_type", "delivery_type"),
-    ("process_type", "process_type"),
+    ("process_type", "processing_option"),
     ("payment_reference", "payment_reference"),
     ("amount_received", "amount_received"),
     ("provider_id", "provider_id"),
