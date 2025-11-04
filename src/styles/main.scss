@@ -12,3 +12,27 @@
 
   padding-bottom: 3rem;
 }
+
+.process-steps {
+  list-style-type: none;
+
+  li {
+    display: flex;
+    flex-wrap: wrap;
+
+    .process-icon {
+      margin-right: 2rem;
+
+      font-size: 2.5rem;
+    }
+
+    span:nth-child(2) {
+      flex-grow: 1;
+    }
+
+    span:nth-child(3) {
+      flex-basis: 100%;
+      padding-inline-start: 0.8rem;
+    }
+  }
+}
