@@ -10,12 +10,12 @@ class MultiPageFormRoutes(Enum):
     ONLY_LIVING_SUBJECTS_CAN_REQUEST_THEIR_RECORD = (
         "main.only_living_subjects_can_request_their_record"
     )
-    WAS_SERVICE_PERSON_AN_OFFICER_FORM = "main.was_service_person_an_officer"
+    WERE_THEY_A_COMMISSIONED_OFFICER_FORM = "main.were_they_a_commissioned_officer"
     WE_DO_NOT_HAVE_RECORDS_FOR_THIS_SERVICE_BRANCH = (
         "main.we_do_not_have_records_for_this_service_branch"
     )
     WE_DO_NOT_HAVE_RECORDS_FOR_THIS_RANK = "main.we_do_not_have_records_for_this_rank"
-    WE_MAY_BE_UNABLE_TO_FIND_THIS_RECORD = "main.we_may_be_unable_to_find_this_record"
+    WE_ARE_UNLIKELY_TO_FIND_THIS_RECORD = "main.we_are_unlikely_to_find_this_record"
     WE_MAY_HOLD_THIS_RECORD = "main.we_may_hold_this_record"
     WHAT_WAS_THEIR_DATE_OF_BIRTH = "main.what_was_their_date_of_birth"
     WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE = (
@@ -37,11 +37,11 @@ class MultiPageFormRoutes(Enum):
 
 class ServiceBranches(Enum):
     BRITISH_ARMY = "British Army"
-    ROYAL_AIR_FORCE = "Royal Air Force"
-    ROYAL_NAVY = "Royal Navy"
     HOME_GUARD = "Home Guard"
-    BRITISH_ARMY_OTHER = "British Army: Other (e.g. Kenya Regiment, Hong Kong Regiment)"
-    UNKNOWN = "I don't know"
+    ROYAL_AIR_FORCE = "Royal Air Force"
+    ROYAL_NAVY = "Royal Navy (including Royal Marines)"
+    OTHER = "Other"
+    UNKNOWN = "Don't know"
 
 
 class Ranks(Enum):

@@ -1,32 +1,32 @@
 import { test, expect } from "@playwright/test";
 import { Paths } from "../lib/constants";
 
-test.describe("the 'What was the person's service branch?' form", () => {
+test.describe("the 'Which military branch did the person serve in?' form", () => {
   const selectionMappings = [
     {
       branchLabel: "British Army",
-      nextUrl: Paths.WAS_SERVICE_PERSON_AN_OFFICER,
+      nextUrl: Paths.WERE_THEY_A_COMMISSIONED_OFFICER,
       expectedHeading: /Were they a commissioned officer\?/,
     },
     {
-      branchLabel: "Royal Navy",
+      branchLabel: "Royal Navy (including Royal Marines)",
       nextUrl: Paths.WE_DO_NOT_HAVE_RECORDS_FOR_THIS_SERVICE_BRANCH,
-      expectedHeading: /We do not have records for this service branch/,
+      expectedHeading: /We do not hold this record/,
     },
     {
       branchLabel: "Royal Air Force",
-      nextUrl: Paths.WAS_SERVICE_PERSON_AN_OFFICER,
+      nextUrl: Paths.WERE_THEY_A_COMMISSIONED_OFFICER,
       expectedHeading: /Were they a commissioned officer\?/,
     },
     {
-      branchLabel: "I don't know",
-      nextUrl: Paths.WAS_SERVICE_PERSON_AN_OFFICER,
+      branchLabel: "Don't know",
+      nextUrl: Paths.WERE_THEY_A_COMMISSIONED_OFFICER,
       expectedHeading: /Were they a commissioned officer\?/,
     },
     {
       branchLabel: "Home Guard",
-      nextUrl: Paths.WE_MAY_BE_UNABLE_TO_FIND_THIS_RECORD,
-      expectedHeading: /We may have this record/,
+      nextUrl: Paths.WE_ARE_UNLIKELY_TO_FIND_THIS_RECORD,
+      expectedHeading: /We are unlikely to be able to locate this record/,
     },
   ];
 
@@ -37,7 +37,7 @@ test.describe("the 'What was the person's service branch?' form", () => {
 
   test("has the correct heading", async ({ page }) => {
     await expect(page.locator("h1")).toHaveText(
-      /What was the person's service branch\?/,
+      /Which military branch did the person serve in\?/,
     );
   });
 
@@ -47,7 +47,7 @@ test.describe("the 'What was the person's service branch?' form", () => {
     }) => {
       await page.getByRole("button", { name: /Continue/i }).click();
       await expect(page.locator(".tna-fieldset__error")).toHaveText(
-        /The service person's service branch is required/,
+        /The person's service branch is required/,
       );
     });
     selectionMappings.forEach(({ branchLabel, nextUrl, expectedHeading }) => {
