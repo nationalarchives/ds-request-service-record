@@ -170,12 +170,6 @@ class RequestAServiceRecord(FlaskForm):
         validators=[],
     )
 
-    requester_title = StringField(
-        get_field_content(content, "requester_title", "label"),
-        widget=TnaTextInputWidget(),
-        validators=[],
-    )
-
     requester_first_name = StringField(
         get_field_content(content, "requester_first_name", "label"),
         widget=TnaTextInputWidget(),
