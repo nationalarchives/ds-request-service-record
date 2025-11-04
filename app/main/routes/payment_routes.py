@@ -22,6 +22,7 @@ from app.lib.gov_uk_pay import (
 )
 from app.lib.models import db
 from app.main import bp
+from app.constants import OrderFeesPence
 from app.main.forms.proceed_to_pay import ProceedToPay
 from flask import current_app, redirect, render_template, request, session, url_for
 
@@ -34,8 +35,19 @@ def send_to_gov_pay():
 
     id = str(uuid.uuid4())
 
+    if form_data.get("processing_option") == "standard":
+        if form_data.get("how_do_you_want_your_order_processed_standard_option") == "digital":
+            amount = OrderFeesPence.STANDARD_DIGITAL.value
+        else:
+            amount = OrderFeesPence.STANDARD_PRINTED.value
+    if form_data.get("processing_option") == "full":
+        if form_data.get("how_do_you_want_your_order_processed_full_option") == "digital":
+            amount = OrderFeesPence.FULL_DIGITAL.value
+        else:
+            amount = OrderFeesPence.FULL_PRINTED.value
+
     response = create_payment(
-        amount=1000,
+        amount=amount,
         description=content["app"]["title"],
         reference="ServiceRecordRequest",
         email=requester_email,
