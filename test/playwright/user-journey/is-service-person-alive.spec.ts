@@ -33,7 +33,7 @@ test.describe("the 'Is the person still alive?' form", () => {
     {
       label: "No",
       url: Paths.SELECT_SERVICE_BRANCH,
-      heading: /What was the person's service branch\?/,
+      heading: /Which military branch did the person serve in\?/,
       description: "when 'No' is selected, presents the 'Service branch' form",
     },
   ];

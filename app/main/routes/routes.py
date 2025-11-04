@@ -23,7 +23,7 @@ from app.main.forms.service_branch import ServiceBranch
 from app.main.forms.service_person_details import ServicePersonDetails
 from app.main.forms.start_now import StartNow
 from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
-from app.main.forms.was_service_person_an_officer import WasServicePersonAnOfficer
+from app.main.forms.were_they_a_commissioned_officer import WasServicePersonAnOfficer
 from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
 from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 from app.main.forms.your_details import YourDetails
@@ -108,10 +108,10 @@ def service_branch_form(form, state_machine):
 @bp.route("/was-service-person-officer/", methods=["GET", "POST"])
 @with_form_prefilled_from_session(WasServicePersonAnOfficer)
 @with_state_machine
-def was_service_person_an_officer(form, state_machine):
+def were_they_a_commissioned_officer(form, state_machine):
     if form.validate_on_submit():
         save_submitted_form_fields_to_session(form)
-        state_machine.continue_from_was_service_person_an_officer_form(form)
+        state_machine.continue_from_were_they_a_commissioned_officer_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(
@@ -143,7 +143,7 @@ def we_do_not_have_records_for_this_rank():
 
 
 @bp.route("/we-may-be-unable-to-find-this-record/", methods=["GET"])
-def we_may_be_unable_to_find_this_record():
+def we_are_unlikely_to_find_this_record():
     return render_template(
         "main/we-may-be-unable-to-find-this-record.html",
         content=load_content(),

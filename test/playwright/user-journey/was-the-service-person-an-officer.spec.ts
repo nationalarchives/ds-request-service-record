@@ -4,7 +4,7 @@ import { Paths } from "../lib/constants";
 test.describe("the 'Were they a commissioned officer?' form", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START); // We need to go here first because we prevent direct access to mid-journey pages
-    await page.goto(Paths.WAS_SERVICE_PERSON_AN_OFFICER);
+    await page.goto(Paths.WERE_THEY_A_COMMISSIONED_OFFICER);
   });
 
   test("has the correct heading", async ({ page }) => {
@@ -55,7 +55,7 @@ test.describe("the 'Were they a commissioned officer?' form", () => {
           page,
         }) => {
           await page.goto(Paths.JOURNEY_START);
-          await page.goto(Paths.WAS_SERVICE_PERSON_AN_OFFICER);
+          await page.goto(Paths.WERE_THEY_A_COMMISSIONED_OFFICER);
           await page.getByLabel(branchLabel, { exact: true }).check();
           await page.getByRole("button", { name: /Continue/i }).click();
           await expect(page).toHaveURL(nextUrl);
@@ -63,7 +63,9 @@ test.describe("the 'Were they a commissioned officer?' form", () => {
           // If there's a "Back" link, click it
           if ((await backLink.count()) > 0) {
             await backLink.click();
-            await expect(page).toHaveURL(Paths.WAS_SERVICE_PERSON_AN_OFFICER);
+            await expect(page).toHaveURL(
+              Paths.WERE_THEY_A_COMMISSIONED_OFFICER,
+            );
             await expect(
               page.getByLabel(branchLabel, { exact: true }),
             ).toBeChecked();

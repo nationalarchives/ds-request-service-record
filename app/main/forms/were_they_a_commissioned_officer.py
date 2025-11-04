@@ -8,13 +8,13 @@ from wtforms.validators import InputRequired
 class WasServicePersonAnOfficer(FlaskForm):
     content = load_content()
 
-    was_service_person_an_officer = RadioField(
-        get_field_content(content, "was_service_person_an_officer", "label"),
+    were_they_a_commissioned_officer = RadioField(
+        get_field_content(content, "were_they_a_commissioned_officer", "label"),
         choices=[("yes", "Yes"), ("no", "No"), ("unknown", "I don't know")],
         validators=[
             InputRequired(
                 message=get_field_content(
-                    content, "was_service_person_an_officer", "messages"
+                    content, "were_they_a_commissioned_officer", "messages"
                 )["required"]
             )
         ],
