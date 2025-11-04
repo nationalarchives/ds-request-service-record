@@ -43,6 +43,11 @@ class ServiceBranches(Enum):
     OTHER = "Other"
     UNKNOWN = "Don't know"
 
+class OrderFeesPence(Enum):
+    STANDARD_DIGITAL = 10
+    STANDARD_PRINTED = 10
+    FULL_DIGITAL = 4716
+    FULL_PRINTED = 4225
 
 class Ranks(Enum):
     OFFICER = "Officer"
