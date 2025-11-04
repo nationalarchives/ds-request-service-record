@@ -45,7 +45,8 @@ def get_payment_id_from_record_id(record_id: str) -> str | None:
     return record.payment_id if record else None
 
 
-def add_service_record_request(data: dict) -> None:
+def add_service_record_request(data: dict) -> ServiceRecordRequest | None:
+    record = None
     try:
         record = ServiceRecordRequest(**data)
         db.session.add(record)
@@ -53,6 +54,7 @@ def add_service_record_request(data: dict) -> None:
     except Exception as e:
         current_app.logger.error(f"Error adding service record request: {e}")
         db.session.rollback()
+    return record
 
 
 def delete_service_record_request(record: ServiceRecordRequest) -> None:
@@ -115,3 +117,12 @@ def get_gov_uk_dynamics_payment(id: str) -> GOVUKDynamicsPayment | None:
     except Exception as e:
         current_app.logger.error(f"Error fetching GOV UK payment: {e}")
         return None
+
+def transform_form_data_to_record(form_data: dict) -> dict:
+    transformed_data = {field: value for field, value in form_data.items() if hasattr(ServiceRecordRequest, field)}
+    
+    if form_data.get("processing_option") == "standard":
+        transformed_data["delivery_type"] = form_data.get("how_do_you_want_your_order_processed_standard_option")
+    elif form_data.get("processing_option") == "full":
+        transformed_data["delivery_type"] = form_data.get("how_do_you_want_your_order_processed_full_option")
+    return transformed_data
