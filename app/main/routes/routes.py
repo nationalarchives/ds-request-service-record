@@ -10,6 +10,7 @@ from app.lib.save_submitted_form_fields_to_session import (
     save_submitted_form_fields_to_session,
 )
 from app.main import bp
+from app.main.forms.how_the_process_works import HowTheProcessWorks
 from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
 from app.main.forms.have_you_checked_the_catalogue import HaveYouCheckedTheCatalogue
 from app.main.forms.have_you_previously_made_a_request import (
@@ -41,6 +42,19 @@ def start(form, state_machine):
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template("main/start.html", form=form, content=load_content())
+
+
+@bp.route("/how-the-process-works/", methods=["GET", "POST"])
+@with_state_machine
+@with_form_prefilled_from_session(HowTheProcessWorks)
+def how_the_process_works(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_how_the_process_works_form()
+        return redirect(url_for(state_machine.route_for_current_state))
+
+    return render_template(
+        "main/how-the-process-works.html", form=form, content=load_content()
+    )
 
 
 @bp.route("/have-you-checked-the-catalogue/", methods=["GET", "POST"])
