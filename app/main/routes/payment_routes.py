@@ -1,7 +1,6 @@
 import uuid
 from datetime import datetime
 
-from app.constants import OrderFeesPence
 from app.lib.aws import send_email
 from app.lib.content import load_content
 from app.lib.db_handler import (
@@ -37,7 +36,7 @@ def send_to_gov_pay():
     id = str(uuid.uuid4())
 
     amount = calculate_amount_based_on_form_data(form_data)
-    
+
     response = create_payment(
         amount=amount,
         description=content["app"]["title"],
