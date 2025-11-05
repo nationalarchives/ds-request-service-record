@@ -108,14 +108,13 @@ class RoutingStateMachine(StateMachine):
     ) | initial.to(service_branch_form, unless="living_subject")
     continue_from_service_branch_form = (
         initial.to(
-            were_they_a_commissioned_officer_form, unless="go_to_mod or likely_unfindable"
+            were_they_a_commissioned_officer_form,
+            unless="go_to_mod or likely_unfindable",
         )
         | initial.to(
             we_do_not_have_records_for_this_service_branch_page, cond="go_to_mod"
         )
-        | initial.to(
-            we_are_unlikely_to_find_this_record_page, cond="likely_unfindable"
-        )
+        | initial.to(we_are_unlikely_to_find_this_record_page, cond="likely_unfindable")
     )
 
     continue_from_were_they_a_commissioned_officer_form = initial.to(
