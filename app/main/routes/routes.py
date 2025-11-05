@@ -10,7 +10,6 @@ from app.lib.save_submitted_form_fields_to_session import (
     save_submitted_form_fields_to_session,
 )
 from app.main import bp
-from app.main.forms.how_the_process_works import HowTheProcessWorks
 from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
 from app.main.forms.have_you_checked_the_catalogue import HaveYouCheckedTheCatalogue
 from app.main.forms.have_you_previously_made_a_request import (
@@ -19,6 +18,7 @@ from app.main.forms.have_you_previously_made_a_request import (
 from app.main.forms.how_do_you_want_your_order_processed import (
     HowDoYouWantYourOrderProcessed,
 )
+from app.main.forms.how_the_process_works import HowTheProcessWorks
 from app.main.forms.is_service_person_alive import IsServicePersonAlive
 from app.main.forms.service_branch import ServiceBranch
 from app.main.forms.service_person_details import ServicePersonDetails

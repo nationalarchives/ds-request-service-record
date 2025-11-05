@@ -269,8 +269,7 @@ def test_continue_from_have_you_previously_made_a_request():
 
     sm.continue_from_have_you_previously_made_a_request_form(
         form=make_form(
-            first_name=None,
-            middle_names=None,
+            forenames=None,
             last_name=None,
             place_of_birth=None,
             date_of_death=None,

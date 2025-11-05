@@ -261,13 +261,7 @@ forms:
     forenames:
       label: Forenames (including middle names)
       messages:
-        required: The service person's first name is required
-    first_name:
-      label: First name
-      messages:
-        required: The service person's first name is required
-    middle_names:
-      label: Middle names (optional)
+        required: The service person's forenames are required
     last_name:
       label: Last name
       messages:

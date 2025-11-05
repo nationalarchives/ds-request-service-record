@@ -17,8 +17,7 @@
         <h1 class="tna-heading-xl">{{ content.pages.service_person_details.heading }}</h1>
         <form action="{{ url_for('main.service_person_details') }}" method="post" novalidate>
           {{ form.csrf_token }}
-          {{ form.first_name(params={'headingLevel':2, 'size':'l', 'autocomplete':'off'}) }}
-          {{ form.middle_names(params={'headingLevel':2, 'size':'m', 'autocomplete':'off'}) }}
+          {{ form.forenames(params={'headingLevel':2, 'size':'l', 'autocomplete':'off'}) }}
           {{ form.last_name(params={'headingLevel':2, 'size':'m', 'autocomplete':'off'}) }}
           {{ form.other_last_names(params={'headingLevel':2, 'size':'m', 'autocomplete':'off'}) }}
           {{ form.place_of_birth(params={'headingLevel':2, 'size':'m', 'autocomplete':'off'}) }}
