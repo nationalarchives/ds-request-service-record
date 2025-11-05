@@ -24,8 +24,8 @@ from app.main.forms.service_branch import ServiceBranch
 from app.main.forms.service_person_details import ServicePersonDetails
 from app.main.forms.start_now import StartNow
 from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
-from app.main.forms.were_they_a_commissioned_officer import WasServicePersonAnOfficer
 from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
+from app.main.forms.were_they_a_commissioned_officer import WasServicePersonAnOfficer
 from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 from app.main.forms.your_details import YourDetails
 from app.main.forms.your_postal_address import YourPostalAddress
