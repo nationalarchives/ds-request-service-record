@@ -10,6 +10,7 @@ from app.lib.save_submitted_form_fields_to_session import (
     save_submitted_form_fields_to_session,
 )
 from app.main import bp
+from app.main.forms.before_you_start import BeforeYouStart
 from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
 from app.main.forms.have_you_checked_the_catalogue import HaveYouCheckedTheCatalogue
 from app.main.forms.have_you_previously_made_a_request import (
@@ -54,6 +55,15 @@ def how_the_process_works(form, state_machine):
 
     return render_template(
         "main/how-the-process-works.html", form=form, content=load_content()
+    )
+
+
+@bp.route("/before-you-start/", methods=["GET", "POST"])
+@with_state_machine
+@with_form_prefilled_from_session(BeforeYouStart)
+def before_you_start(form, state_machine):
+    return render_template(
+        "main/before-you-start.html", form=form, content=load_content()
     )
 
 
