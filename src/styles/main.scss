@@ -2,7 +2,7 @@
 @use "@nationalarchives/frontend/nationalarchives/tools/a11y";
 
 .hide-legend {
-  legend {
+  .tna-form-item__header {
     @include a11y.visually-hidden;
   }
 }

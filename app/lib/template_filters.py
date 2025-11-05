@@ -19,6 +19,6 @@ def parse_markdown_links(s):
 
     def replacer(match):
         text, url = match.group(1), match.group(2)
-        return f'<a href="{url}">{text}</a>'
+        return f'<a href="{url}" target="_blank" rel="noreferrer noopener">{text}</a>'
 
     return pattern.sub(replacer, s)
