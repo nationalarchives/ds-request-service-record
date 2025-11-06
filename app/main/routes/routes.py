@@ -11,6 +11,7 @@ from app.lib.save_submitted_form_fields_to_session import (
 )
 from app.main import bp
 from app.main.forms.before_you_start import BeforeYouStart
+from app.main.forms.check_ancestry import CheckAncestry
 from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
 from app.main.forms.have_you_checked_the_catalogue import HaveYouCheckedTheCatalogue
 from app.main.forms.have_you_previously_made_a_request import (
@@ -62,8 +63,31 @@ def how_the_process_works(form, state_machine):
 @with_state_machine
 @with_form_prefilled_from_session(BeforeYouStart)
 def before_you_start(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_before_you_start_form()
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/before-you-start.html", form=form, content=load_content()
+    )
+
+
+@bp.route("/are-you-sure-you-want-to-cancel/", methods=["GET", "POST"])
+@with_state_machine
+@with_form_prefilled_from_session(BeforeYouStart)
+def are_you_sure_you_want_to_cancel(form, state_machine):
+    return render_template(
+        "main/are-you-sure-you-want-to-cancel.html", form=form, content=load_content()
+    )
+
+
+@bp.route("/check-ancestry/", methods=["GET", "POST"])
+@with_state_machine
+@with_form_prefilled_from_session(CheckAncestry)
+def check_ancestry(form, state_machine):
+    return render_template(
+        "main/check-ancestry.html",
+        form=form,
+        content=load_content(),
     )
 
 
