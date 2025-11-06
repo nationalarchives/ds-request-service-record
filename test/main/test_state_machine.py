@@ -35,6 +35,11 @@ def test_continue_from_start_form_sets_route():
     assert sm.current_state.id == "how_the_process_works_form"
     assert sm.route_for_current_state == MultiPageFormRoutes.HOW_THE_PROCESS_WORKS.value
 
+def test_continue_from_before_you_start_sets_route():
+    sm = RoutingStateMachine()
+    sm.continue_from_before_you_start_form()
+    assert sm.current_state.id == "check_ancestry_page"
+    assert sm.route_for_current_state == MultiPageFormRoutes.CHECK_ANCESTRY.value
 
 @pytest.mark.parametrize(
     "answer,expected_state,expected_route",

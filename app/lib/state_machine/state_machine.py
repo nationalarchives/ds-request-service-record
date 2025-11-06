@@ -34,10 +34,16 @@ class RoutingStateMachine(StateMachine):
     how_the_process_works_form = State(
         enter="entering_how_the_process_works_form", final=True
     )
+    check_ancestry_page = State(enter="entering_check_ancestry_page", final=True)
     before_you_start_form = State(enter="entering_before_you_start_form", final=True)
-    have_you_checked_the_catalogue_form = State(
-        enter="entering_have_you_checked_the_catalogue_form", final=True
-    )
+    # This state has been temporarily disabled pending confirmation from UCD that it is
+    # still required. Why did it need to be commented out? Because the page that had
+    # come before it now goes somewhere else, and a state machine cannot have dangling
+    # states that are not reachable.
+
+    # have_you_checked_the_catalogue_form = State(
+    #     enter="entering_have_you_checked_the_catalogue_form", final=True
+    # )
     search_the_catalogue_page = State(
         enter="entering_search_the_catalogue_page", final=True
     )
@@ -105,9 +111,7 @@ class RoutingStateMachine(StateMachine):
 
     continue_from_how_the_process_works_form = initial.to(before_you_start_form)
 
-    continue_from_before_you_start_form = initial.to(
-        have_you_checked_the_catalogue_form
-    )
+    continue_from_before_you_start_form = initial.to(check_ancestry_page)
 
     continue_from_have_you_checked_the_catalogue_form = initial.to(
         service_person_alive_form, cond="has_checked_catalogue"
@@ -185,10 +189,15 @@ class RoutingStateMachine(StateMachine):
     def entering_before_you_start_form(self, event, state):
         self.route_for_current_state = MultiPageFormRoutes.BEFORE_YOU_START.value
 
-    def entering_have_you_checked_the_catalogue_form(self, event, state):
-        self.route_for_current_state = (
-            MultiPageFormRoutes.HAVE_YOU_CHECKED_THE_CATALOGUE.value
-        )
+    def entering_check_ancestry_page(self, event, state):
+        self.route_for_current_state = MultiPageFormRoutes.CHECK_ANCESTRY.value
+
+    # This state has been temporarily disabled pending confirmation from UCD that it is
+    # still required. I've asked on 6/11
+    # def entering_have_you_checked_the_catalogue_form(self, event, state):
+    #     self.route_for_current_state = (
+    #         MultiPageFormRoutes.HAVE_YOU_CHECKED_THE_CATALOGUE.value
+    #     )
 
     def entering_search_the_catalogue_page(self, event, state):
         self.route_for_current_state = MultiPageFormRoutes.SEARCH_THE_CATALOGUE.value

@@ -105,6 +105,15 @@ pages:
         - |
           The application cannot be saved part way through. Please make sure you are ready to submit 
           your request in one session.
+  check_ancestry:
+    heading: [Placeholder heading]
+    paragraphs:
+      - |
+        [Placeholder paragraph]
+  are_you_sure_you_want_to_cancel:
+    heading: Are you sure you want to cancel?
+    paragraphs:
+      - If you cancel now, any information you have entered will be lost.
   have_you_checked_the_catalogue:
     heading: Have you checked if this record is available in our catalogue?
     paragraph: A portion of the service records we hold are listed in our catalogue and are available to order from there.
@@ -312,6 +321,8 @@ forms:
       label: I have all the mandatory information to continue with my request now
       messages:
         required: You must confirm you have the mandatory information before starting
+    check_ancestry:
+      call_to_action: Continued
     have_you_checked_the_catalogue:
       options:
         yes: Yes
