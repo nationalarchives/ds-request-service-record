@@ -6,7 +6,7 @@ test.describe("The 'Have you checked the catalogue?' form", () => {
     {
       label: "Yes",
       url: Paths.IS_SERVICE_PERSON_ALIVE,
-      heading: /Is the service person still alive\?/,
+      heading: /Is the service person alive\?/,
       description:
         "when 'Yes' is selected, presents the 'Is the service person still alive?' page ",
     },
@@ -35,7 +35,7 @@ test.describe("The 'Have you checked the catalogue?' form", () => {
       {
         label: "Yes",
         url: Paths.IS_SERVICE_PERSON_ALIVE,
-        heading: /Is the service person still alive\?/,
+        heading: /Is the service person alive\?/,
         description:
           "when 'Yes' is selected, presents the 'Is the service person still alive?' page",
       },
@@ -53,7 +53,7 @@ test.describe("The 'Have you checked the catalogue?' form", () => {
       await page.getByRole("button", { name: /Continue/i }).click();
       await expect(page).toHaveURL(Paths.HAVE_YOU_CHECKED_THE_CATALOGUE);
       await expect(page.locator(".tna-fieldset__error")).toHaveText(
-        /Choosing an option is required/,
+        /Tell us if you have checked our catalogue/,
       );
     });
 

@@ -20,7 +20,7 @@ test.describe("the 'What was their date of birth?' form", () => {
       }) => {
         await page.getByRole("button", { name: /Continue/i }).click();
         await expect(page.locator(".tna-fieldset__error")).toHaveText(
-          /The service person's date of birth is required/,
+          /Enter the service person's date of birth/,
         );
       });
 
@@ -34,7 +34,7 @@ test.describe("the 'What was their date of birth?' form", () => {
         await page.getByLabel("Year").fill(nextYear);
         await page.getByRole("button", { name: /Continue/i }).click();
         await expect(page.locator(".tna-fieldset__error")).toHaveText(
-          /The service person's date of birth must be in the past/,
+          /The date of birth must be in the past/,
         );
       });
 
