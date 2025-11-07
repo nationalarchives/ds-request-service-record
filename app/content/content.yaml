@@ -113,7 +113,13 @@ pages:
   are_you_sure_you_want_to_cancel:
     heading: Are you sure you want to cancel?
     paragraphs:
-      - If you cancel now, any information you have entered will be lost.
+      - You will need to start a new request from the beginning if you choose to cancel.
+    no_continue: "No"
+  request_cancelled:
+    heading: You have cancelled your request
+    paragraphs:
+      - No information has been submitted to us. To send a new request for a military service record, please start a new request form.
+    start_new_request: Start a new request
   have_you_checked_the_catalogue:
     heading: Have you checked if this record is available in our catalogue?
     paragraph: A portion of the service records we hold are listed in our catalogue and are available to order from there.
@@ -321,12 +327,14 @@ forms:
       label: I have all the mandatory information to continue with my request now
       messages:
         required: You must confirm you have the mandatory information before starting
+    are_you_sure_you_want_to_cancel:
+      call_to_action: "Yes"
     check_ancestry:
-      call_to_action: Continued
+      call_to_action: Continue
     have_you_checked_the_catalogue:
       options:
-        yes: Yes
-        no: No
+        yes: "Yes"
+        no: "No"
       messages:
         required: Choosing an option is required
       call_to_action: Continue
