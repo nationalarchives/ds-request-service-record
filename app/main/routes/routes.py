@@ -10,6 +10,7 @@ from app.lib.save_submitted_form_fields_to_session import (
     save_submitted_form_fields_to_session,
 )
 from app.main import bp
+from app.main.forms.are_you_sure_you_want_to_cancel import AreYouSureYouWantToCancel
 from app.main.forms.before_you_start import BeforeYouStart
 from app.main.forms.check_ancestry import CheckAncestry
 from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
@@ -73,11 +74,19 @@ def before_you_start(form, state_machine):
 
 @bp.route("/are-you-sure-you-want-to-cancel/", methods=["GET", "POST"])
 @with_state_machine
-@with_form_prefilled_from_session(BeforeYouStart)
+@with_form_prefilled_from_session(AreYouSureYouWantToCancel)
 def are_you_sure_you_want_to_cancel(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_are_you_sure_you_want_to_cancel_form()
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/are-you-sure-you-want-to-cancel.html", form=form, content=load_content()
     )
+
+
+@bp.route("/request-cancelled/", methods=["GET"])
+def request_cancelled():
+    return render_template("main/request-cancelled.html", content=load_content())
 
 
 @bp.route("/check-ancestry/", methods=["GET", "POST"])

@@ -3,26 +3,30 @@
 {%- set pageTitle = content.app.title -%}
 
 {% block beforeContent %}
-  {{ modFoiBreadcrumbs({'breadcrumbItems': breadcrumbItems, 'hasAccentBackground': true}) }}
+  {{ modFoiBreadcrumbs({'breadcrumbItems': breadcrumbItems}) }}
 {% endblock %}
 
 {% block content %}
-<div class="tna-section tna-background-accent-light">
-  <div class="tna-container">
-    <div
-      class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
-      <h1 class="tna-heading-xl">{{ content.pages.are_you_sure_you_want_to_cancel.heading }}</h1>
+  <div class="tna-section">
+    <div class="tna-container">
+      <div
+        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+        <h1 class="tna-heading-xl">{{ content.pages.are_you_sure_you_want_to_cancel.heading }}</h1>
+
+        {% for paragraph in content.pages.are_you_sure_you_want_to_cancel.paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+        <form action="{{ url_for('main.are_you_sure_you_want_to_cancel') }}" method="post" id="cancel-request" novalidate>
+          {{ form.csrf_token }}
+          <div class="tna-button-group ">
+            <a href="{{ url_for('main.before_you_start') }}" class="tna-button tna-button--plain">{{ content.pages.are_you_sure_you_want_to_cancel.no_continue }}</a>
+            {# TODO: Use 'accent' parameter here. Only using 'classes' param because I can't work out why the 'accent' parameter isn't working. #}
+            {{ form.submit(params={'classes': 'tna-button--accent'}) }}
+          </div>
+        </form>
+      </div>
     </div>
   </div>
-</div>
-<div class="tna-section">
-  <div class="tna-container">
-    <div
-      class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
-      {% for paragraph in content.pages.are_you_sure_you_want_to_cancel.paragraphs %}
-        <p>{{ paragraph }}</p>
-      {% endfor %}
-    </div>
-  </div>
-</div>
+
+
 {% endblock %}
