@@ -9,7 +9,7 @@ test.describe("the 'Is the person still alive?' form", () => {
 
   test("has the correct heading", async ({ page }) => {
     await expect(page.locator("h1")).toHaveText(
-      /Is the service person still alive\?/,
+      /Is the service person alive\?/,
     );
   });
 
@@ -17,7 +17,7 @@ test.describe("the 'Is the person still alive?' form", () => {
     test("without a submission, shows an error", async ({ page }) => {
       await page.getByRole("button", { name: /Continue/i }).click();
       await expect(page.locator(".tna-fieldset__error")).toHaveText(
-        /An answer to this question is required/,
+        /Tell us if the service person is alive/,
       );
     });
   });
@@ -33,7 +33,7 @@ test.describe("the 'Is the person still alive?' form", () => {
     {
       label: "No",
       url: Paths.SELECT_SERVICE_BRANCH,
-      heading: /Which military branch did the person serve in\?/,
+      heading: /What was the person's service branch\?/,
       description: "when 'No' is selected, presents the 'Service branch' form",
     },
   ];

@@ -318,7 +318,7 @@ pages:
 forms:
   fields:
     start:
-      call_to_action: Continue
+      call_to_action: Start now
     how_the_process_works:
       call_to_action: Continue
     before_you_start:
@@ -336,63 +336,63 @@ forms:
         yes: "Yes"
         no: "No"
       messages:
-        required: Choosing an option is required
+        required: Tell us if you have checked our catalogue
       call_to_action: Continue
     is_service_person_alive:
-      label: Is the service person still alive?
+      label: Is the service person alive?
       messages:
-        required: An answer to this question is required
+        required: Tell us if the service person is alive
     were_they_a_commissioned_officer:
       label: Were they a commissioned officer?
       messages:
-        required: Choosing an option is required
+        required: Tell us if the service person was a commissioned officer
       call_to_action: Continue
     we_may_hold_this_record:
       call_to_action: Continue
     forenames:
       label: Forenames (including middle names)
       messages:
-        required: The service person's forenames are required
+        required: Enter forenames
     last_name:
       label: Last name
       messages:
-        required: The service person's last name is required
+        required: Enter a last name
     other_last_names:
       label: Other last names (optional)
     date_of_birth:
       label: What was their date of birth?
       description: For example, 31 3 1910.
       messages:
-        required: The service person's date of birth is required
-        past_date: The service person's date of birth must be in the past
+        required: Enter the service person's date of birth
+        past_date: The date of birth must be in the past
       call_to_action: Continue
     place_of_birth:
       label: Place of birth (optional)
     date_of_death:
       label: Date of death (optional)
-      description: Enter the service person's date of death in the format DD MM YYYY
+      description: The date of death must include a day, month, and year
       messages:
-        past_date: The service person's date of death must be in the past
+        past_date: The date of death must be in the past
     do_you_have_a_proof_of_death:
       label: Do you have a proof of death?
       messages:
-        required: Choosing an option is required
+        required: Tell us if you have a proof of death
       call_to_action: Continue
     upload_a_proof_of_death:
       label: Upload a file
       messages:
-        required: Uploading a file is required
-        file_size: The maximum file size is 5MB
-        file_allowed: Files must be in JPG, PNG or PDF format
+        required: Upload a proof of death
+        file_size: The selected file must be smaller than 5MB
+        file_allowed: The selected file must be a JPG, GIF or PNG
       call_to_action: Continue
     service_number:
       label: Service number (optional)
     regiment:
       label: Regiment (optional)
     service_branch:
-      label: Which military branch did the person serve in?
+      label: What was the person's service branch?
       messages:
-        required: The person's service branch is required
+        required: Select the branch they served in
     additional_information:
       label: Additional information (optional)
       description: |
@@ -404,12 +404,12 @@ forms:
     evidence_of_death:
       label: Evidence of death (optional)
       messages:
-        file_allowed: File type not allowed. Only .jpg, .png, .gif files are accepted.
-        file_size: File size must be less than 20MB.
+        file_allowed: The selected file must be a JPG, GIF or PNG
+        file_size: The selected file must be smaller than 5MB
     died_in_service:
       label: Did they die in service? (optional)
       messages:
-        required: Choosing an option for death in service is required
+        required: Select yes if the service person died in service
     have_you_previously_made_a_request:
       with_mod:
         label: Have you made a request for this record with the Ministry of Defence before? (optional)
@@ -426,33 +426,33 @@ forms:
     requester_first_name:
       label: First name
       messages:
-        required: Your first name is required
+        required: Enter your first name
     requester_last_name:
       label: Last name
       messages:
-        required: Your last name is required
+        required: Enter you last name
     does_not_have_email:
       label: Email address
       description: I do not have an email address
     contact_preferences:
       label: How would you like to be contacted?
       messages:
-        required: Choosing how you would like to be contacted is required
+        required: Tell us how we can contact you
     requester_email:
       label: Email
       messages:
-        required: Your email address is required so that we can contact you. If you do not have an email address, please select 'I do not have an email address' below
-        address_format: Please enter a valid email address
+        required: Enter an email address in the correct format, like name@example.com. If you do not have an email address, please select 'I do not have an email address' below
+        address_format: Enter an email address in the correct format, like name@example.com
     requester_address_line_1:
       label: Address line 1
       messages:
-        required: First line of your address is required
+        required: Enter address line 1, typically the building and street
     requester_address_line_2:
       label: Address line 2 (optional)
     requester_town_city:
       label: Town or city
       messages:
-        required: Your town or city is required
+        required: Enter town or city
     requester_county:
       label: County (optional)
     requester_postcode:
@@ -461,7 +461,7 @@ forms:
       label: Country
       prompt_to_select: Select a country
       messages:
-        required: Country is required
+        required: Select a country
     proceed_to_payment:
       call_to_action: Proceed to make payment using GOV.UK Pay
     how_do_you_want_your_order_processed:
@@ -477,4 +477,4 @@ forms:
         printed: Printed full record check
         continue: Continue with a full record check order
       messages:
-        no_radio_selected: You must select a processing option to continue
+        no_radio_selected: Select how you would like your order processed

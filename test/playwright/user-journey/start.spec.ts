@@ -16,11 +16,11 @@ test.describe("the service start form", () => {
     test("takes the user to the 'How the process works' page", async ({
       page,
     }) => {
-      await page.getByRole("button", { name: /Continue/i }).click();
+      await page.getByRole("button", { name: /Start now/i }).click();
       await expect(page).toHaveURL(Paths.HOW_THE_PROCESS_WORKS);
     });
     test("has the correct heading", async ({ page }) => {
-      await page.getByRole("button", { name: /Continue/i }).click();
+      await page.getByRole("button", { name: /Start now/i }).click();
       await expect(page).toHaveURL(Paths.HOW_THE_PROCESS_WORKS);
       await expect(page.locator("h1")).toHaveText(/How the process works/);
     });

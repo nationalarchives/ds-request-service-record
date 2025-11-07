@@ -27,10 +27,10 @@ test.describe("the 'About the service person form?' form", () => {
         await page.getByRole("button", { name: /Continue/i }).click();
         await expect(page.locator(".tna-form-item__error")).toHaveCount(2);
         await expect(page.locator(".tna-form-item__error").first()).toHaveText(
-          /The service person's forenames are required/,
+          /Enter forenames/,
         );
         await expect(page.locator(".tna-form-item__error").nth(1)).toHaveText(
-          /The service person's last name is required/,
+          /Enter a last name/,
         );
       });
     });
