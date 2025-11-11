@@ -18,7 +18,7 @@ class ServiceRecordRequest(db.Model):
     date_of_birth = db.Column(db.String(10))
     date_of_death = db.Column(db.String(10), nullable=True)
     died_in_service = db.Column(db.String(8))
-    first_name = db.Column(db.String(128))
+    forenames = db.Column(db.String(128))
     last_name = db.Column(db.String(128))
     mod_reference = db.Column(db.String(64), nullable=True)
     catalogue_reference = db.Column(db.String(64), nullable=True)
