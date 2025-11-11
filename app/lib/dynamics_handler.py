@@ -50,15 +50,27 @@ DYNAMICS_PAYMENT_FIELD_MAP = [
 
 
 def send_request_to_dynamics(record: ServiceRecordRequest) -> None:
-    # TODO: Check "status" of record, based on defined logic (used in Dynamics email subject, e.g. FOICD, DPA, etc)
-
-    tagged_data = generate_tagged_request(record)
-
     send_email(
         to=current_app.config["DYNAMICS_INBOX"],
-        subject=f"New Service Record Request: {record.id}",
-        body=tagged_data,
+        subject=subject_status(record),
+        body=generate_tagged_request(record),
     )
+
+
+def subject_status(record: ServiceRecordRequest) -> str:
+    dob = datetime.strptime(record.date_of_birth, "%Y-%m-%d")
+    age = (datetime.now() - dob).days / 365.25
+
+    if age >= 115:
+        closure_status = "FOIOP"
+    else:
+        if record.evidence_of_death:
+            closure_status = "FOICD"
+        else:
+            closure_status = "FOICDN"
+
+    option = "1" if record.processing_option == "standard" else "2"
+    return f"? FOI DIRECT MOD {closure_status}{option}"
 
 
 def send_payment_to_dynamics(payment: DynamicsPayment) -> None:
