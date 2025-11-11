@@ -361,7 +361,7 @@ def test_continue_from_how_do_you_want_your_order_processed(processing_option):
         )
     )
     assert sm.current_state.id == "gov_uk_pay_redirect"
-    assert sm.route_for_current_state == MultiPageFormRoutes.SEND_TO_GOV_PAY.value
+    assert sm.route_for_current_state == MultiPageFormRoutes.SEND_TO_GOV_UK_PAY.value
 
 
 def test_continue_from_gov_uk_pay():

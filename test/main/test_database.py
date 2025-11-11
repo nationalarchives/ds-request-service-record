@@ -39,7 +39,7 @@ def test_add_service_record_request(session):
         {
             "id": "testrecordid123",
             "forenames": "John",
-            "lastname": "Doe",
+            "last_name": "Doe",
             "requester_email": "john.doe@email.com",
             "died_in_service": "yes",
             "requester_address1": "123 Main St",
@@ -79,7 +79,7 @@ def test_delete_service_record_request(session):
     add_service_record_request(
         {
             "forenames": "John",
-            "lastname": "Doe",
+            "last_name": "Doe",
             "requester_email": "john.doe@email.com",
             "died_in_service": "yes",
             "requester_address1": "123 Main St",

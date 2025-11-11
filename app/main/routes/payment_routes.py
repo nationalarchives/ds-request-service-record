@@ -11,6 +11,7 @@ from app.lib.db_handler import (
     get_dynamics_payment,
     get_gov_uk_dynamics_payment,
     get_payment_id_from_record_id,
+    transform_form_data_to_record,
 )
 from app.lib.decorators.state_machine_decorator import with_state_machine
 from app.lib.gov_uk_pay import (
@@ -28,7 +29,7 @@ from flask import current_app, redirect, render_template, request, session, url_
 
 
 @bp.route("/send-to-gov-uk-pay/")
-def send_to_gov_pay():
+def send_to_gov_uk_pay():
     content = load_content()
     form_data = session.get("form_data", {})
     requester_email = form_data.get("requester_email", None)
@@ -54,14 +55,19 @@ def send_to_gov_pay():
     if not payment_url or not payment_id:
         return redirect(url_for("main.payment_link_creation_failed"))
 
+    transformed_form_data = transform_form_data_to_record(form_data)
+
     data = {
-        **form_data,
+        **transformed_form_data,
         "id": id,
         "payment_id": payment_id,
         "created_at": datetime.now(),
     }
+    
+    record = add_service_record_request(data)
 
-    add_service_record_request(data)
+    if record is None:
+        return redirect(url_for("main.payment_link_creation_failed"))
 
     return redirect(payment_url)
 
@@ -128,9 +134,8 @@ def handle_gov_uk_pay_request_response():
         return "Some sort of error"  # TODO: We need to make a proper error page for this to show we couldn't connect to GOV.UK Pay API - maybe provide the GOV.UK Pay ID and to contact webmaster?
 
     if validate_payment(gov_uk_payment_data):
-        provider_id = gov_uk_payment_data.get("provider_id", None)
         try:
-            process_valid_request(gov_uk_payment_id, provider_id)
+            process_valid_request(gov_uk_payment_id, gov_uk_payment_data)
         except Exception as e:
             current_app.logger.error(
                 f"Error processing valid request of payment ID {gov_uk_payment_id}: {e}"

@@ -421,8 +421,6 @@ forms:
     case_reference_number:
       label: Case reference number (optional)
       description: If you have contacted us before and have a case reference number, please enter it here. This might start with 'CAS' or 'SPR'
-    requester_title:
-      label: Title (optional)
     requester_first_name:
       label: First name
       messages:

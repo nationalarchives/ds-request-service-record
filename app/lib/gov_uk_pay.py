@@ -1,3 +1,4 @@
+from datetime import datetime
 from enum import Enum
 
 import requests
@@ -75,8 +76,14 @@ def create_payment(
     return response.json()
 
 
-def process_valid_request(payment_id: str, provider_id: str) -> None:
+def process_valid_request(payment_id: str, payment_data: dict) -> None:
     record = get_service_record_request(payment_id=payment_id)
+
+    record.provider_id = payment_data.get("provider_id", None)
+    record.amount_received = f"£{payment_data.get('amount')/100:.2f}" if payment_data.get("amount") is not None else None
+    record.payment_reference = payment_data.get("reference", "")
+    record.payment_date = datetime.now()
+    db.session.commit()
 
     if record is None:
         raise ValueError(f"Service record not found for payment ID: {payment_id}")
