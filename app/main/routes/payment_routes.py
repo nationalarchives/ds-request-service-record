@@ -22,6 +22,7 @@ from app.lib.gov_uk_pay import (
     validate_payment,
 )
 from app.lib.models import db
+from app.lib.price_calculations import calculate_amount_based_on_form_data
 from app.main import bp
 from app.main.forms.proceed_to_pay import ProceedToPay
 from flask import current_app, redirect, render_template, request, session, url_for
@@ -35,8 +36,10 @@ def send_to_gov_uk_pay():
 
     id = str(uuid.uuid4())
 
+    amount = calculate_amount_based_on_form_data(form_data)
+
     response = create_payment(
-        amount=1000,
+        amount=amount,
         description=content["app"]["title"],
         reference="ServiceRecordRequest",
         email=requester_email,

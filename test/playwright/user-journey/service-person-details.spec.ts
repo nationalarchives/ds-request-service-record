@@ -27,10 +27,10 @@ test.describe("the 'About the service person form?' form", () => {
         await page.getByRole("button", { name: /Continue/i }).click();
         await expect(page.locator(".tna-form-item__error")).toHaveCount(2);
         await expect(page.locator(".tna-form-item__error").first()).toHaveText(
-          /The service person's first name is required/,
+          /Enter forenames/,
         );
         await expect(page.locator(".tna-form-item__error").nth(1)).toHaveText(
-          /The service person's last name is required/,
+          /Enter a last name/,
         );
       });
     });
@@ -38,7 +38,7 @@ test.describe("the 'About the service person form?' form", () => {
       test("with only the required fields filled in, the user is taken to the next page", async ({
         page,
       }) => {
-        await page.getByLabel("First name").fill("Thomas");
+        await page.getByLabel("Forenames").fill("Thomas");
         await page.getByLabel("Last name", { exact: true }).fill("Duffus");
         await page.getByRole("button", { name: /Continue/i }).click();
         await expect(page).toHaveURL(Paths.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
@@ -46,7 +46,7 @@ test.describe("the 'About the service person form?' form", () => {
       test("with all fields filled in, the user is taken to the next page", async ({
         page,
       }) => {
-        await page.getByLabel("First name").fill("Thomas");
+        await page.getByLabel("Forenames").fill("Thomas");
         await page.getByLabel("Middle names").fill("Duffus");
         await page.getByLabel("Last name", { exact: true }).fill("Hardy");
         await page.getByLabel("Service number").fill("123456");

@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { Paths } from "../lib/constants";
 
-test.describe("the 'Which military branch did the person serve in?' form", () => {
+test.describe("the service branch form", () => {
   const selectionMappings = [
     {
       branchLabel: "British Army",
@@ -37,7 +37,7 @@ test.describe("the 'Which military branch did the person serve in?' form", () =>
 
   test("has the correct heading", async ({ page }) => {
     await expect(page.locator("h1")).toHaveText(
-      /Which military branch did the person serve in\?/,
+      /What was the person's service branch\?/,
     );
   });
 
@@ -47,7 +47,7 @@ test.describe("the 'Which military branch did the person serve in?' form", () =>
     }) => {
       await page.getByRole("button", { name: /Continue/i }).click();
       await expect(page.locator(".tna-fieldset__error")).toHaveText(
-        /The person's service branch is required/,
+        /Select the branch they served in/,
       );
     });
     selectionMappings.forEach(({ branchLabel, nextUrl, expectedHeading }) => {

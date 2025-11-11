@@ -10,6 +10,9 @@ from app.lib.save_submitted_form_fields_to_session import (
     save_submitted_form_fields_to_session,
 )
 from app.main import bp
+from app.main.forms.are_you_sure_you_want_to_cancel import AreYouSureYouWantToCancel
+from app.main.forms.before_you_start import BeforeYouStart
+from app.main.forms.check_ancestry import CheckAncestry
 from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
 from app.main.forms.have_you_checked_the_catalogue import HaveYouCheckedTheCatalogue
 from app.main.forms.have_you_previously_made_a_request import (
@@ -18,13 +21,14 @@ from app.main.forms.have_you_previously_made_a_request import (
 from app.main.forms.how_do_you_want_your_order_processed import (
     HowDoYouWantYourOrderProcessed,
 )
+from app.main.forms.how_the_process_works import HowTheProcessWorks
 from app.main.forms.is_service_person_alive import IsServicePersonAlive
 from app.main.forms.service_branch import ServiceBranch
 from app.main.forms.service_person_details import ServicePersonDetails
 from app.main.forms.start_now import StartNow
 from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
-from app.main.forms.were_they_a_commissioned_officer import WasServicePersonAnOfficer
 from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
+from app.main.forms.were_they_a_commissioned_officer import WasServicePersonAnOfficer
 from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 from app.main.forms.your_details import YourDetails
 from app.main.forms.your_postal_address import YourPostalAddress
@@ -41,6 +45,59 @@ def start(form, state_machine):
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template("main/start.html", form=form, content=load_content())
+
+
+@bp.route("/how-the-process-works/", methods=["GET", "POST"])
+@with_state_machine
+@with_form_prefilled_from_session(HowTheProcessWorks)
+def how_the_process_works(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_how_the_process_works_form()
+        return redirect(url_for(state_machine.route_for_current_state))
+
+    return render_template(
+        "main/how-the-process-works.html", form=form, content=load_content()
+    )
+
+
+@bp.route("/before-you-start/", methods=["GET", "POST"])
+@with_state_machine
+@with_form_prefilled_from_session(BeforeYouStart)
+def before_you_start(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_before_you_start_form()
+        return redirect(url_for(state_machine.route_for_current_state))
+    return render_template(
+        "main/before-you-start.html", form=form, content=load_content()
+    )
+
+
+@bp.route("/are-you-sure-you-want-to-cancel/", methods=["GET", "POST"])
+@with_state_machine
+@with_form_prefilled_from_session(AreYouSureYouWantToCancel)
+def are_you_sure_you_want_to_cancel(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_are_you_sure_you_want_to_cancel_form()
+        return redirect(url_for(state_machine.route_for_current_state))
+    return render_template(
+        "main/are-you-sure-you-want-to-cancel.html", form=form, content=load_content()
+    )
+
+
+@bp.route("/request-cancelled/", methods=["GET"])
+def request_cancelled():
+    return render_template("main/request-cancelled.html", content=load_content())
+
+
+@bp.route("/check-ancestry/", methods=["GET", "POST"])
+@with_state_machine
+@with_form_prefilled_from_session(CheckAncestry)
+def check_ancestry(form, state_machine):
+    return render_template(
+        "main/check-ancestry.html",
+        form=form,
+        content=load_content(),
+    )
 
 
 @bp.route("/have-you-checked-the-catalogue/", methods=["GET", "POST"])

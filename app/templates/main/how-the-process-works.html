@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{%- set pageTitle = content.app.title -%}
+
+{% block beforeContent %}
+  {{ modFoiBreadcrumbs({'breadcrumbItems': breadcrumbItems}) }}
+{% endblock %}
+
+{% block content %}
+  <div class="tna-section">
+    <div class="tna-container">
+      <div
+        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+        <h1 class="tna-heading-xl">{{ content.pages.how_the_process_works.heading }}</h1>
+        {% for paragraph in content.pages.how_the_process_works.paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+        <h2 class="tna-heading-s">{{ content.pages.how_the_process_works.sub_heading }}</h2>
+        <ol class="process-steps tna-!--margin-top-l">
+          <li>
+            <span><i class="fa-solid fa-users process-icon"></i><i class="fa-solid fa-chevron-down chevron-icon"></i></span>
+            <span>{{ content.pages.how_the_process_works.steps.advisor_check }}</span>
+          </li>
+          <li>
+            <span><i class="fa-solid fa-box-open process-icon"></i><i class="fa-solid fa-chevron-down chevron-icon"></i></span>
+            <span>{{ content.pages.how_the_process_works.steps.box_retrieved }}</span>
+          </li>
+          <li>
+            <span><i class="fa-solid fa-van-shuttle process-icon"></i><i class="fa-solid fa-chevron-down chevron-icon"></i></span>
+            <span>{{ content.pages.how_the_process_works.steps.transported_to_us }}</span>
+          </li>
+          <li>
+            <span><i class="fa-solid fa-file process-icon"></i><i class="fa-solid fa-chevron-down chevron-icon"></i></span>
+            <span>{{ content.pages.how_the_process_works.steps.scanned }}</span>
+          </li>
+          <li>
+            <span><i class="fa-solid fa-highlighter process-icon"></i><i class="fa-solid fa-chevron-down chevron-icon"></i></span>
+            <span>{{ content.pages.how_the_process_works.steps.sensitivity_review }}</span>
+          </li>
+          <li>
+            <span><i class="fa-solid fa-envelope process-icon"></i></span>
+            <span>{{ content.pages.how_the_process_works.steps.sent_to_you }}</span>
+          </li>
+        </ol>
+        <form action="{{ url_for('main.how_the_process_works') }}" method="post" novalidate>
+          {{ form.csrf_token }}
+          <div class="tna-button-group">
+            {{ backLink(url_for('main.start')) }}
+            {# TODO: Use 'accent' parameter here. Only using 'classes' param because I can't work out why the 'accent' parameter isn't working. #}
+            {{ form.submit(params={'classes': 'tna-button--accent'}) }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

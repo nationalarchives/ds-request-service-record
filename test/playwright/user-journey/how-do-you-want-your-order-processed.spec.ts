@@ -23,7 +23,7 @@ test.describe("how do you want your order processed", () => {
           .click();
         await expect(page.locator(".tna-fieldset__error")).toHaveCount(1);
         await expect(page.locator(".tna-fieldset__error").first()).toHaveText(
-          /You must select a processing option to continue/,
+          /Select how you would like your order processed/,
         );
       });
       ["Digital standard", "Printed standard"].forEach((option) => {
@@ -49,7 +49,7 @@ test.describe("how do you want your order processed", () => {
           .click();
         await expect(page.locator(".tna-fieldset__error")).toHaveCount(1);
         await expect(page.locator(".tna-fieldset__error").first()).toHaveText(
-          /You must select a processing option to continue/,
+          /Select how you would like your order processed/,
         );
       });
       ["Digital full record check", "Printed full record check"].forEach(

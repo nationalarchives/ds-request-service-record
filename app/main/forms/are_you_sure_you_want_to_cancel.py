@@ -8,10 +8,10 @@ from wtforms import (
 )
 
 
-class StartNow(FlaskForm):
+class AreYouSureYouWantToCancel(FlaskForm):
     content = load_content()
 
     submit = SubmitField(
-        get_field_content(content, "start", "call_to_action"),
+        get_field_content(content, "are_you_sure_you_want_to_cancel", "call_to_action"),
         widget=TnaSubmitWidget(),
     )

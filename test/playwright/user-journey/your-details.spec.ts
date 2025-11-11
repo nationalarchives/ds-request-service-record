@@ -17,13 +17,13 @@ test.describe("your details", () => {
       await page.getByRole("button", { name: /Continue/i }).click();
       await expect(page.locator(".tna-form-item__error")).toHaveCount(3);
       await expect(page.locator(".tna-form-item__error").first()).toHaveText(
-        /Your first name is required/,
+        /Enter your first name/,
       );
       await expect(page.locator(".tna-form-item__error").nth(1)).toHaveText(
-        /Your last name is required/,
+        /Enter you last name/,
       );
       await expect(page.locator(".tna-form-item__error").nth(2)).toHaveText(
-        /Your email address is required so that we can contact you. If you do not have an email address, please select 'I do not have an email address' below/,
+        /Enter an email address in the correct format, like name@example.com. If you do not have an email address, please select 'I do not have an email address' below/,
       );
     });
 

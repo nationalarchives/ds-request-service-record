@@ -31,9 +31,21 @@ class RoutingStateMachine(StateMachine):
 
     """
     initial = State(initial=True)  # The initial state of our machine
-    have_you_checked_the_catalogue_form = State(
-        enter="entering_have_you_checked_the_catalogue_form", final=True
+    how_the_process_works_form = State(
+        enter="entering_how_the_process_works_form", final=True
     )
+    check_ancestry_page = State(enter="entering_check_ancestry_page", final=True)
+    before_you_start_form = State(enter="entering_before_you_start_form", final=True)
+    request_cancelled_page = State(enter="entering_request_cancelled_page", final=True)
+
+    # This state has been temporarily disabled pending confirmation from UCD that it is
+    # still required. Why did it need to be commented out? Because the page that had
+    # come before it now goes somewhere else, and a state machine cannot have dangling
+    # states that are not reachable.
+
+    # have_you_checked_the_catalogue_form = State(
+    #     enter="entering_have_you_checked_the_catalogue_form", final=True
+    # )
     search_the_catalogue_page = State(
         enter="entering_search_the_catalogue_page", final=True
     )
@@ -97,7 +109,15 @@ class RoutingStateMachine(StateMachine):
     that act as predicates that resolve to a boolean
     """
 
-    continue_from_start_form = initial.to(have_you_checked_the_catalogue_form)
+    continue_from_start_form = initial.to(how_the_process_works_form)
+
+    continue_from_how_the_process_works_form = initial.to(before_you_start_form)
+
+    continue_from_before_you_start_form = initial.to(check_ancestry_page)
+
+    continue_from_are_you_sure_you_want_to_cancel_form = initial.to(
+        request_cancelled_page
+    )
 
     continue_from_have_you_checked_the_catalogue_form = initial.to(
         service_person_alive_form, cond="has_checked_catalogue"
@@ -108,14 +128,13 @@ class RoutingStateMachine(StateMachine):
     ) | initial.to(service_branch_form, unless="living_subject")
     continue_from_service_branch_form = (
         initial.to(
-            were_they_a_commissioned_officer_form, unless="go_to_mod or likely_unfindable"
+            were_they_a_commissioned_officer_form,
+            unless="go_to_mod or likely_unfindable",
         )
         | initial.to(
             we_do_not_have_records_for_this_service_branch_page, cond="go_to_mod"
         )
-        | initial.to(
-            we_are_unlikely_to_find_this_record_page, cond="likely_unfindable"
-        )
+        | initial.to(we_are_unlikely_to_find_this_record_page, cond="likely_unfindable")
     )
 
     continue_from_were_they_a_commissioned_officer_form = initial.to(
@@ -170,10 +189,24 @@ class RoutingStateMachine(StateMachine):
 
     continue_on_return_from_gov_uk_redirect = initial.to(request_submitted_page)
 
-    def entering_have_you_checked_the_catalogue_form(self, event, state):
-        self.route_for_current_state = (
-            MultiPageFormRoutes.HAVE_YOU_CHECKED_THE_CATALOGUE.value
-        )
+    def entering_how_the_process_works_form(self, event, state):
+        self.route_for_current_state = MultiPageFormRoutes.HOW_THE_PROCESS_WORKS.value
+
+    def entering_before_you_start_form(self, event, state):
+        self.route_for_current_state = MultiPageFormRoutes.BEFORE_YOU_START.value
+
+    def entering_check_ancestry_page(self, event, state):
+        self.route_for_current_state = MultiPageFormRoutes.CHECK_ANCESTRY.value
+
+    def entering_request_cancelled_page(self, event, state):
+        self.route_for_current_state = MultiPageFormRoutes.REQUEST_CANCELLED.value
+
+    # This state has been temporarily disabled pending confirmation from UCD that it is
+    # still required. I've asked on 6/11
+    # def entering_have_you_checked_the_catalogue_form(self, event, state):
+    #     self.route_for_current_state = (
+    #         MultiPageFormRoutes.HAVE_YOU_CHECKED_THE_CATALOGUE.value
+    #     )
 
     def entering_search_the_catalogue_page(self, event, state):
         self.route_for_current_state = MultiPageFormRoutes.SEARCH_THE_CATALOGUE.value

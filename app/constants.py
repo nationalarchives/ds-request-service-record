@@ -2,6 +2,11 @@ from enum import Enum
 
 
 class MultiPageFormRoutes(Enum):
+    HOW_THE_PROCESS_WORKS = "main.how_the_process_works"
+    BEFORE_YOU_START = "main.before_you_start"
+    CHECK_ANCESTRY = "main.check_ancestry"
+    ARE_YOU_SURE_YOU_WANT_TO_CANCEL = "main.are_you_sure_you_want_to_cancel"
+    REQUEST_CANCELLED = "main.request_cancelled"
     HAVE_YOU_CHECKED_THE_CATALOGUE = "main.have_you_checked_the_catalogue"
     SEARCH_THE_CATALOGUE = "main.search_the_catalogue"
     IS_SERVICE_PERSON_ALIVE = "main.is_service_person_alive"
@@ -42,6 +47,13 @@ class ServiceBranches(Enum):
     ROYAL_NAVY = "Royal Navy (including Royal Marines)"
     OTHER = "Other"
     UNKNOWN = "Don't know"
+
+
+class OrderFeesPence(Enum):
+    STANDARD_DIGITAL = 4225
+    STANDARD_PRINTED = 4716
+    FULL_DIGITAL = 4887
+    FULL_PRINTED = 4887
 
 
 class Ranks(Enum):

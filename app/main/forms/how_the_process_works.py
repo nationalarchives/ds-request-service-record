@@ -8,10 +8,10 @@ from wtforms import (
 )
 
 
-class StartNow(FlaskForm):
+class HowTheProcessWorks(FlaskForm):
     content = load_content()
 
     submit = SubmitField(
-        get_field_content(content, "start", "call_to_action"),
+        get_field_content(content, "how_the_process_works", "call_to_action"),
         widget=TnaSubmitWidget(),
     )

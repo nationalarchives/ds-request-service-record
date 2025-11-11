@@ -32,11 +32,22 @@ def test_initial_state_has_no_route():
 def test_continue_from_start_form_sets_route():
     sm = RoutingStateMachine()
     sm.continue_from_start_form()
-    assert sm.current_state.id == "have_you_checked_the_catalogue_form"
-    assert (
-        sm.route_for_current_state
-        == MultiPageFormRoutes.HAVE_YOU_CHECKED_THE_CATALOGUE.value
-    )
+    assert sm.current_state.id == "how_the_process_works_form"
+    assert sm.route_for_current_state == MultiPageFormRoutes.HOW_THE_PROCESS_WORKS.value
+
+
+def test_continue_from_before_you_start_sets_route():
+    sm = RoutingStateMachine()
+    sm.continue_from_before_you_start_form()
+    assert sm.current_state.id == "check_ancestry_page"
+    assert sm.route_for_current_state == MultiPageFormRoutes.CHECK_ANCESTRY.value
+
+
+def test_continue_from_are_you_sure_you_want_to_cancel_sets_route():
+    sm = RoutingStateMachine()
+    sm.continue_from_are_you_sure_you_want_to_cancel_form()
+    assert sm.current_state.id == "request_cancelled_page"
+    assert sm.route_for_current_state == MultiPageFormRoutes.REQUEST_CANCELLED.value
 
 
 @pytest.mark.parametrize(
@@ -272,8 +283,7 @@ def test_continue_from_have_you_previously_made_a_request():
 
     sm.continue_from_have_you_previously_made_a_request_form(
         form=make_form(
-            first_name=None,
-            middle_names=None,
+            forenames=None,
             last_name=None,
             place_of_birth=None,
             date_of_death=None,
