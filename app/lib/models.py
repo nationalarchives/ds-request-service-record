@@ -44,7 +44,7 @@ class ServiceRecordRequest(db.Model):
     delivery_type = db.Column(db.String(32), nullable=True)
     processing_option = db.Column(db.String(32), nullable=True)
     payment_reference = db.Column(db.String(64), nullable=True)
-    amount_received = db.Column(db.Integer, nullable=True)  # amount in pence
+    amount_received = db.Column(db.String(32), nullable=True)  # amount in £xx.xx format
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
 
