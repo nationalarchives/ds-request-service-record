@@ -63,7 +63,7 @@ def send_to_gov_uk_pay():
         "payment_id": payment_id,
         "created_at": datetime.now(),
     }
-    
+
     record = add_service_record_request(data)
 
     if record is None:

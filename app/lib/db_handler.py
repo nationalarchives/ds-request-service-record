@@ -118,14 +118,25 @@ def get_gov_uk_dynamics_payment(id: str) -> GOVUKDynamicsPayment | None:
         current_app.logger.error(f"Error fetching GOV UK payment: {e}")
         return None
 
-def transform_form_data_to_record(form_data: dict) -> dict:
-    transformed_data = {field: value for field, value in form_data.items() if hasattr(ServiceRecordRequest, field)}
 
-    if date_of_birth := form_data.get("what_was_their_date_of_birth"): # TODO: can this field go back to `date_of_birth` in the frontend?
+def transform_form_data_to_record(form_data: dict) -> dict:
+    transformed_data = {
+        field: value
+        for field, value in form_data.items()
+        if hasattr(ServiceRecordRequest, field)
+    }
+
+    if date_of_birth := form_data.get(
+        "what_was_their_date_of_birth"
+    ):  # TODO: can this field go back to `date_of_birth` in the frontend?
         transformed_data["date_of_birth"] = date_of_birth
 
     if form_data.get("processing_option") == "standard":
-        transformed_data["delivery_type"] = form_data.get("how_do_you_want_your_order_processed_standard_option")
+        transformed_data["delivery_type"] = form_data.get(
+            "how_do_you_want_your_order_processed_standard_option"
+        )
     elif form_data.get("processing_option") == "full":
-        transformed_data["delivery_type"] = form_data.get("how_do_you_want_your_order_processed_full_option")
+        transformed_data["delivery_type"] = form_data.get(
+            "how_do_you_want_your_order_processed_full_option"
+        )
     return transformed_data
