@@ -7,9 +7,9 @@ from app import create_app
 
 
 class DummyRecord:
-    def __init__(self, date_of_birth, evidence_of_death, processing_option):
+    def __init__(self, date_of_birth, proof_of_death, processing_option):
         self.date_of_birth = date_of_birth
-        self.evidence_of_death = evidence_of_death
+        self.proof_of_death = proof_of_death
         self.processing_option = processing_option
 
 
@@ -27,7 +27,7 @@ class SubjectStatusTests(unittest.TestCase):
         r = DummyRecord(dob, None, "standard")
         self.assertEqual(subject_status(r), "? FOI DIRECT MOD FOIOP1")
 
-    def test_evidence_of_death_sets_FOICD(self):
+    def test_proof_of_death_sets_FOICD(self):
         recent_year = datetime.now().year - 40
         dob = f"{recent_year}-06-15"
         r = DummyRecord(dob, "file.png", "standard")

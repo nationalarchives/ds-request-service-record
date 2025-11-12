@@ -37,7 +37,7 @@ class ServiceRecordRequest(db.Model):
     requester_town_city = db.Column(db.String(128))
     service_branch = db.Column(db.String(64))
     service_number = db.Column(db.String(64), nullable=True)
-    evidence_of_death = db.Column(db.String(64), nullable=True)
+    proof_of_death = db.Column(db.String(64), nullable=True)
     payment_id = db.Column(db.String(64), nullable=True, unique=True)
     provider_id = db.Column(db.String(64), nullable=True)
     payment_date = db.Column(db.DateTime, nullable=True)
