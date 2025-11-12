@@ -215,7 +215,7 @@ pages:
       - >
         The file must be:
     list_items:
-      - JPG, PNG or PDF
+      - JPG, PNG or GIF
       - no more than 5MB
       - clear and show all the death certificate
   service_person_details:
@@ -381,7 +381,6 @@ forms:
     upload_a_proof_of_death:
       label: Upload a file
       messages:
-        required: Upload a proof of death
         file_size: The selected file must be smaller than 5MB
         file_allowed: The selected file must be a JPG, GIF or PNG
       call_to_action: Continue
