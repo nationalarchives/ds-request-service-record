@@ -1,5 +1,6 @@
 import logging
 
+import sentry_sdk
 from app.lib.cache import cache
 from app.lib.context_processor import cookie_preference, now_iso_8601
 from app.lib.models import db
@@ -13,8 +14,22 @@ from tna_frontend_jinja.wtforms.helpers import WTFormsHelpers
 
 
 def create_app(config_class):
-    app = Flask(__name__, static_url_path="/request-a-service-record/static")
+    app = Flask(__name__, static_url_path="/request-a-military-service-record/static")
     app.config.from_object(config_class)
+
+    if app.config.get("SENTRY_DSN"):
+        sentry_sdk.init(
+            dsn=app.config.get("SENTRY_DSN"),
+            environment=app.config.get("ENVIRONMENT_NAME"),
+            release=(
+                f"ds-request-service-record@{app.config.get('BUILD_VERSION')}"
+                if app.config.get("BUILD_VERSION")
+                else ""
+            ),
+            sample_rate=app.config.get("SENTRY_SAMPLE_RATE"),
+            traces_sample_rate=app.config.get("SENTRY_SAMPLE_RATE"),
+            profiles_sample_rate=app.config.get("SENTRY_SAMPLE_RATE"),
+        )
 
     requires_session_key(app)
 
@@ -108,7 +123,7 @@ def create_app(config_class):
     from .healthcheck import bp as healthcheck_bp
     from .main import bp as site_bp
 
-    app.register_blueprint(site_bp, url_prefix="/request-a-service-record")
+    app.register_blueprint(site_bp, url_prefix="/request-a-military-service-record")
     app.register_blueprint(healthcheck_bp, url_prefix="/healthcheck")
 
     db.init_app(app)

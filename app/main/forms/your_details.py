@@ -1,4 +1,7 @@
 from app.lib.content import get_field_content, load_content
+from app.main.forms.validation_helpers.field_required_unless_checkbox_checked import (
+    field_required_unless_checkbox_checked,
+)
 from flask_wtf import FlaskForm
 from tna_frontend_jinja.wtforms import (
     TnaCheckboxWidget,
@@ -11,7 +14,7 @@ from wtforms import (
     StringField,
     SubmitField,
 )
-from wtforms.validators import Email, InputRequired, Optional
+from wtforms.validators import Email, InputRequired
 
 
 class YourDetails(FlaskForm):
@@ -44,7 +47,12 @@ class YourDetails(FlaskForm):
     requester_email = EmailField(
         get_field_content(content, "requester_email", "label"),
         validators=[
-            Optional(),
+            field_required_unless_checkbox_checked(
+                "does_not_have_email",
+                message=get_field_content(content, "requester_email", "messages")[
+                    "required"
+                ],
+            ),
             Email(
                 message=get_field_content(content, "requester_email", "messages")[
                     "address_format"

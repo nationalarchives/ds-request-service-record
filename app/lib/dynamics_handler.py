@@ -1,22 +1,21 @@
+from datetime import datetime
+
 from app.lib.aws import send_email
-from app.lib.models import ServiceRecordRequest
+from app.lib.models import DynamicsPayment, ServiceRecordRequest
 from flask import current_app
 
-DYNAMICS_FIELD_MAP = [
-    ("enquiry_id", "id"),
-    ("title", "requester_title"),
+DYNAMICS_REQUEST_FIELD_MAP = [
     ("mandatory_forename", "requester_first_name"),
     ("mandatory_surname", "requester_last_name"),
     ("mandatory_email", "requester_email"),
     ("mandatory_address1", "requester_address1"),
     ("address2", "requester_address2"),
-    ("address3", None),  # TODO: no source yet
     ("mandatory_town", "requester_town_city"),
     ("county", "requester_county"),
-    ("mandatory_postcode", "requester_postcode"),
+    ("postcode", "requester_postcode"),
     ("mandatory_country", "requester_country"),
     ("mandatory_certificate_forename", "forenames"),
-    ("mandatory_certificate_surname", "lastname"),
+    ("mandatory_certificate_surname", "last_name"),
     ("mandatory_birth_date", "date_of_birth"),
     ("birth_place", "place_of_birth"),
     ("service_number", "service_number"),
@@ -25,34 +24,78 @@ DYNAMICS_FIELD_MAP = [
     ("enquiry", "additional_information"),
     (
         "mandatory_catalogue_reference",
-        None,
-    ),  # TODO: this comes automatically from the catalogue, currently
+        "catalogue_reference",
+    ),
     ("certificate_othernames", "other_last_names"),
     ("date_of_death", "date_of_death"),
     ("mod_barcode_number", "mod_reference"),
     ("service_branch", "service_branch"),
     ("died_in_service", "died_in_service"),
     ("prior_contact_reference", "case_reference_number"),
+    ("payment_date", "payment_date"),
+    ("delivery_type", "delivery_type"),
+    ("process_type", "processing_option"),
+    ("payment_reference", "payment_reference"),
+    ("amount_received", "amount_received"),
+    ("provider_id", "provider_id"),
+]
+
+DYNAMICS_PAYMENT_FIELD_MAP = [
+    ("payment_id", "id"),
+    ("case_number", "case_number"),
+    ("reference", "reference"),
+    ("provider_id", "provider_id"),
+    ("total_amount_pence", "total_amount"),
 ]
 
 
-def send_data_to_dynamics(record: ServiceRecordRequest) -> None:
-    # Check "status" of record, based on defined logic (used in Dynamics email subject, e.g. FOICD, DPA, etc)
-
-    tagged_data = generate_tagged_data(record)
-
+def send_request_to_dynamics(record: ServiceRecordRequest) -> None:
     send_email(
         to=current_app.config["DYNAMICS_INBOX"],
-        subject=f"New Service Record Request: {record.id}",
-        body=tagged_data,
+        subject=subject_status(record),
+        body=generate_tagged_request(record),
     )
 
 
-def generate_tagged_data(record: ServiceRecordRequest) -> str:
+def subject_status(record: ServiceRecordRequest) -> str:
+    dob = datetime.strptime(record.date_of_birth, "%Y-%m-%d")
+    age = (datetime.now() - dob).days / 365.25
+
+    if age >= 115:
+        closure_status = "FOIOP"
+    else:
+        if record.evidence_of_death:
+            closure_status = "FOICD"
+        else:
+            closure_status = "FOICDN"
+
+    option = "1" if record.processing_option == "standard" else "2"
+    return f"? FOI DIRECT MOD {closure_status}{option}"
+
+
+def send_payment_to_dynamics(payment: DynamicsPayment) -> None:
+    tagged_data = generate_tagged_payment(payment)
+
+    send_email(
+        to=current_app.config["DYNAMICS_INBOX"],
+        subject=f"Payment received for Dynamics payment ID: {payment.id}",
+        body=tagged_data + f"\n<paid_at>{datetime.now()}</paid_at>",
+    )
+
+
+def _generate_tagged_data(mapping: list[tuple[str, str | None]], obj) -> str:
     chunks = []
-    for tag, attr in DYNAMICS_FIELD_MAP:
-        value = getattr(record, attr) if attr else None
+    for tag, attr in mapping:
+        value = getattr(obj, attr) if attr else None
         if value:
             text = str(value)
             chunks.append(f"<{tag}>{text}</{tag}>")
     return "\n".join(chunks)
+
+
+def generate_tagged_request(record: ServiceRecordRequest) -> str:
+    return _generate_tagged_data(DYNAMICS_REQUEST_FIELD_MAP, record)
+
+
+def generate_tagged_payment(record: DynamicsPayment) -> str:
+    return _generate_tagged_data(DYNAMICS_PAYMENT_FIELD_MAP, record)

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{%- set pageTitle = 'Payment for ' + payment.case_number -%}
+
+{% block content %}
+  <div class="tna-section">
+    <div class="tna-container">
+      {% if payment.status != "P" %}
+      <div
+        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+        {% if form.errors %}
+          {{ tnaErrorSummary(wtforms_errors(form)) }}
+        {% endif %}
+        <h1 class="tna-heading-xl">Payment for {{ payment.case_number }}</h1>
+        {% if payment.first_name or payment.last_name %}
+        <p>Dear {{ payment.first_name }} {{ payment.last_name }},</p>
+        {% endif %}
+        {% if payment.details %}
+          <p>This payment is for: {{ payment.details }}</p>
+        {% endif %}
+        {% if payment.reference %}
+          <p>Your payment reference is: <strong>{{ payment.reference }}</strong></p>
+        {% endif %}
+        <p>Your total amount due is: <strong>£{{ '%.2f' | format(payment.total_amount / 100) }}</strong></p>
+        <p>The breakdown of this amount is as follows:</p>
+        <ul>
+          <li>Net amount: £{{ '%.2f' | format(payment.net_amount / 100) }}</li>
+          {% if payment.delivery_amount %}
+          <li>Delivery amount: £{{ '%.2f' | format(payment.delivery_amount / 100) }}</li>
+          {% endif %}
+        </ul>
+        <p>Click the button below to make your payment securely through our payment provider.</p>
+
+      </div>
+      <div class="tna-!--margin-top-m">
+        <form action="{{ url_for('main.make_payment', id=payment.id) }}" method="post" novalidate>
+          {{ form.csrf_token }}
+          <div class="tna-button-group">
+            {{ form.submit(params={'accent':'true'}) }}
+          </div>
+        </form>
+      </div>
+      {% else %}
+      <div
+        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+        <h1 class="tna-heading-xl">Payment already made</h1>
+        <p>Your payment has already been processed. Thank you.</p>
+        <p>If you have any questions, please contact us.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

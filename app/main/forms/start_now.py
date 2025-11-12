@@ -12,6 +12,6 @@ class StartNow(FlaskForm):
     content = load_content()
 
     submit = SubmitField(
-        get_field_content(content, "start_now", "call_to_action"),
+        get_field_content(content, "start", "call_to_action"),
         widget=TnaSubmitWidget(),
     )

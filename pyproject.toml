@@ -11,7 +11,7 @@ python = "^3.13"
 flask = "^3.1.0"
 requests = "^2.31.0"
 flask-caching = "^2.1.0"
-tna-frontend-jinja = "0.26.0"
+tna-frontend-jinja = "0.27.0"
 flask-talisman = "^1.1.0"
 pyyaml = "^6.0.2"
 flask-wtf = "^1.2.2"
@@ -23,6 +23,9 @@ flask-session = "~0.8"
 redis = "~6.4"
 python-statemachine = "^2.5.0"
 boto3 = "~1.40"
+sentry-sdk = {extras = ["flask"], version = "^2.41.0"}
+markupsafe = "^3.0.3"
+black = "^25.9.0"
 
 [tool.poetry.group.dev]
 optional = true

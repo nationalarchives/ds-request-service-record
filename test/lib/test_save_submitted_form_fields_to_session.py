@@ -20,7 +20,7 @@ class DummyForm:
 def test_saves_basic_fields_into_empty_session():
     session_obj = {}
     form = DummyForm(
-        first_name="Francis",
+        forenames="Francis",
         last_name="Palgrave",
         csrf_token="ignore",
         submit="ignored",
@@ -33,22 +33,19 @@ def test_saves_basic_fields_into_empty_session():
 
     assert "form_data" in session_obj
     assert session_obj["form_data"] == {
-        "first_name": "Francis",
+        "forenames": "Francis",
         "last_name": "Palgrave",
     }
 
 
 def test_merges_with_existing_dict_overwriting_new_values():
-    session_obj = {
-        "form_data": {"first_name": "Thomas", "middle_name": "Duffus", "age": 272}
-    }
-    form = DummyForm(first_name="William", last_name="Hardy")
+    session_obj = {"form_data": {"forenames": "Thomas", "age": 272}}
+    form = DummyForm(forenames="William", last_name="Hardy")
 
     save_submitted_form_fields_to_session(form, session_obj=session_obj)
 
     assert session_obj["form_data"] == {
-        "first_name": "William",  # overwritten
-        "middle_name": "Duffus",  # preserved
+        "forenames": "William",  # overwritten
         "age": 272,  # preserved
         "last_name": "Hardy",  # added
     }

@@ -8,11 +8,11 @@ def requires_session_key(app_or_blueprint):
         required_key = "entered_through_index_page"
 
         exempt_routes = [
-            "main.index",
             "main.start",
             "static",
             "healthcheck.healthcheck",
-            "main.gov_uk_pay_webhook",
+            "main.create_payment_endpoint",
+            "main.make_payment",
         ]
 
         short_session_id = request.cookies.get("session", "unknown")[0:7]
@@ -34,4 +34,4 @@ def requires_session_key(app_or_blueprint):
             )
             # If the session key is not set, we set the session key to True before redirecting
             session["entered_through_index_page"] = True
-            return redirect(url_for("main.index"))
+            return redirect(url_for("main.start"))

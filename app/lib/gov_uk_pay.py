@@ -1,10 +1,15 @@
-import hashlib
-import hmac
+from datetime import datetime
 from enum import Enum
 
 import requests
-from app.lib.db_handler import delete_service_record_request, get_service_record_request
-from app.lib.dynamics_handler import send_data_to_dynamics
+from app.lib.db_handler import (
+    delete_service_record_request,
+    get_dynamics_payment,
+    get_gov_uk_dynamics_payment,
+    get_service_record_request,
+)
+from app.lib.dynamics_handler import send_payment_to_dynamics, send_request_to_dynamics
+from app.lib.models import db
 from flask import current_app
 
 
@@ -13,15 +18,6 @@ class GOV_UK_PAY_EVENT_TYPES(Enum):
     FAILED = "card_payment_failed"
     SUCCEEDED = "card_payment_succeeded"
 
-
-SUCCESS_PAYMENT_STATUSES: set[str] = {"success"}
-
-IN_PROGRESS_PAYMENT_STATUSES: set[str] = {
-    "created",
-    "submitted",
-    "started",
-    "capturable",
-}
 
 FAILED_PAYMENT_STATUSES: set[str] = {"failed", "cancelled", "error"}
 
@@ -45,15 +41,8 @@ def get_payment_data(payment_id: str) -> dict | None:
     return response.json()
 
 
-def get_payment_status(payment_id: str) -> str | None:
-    data = get_payment_data(payment_id)
-    if data is None:
-        return None
-    return data.get("state", {}).get("status")
-
-
-def validate_payment(payment_id: str) -> bool:
-    return get_payment_status(payment_id) in SUCCESS_PAYMENT_STATUSES
+def validate_payment(data: dict) -> bool:
+    return data.get("state", {}).get("status") == "success"
 
 
 def create_payment(
@@ -87,45 +76,35 @@ def create_payment(
     return response.json()
 
 
-def validate_webhook_signature(request: requests.Request) -> bool:
-    signing_secret = current_app.config["GOV_UK_PAY_SIGNING_SECRET"]
-    pay_signature = request.headers.get("Pay-Signature", "")
-    body = request.get_data()
-
-    hmac_obj = hmac.new(signing_secret.encode("utf-8"), body, hashlib.sha256)
-
-    generated_signature = hmac_obj.hexdigest()
-
-    if pay_signature != generated_signature:
-        return False
-
-    return True
-
-
-def process_webhook_data(data: dict) -> None:
-    payment_id = data.get("resource_id", "")
-    event_type = data.get("event_type", "")
-
+def process_valid_request(payment_id: str, payment_data: dict) -> None:
     record = get_service_record_request(payment_id=payment_id)
+
+    record.provider_id = payment_data.get("provider_id", None)
+    record.amount_received = (
+        f"£{payment_data.get('amount') / 100:.2f}"
+        if payment_data.get("amount") is not None
+        else None
+    )
+    record.payment_reference = payment_data.get("reference", "")
+    record.payment_date = datetime.now()
+    db.session.commit()
 
     if record is None:
         raise ValueError(f"Service record not found for payment ID: {payment_id}")
 
-    if event_type not in [type.value for type in GOV_UK_PAY_EVENT_TYPES]:
-        raise ValueError(f"Unknown event type received: {event_type}")
-
-    if event_type == GOV_UK_PAY_EVENT_TYPES.SUCCEEDED.value:
-        send_data_to_dynamics(record)
+    send_request_to_dynamics(record)
 
     delete_service_record_request(record)
 
 
-def process_valid_request(payment_id: str) -> None:
-    record = get_service_record_request(payment_id=payment_id)
+def process_valid_payment(id: str, provider_id: str) -> None:
+    payment = get_gov_uk_dynamics_payment(id)
 
-    if record is None:
-        raise ValueError(f"Service record not found for payment ID: {payment_id}")
+    if payment is None:
+        raise ValueError(f"Payment not found for GOV.UK payment ID: {id}")
 
-    send_data_to_dynamics(record)
+    get_dynamics_payment(payment.dynamics_payment_id).status = "P"
+    get_dynamics_payment(payment.dynamics_payment_id).provider_id = provider_id
+    db.session.commit()
 
-    delete_service_record_request(record)
+    send_payment_to_dynamics(get_dynamics_payment(payment.dynamics_payment_id))

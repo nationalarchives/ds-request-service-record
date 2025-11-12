@@ -2,6 +2,11 @@ from enum import Enum
 
 
 class MultiPageFormRoutes(Enum):
+    HOW_THE_PROCESS_WORKS = "main.how_the_process_works"
+    BEFORE_YOU_START = "main.before_you_start"
+    CHECK_ANCESTRY = "main.check_ancestry"
+    ARE_YOU_SURE_YOU_WANT_TO_CANCEL = "main.are_you_sure_you_want_to_cancel"
+    REQUEST_CANCELLED = "main.request_cancelled"
     HAVE_YOU_CHECKED_THE_CATALOGUE = "main.have_you_checked_the_catalogue"
     SEARCH_THE_CATALOGUE = "main.search_the_catalogue"
     IS_SERVICE_PERSON_ALIVE = "main.is_service_person_alive"
@@ -10,12 +15,12 @@ class MultiPageFormRoutes(Enum):
     ONLY_LIVING_SUBJECTS_CAN_REQUEST_THEIR_RECORD = (
         "main.only_living_subjects_can_request_their_record"
     )
-    WAS_SERVICE_PERSON_AN_OFFICER_FORM = "main.was_service_person_an_officer"
+    WERE_THEY_A_COMMISSIONED_OFFICER_FORM = "main.were_they_a_commissioned_officer"
     WE_DO_NOT_HAVE_RECORDS_FOR_THIS_SERVICE_BRANCH = (
         "main.we_do_not_have_records_for_this_service_branch"
     )
     WE_DO_NOT_HAVE_RECORDS_FOR_THIS_RANK = "main.we_do_not_have_records_for_this_rank"
-    WE_MAY_BE_UNABLE_TO_FIND_THIS_RECORD = "main.we_may_be_unable_to_find_this_record"
+    WE_ARE_UNLIKELY_TO_FIND_THIS_RECORD = "main.we_are_unlikely_to_find_this_record"
     WE_MAY_HOLD_THIS_RECORD = "main.we_may_hold_this_record"
     WHAT_WAS_THEIR_DATE_OF_BIRTH = "main.what_was_their_date_of_birth"
     WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE = (
@@ -31,17 +36,24 @@ class MultiPageFormRoutes(Enum):
     YOUR_DETAILS = "main.your_details"
     YOUR_POSTAL_ADDRESS = "main.your_postal_address"
     HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED = "main.how_do_you_want_your_order_processed"
-    SEND_TO_GOV_PAY = "main.send_to_gov_pay"
+    SEND_TO_GOV_UK_PAY = "main.send_to_gov_uk_pay"
     REQUEST_SUBMITTED = "main.request_submitted"
 
 
 class ServiceBranches(Enum):
     BRITISH_ARMY = "British Army"
-    ROYAL_AIR_FORCE = "Royal Air Force"
-    ROYAL_NAVY = "Royal Navy"
     HOME_GUARD = "Home Guard"
-    BRITISH_ARMY_OTHER = "British Army: Other (e.g. Kenya Regiment, Hong Kong Regiment)"
-    UNKNOWN = "I don't know"
+    ROYAL_AIR_FORCE = "Royal Air Force"
+    ROYAL_NAVY = "Royal Navy (including Royal Marines)"
+    OTHER = "Other"
+    UNKNOWN = "Don't know"
+
+
+class OrderFeesPence(Enum):
+    STANDARD_DIGITAL = 4225
+    STANDARD_PRINTED = 4716
+    FULL_DIGITAL = 4887
+    FULL_PRINTED = 4887
 
 
 class Ranks(Enum):

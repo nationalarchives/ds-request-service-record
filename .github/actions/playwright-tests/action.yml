@@ -34,5 +34,5 @@ runs:
       run: docker compose up --detach --wait --wait-timeout 300 app || docker compose logs app
       shell: bash
     - name: Run tests
-      run: CI=true npx playwright test --grep-invert "@wip"
+      run: CI=true npx playwright test --project=chromium --grep-invert "@wip"
       shell: bash

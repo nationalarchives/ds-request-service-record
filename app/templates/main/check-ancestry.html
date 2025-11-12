@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{%- set pageTitle = content.app.title -%}
+
+{% block beforeContent %}
+  {{ modFoiBreadcrumbs({'breadcrumbItems': breadcrumbItems, 'hasAccentBackground': true}) }}
+{% endblock %}
+
+{% block content %}
+<div class="tna-section tna-background-accent-light">
+  <div class="tna-container">
+    <div
+      class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+      <h1 class="tna-heading-xl">{{ content.pages.check_ancestry.heading }}</h1>
+    </div>
+  </div>
+</div>
+<div class="tna-section">
+  <div class="tna-container">
+    <div
+      class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+      {% for paragraph in content.pages.check_ancestry.paragraphs %}
+        <p>{{ paragraph }}</p>
+      {% endfor %}
+
+      <div class="tna-!--margin-top-m">
+        <form action="{{ url_for('main.check_ancestry') }}" method="post" novalidate>
+          {{ form.csrf_token }}
+          <div class="tna-button-group">
+            {# TODO: Use 'accent' parameter here. Only using 'classes' param because I can't work out why the 'accent' parameter isn't working. #}
+            {{ form.submit(params={'classes': 'tna-button--accent'}) }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

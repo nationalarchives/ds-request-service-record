@@ -33,11 +33,22 @@ def test_initial_state_has_no_route():
 def test_continue_from_start_form_sets_route():
     sm = RoutingStateMachine()
     sm.continue_from_start_form()
-    assert sm.current_state.id == "have_you_checked_the_catalogue_form"
-    assert (
-        sm.route_for_current_state
-        == MultiPageFormRoutes.HAVE_YOU_CHECKED_THE_CATALOGUE.value
-    )
+    assert sm.current_state.id == "how_the_process_works_form"
+    assert sm.route_for_current_state == MultiPageFormRoutes.HOW_THE_PROCESS_WORKS.value
+
+
+def test_continue_from_before_you_start_sets_route():
+    sm = RoutingStateMachine()
+    sm.continue_from_before_you_start_form()
+    assert sm.current_state.id == "check_ancestry_page"
+    assert sm.route_for_current_state == MultiPageFormRoutes.CHECK_ANCESTRY.value
+
+
+def test_continue_from_are_you_sure_you_want_to_cancel_sets_route():
+    sm = RoutingStateMachine()
+    sm.continue_from_are_you_sure_you_want_to_cancel_form()
+    assert sm.current_state.id == "request_cancelled_page"
+    assert sm.route_for_current_state == MultiPageFormRoutes.REQUEST_CANCELLED.value
 
 
 @pytest.mark.parametrize(
@@ -93,8 +104,8 @@ def test_continue_from_service_person_alive_form_routes_by_condition(
     [
         (
             "BRITISH_ARMY",
-            "was_service_person_an_officer_form",
-            MultiPageFormRoutes.WAS_SERVICE_PERSON_AN_OFFICER_FORM.value,
+            "were_they_a_commissioned_officer_form",
+            MultiPageFormRoutes.WERE_THEY_A_COMMISSIONED_OFFICER_FORM.value,
         ),
         (
             "ROYAL_NAVY",
@@ -103,23 +114,23 @@ def test_continue_from_service_person_alive_form_routes_by_condition(
         ),
         (
             "HOME_GUARD",
-            "we_may_be_unable_to_find_this_record_page",
-            MultiPageFormRoutes.WE_MAY_BE_UNABLE_TO_FIND_THIS_RECORD.value,
+            "we_are_unlikely_to_find_this_record_page",
+            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_FIND_THIS_RECORD.value,
         ),
         (
             "ROYAL_AIR_FORCE",
-            "was_service_person_an_officer_form",
-            MultiPageFormRoutes.WAS_SERVICE_PERSON_AN_OFFICER_FORM.value,
+            "were_they_a_commissioned_officer_form",
+            MultiPageFormRoutes.WERE_THEY_A_COMMISSIONED_OFFICER_FORM.value,
         ),
         (
             "BRITISH_ARMY_OTHER",
-            "was_service_person_an_officer_form",
-            MultiPageFormRoutes.WAS_SERVICE_PERSON_AN_OFFICER_FORM.value,
+            "were_they_a_commissioned_officer_form",
+            MultiPageFormRoutes.WERE_THEY_A_COMMISSIONED_OFFICER_FORM.value,
         ),
         (
             "UNKNOWN",
-            "was_service_person_an_officer_form",
-            MultiPageFormRoutes.WAS_SERVICE_PERSON_AN_OFFICER_FORM.value,
+            "were_they_a_commissioned_officer_form",
+            MultiPageFormRoutes.WERE_THEY_A_COMMISSIONED_OFFICER_FORM.value,
         ),
     ],
 )
@@ -152,12 +163,12 @@ def test_continue_from_service_branch_form_routes_by_condition(
         ),
     ],
 )
-def test_continue_from_was_service_person_an_officer_form_routes_by_condition(
+def test_continue_from_were_they_a_commissioned_officer_form_routes_by_condition(
     answer, expected_state, expected_route
 ):
     sm = RoutingStateMachine()
-    sm.continue_from_was_service_person_an_officer_form(
-        form=make_form(was_service_person_an_officer=answer)
+    sm.continue_from_were_they_a_commissioned_officer_form(
+        form=make_form(were_they_a_commissioned_officer=answer)
     )
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
@@ -306,8 +317,7 @@ def test_continue_from_have_you_previously_made_a_request():
 
     sm.continue_from_have_you_previously_made_a_request_form(
         form=make_form(
-            first_name=None,
-            middle_names=None,
+            forenames=None,
             last_name=None,
             place_of_birth=None,
             date_of_death=None,
@@ -385,7 +395,7 @@ def test_continue_from_how_do_you_want_your_order_processed(processing_option):
         )
     )
     assert sm.current_state.id == "gov_uk_pay_redirect"
-    assert sm.route_for_current_state == MultiPageFormRoutes.SEND_TO_GOV_PAY.value
+    assert sm.route_for_current_state == MultiPageFormRoutes.SEND_TO_GOV_UK_PAY.value
 
 
 def test_continue_from_gov_uk_pay():
