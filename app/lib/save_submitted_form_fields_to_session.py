@@ -1,3 +1,5 @@
+import datetime
+
 from flask import session as flask_session
 
 
@@ -14,7 +16,12 @@ def save_submitted_form_fields_to_session(
         field,
     ) in form._fields.items():
         if field_name not in ["csrf_token", "submit"]:
-            data[field_name] = field.data
+            field_data = field.data
+            if isinstance(field_data, datetime.date):
+                field_data = field_data.isoformat()
+            elif isinstance(field_data, datetime.datetime):
+                field_data = field_data.date().isoformat()
+            data[field_name] = field_data
     # We need to merge with existing data (if any) instead of overwriting - this caught me out initially
     existing = session_obj.get("form_data")
     if isinstance(existing, dict):
