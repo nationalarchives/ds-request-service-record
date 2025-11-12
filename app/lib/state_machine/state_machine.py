@@ -353,11 +353,7 @@ class RoutingStateMachine(StateMachine):
 
     def was_officer(self, form):
         """Condition method to determine if the service person was an officer."""
-<<<<<<< HEAD
-        return self.get_form_field_data(form, "was_service_person_an_officer") == "yes"
-=======
         return form.were_they_a_commissioned_officer.data == "yes"
->>>>>>> main
 
     def born_too_late(self, form):
         return (
