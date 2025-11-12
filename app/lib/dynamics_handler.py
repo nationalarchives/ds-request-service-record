@@ -20,7 +20,7 @@ DYNAMICS_REQUEST_FIELD_MAP = [
     ("birth_place", "place_of_birth"),
     ("service_number", "service_number"),
     ("regiment", "regiment"),
-    ("mandatory_upload_file_name", "evidence_of_death"),
+    ("mandatory_upload_file_name", "proof_of_death"),
     ("enquiry", "additional_information"),
     (
         "mandatory_catalogue_reference",
@@ -64,7 +64,7 @@ def subject_status(record: ServiceRecordRequest) -> str:
     if age >= 115:
         closure_status = "FOIOP"
     else:
-        if record.evidence_of_death:
+        if record.proof_of_death:
             closure_status = "FOICD"
         else:
             closure_status = "FOICDN"
