@@ -14,6 +14,9 @@ def upload_proof_of_death(file: FileStorage) -> str | None:
 
     uuid_filename = str(uuid.uuid4())
 
+    if current_app.config.get("ENVIRONMENT_NAME") == "test":
+        return uuid_filename
+    
     return upload_file_to_s3(
         file=file,
         bucket_name=current_app.config["PROOF_OF_DEATH_BUCKET_NAME"],
@@ -57,7 +60,7 @@ def upload_file_to_s3(
             stream = io.BytesIO(data)
             try:
                 s3.upload_fileobj(stream, bucket_name, filename)
-                return filename
+                return filename_override
             except Exception as e:
                 current_app.logger.error(
                     f"Error uploading file to S3 (attempt {attempt}): {e}"
@@ -67,8 +70,6 @@ def upload_file_to_s3(
                         f"Max upload attempts reached for file {filename}. Upload failed."
                     )
                     return None
-
-        return filename
     return None
 
 

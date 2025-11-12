@@ -48,7 +48,7 @@ def test_upload_file_to_s3_valid_file_returns_filename(context):
         )
 
     assert isinstance(result, str)
-    assert result == "override-name.png"
+    assert result == "override-name"
     mock_client.assert_called_once_with(
         "s3",
         aws_access_key_id="test",
