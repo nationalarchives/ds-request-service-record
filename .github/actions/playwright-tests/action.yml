@@ -32,7 +32,7 @@ runs:
       shell: bash
     - name: Start service
       env:
-        CONFIG: config.Test
+        ENVIRONMENT_NAME: test
       run: docker compose up --detach --wait --wait-timeout 300 app || docker compose logs app
       shell: bash
     - name: Run tests
