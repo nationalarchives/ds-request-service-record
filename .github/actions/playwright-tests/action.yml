@@ -31,6 +31,8 @@ runs:
       run: npx playwright install-deps webkit
       shell: bash
     - name: Start service
+      env:
+        CONFIG: config.Test
       run: docker compose up --detach --wait --wait-timeout 300 app || docker compose logs app
       shell: bash
     - name: Run tests
