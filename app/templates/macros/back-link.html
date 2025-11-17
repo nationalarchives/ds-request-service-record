@@ -1,6 +1,9 @@
 {% macro backLink(url) -%}
-  <a href="{{ url }}" class="tna-button tna-button--plain">
-    <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
-    Back
-  </a>
+  <div class="tna-container">
+    <div class="tna-column tna-column--full tna-!--padding-top-m">
+      <nav class="mod-foi-back-link" aria-label="Back link">
+        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i><a href="{{ url }}" class="tna-link tna-link--no-visited-state">Back</a>
+      </nav>
+    </div>
+  </div>
 {%- endmacro %}

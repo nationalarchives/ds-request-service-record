@@ -3,11 +3,11 @@
 {%- set pageTitle = content.app.title -%}
 
 {% block beforeContent %}
-  {{ modFoiBreadcrumbs({'breadcrumbItems': breadcrumbItems}) }}
+  {{ backLink(url_for('main.do_you_have_a_proof_of_death')) }}
 {% endblock %}
 
 {% block content %}
-  <div class="tna-section">
+  <div class="tna-section tna-!--padding-top-s">
     <div class="tna-container">
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">

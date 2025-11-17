@@ -3,11 +3,11 @@
 {%- set pageTitle = content.app.title -%}
 
 {% block beforeContent %}
-  {{ modFoiBreadcrumbs({'breadcrumbItems': breadcrumbItems}) }}
+  {{ backLink(url_for('main.service_person_details')) }}
 {% endblock %}
 
 {% block content %}
-  <div class="tna-section">
+  <div class="tna-section tna-!--padding-top-s">
     <div class="tna-container">
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
@@ -17,7 +17,6 @@
           {{ form.with_mod(params={'size':'m'}) }}
           {{ form.with_tna(params={'size':'m'}) }}
           <div class="tna-button-group">
-            {{ backLink(url_for('main.service_person_details')) }}
             {{ form.submit(params={'accent':'true'}) }}
           </div>
         </form>
