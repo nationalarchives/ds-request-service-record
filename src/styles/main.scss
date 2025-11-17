@@ -43,11 +43,11 @@
 
   a {
     &:link {
-      color: black;
+      color: inherit;
     }
 
     &:visited {
-      color: black;
+      color: inherit;
     }
   }
 }
