@@ -7,23 +7,40 @@ pages:
       paragraphs:
         - Use this service to make a request to the National Archives to search for a military service record for someone who served in the British Armed Forces after 1918 and was born before 1940.
         - These records predominantly cover the period of the Second World War.
-    service_options:
-      heading: ████ ██ ████
-      paragraph: |
-        ████████ █████ █ ███ █████ █ ███ ████████ █████
-      table:
-        headers:
-          - Service option
-          - ██
-        rows:
-          - option: Standard
-            fee: █████████████
-          - option: Standard (paper-copy)
-            fee: █████████████
-          - option: Full sensitivity check
-            fee: █████████████
-          - option: Full sensitivity check (paper-copy)
-            fee: █████████████
+    ways_to_request_a_record:
+      heading: Ways to request a record
+      paragraph: There are two ways to request a record.
+      options:
+        - title: Standard
+          paragraphs:
+            - For most applicants a standard request will provide the information they are looking for.
+            - |
+              Standard provides a subset of documents in the record. It will include information that 
+              would be of most interest to the families of service person, such as details provided 
+              when they enlisted, records of service and testimonials
+        - title: Full record check
+          paragraphs:
+            - |
+              Documents not provided in our standard subset will, in most cases, contain sensitive 
+              information and will be closed by default. However, we can complete a sensitivity 
+              check of the record to assess what can be released. In some cases, we will not be able 
+              to supply the record at all, or large parts of it will be redacted.
+    xxxx:
+      heading: ███
+      paragraphs:
+        - ████████ ██ █████ ████████ █████ ██ ████ ████
+        - ████████ ██████ ████████ ██████ █████
+    table:
+      headers:
+        - Service option
+        - ██
+      rows:
+        - option: Standard
+          fee: ███
+        - option: Full sensitivity check
+          fee: ██ █████ ███ ███
+    delivery_method: |
+      ████████ ██████ ██ █████ ██████ █████ ██ ████ ████
   how_the_process_works:
     heading: How the process works
     paragraphs:
@@ -277,7 +294,7 @@ pages:
 forms:
   fields:
     start:
-      call_to_action: Start now
+      call_to_action: Continue
     how_the_process_works:
       call_to_action: Continue
     before_you_start:

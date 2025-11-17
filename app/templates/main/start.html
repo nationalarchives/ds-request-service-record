@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="tna-section tna-!--padding-top-s tna-background-accent-light">
+<div class="tna-section tna-background-accent-light">
   <div class="tna-container">
     <div
       class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
@@ -18,23 +18,32 @@
 <div class="tna-section tna-!--padding-top-s">
   <div class="tna-container">
     <div
-      class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+      class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny tna-!--padding-top-m">
       {% for paragraph in content.pages.start.contents.paragraphs %}
         <p>{{ paragraph }}</p>
       {% endfor %}
-      <h2 class="tna-heading-l">{{ content.pages.start.service_options.heading }}</h2>
-      <p>{{ content.pages.start.service_options.paragraph }}</p>
-
+      <h2 class="tna-heading-l">{{ content.pages.start.ways_to_request_a_record.heading }}</h2>
+      <p>{{ content.pages.start.ways_to_request_a_record.paragraph }}</p>
+      {% for item in content.pages.start.ways_to_request_a_record.options %}
+        <h3 class="tna-heading-m">{{ item.title }}</h3>
+        {% for paragraph in item.paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+      {% endfor %}
+      <h2 class="tna-heading-l">{{ content.pages.start.xxxx.heading }}</h2>
+      {% for paragraph in content.pages.start.xxxx.paragraphs %}
+        <p>{{ paragraph }}</p>
+      {% endfor %}
       <table class="tna-table">
         <thead class="tna-table__head">
         <tr class="tna-table__row">
-          {% for header in content.pages.start.service_options.table.headers %}
+          {% for header in content.pages.start.table.headers %}
             <th class="tna-table__header">{{ header }}</th>
           {% endfor %}
         </tr>
         </thead>
         <tbody class="tna-table__body">
-        {% for row in content.pages.start.service_options.table.rows %}
+        {% for row in content.pages.start.table.rows %}
           <tr class="tna-table__row">
             <td class="tna-table__header">{{ row.option }}</td>
             <td class="tna-table__header">{{ row.fee }}</td>
@@ -42,6 +51,7 @@
         {% endfor %}
         </tbody>
       </table>
+      <p>{{ content.pages.start.delivery_method }}</p>
 
       <div class="tna-!--margin-top-m">
         <form action="{{ url_for('main.start') }}" method="post" novalidate>
