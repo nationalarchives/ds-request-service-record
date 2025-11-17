@@ -35,3 +35,19 @@
     }
   }
 }
+
+.mod-foi-back-link {
+  i {
+    font-size: 0.9rem;
+  }
+
+  a {
+    &:link {
+      color: black;
+    }
+
+    &:visited {
+      color: black;
+    }
+  }
+}

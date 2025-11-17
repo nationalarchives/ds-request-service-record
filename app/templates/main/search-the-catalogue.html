@@ -3,11 +3,11 @@
 {%- set pageTitle = content.app.title -%}
 
 {% block beforeContent %}
-  {{ modFoiBreadcrumbs({'breadcrumbItems': breadcrumbItems}) }}
+  {{ backLink(url_for('main.have_you_checked_the_catalogue')) }}
 {% endblock %}
 
 {% block content %}
-  <div class="tna-section">
+  <div class="tna-section tna-!--padding-top-s">
     <div class="tna-container">
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
@@ -21,7 +21,6 @@
           {% endfor %}
         </ul>
         <div class="tna-button-group">
-          {{ backLink(url_for('main.have_you_checked_the_catalogue')) }}
           <a href="https://discovery.nationalarchives.gov.uk/" class="tna-button tna-button--accent">
             <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
             {{ content.pages.search_the_catalogue.call_to_action }}
