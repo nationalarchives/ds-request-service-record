@@ -49,7 +49,6 @@ def calculate_amount_based_on_form_data(form_data: dict) -> int:
     )
 
     if processing_option == "standard" and form_data.get("how_do_you_want_your_order_processed_standard_option") == "printed":
-        # Calculate delivery fee
         if country := form_data.get("requester_country"):
             amount += calculate_delivery_fee(country)
         else:
