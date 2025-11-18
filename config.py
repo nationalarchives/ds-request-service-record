@@ -87,6 +87,8 @@ class Production(Features):
     EMAIL_FROM: str = os.environ.get("EMAIL_FROM", "")
     DYNAMICS_INBOX: str = os.environ.get("DYNAMICS_INBOX", "")
 
+    DELIVERY_FEE_API_URL: str = os.environ.get("DELIVERY_FEE_API_URL", "")
+
 
 class Staging(Production):
     SENTRY_SAMPLE_RATE: float = float(os.getenv("SENTRY_SAMPLE_RATE", "1"))
