@@ -22,13 +22,6 @@ test.describe("The 'Upload proof of death' form", () => {
   });
 
   test.describe("when submitted", () => {
-    test("without a an uploaded file, shows an error", async ({ page }) => {
-      await page.getByRole("button", { name: /Continue/i }).click();
-      await expect(page.locator(".tna-form-item__error")).toHaveText(
-        /Upload a proof of death/,
-      );
-    });
-
     test("with an uploaded file with the incorrect extension, shows an error", async ({
       page,
     }) => {
@@ -43,7 +36,7 @@ test.describe("The 'Upload proof of death' form", () => {
       );
     });
 
-    ["jpg", "png", "pdf"].forEach((extension) => {
+    ["jpg", "png", "gif"].forEach((extension) => {
       test(`with a valid extension (of .${extension}) which is above the size limit, shows an error`, async ({
         page,
       }) => {
@@ -57,7 +50,7 @@ test.describe("The 'Upload proof of death' form", () => {
           /The selected file must be smaller than 5MB/,
         );
       });
-      test(`with a file that has a valid extention (of .${extension}) and is below the size limit, presents next page`, async ({
+      test(`with a file that has a valid extension (of .${extension}) and is below the size limit, presents next page`, async ({
         page,
       }) => {
         await page.getByLabel("Upload a file").setInputFiles({

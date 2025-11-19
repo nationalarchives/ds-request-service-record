@@ -7,23 +7,40 @@ pages:
       paragraphs:
         - Use this service to make a request to the National Archives to search for a military service record for someone who served in the British Armed Forces after 1918 and was born before 1940.
         - These records predominantly cover the period of the Second World War.
-    service_options:
-      heading: ████ ██ ████
-      paragraph: |
-        ████████ █████ █ ███ █████ █ ███ ████████ █████
-      table:
-        headers:
-          - Service option
-          - ██
-        rows:
-          - option: Standard
-            fee: █████████████
-          - option: Standard (paper-copy)
-            fee: █████████████
-          - option: Full sensitivity check
-            fee: █████████████
-          - option: Full sensitivity check (paper-copy)
-            fee: █████████████
+    ways_to_request_a_record:
+      heading: Ways to request a record
+      paragraph: There are two ways to request a record.
+      options:
+        - title: Standard
+          paragraphs:
+            - For most applicants a standard request will provide the information they are looking for.
+            - |
+              Standard provides a subset of documents in the record. It will include information that 
+              would be of most interest to the families of service person, such as details provided 
+              when they enlisted, records of service and testimonials
+        - title: Full record check
+          paragraphs:
+            - |
+              Documents not provided in our standard subset will, in most cases, contain sensitive 
+              information and will be closed by default. However, we can complete a sensitivity 
+              check of the record to assess what can be released. In some cases, we will not be able 
+              to supply the record at all, or large parts of it will be redacted.
+    xxxx:
+      heading: ███
+      paragraphs:
+        - ████████ ██ █████ ████████ █████ ██ ████ ████
+        - ████████ ██████ ████████ ██████ █████
+    table:
+      headers:
+        - Service option
+        - ██
+      rows:
+        - option: Standard
+          fee: ███
+        - option: Full sensitivity check
+          fee: ██ █████ ███ ███
+    delivery_method: |
+      ████████ ██████ ██ █████ ██████ █████ ██ ████ ████
   how_the_process_works:
     heading: How the process works
     paragraphs:
@@ -165,14 +182,6 @@ pages:
     paragraphs:
       - You will need to request the service record from the Ministry of Defence.
     call_to_action: Apply for MOD records
-  were_they_a_commissioned_officer:
-    heading: Were they a commissioned officer?
-    paragraphs:
-      - |
-        Service records are often categorised as either 'Commissioned Officers' or 
-        'Other Ranks'. Information on whether the service person was a Commissioned 
-        Officer will help confirm if the service record has been transferred to The 
-        National Archives or is still with the Ministry of Defence.
   we_are_unlikely_to_find_this_record:
     heading: We are unlikely to be able to locate this record
     paragraphs:
@@ -215,7 +224,7 @@ pages:
       - >
         The file must be:
     list_items:
-      - JPG, PNG or PDF
+      - JPG, PNG or GIF
       - no more than 5MB
       - clear and show all the death certificate
   service_person_details:
@@ -231,39 +240,6 @@ pages:
       - published obituaries (detailing publication source, name of deceased, and date of birth and death)
       - "[war dead records](https://www.cwgc.org/find-records/find-war-dead/)"
     warning: If you do not send a proof of death when required, it is likely that we will withold all of the requested information and cannot provide the record.
-  all_fields_in_one_form:
-    service_person_details:
-      legend: Service person detail
-      introduction: |
-        Please provide us with information about the individual that you want us to search for. 
-        We will use this information to search our systems for the record.
-    evidence_of_death:
-      heading: Evidence of death
-      introduction: |
-        If you have evidence of the service person's death, please upload it here. 
-        This could be a death certificate or any other official document that confirms their death.
-      paragraphs:
-        - Without providing evidence of death, it's unlikely we can release the record.
-        - |
-          Submit your evidence below. 
-          If you are unable to upload the document, you can send it to us by replying
-          directly to the email you will receive on completion of this form.
-        - Suitable forms of evidence include
-      list:
-        - "[copies of death certificates](https://www.gov.uk/order-copy-birth-death-marriage-certificate)"
-        - published obituaries (detailing publication source, name of deceased, and date of birth and death)
-        - "[war dead records](https://www.cwgc.org/find-records/find-war-dead/)"
-    enter_your_details:
-      legend: Enter your details
-  review:
-    heading: Review the data provided
-    details:
-      summary: Expand to review
-    table:
-      headers:
-        - Field
-        - Provided
-        - Value, if provided
   confirm_payment_received:
     heading: Payment received
   payment_link_creation_failed:
@@ -318,7 +294,7 @@ pages:
 forms:
   fields:
     start:
-      call_to_action: Start now
+      call_to_action: Continue
     how_the_process_works:
       call_to_action: Continue
     before_you_start:
@@ -381,7 +357,6 @@ forms:
     upload_a_proof_of_death:
       label: Upload a file
       messages:
-        required: Upload a proof of death
         file_size: The selected file must be smaller than 5MB
         file_allowed: The selected file must be a JPG, GIF or PNG
       call_to_action: Continue
@@ -398,14 +373,6 @@ forms:
       description: |
         If you have any additional information that might help us to find the service record, please provide it here.
         This could include details such as the service person's rank, unit, occupation or any other relevant information.
-    mod_reference:
-      label: Reference number from MoD (optional)
-      description: This might start with 'APV' followed by a series of numbers
-    evidence_of_death:
-      label: Evidence of death (optional)
-      messages:
-        file_allowed: The selected file must be a JPG, GIF or PNG
-        file_size: The selected file must be smaller than 5MB
     died_in_service:
       label: Did they die in service? (optional)
       messages:
@@ -418,9 +385,6 @@ forms:
         label: Have you made a request for this record with us before? (optional)
         hint_text: If so, provide your case reference number. This might start with 'CAS' or 'SPR' followed by a series of numbers.
       call_to_action: Continue
-    case_reference_number:
-      label: Case reference number (optional)
-      description: If you have contacted us before and have a case reference number, please enter it here. This might start with 'CAS' or 'SPR'
     requester_first_name:
       label: First name
       messages:
@@ -432,10 +396,6 @@ forms:
     does_not_have_email:
       label: Email address
       description: I do not have an email address
-    contact_preferences:
-      label: How would you like to be contacted?
-      messages:
-        required: Tell us how we can contact you
     requester_email:
       label: Email
       messages:
