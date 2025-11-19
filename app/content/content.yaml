@@ -378,10 +378,10 @@ forms:
       messages:
         required: Select yes if the service person died in service
     have_you_previously_made_a_request:
-      with_mod:
+      mod_reference:
         label: Have you made a request for this record with the Ministry of Defence before? (optional)
         hint_text: If so, please provide your reference number. This might start with 'APV' followed by a series of numbers.
-      with_tna:
+      case_reference_number:
         label: Have you made a request for this record with us before? (optional)
         hint_text: If so, provide your case reference number. This might start with 'CAS' or 'SPR' followed by a series of numbers.
       call_to_action: Continue

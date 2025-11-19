@@ -13,23 +13,23 @@ from wtforms import (
 class HaveYouPreviouslyMadeARequest(FlaskForm):
     content = load_content()
 
-    with_mod = StringField(
-        get_field_content(content, "have_you_previously_made_a_request", "with_mod")[
+    mod_reference = StringField(
+        get_field_content(content, "have_you_previously_made_a_request", "mod_reference")[
             "label"
         ],
         description=get_field_content(
-            content, "have_you_previously_made_a_request", "with_mod"
+            content, "have_you_previously_made_a_request", "mod_reference"
         )["hint_text"],
         widget=TnaTextInputWidget(),
         validators=[],
     )
 
-    with_tna = StringField(
-        get_field_content(content, "have_you_previously_made_a_request", "with_tna")[
+    case_reference_number = StringField(
+        get_field_content(content, "have_you_previously_made_a_request", "case_reference_number")[
             "label"
         ],
         description=get_field_content(
-            content, "have_you_previously_made_a_request", "with_tna"
+            content, "have_you_previously_made_a_request", "case_reference_number"
         )["hint_text"],
         widget=TnaTextInputWidget(),
         validators=[],

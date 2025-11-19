@@ -58,8 +58,8 @@ def send_request_to_dynamics(record: ServiceRecordRequest) -> None:
 
 
 def subject_status(record: ServiceRecordRequest) -> str:
-    dob = datetime.strptime(record.date_of_birth, "%Y-%m-%d")
-    age = (datetime.now() - dob).days / 365.25
+    dob = datetime.strptime(record.date_of_birth, "%-d %B %Y")
+    age = datetime.now().year - dob.year
 
     if age >= 115:
         closure_status = "FOIOP"

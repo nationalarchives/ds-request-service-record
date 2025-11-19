@@ -86,7 +86,7 @@ def process_valid_request(payment_id: str, payment_data: dict) -> None:
         else None
     )
     record.payment_reference = payment_data.get("reference", "")
-    record.payment_date = datetime.now()
+    record.payment_date = datetime.now().strftime("%-d %B %Y")
     db.session.commit()
 
     if record is None:
