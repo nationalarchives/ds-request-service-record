@@ -21,7 +21,7 @@ from app.main.forms.have_you_previously_made_a_request import (
 from app.main.forms.how_do_you_want_your_order_processed import (
     HowDoYouWantYourOrderProcessed,
 )
-from app.main.forms.how_the_process_works import HowTheProcessWorks
+from app.main.forms.how_we_process_requests import HowTheProcessWorks
 from app.main.forms.is_service_person_alive import IsServicePersonAlive
 from app.main.forms.service_branch import ServiceBranch
 from app.main.forms.service_person_details import ServicePersonDetails
@@ -47,16 +47,16 @@ def start(form, state_machine):
     return render_template("main/start.html", form=form, content=load_content())
 
 
-@bp.route("/how-the-process-works/", methods=["GET", "POST"])
+@bp.route("/how-we-process-requests/", methods=["GET", "POST"])
 @with_state_machine
 @with_form_prefilled_from_session(HowTheProcessWorks)
-def how_the_process_works(form, state_machine):
+def how_we_process_requests(form, state_machine):
     if form.validate_on_submit():
-        state_machine.continue_from_how_the_process_works_form()
+        state_machine.continue_from_how_we_process_requests_form()
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(
-        "main/how-the-process-works.html", form=form, content=load_content()
+        "main/how-we-process-requests.html", form=form, content=load_content()
     )
 
 

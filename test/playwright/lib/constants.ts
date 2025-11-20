@@ -2,7 +2,7 @@ export const basePath: string = "/request-a-military-service-record";
 
 export const Paths = {
   DO_YOU_HAVE_A_PROOF_OF_DEATH: `${basePath}/do-you-have-a-proof-of-death/`,
-  HOW_THE_PROCESS_WORKS: `${basePath}/how-the-process-works/`,
+  HOW_WE_PROCESS_REQUESTS: `${basePath}/how-we-process-requests/`,
   BEFORE_YOU_START: `${basePath}/before-you-start/`,
   REQUEST_CANCELLED: `${basePath}/request-cancelled/`,
   ARE_YOU_SURE_YOU_WANT_TO_CANCEL: `${basePath}/are-you-sure-you-want-to-cancel/`,

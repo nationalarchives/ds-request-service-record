@@ -41,16 +41,17 @@ pages:
           fee: ██ █████ ███ ███
     delivery_method: |
       ████████ ██████ ██ █████ ██████ █████ ██ ████ ████
-  how_the_process_works:
-    heading: How the process works
+  how_we_process_requests:
+    heading: How we process requests
     paragraphs:
       - |
-        We are currently in the process of receiving 10 million paper records over a five-year period from the Ministry 
-        of Defence. The information you provide allows our advisors to check if we have received the paper record, and 
-        if we do have it, find the record in our repositories and scan it for you.
+        We are currently in the process of receiving ten million paper records over a five-year period 
+        from the Ministry of Defence. The information you provide allows our advisors to check if we 
+        have received the paper record, and if we do have it, find the record in our repositories and 
+        scan it for you.
     sub_heading: "Once you have submitted your request:"
     steps:
-      advisor_check: An advisor will check the database for a matching service record
+      advisor_check: An advisor will check our systems for a matching service record
       box_retrieved: If there is a match, the box with the record will be received
       transported_to_us: If offsite, this box will be transported by van to us
       scanned: Upon arrival the record will be scanned
@@ -295,7 +296,7 @@ forms:
   fields:
     start:
       call_to_action: Continue
-    how_the_process_works:
+    how_we_process_requests:
       call_to_action: Continue
     before_you_start:
       call_to_action: Start now

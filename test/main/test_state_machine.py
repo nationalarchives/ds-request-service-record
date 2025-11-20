@@ -32,8 +32,10 @@ def test_initial_state_has_no_route():
 def test_continue_from_start_form_sets_route():
     sm = RoutingStateMachine()
     sm.continue_from_start_form()
-    assert sm.current_state.id == "how_the_process_works_form"
-    assert sm.route_for_current_state == MultiPageFormRoutes.HOW_THE_PROCESS_WORKS.value
+    assert sm.current_state.id == "how_we_process_requests_form"
+    assert (
+        sm.route_for_current_state == MultiPageFormRoutes.HOW_WE_PROCESS_REQUESTS.value
+    )
 
 
 def test_continue_from_before_you_start_sets_route():

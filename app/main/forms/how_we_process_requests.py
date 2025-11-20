@@ -12,6 +12,6 @@ class HowTheProcessWorks(FlaskForm):
     content = load_content()
 
     submit = SubmitField(
-        get_field_content(content, "how_the_process_works", "call_to_action"),
+        get_field_content(content, "how_we_process_requests", "call_to_action"),
         widget=TnaSubmitWidget(),
     )
