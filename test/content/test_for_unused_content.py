@@ -90,7 +90,7 @@ class TestForUnusedContent(unittest.TestCase):
                 #       The test is therefore a little brittle, but it'll be immediately apparent if
                 #       the test breaks due to changes in get_field_content.
                 pattern = re.compile(
-                    rf"get_field_content\(content,\s?['\"]{field_name}['\"],\s?['\"][a-z|_]+['\"]\)"
+                    rf"get_field_content\([^,]+,\s*['\"]{field_name}['\"],\s*['\"][a-z_]+['\"]"
                 )
                 found = any(pattern.search(txt) for txt in self._form_texts)
                 self.assertTrue(
