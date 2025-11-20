@@ -79,7 +79,8 @@ def send_payment_to_dynamics(payment: DynamicsPayment) -> None:
     send_email(
         to=current_app.config["DYNAMICS_INBOX"],
         subject=f"Payment received for Dynamics payment ID: {payment.id}",
-        body=tagged_data + f"\n<paid_at>{datetime.now().strftime('%-d %B %Y')}</paid_at>",
+        body=tagged_data
+        + f"\n<paid_at>{datetime.now().strftime('%-d %B %Y')}</paid_at>",
     )
 
 
