@@ -42,17 +42,6 @@ class RoutingStateMachine(StateMachine):
         enter="entering_you_have_cancelled_your_request_page", final=True
     )
 
-    # This state has been temporarily disabled pending confirmation from UCD that it is
-    # still required. Why did it need to be commented out? Because the page that had
-    # come before it now goes somewhere else, and a state machine cannot have dangling
-    # states that are not reachable.
-
-    # have_you_checked_the_catalogue_form = State(
-    #     enter="entering_have_you_checked_the_catalogue_form", final=True
-    # )
-    search_the_catalogue_page = State(
-        enter="entering_search_the_catalogue_page", final=True
-    )
     service_person_alive_form = State(
         enter="entering_service_person_alive_form", final=True
     )
@@ -128,10 +117,6 @@ class RoutingStateMachine(StateMachine):
     continue_from_you_may_want_to_check_ancestry_form = initial.to(
         service_person_alive_form
     )
-
-    continue_from_have_you_checked_the_catalogue_form = initial.to(
-        service_person_alive_form, cond="has_checked_catalogue"
-    ) | initial.to(search_the_catalogue_page, unless="has_checked_catalogue")
 
     continue_from_service_person_alive_form = initial.to(
         subject_access_request_page, cond="living_subject"
@@ -214,16 +199,6 @@ class RoutingStateMachine(StateMachine):
         self.route_for_current_state = (
             MultiPageFormRoutes.YOU_HAVE_CANCELLED_YOUR_REQUEST.value
         )
-
-    # This state has been temporarily disabled pending confirmation from UCD that it is
-    # still required. I've asked on 6/11
-    # def entering_have_you_checked_the_catalogue_form(self, event, state):
-    #     self.route_for_current_state = (
-    #         MultiPageFormRoutes.HAVE_YOU_CHECKED_THE_CATALOGUE.value
-    #     )
-
-    def entering_search_the_catalogue_page(self, event, state):
-        self.route_for_current_state = MultiPageFormRoutes.SEARCH_THE_CATALOGUE.value
 
     def entering_service_person_alive_form(self, event, state):
         self.route_for_current_state = MultiPageFormRoutes.IS_SERVICE_PERSON_ALIVE.value
@@ -324,10 +299,6 @@ class RoutingStateMachine(StateMachine):
         print(
             f"State machine: Exiting '{state.id}' state in response to '{event}' event."
         )
-
-    def has_checked_catalogue(self, form):
-        """Condition method to determine if the user has checked the catalogue."""
-        return form.have_you_checked_the_catalogue.data == "yes"
 
     def living_subject(self, form):
         """Condition method to determine if the service person is alive."""

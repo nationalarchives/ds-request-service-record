@@ -16,7 +16,6 @@ from app.main.forms.are_you_sure_you_want_to_cancel import AreYouSureYouWantToCa
 from app.main.forms.before_you_start import BeforeYouStart
 from app.main.forms.you_may_want_to_check_ancestry import YouMayWantToCheckAncestry
 from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
-from app.main.forms.have_you_checked_the_catalogue import HaveYouCheckedTheCatalogue
 from app.main.forms.have_you_previously_made_a_request import (
     HaveYouPreviouslyMadeARequest,
 )
@@ -111,22 +110,6 @@ def you_may_want_to_check_ancestry(form, state_machine):
     )
 
 
-@bp.route("/have-you-checked-the-catalogue/", methods=["GET", "POST"])
-@with_state_machine
-@with_form_prefilled_from_session(HaveYouCheckedTheCatalogue)
-def have_you_checked_the_catalogue(form, state_machine):
-    if form.validate_on_submit():
-        save_submitted_form_fields_to_session(form)
-        state_machine.continue_from_have_you_checked_the_catalogue_form(form)
-        return redirect(url_for(state_machine.route_for_current_state))
-
-    return render_template(
-        "main/have-you-checked-the-catalogue.html",
-        form=form,
-        content=load_content(),
-    )
-
-
 @bp.route("/is-service-person-alive/", methods=["GET", "POST"])
 @with_state_machine
 @with_form_prefilled_from_session(IsServicePersonAlive)
@@ -187,11 +170,6 @@ def were_they_a_commissioned_officer(form, state_machine):
         form=form,
         content=load_content(),
     )
-
-
-@bp.route("/search-the-catalogue/", methods=["GET"])
-def search_the_catalogue():
-    return render_template("main/search-the-catalogue.html", content=load_content())
 
 
 @bp.route("/we-do-not-have-records-for-this-service-branch/", methods=["GET"])
