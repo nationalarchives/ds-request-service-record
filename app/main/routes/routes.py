@@ -1,5 +1,7 @@
+from app.constants import MultiPageFormRoutes
 from app.lib.content import load_content
 from app.lib.decorators.state_machine_decorator import with_state_machine
+from app.lib.decorators.with_back_url_saved_to_session import with_route_for_back_link_saved_to_session
 from app.lib.decorators.with_form_prefilled_from_session import (
     with_form_prefilled_from_session,
 )
@@ -32,7 +34,7 @@ from app.main.forms.were_they_a_commissioned_officer import WasServicePersonAnOf
 from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 from app.main.forms.your_details import YourDetails
 from app.main.forms.your_postal_address import YourPostalAddress
-from flask import redirect, render_template, request, url_for
+from flask import redirect, render_template, request, url_for, session
 
 
 @bp.route("/", methods=["GET", "POST"])
@@ -62,6 +64,7 @@ def how_we_process_requests(form, state_machine):
 
 @bp.route("/before-you-start/", methods=["GET", "POST"])
 @with_state_machine
+@with_route_for_back_link_saved_to_session(route=MultiPageFormRoutes.BEFORE_YOU_START.value)
 @with_form_prefilled_from_session(BeforeYouStart)
 def before_you_start(form, state_machine):
     if form.validate_on_submit():
@@ -80,7 +83,10 @@ def are_you_sure_you_want_to_cancel(form, state_machine):
         state_machine.continue_from_are_you_sure_you_want_to_cancel_form()
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/are-you-sure-you-want-to-cancel.html", form=form, content=load_content()
+        "main/are-you-sure-you-want-to-cancel.html",
+        form=form,
+        content=load_content(),
+        route_for_back_link=session.get("route_for_back_link", False),
     )
 
 

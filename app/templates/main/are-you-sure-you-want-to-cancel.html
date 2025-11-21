@@ -3,7 +3,8 @@
 {%- set pageTitle = content.app.title -%}
 
 {% block beforeContent %}
-  {{ backLink(url_for('main.before_you_start')) }}
+  {%- set back_link_endpoint = route_for_back_link if route_for_back_link else 'main.before_you_start' -%}
+  {{ backLink(url_for(back_link_endpoint)) }}
 {% endblock %}
 
 {% block content %}
@@ -16,10 +17,12 @@
         {% for paragraph in content.pages.are_you_sure_you_want_to_cancel.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
-        <form action="{{ url_for('main.are_you_sure_you_want_to_cancel') }}" method="post" id="cancel-request" novalidate>
+        <form action="{{ url_for('main.are_you_sure_you_want_to_cancel') }}" method="post" id="cancel-request"
+              novalidate>
           {{ form.csrf_token }}
           <div class="tna-button-group ">
-            <a href="{{ url_for('main.before_you_start') }}" class="tna-button tna-button--plain">{{ content.pages.are_you_sure_you_want_to_cancel.no_continue }}</a>
+            <a href="{{ url_for('main.before_you_start') }}"
+               class="tna-button tna-button--plain">{{ content.pages.are_you_sure_you_want_to_cancel.no_continue }}</a>
             {# TODO: Use 'accent' parameter here. Only using 'classes' param because I can't work out why the 'accent' parameter isn't working. #}
             {{ form.submit(params={'classes': 'tna-button--accent'}) }}
           </div>
