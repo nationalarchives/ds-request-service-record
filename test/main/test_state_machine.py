@@ -48,8 +48,8 @@ def test_continue_from_before_you_start_sets_route():
 def test_continue_from_are_you_sure_you_want_to_cancel_sets_route():
     sm = RoutingStateMachine()
     sm.continue_from_are_you_sure_you_want_to_cancel_form()
-    assert sm.current_state.id == "request_cancelled_page"
-    assert sm.route_for_current_state == MultiPageFormRoutes.REQUEST_CANCELLED.value
+    assert sm.current_state.id == "you_have_cancelled_your_request_page"
+    assert sm.route_for_current_state == MultiPageFormRoutes.YOU_HAVE_CANCELLED_YOUR_REQUEST.value
 
 
 @pytest.mark.parametrize(

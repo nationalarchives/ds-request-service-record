@@ -36,7 +36,7 @@ class RoutingStateMachine(StateMachine):
     )
     check_ancestry_page = State(enter="entering_check_ancestry_page", final=True)
     before_you_start_form = State(enter="entering_before_you_start_form", final=True)
-    request_cancelled_page = State(enter="entering_request_cancelled_page", final=True)
+    you_have_cancelled_your_request_page = State(enter="entering_you_have_cancelled_your_request_page", final=True)
 
     # This state has been temporarily disabled pending confirmation from UCD that it is
     # still required. Why did it need to be commented out? Because the page that had
@@ -116,7 +116,7 @@ class RoutingStateMachine(StateMachine):
     continue_from_before_you_start_form = initial.to(check_ancestry_page)
 
     continue_from_are_you_sure_you_want_to_cancel_form = initial.to(
-        request_cancelled_page
+        you_have_cancelled_your_request_page
     )
 
     continue_from_have_you_checked_the_catalogue_form = initial.to(
@@ -198,8 +198,8 @@ class RoutingStateMachine(StateMachine):
     def entering_check_ancestry_page(self, event, state):
         self.route_for_current_state = MultiPageFormRoutes.CHECK_ANCESTRY.value
 
-    def entering_request_cancelled_page(self, event, state):
-        self.route_for_current_state = MultiPageFormRoutes.REQUEST_CANCELLED.value
+    def entering_you_have_cancelled_your_request_page(self, event, state):
+        self.route_for_current_state = MultiPageFormRoutes.YOU_HAVE_CANCELLED_YOUR_REQUEST.value
 
     # This state has been temporarily disabled pending confirmation from UCD that it is
     # still required. I've asked on 6/11

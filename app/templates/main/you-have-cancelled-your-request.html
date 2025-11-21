@@ -7,14 +7,14 @@
     <div class="tna-container">
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
-        <h1 class="tna-heading-xl">{{ content.pages.request_cancelled.heading }}</h1>
+        <h1 class="tna-heading-xl tna-!--margin-top-l">{{ content.pages.you_have_cancelled_your_request.heading }}</h1>
 
-        {% for paragraph in content.pages.request_cancelled.paragraphs %}
+        {% for paragraph in content.pages.you_have_cancelled_your_request.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
         <div class="tna-button-group ">
           <a href="{{ url_for('main.start') }}"
-             class="tna-button tna-button--accent">{{ content.pages.request_cancelled.start_new_request }}</a>
+             class="tna-button tna-button--accent">{{ content.pages.you_have_cancelled_your_request.start_new_request }}</a>
         </div>
 
       </div>
