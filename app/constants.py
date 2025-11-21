@@ -4,7 +4,7 @@ from enum import Enum
 class MultiPageFormRoutes(Enum):
     HOW_WE_PROCESS_REQUESTS = "main.how_we_process_requests"
     BEFORE_YOU_START = "main.before_you_start"
-    CHECK_ANCESTRY = "main.check_ancestry"
+    YOU_MAY_WANT_TO_CHECK_ANCESTRY = "main.you_may_want_to_check_ancestry"
     ARE_YOU_SURE_YOU_WANT_TO_CANCEL = "main.are_you_sure_you_want_to_cancel"
     YOU_HAVE_CANCELLED_YOUR_REQUEST = "main.you_have_cancelled_your_request"
     HAVE_YOU_CHECKED_THE_CATALOGUE = "main.have_you_checked_the_catalogue"
