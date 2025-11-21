@@ -9,6 +9,7 @@ const config: ConfigData = {
     "no-inline-style": "warn", // video.js
     "no-trailing-whitespace": "off",
     "prefer-native-element": "warn", // video.js
+    "script-type": "off",
   },
 };
 

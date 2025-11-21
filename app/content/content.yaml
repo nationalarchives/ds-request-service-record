@@ -62,16 +62,10 @@ pages:
     exit_this_form: Exit this form
     paragraphs:
       - |
-        These records are in the process of being transferred to The National Archives from 
-        The Ministry of Defence (MOD). There are just under ten million military service records 
-        being transferred.
-      - |
-        Once a request is made our staff will try to physically locate the record in our collection.
-      - |
-        To help our staff search for the record, you will need to provide information on the 
-        individual you are looking for.
+        To help our staff search for the record, you will need to provide 
+        information on the individual you are looking for.
     mandatory_information:
-      heading: Mandatory information that you will need for this request
+      heading: Mandatory information that you will need
       before_list:
         paragraphs:
           - "You will need to provide:"
@@ -81,33 +75,33 @@ pages:
         - Your contact details so we can answer your request
       after_list:
         paragraphs:
-          - If the information above isn’t provided, we will be unable to process your request.
+          - If the information above is not provided, we will be unable to process your request.
     proof_of_death_requirement:
-      heading: Proof of death required for individuals born after 1909
+      heading: Proof of death
       before_first_list:
         paragraphs:
           - |
-            If the person whose record you are looking for was born after 1909, we require a digital 
-            copy of proof of death for that individual. This is to protect any personal data that 
-            might be in the record that relates to a living person.
-          - "The copy of proof of death must be:"
-      first_list:
-        - In a JPG, GIF or PNG format
-        - No more than 5MB in size
-        - Clearly show all the information so our staff can read it
+            If the person whose record you are looking for was born after 1909 and is deceased, 
+            we require a digital copy of a proof of death. This is to protect any personal data 
+            in the record that might relate to a living person.
+          - "You'll need to submit one of the following forms of evidence:"
       before_second_list:
         paragraphs:
           - "Suitable forms of evidence include:"
-      second_list:
+      first_list:
         - |
-          [Copies of death certificates (opens in a new tab)](https://www.gov.uk/order-copy-birth-death-marriage-certificate)
+          [Copies of death certificates (opens in new tab)](https://www.gov.uk/order-copy-birth-death-marriage-certificate)
         - Published obituaries (detailing publication source, name of deceased, and date of birth and death)
         - |
-          [War dead records (opens in a new tab)](https://www.cwgc.org/find-records/find-war-dead/)
+          [Commonwealth War Graves’ (CWG) war dead records (opens in new tab)](https://www.cwgc.org/find-records/find-war-dead/)
+      second_list:
+        - In a JPG, GIF or PNG format
+        - No more than 5MB in size
+        - Clearly show all the information so our staff can read it
       after_second_list:
-        paragraphs:
-          - |
-            If you do not submit a proof of death when required, it is unlikely that we will be able to provide the record.
+        paragraph: |
+          If you do not submit a proof of death when required, it is 
+          unlikely that we will be able to provide the record.
     important_information_that_will_help:
       heading: Important information that will help our search
       paragraphs:
@@ -115,19 +109,29 @@ pages:
       list_items:
         - The service person's service number
         - The military branch that they served in
-        - Whether they were a commissioned officer or not
+        - If they were a commissioned officer
         - Anything else you might know about them that you think might help our search
+
     about_the_online_form:
       heading: About the online form
       paragraphs:
         - |
-          The application cannot be saved part way through. Please make sure you are ready to submit 
-          your request in one session.
+          The application cannot be saved part way through. 
+          Please make sure you are ready to submit your request in one session.
+        - |
+          We will only use the data you provide to answer your request. 
+          [Our privacy notice (opens in new tab)](https://www.nationalarchives.gov.uk/legal/privacy-policy/) 
+          explains how we collect, use, and protect personal data.
   check_ancestry:
-    heading: [Placeholder heading]
+    heading: You may want to check Ancestry
     paragraphs:
       - |
-        [Placeholder paragraph]
+        Our partner, Ancestry, hold a portion of digitised records and your record may 
+        be available to order from them. Please visit their site and check for the 
+        record before proceeding.
+      - |
+        [Search Ancestry (opens in new tab)](https://www.ancestry.co.uk/search/)
+      - If you have already checked, or do not wish to check Ancestry, please continue your request.
   are_you_sure_you_want_to_cancel:
     heading: Are you sure you want to cancel?
     paragraphs:
@@ -235,7 +239,7 @@ pages:
     paragraphs:
       - You will need to upload a digital copy of a proof of death for the service person.
       - >
-        Suitable forms of evidence include:
+        The copy of proof of death must be:
     list_items:
       - "[copies of death certificates](https://www.gov.uk/order-copy-birth-death-marriage-certificate)"
       - published obituaries (detailing publication source, name of deceased, and date of birth and death)
@@ -301,7 +305,7 @@ forms:
     before_you_start:
       call_to_action: Start now
     ready_to_continue:
-      label: I have all the mandatory information to continue with my request now
+      label: I confirm I have all the mandatory information
       messages:
         required: You must confirm you have the mandatory information before starting
     are_you_sure_you_want_to_cancel:
