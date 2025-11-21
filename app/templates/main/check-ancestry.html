@@ -7,20 +7,13 @@
 {% endblock %}
 
 {% block content %}
-<div class="tna-section tna-!--padding-top-s tna-background-accent-light">
+<div class="tna-section tna-!--padding-top-s">
   <div class="tna-container">
     <div
       class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
       <h1 class="tna-heading-xl">{{ content.pages.check_ancestry.heading }}</h1>
-    </div>
-  </div>
-</div>
-<div class="tna-section">
-  <div class="tna-container">
-    <div
-      class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
       {% for paragraph in content.pages.check_ancestry.paragraphs %}
-        <p>{{ paragraph }}</p>
+        <p>{{ paragraph | parse_markdown_links | safe }}</p>
       {% endfor %}
 
       <div class="tna-!--margin-top-m">
@@ -35,4 +28,6 @@
     </div>
   </div>
 </div>
+
+
 {% endblock %}
