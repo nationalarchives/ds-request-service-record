@@ -15,6 +15,15 @@
         {% for paragraph in content.pages.must_submit_subject_access_request.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
+        <form action="{{ url_for('main.must_submit_subject_access_request') }}" method="post" novalidate>
+          {{ form.csrf_token }}
+          <div class="tna-button-group ">
+            {{ form.submit(params={'classes': 'tna-button--plain'}) }}
+            <a href="https://discovery.nationalarchives.gov.uk/mod-dsa-request-step1" target="_blank" rel="noreferrer noopener" class="tna-button tna-button--accent">
+            {{ content.pages.must_submit_subject_access_request.call_to_action }}
+          </a>
+          </div>
+        </form>
       </div>
     </div>
   </div>

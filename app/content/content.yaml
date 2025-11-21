@@ -144,27 +144,14 @@ pages:
     start_new_request: Start a new request
   have_you_previously_made_a_request:
     heading: Have you previously made a request?
-  search_the_catalogue:
-    heading: Search our catalogue
-    paragraphs:
-      - We are in the process of adding the service records we hold to our catalogue.
-      - |
-        If you locate a document reference whose description matches the details 
-        you are looking for, you can request a copy of the record directly from the catalogue.
-      - >
-        How to search for a military service record:
-    list_items:
-      - search our catalogue by surname, service number or year of birth, or by a combination of any of these
-      - if you have a service number, try searching with that alone
-      - try using just the year of birth (some records do not have a full date of birth)
-      - try variations on the spelling of the last name
-    call_to_action: Search the catalogue
   must_submit_subject_access_request:
     heading: Submit a data access request
     paragraphs:
       - |
-        You will need to use our [INSERT NAME HERE] form to request your own Ministry of Defence (MOD) 
-        service personnel record, or if you are acting on behalf of a living service personnel member.
+        You will need to use our service under the Data Protection Act to request your own 
+        Ministry of Defence (MOD) service personnel record, or if you are acting on behalf of 
+        a living service personnel member.
+    call_to_action: Submit a data access request
   we_do_not_have_records_for_this_service_branch:
     heading: We do not hold this record
     paragraphs:

@@ -25,13 +25,18 @@ Notes:
 - The stored value is overwritten on every decorated call, which is the intended behaviour.
 - Store endpoint names, not full URLs.
 """
+
+
 def with_route_for_back_link_saved_to_session(*, route: str | None = None):
     if route is None:
         raise ValueError("Route is required")
+
     def decorator(view_func):
         @wraps(view_func)
         def wrapped(*args, **kwargs):
             session["route_for_back_link"] = route
             return view_func(*args, **kwargs)
+
         return wrapped
+
     return decorator

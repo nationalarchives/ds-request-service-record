@@ -67,6 +67,9 @@ class RoutingStateMachine(StateMachine):
     what_was_their_date_of_birth_form = State(
         enter="entering_what_was_their_date_of_birth_page", final=True
     )
+    are_you_sure_you_want_to_cancel_form = State(
+        enter="entering_are_you_sure_you_want_to_cancel_form", final=True
+    )
     service_person_details_form = State(
         enter="entering_service_person_details_form", final=True
     )
@@ -121,6 +124,11 @@ class RoutingStateMachine(StateMachine):
     continue_from_service_person_alive_form = initial.to(
         subject_access_request_page, cond="living_subject"
     ) | initial.to(service_branch_form, unless="living_subject")
+
+    continue_from_submit_subject_access_request_form = initial.to(
+        are_you_sure_you_want_to_cancel_form
+    )
+
     continue_from_service_branch_form = (
         initial.to(
             were_they_a_commissioned_officer_form,
@@ -242,6 +250,11 @@ class RoutingStateMachine(StateMachine):
     def entering_what_was_their_date_of_birth_page(self, form):
         self.route_for_current_state = (
             MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH.value
+        )
+
+    def entering_are_you_sure_you_want_to_cancel_form(self, form):
+        self.route_for_current_state = (
+            MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value
         )
 
     def entering_service_person_details_form(self, form):

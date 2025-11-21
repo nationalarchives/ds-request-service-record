@@ -1,7 +1,9 @@
 from app.constants import MultiPageFormRoutes
 from app.lib.content import load_content
 from app.lib.decorators.state_machine_decorator import with_state_machine
-from app.lib.decorators.with_back_url_saved_to_session import with_route_for_back_link_saved_to_session
+from app.lib.decorators.with_back_url_saved_to_session import (
+    with_route_for_back_link_saved_to_session,
+)
 from app.lib.decorators.with_form_prefilled_from_session import (
     with_form_prefilled_from_session,
 )
@@ -15,6 +17,7 @@ from app.main import bp
 from app.main.forms.are_you_sure_you_want_to_cancel import AreYouSureYouWantToCancel
 from app.main.forms.before_you_start import BeforeYouStart
 from app.main.forms.you_may_want_to_check_ancestry import YouMayWantToCheckAncestry
+from app.main.forms.submit_a_data_access_request import SubmitDataAccessRequest
 from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
 from app.main.forms.have_you_previously_made_a_request import (
     HaveYouPreviouslyMadeARequest,
@@ -63,7 +66,9 @@ def how_we_process_requests(form, state_machine):
 
 @bp.route("/before-you-start/", methods=["GET", "POST"])
 @with_state_machine
-@with_route_for_back_link_saved_to_session(route=MultiPageFormRoutes.BEFORE_YOU_START.value)
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.BEFORE_YOU_START.value
+)
 @with_form_prefilled_from_session(BeforeYouStart)
 def before_you_start(form, state_machine):
     if form.validate_on_submit():
@@ -126,10 +131,20 @@ def is_service_person_alive(form, state_machine):
     )
 
 
-@bp.route("/must-submit-subject-access/", methods=["GET"])
-def must_submit_subject_access_request():
+@bp.route("/must-submit-subject-access/", methods=["GET", "POST"])
+@with_state_machine
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.MUST_SUBMIT_SUBJECT_ACCESS_REQUEST.value
+)
+@with_form_prefilled_from_session(SubmitDataAccessRequest)
+def must_submit_subject_access_request(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_submit_subject_access_request_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
+
     return render_template(
         "main/must-submit-subject-access-request.html",
+        form=form,
         content=load_content(),
     )
 
