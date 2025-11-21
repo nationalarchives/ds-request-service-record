@@ -72,37 +72,6 @@ def test_continue_from_you_may_want_to_check_ancestry_sets_route():
     [
         (
             "yes",
-            "service_person_alive_form",
-            MultiPageFormRoutes.IS_SERVICE_PERSON_ALIVE.value,
-        ),
-        (
-            "no",
-            "search_the_catalogue_page",
-            MultiPageFormRoutes.SEARCH_THE_CATALOGUE.value,
-        ),
-        (
-            "unknown",
-            "search_the_catalogue_page",
-            MultiPageFormRoutes.SEARCH_THE_CATALOGUE.value,
-        ),
-    ],
-)
-def test_continue_from_have_you_checked_the_catalogue_form_routes_by_condition(
-    answer, expected_state, expected_route
-):
-    sm = RoutingStateMachine()
-    sm.continue_from_have_you_checked_the_catalogue_form(
-        form=make_form(have_you_checked_the_catalogue=answer)
-    )
-    assert sm.current_state.id == expected_state
-    assert sm.route_for_current_state == expected_route
-
-
-@pytest.mark.parametrize(
-    "answer,expected_state,expected_route",
-    [
-        (
-            "yes",
             "subject_access_request_page",
             MultiPageFormRoutes.MUST_SUBMIT_SUBJECT_ACCESS_REQUEST.value,
         ),
@@ -167,6 +136,14 @@ def test_continue_from_service_branch_form_routes_by_condition(
     sm.continue_from_service_branch_form(form=make_form(service_branch=answer))
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
+
+def test_continue_from_submit_subject_access_request_form():
+    sm = RoutingStateMachine()
+    sm.continue_from_submit_subject_access_request_form(
+        form=make_form(submit_subject_access_request=None)
+    )
+    assert sm.current_state.id == "are_you_sure_you_want_to_cancel_form"
+    assert sm.route_for_current_state == MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value
 
 
 @pytest.mark.parametrize(

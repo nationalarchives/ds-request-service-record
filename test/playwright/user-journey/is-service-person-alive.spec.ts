@@ -26,7 +26,7 @@ test.describe("the 'Is the person still alive?' form", () => {
     {
       label: "Yes",
       url: Paths.MUST_SUBMIT_SUBJECT_ACCESS,
-      heading: /Submit a data request for a living subject/,
+      heading: /Submit a data access request/,
       description:
         "when 'Yes' is selected, presents the 'Data request for a living person' page ",
     },
@@ -74,6 +74,6 @@ test.describe("the 'Is the person still alive?' form", () => {
     page,
   }) => {
     await page.getByRole("link", { name: "Back" }).click();
-    await expect(page).toHaveURL(Paths.HAVE_YOU_CHECKED_THE_CATALOGUE);
+    await expect(page).toHaveURL(Paths.YOU_MAY_WANT_TO_CHECK_ANCESTRY);
   });
 });
