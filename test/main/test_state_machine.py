@@ -80,6 +80,11 @@ def test_continue_from_you_may_want_to_check_ancestry_sets_route():
             "search_the_catalogue_page",
             MultiPageFormRoutes.SEARCH_THE_CATALOGUE.value,
         ),
+        (
+            "unknown",
+            "search_the_catalogue_page",
+            MultiPageFormRoutes.SEARCH_THE_CATALOGUE.value,
+        ),
     ],
 )
 def test_continue_from_have_you_checked_the_catalogue_form_routes_by_condition(
