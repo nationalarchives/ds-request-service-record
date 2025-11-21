@@ -28,7 +28,7 @@ test.describe("the 'Before you start' form", () => {
         .getByLabel(/I have all the mandatory information/)
         .check({ force: true });
       await page.getByRole("button", { name: /Start now/i }).click();
-      await expect(page).toHaveURL(Paths.CHECK_ANCESTRY);
+      await expect(page).toHaveURL(Paths.YOU_MAY_WANT_TO_CHECK_ANCESTRY);
     });
   });
 

@@ -122,7 +122,7 @@ pages:
           We will only use the data you provide to answer your request. 
           [Our privacy notice (opens in new tab)](https://www.nationalarchives.gov.uk/legal/privacy-policy/) 
           explains how we collect, use, and protect personal data.
-  check_ancestry:
+  you_may_want_to_check_ancestry:
     heading: You may want to check Ancestry
     paragraphs:
       - |
@@ -310,7 +310,7 @@ forms:
         required: You must confirm you have the mandatory information before starting
     are_you_sure_you_want_to_cancel:
       call_to_action: "Yes"
-    check_ancestry:
+    you_may_want_to_check_ancestry:
       call_to_action: Continue
     have_you_checked_the_catalogue:
       options:

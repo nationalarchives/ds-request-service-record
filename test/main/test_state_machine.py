@@ -41,15 +41,30 @@ def test_continue_from_start_form_sets_route():
 def test_continue_from_before_you_start_sets_route():
     sm = RoutingStateMachine()
     sm.continue_from_before_you_start_form()
-    assert sm.current_state.id == "check_ancestry_page"
-    assert sm.route_for_current_state == MultiPageFormRoutes.CHECK_ANCESTRY.value
+    assert sm.current_state.id == "you_may_want_to_check_ancestry_page"
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.YOU_MAY_WANT_TO_CHECK_ANCESTRY.value
+    )
 
 
 def test_continue_from_are_you_sure_you_want_to_cancel_sets_route():
     sm = RoutingStateMachine()
     sm.continue_from_are_you_sure_you_want_to_cancel_form()
     assert sm.current_state.id == "you_have_cancelled_your_request_page"
-    assert sm.route_for_current_state == MultiPageFormRoutes.YOU_HAVE_CANCELLED_YOUR_REQUEST.value
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.YOU_HAVE_CANCELLED_YOUR_REQUEST.value
+    )
+
+
+def test_continue_from_you_may_want_to_check_ancestry_sets_route():
+    sm = RoutingStateMachine()
+    sm.continue_from_you_may_want_to_check_ancestry_form()
+    assert sm.current_state.id == "service_person_alive_form"
+    assert (
+        sm.route_for_current_state == MultiPageFormRoutes.IS_SERVICE_PERSON_ALIVE.value
+    )
 
 
 @pytest.mark.parametrize(

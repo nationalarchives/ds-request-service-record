@@ -6,7 +6,7 @@ export const Paths = {
   BEFORE_YOU_START: `${basePath}/before-you-start/`,
   YOU_HAVE_CANCELLED_YOUR_REQUEST: `${basePath}/request-cancelled/`,
   ARE_YOU_SURE_YOU_WANT_TO_CANCEL: `${basePath}/are-you-sure-you-want-to-cancel/`,
-  CHECK_ANCESTRY: `${basePath}/check-ancestry/`,
+  YOU_MAY_WANT_TO_CHECK_ANCESTRY: `${basePath}/check-ancestry/`,
   HAVE_YOU_CHECKED_THE_CATALOGUE: `${basePath}/have-you-checked-the-catalogue/`,
   HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST: `${basePath}/have-you-previously-made-a-request/`,
   HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED: `${basePath}/how-do-you-want-your-order-processed/`,
