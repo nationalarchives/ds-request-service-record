@@ -36,6 +36,13 @@ test.describe("the 'Is the person still alive?' form", () => {
       heading: /What was the person's service branch\?/,
       description: "when 'No' is selected, presents the 'Service branch' form",
     },
+    {
+      label: "I do not know",
+      url: Paths.SELECT_SERVICE_BRANCH,
+      heading: /What was the person's service branch\?/,
+      description:
+        "when 'I do not know' is selected, presents the 'Service branch' form",
+    },
   ];
 
   selectionMappings.forEach(({ label, url, heading, description }) => {
