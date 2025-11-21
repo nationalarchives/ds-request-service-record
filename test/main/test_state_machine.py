@@ -107,6 +107,11 @@ def test_continue_from_have_you_checked_the_catalogue_form_routes_by_condition(
             MultiPageFormRoutes.MUST_SUBMIT_SUBJECT_ACCESS_REQUEST.value,
         ),
         ("no", "service_branch_form", MultiPageFormRoutes.SERVICE_BRANCH_FORM.value),
+        (
+            "unknown",
+            "service_branch_form",
+            MultiPageFormRoutes.SERVICE_BRANCH_FORM.value,
+        ),
     ],
 )
 def test_continue_from_service_person_alive_form_routes_by_condition(
