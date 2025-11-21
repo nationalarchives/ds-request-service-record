@@ -6,7 +6,7 @@ class MultiPageFormRoutes(Enum):
     BEFORE_YOU_START = "main.before_you_start"
     CHECK_ANCESTRY = "main.check_ancestry"
     ARE_YOU_SURE_YOU_WANT_TO_CANCEL = "main.are_you_sure_you_want_to_cancel"
-    REQUEST_CANCELLED = "main.request_cancelled"
+    YOU_HAVE_CANCELLED_YOUR_REQUEST = "main.you_have_cancelled_your_request"
     HAVE_YOU_CHECKED_THE_CATALOGUE = "main.have_you_checked_the_catalogue"
     SEARCH_THE_CATALOGUE = "main.search_the_catalogue"
     IS_SERVICE_PERSON_ALIVE = "main.is_service_person_alive"

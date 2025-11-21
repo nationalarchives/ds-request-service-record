@@ -85,8 +85,8 @@ def are_you_sure_you_want_to_cancel(form, state_machine):
 
 
 @bp.route("/request-cancelled/", methods=["GET"])
-def request_cancelled():
-    return render_template("main/request-cancelled.html", content=load_content())
+def you_have_cancelled_your_request():
+    return render_template("main/you-have-cancelled-your-request.html", content=load_content())
 
 
 @bp.route("/check-ancestry/", methods=["GET", "POST"])

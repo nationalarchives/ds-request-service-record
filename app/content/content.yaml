@@ -137,7 +137,7 @@ pages:
     paragraphs:
       - You will need to start a new request from the beginning if you choose to cancel.
     no_continue: "No"
-  request_cancelled:
+  you_have_cancelled_your_request:
     heading: You have cancelled your request
     paragraphs:
       - No information has been submitted to us. To send a new request for a military service record, please start a new request form.
