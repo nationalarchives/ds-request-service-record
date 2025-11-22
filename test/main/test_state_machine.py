@@ -137,13 +137,17 @@ def test_continue_from_service_branch_form_routes_by_condition(
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
 
+
 def test_continue_from_submit_subject_access_request_form():
     sm = RoutingStateMachine()
     sm.continue_from_submit_subject_access_request_form(
         form=make_form(submit_subject_access_request=None)
     )
     assert sm.current_state.id == "are_you_sure_you_want_to_cancel_form"
-    assert sm.route_for_current_state == MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value
+    )
 
 
 @pytest.mark.parametrize(
