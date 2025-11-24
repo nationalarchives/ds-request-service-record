@@ -59,8 +59,8 @@ class RoutingStateMachine(StateMachine):
         enter="entering_were_they_a_commissioned_officer_form", final=True
     )
 
-    we_do_not_have_records_for_this_service_branch_page = State(
-        enter="entering_we_do_not_have_records_for_this_service_branch_page", final=True
+    we_do_not_have_royal_navy_service_records_form = State(
+        enter="entering_we_do_not_have_royal_navy_service_records_form", final=True
     )
 
     we_do_not_have_records_for_this_rank_page = State(
@@ -155,11 +155,9 @@ class RoutingStateMachine(StateMachine):
     continue_from_service_branch_form = (
         initial.to(
             were_they_a_commissioned_officer_form,
-            unless="go_to_mod or likely_unfindable",
+            unless="is_royal_navy or likely_unfindable",
         )
-        | initial.to(
-            we_do_not_have_records_for_this_service_branch_page, cond="go_to_mod"
-        )
+        | initial.to(we_do_not_have_royal_navy_service_records_form, cond="is_royal_navy")
         | initial.to(we_are_unlikely_to_find_this_record_page, cond="likely_unfindable")
     )
 
@@ -167,6 +165,9 @@ class RoutingStateMachine(StateMachine):
         we_may_hold_this_record_page, unless="was_officer"
     ) | initial.to(we_do_not_have_records_for_this_rank_page, cond="was_officer")
 
+    continue_from_we_do_not_have_royal_navy_service_records_form = initial.to(
+        are_you_sure_you_want_to_cancel_form
+    )
     continue_from_we_may_hold_this_record_form = initial.to(
         what_was_their_date_of_birth_form
     )
@@ -252,9 +253,9 @@ class RoutingStateMachine(StateMachine):
             MultiPageFormRoutes.WERE_THEY_A_COMMISSIONED_OFFICER_FORM.value
         )
 
-    def entering_we_do_not_have_records_for_this_service_branch_page(self):
+    def entering_we_do_not_have_royal_navy_service_records_form(self):
         self.route_for_current_state = (
-            MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_THIS_SERVICE_BRANCH.value
+            MultiPageFormRoutes.WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS.value
         )
 
     def entering_we_do_not_have_records_for_this_rank_page(self):
@@ -327,8 +328,8 @@ class RoutingStateMachine(StateMachine):
         """Condition method to determine if the service person is alive."""
         return form.is_service_person_alive.data == "yes"
 
-    def go_to_mod(self, form):
-        """Condition method to determine if the user should be directed to the MOD."""
+    def is_royal_navy(self, form):
+        """Condition method to determine if the service branch is Royal Navy."""
         return form.service_branch.data in ["ROYAL_NAVY"]
 
     def likely_unfindable(self, form):

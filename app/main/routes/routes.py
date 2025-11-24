@@ -17,7 +17,7 @@ from app.main import bp
 from app.main.forms.are_you_sure_you_want_to_cancel import AreYouSureYouWantToCancel
 from app.main.forms.before_you_start import BeforeYouStart
 from app.main.forms.you_may_want_to_check_ancestry import YouMayWantToCheckAncestry
-from app.main.forms.submit_a_data_access_request import SubmitDataAccessRequest
+from app.main.forms.exit_this_form import ExitThisForm
 from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
 from app.main.forms.have_you_previously_made_a_request import (
     HaveYouPreviouslyMadeARequest,
@@ -136,7 +136,7 @@ def is_service_person_alive(form, state_machine):
 @with_route_for_back_link_saved_to_session(
     route=MultiPageFormRoutes.MUST_SUBMIT_SUBJECT_ACCESS_REQUEST.value
 )
-@with_form_prefilled_from_session(SubmitDataAccessRequest)
+@with_form_prefilled_from_session(ExitThisForm)
 def must_submit_subject_access_request(form, state_machine):
     if form.validate_on_submit():
         state_machine.continue_from_submit_subject_access_request_form(form)
@@ -187,10 +187,19 @@ def were_they_a_commissioned_officer(form, state_machine):
     )
 
 
-@bp.route("/we-do-not-have-records-for-this-service-branch/", methods=["GET"])
-def we_do_not_have_records_for_this_service_branch():
+@bp.route("/we-do-not-have-royal-navy-service-branch-records/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(ExitThisForm)
+@with_state_machine
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS.value
+)
+def we_do_not_have_royal_navy_service_records(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_we_do_not_have_royal_navy_service_records_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/we-do-not-have-records-for-this-service-branch.html",
+        "main/we-do-not-have-royal-navy-service-branch-records.html",
+        form=form,
         content=load_content(),
     )
 
