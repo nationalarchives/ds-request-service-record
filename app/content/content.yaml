@@ -349,7 +349,7 @@ forms:
     regiment:
       label: Regiment (optional)
     service_branch:
-      label: What was the person's service branch?
+      label: Which military branch did the person serve in?
       messages:
         required: Select the branch they served in
     additional_information:
