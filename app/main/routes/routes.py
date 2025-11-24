@@ -1,4 +1,4 @@
-from app.constants import MultiPageFormRoutes
+from app.constants import MultiPageFormRoutes, ExternalLinks
 from app.lib.content import load_content
 from app.lib.decorators.state_machine_decorator import with_state_machine
 from app.lib.decorators.with_back_url_saved_to_session import (
@@ -146,6 +146,7 @@ def must_submit_subject_access_request(form, state_machine):
         "main/must-submit-subject-access-request.html",
         form=form,
         content=load_content(),
+        subject_access_request_link=ExternalLinks.SUBJECT_ACCESS_REQUEST_FORM,
     )
 
 
@@ -201,6 +202,7 @@ def we_do_not_have_royal_navy_service_records(form, state_machine):
         "main/we-do-not-have-royal-navy-service-branch-records.html",
         form=form,
         content=load_content(),
+        mod_service_link=ExternalLinks.MOD_SERVICE,
     )
 
 

@@ -19,7 +19,7 @@
           {{ form.csrf_token }}
           <div class="tna-button-group ">
             {{ form.submit(params={'classes': 'tna-button--plain'}) }}
-            <a href="https://www.gov.uk/get-copy-military-records-of-service/apply-for-the-records-of-a-deceased-serviceperson" target="_blank"
+            <a href="{{ mod_service_link }}" target="_blank"
                rel="noreferrer noopener" class="tna-button tna-button--accent">
               {{ content.pages.we_do_not_have_royal_navy_service_records.call_to_action }}
             </a>

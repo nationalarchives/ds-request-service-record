@@ -157,7 +157,9 @@ class RoutingStateMachine(StateMachine):
             were_they_a_commissioned_officer_form,
             unless="is_royal_navy or likely_unfindable",
         )
-        | initial.to(we_do_not_have_royal_navy_service_records_form, cond="is_royal_navy")
+        | initial.to(
+            we_do_not_have_royal_navy_service_records_form, cond="is_royal_navy"
+        )
         | initial.to(we_are_unlikely_to_find_this_record_page, cond="likely_unfindable")
     )
 
