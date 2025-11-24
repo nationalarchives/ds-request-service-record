@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{%- set pageTitle = content.app.title -%}
+
+{% block beforeContent %}
+  {{ backLink(url_for('main.service_branch_form')) }}
+{% endblock %}
+
+{% block content %}
+  <div class="tna-section tna-!--padding-top-s">
+    <div class="tna-container">
+      <div
+        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+        <h1 class="tna-heading-xl">{{ content.pages.we_do_not_have_royal_navy_service_records.heading }}</h1>
+        {% for paragraph in content.pages.we_do_not_have_royal_navy_service_records.paragraphs %}
+          <p>{{ paragraph | safe }}</p>
+        {% endfor %}
+        <form action="{{ url_for('main.we_do_not_have_royal_navy_service_records') }}" method="post" novalidate>
+          {{ form.csrf_token }}
+          <div class="tna-button-group ">
+            {{ form.submit(params={'classes': 'tna-button--plain'}) }}
+            <a href="https://www.gov.uk/get-copy-military-records-of-service/apply-for-the-records-of-a-deceased-serviceperson" target="_blank"
+               rel="noreferrer noopener" class="tna-button tna-button--accent">
+              {{ content.pages.we_do_not_have_royal_navy_service_records.call_to_action }}
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

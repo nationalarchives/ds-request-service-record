@@ -10,7 +10,7 @@ test.describe("the service branch form", () => {
     },
     {
       branchLabel: "Royal Navy (including Royal Marines)",
-      nextUrl: Paths.WE_DO_NOT_HAVE_RECORDS_FOR_THIS_SERVICE_BRANCH,
+      nextUrl: Paths.WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS,
       expectedHeading: /We do not hold this record/,
     },
     {

@@ -104,8 +104,8 @@ def test_continue_from_service_person_alive_form_routes_by_condition(
         ),
         (
             "ROYAL_NAVY",
-            "we_do_not_have_records_for_this_service_branch_page",
-            MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_THIS_SERVICE_BRANCH.value,
+            "we_do_not_have_royal_navy_service_records_form",
+            MultiPageFormRoutes.WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS.value,
         ),
         (
             "HOME_GUARD",
@@ -136,6 +136,16 @@ def test_continue_from_service_branch_form_routes_by_condition(
     sm.continue_from_service_branch_form(form=make_form(service_branch=answer))
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
+
+
+def test_continue_from_we_do_not_have_royal_navy_service_records():
+    sm = RoutingStateMachine()
+    sm.continue_from_we_do_not_have_royal_navy_service_records_form()
+    assert sm.current_state.id == "are_you_sure_you_want_to_cancel_form"
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value
+    )
 
 
 def test_continue_from_submit_subject_access_request_form():

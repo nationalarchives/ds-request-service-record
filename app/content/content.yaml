@@ -152,12 +152,13 @@ pages:
         Ministry of Defence (MOD) service personnel record, or if you are acting on behalf of 
         a living service personnel member.
     call_to_action: Submit a data access request
-  we_do_not_have_records_for_this_service_branch:
+  we_do_not_have_royal_navy_service_records:
     heading: We do not hold this record
     paragraphs:
       - |
-        The Royal Navy service personnel records will not be transferred to us until after April 2026. 
-        Please use the Ministry of Defence service to request access to Royal Navy records.
+        The Royal Navy service personnel records will not be transferred to us until after April 
+        2026. Please use the <strong>Ministry of Defence service</strong> to request access to Royal Navy records.
+    call_to_action: Request from the Ministry of Defence
   we_do_not_have_records_for_this_rank:
     heading: We do not have records for this rank
     paragraphs:

@@ -8,7 +8,7 @@ from wtforms import (
 )
 
 
-class SubmitDataAccessRequest(FlaskForm):
+class ExitThisForm(FlaskForm):
     content = load_content()
 
     submit = SubmitField(

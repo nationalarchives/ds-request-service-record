@@ -16,8 +16,8 @@ class MultiPageFormRoutes(Enum):
         "main.only_living_subjects_can_request_their_record"
     )
     WERE_THEY_A_COMMISSIONED_OFFICER_FORM = "main.were_they_a_commissioned_officer"
-    WE_DO_NOT_HAVE_RECORDS_FOR_THIS_SERVICE_BRANCH = (
-        "main.we_do_not_have_records_for_this_service_branch"
+    WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS = (
+        "main.we_do_not_have_royal_navy_service_records"
     )
     WE_DO_NOT_HAVE_RECORDS_FOR_THIS_RANK = "main.we_do_not_have_records_for_this_rank"
     WE_ARE_UNLIKELY_TO_FIND_THIS_RECORD = "main.we_are_unlikely_to_find_this_record"
