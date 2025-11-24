@@ -61,6 +61,13 @@ class Ranks(Enum):
     NON_OFFICER = "Non-Officer"
 
 
+class ExternalLinks:
+    SUBJECT_ACCESS_REQUEST_FORM = (
+        "https://discovery.nationalarchives.gov.uk/mod-dsa-request-step1"
+    )
+    MOD_SERVICE = "https://www.gov.uk/get-copy-military-records-of-service/apply-for-the-records-of-a-deceased-serviceperson"
+
+
 COUNTRY_CHOICES = [
     "United Kingdom",
     "Afghanistan",

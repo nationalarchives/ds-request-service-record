@@ -11,6 +11,25 @@ test.describe("the 'We do not hold this record' form", () => {
     await expect(page.locator("h1")).toHaveText(/We do not hold this record/);
   });
 
+  test.describe("clicking the 'Request from the Ministry of Defence' button", () => {
+    test("opens link in new tab", async ({ page }) => {
+      // Trigger that opens a new tab (e.g. <a target="_blank">)
+      const [newPage] = await Promise.all([
+        page.waitForEvent("popup"), // waits for the new tab
+        page
+          .getByRole("link", { name: "Request from the Ministry of Defence" })
+          .click(),
+      ]);
+
+      await newPage.waitForLoadState("domcontentloaded");
+
+      // Assertions on the new tab
+      expect(newPage.url()).toContain(
+        "https://www.gov.uk/get-copy-military-records-of-service/apply-for-the-records-of-a-deceased-serviceperson",
+      );
+    });
+  });
+
   test.describe("'Exit this form' and 'Back' links", () => {
     test("clicking the 'Exit this form' button takes the user to 'Are you sure you want to cancel?'", async ({
       page,
