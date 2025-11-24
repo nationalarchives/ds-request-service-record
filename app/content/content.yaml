@@ -172,26 +172,25 @@ pages:
     paragraphs:
       - You will need to request the service record from the Ministry of Defence.
     call_to_action: Apply for MOD records
-  we_are_unlikely_to_find_this_record:
+  we_are_unlikely_to_locate_this_record:
     heading: We are unlikely to be able to locate this record
     paragraphs:
       - |
-        Due to the high volume of Home Guard records, 
-        with over 4 million transferred to The National Archives, 
-        and the storage method used for these records, 
-        it is unlikely that we will be able to locate the record 
-        of interest within a reasonable timeframe.
+        Due to the high volume of Home Guard records, with over 4 million transferred 
+        to The National Archives, and the storage method used for these records, it 
+        is unlikely that we will be able to locate the record of interest within a 
+        reasonable timeframe.
       - |
-        Records relating to the Durham Home Guard are currently 
-        available in our catalogue.
+        Records relating to the Durham Home Guard are currently available in our catalogue.
       - |
-        The remaining Home Guard records will be made available via 
-        our partner, Ancestry. We expect all Home Guard records that 
-        have been transferred will be available via Ancestry by September 2027.
+        The remaining Home Guard records will be made available via our partner, 
+        Ancestry. We expect all Home Guard records that have been transferred will 
+        be available via Ancestry by September 2027.
       - |
-        Please only proceed if you are unable to wait until September 2027 by 
-        requesting a paid search. You will then receive a quotation based on 
-        the estimated amount of time it will take to locate the record.
+        Please only proceed if you are unable to wait until September 2027 by requesting 
+        a paid search. You will then receive a quotation based on the estimated amount 
+        of time it will take to locate the record.
+    call_to_action: Request a paid search
   we_may_hold_this_record:
     heading: We may hold this record
     paragraphs:

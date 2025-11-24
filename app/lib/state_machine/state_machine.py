@@ -67,8 +67,8 @@ class RoutingStateMachine(StateMachine):
         enter="entering_we_do_not_have_records_for_this_rank_page", final=True
     )
 
-    we_are_unlikely_to_find_this_record_page = State(
-        enter="entering_we_are_unlikely_to_find_this_record_page", final=True
+    we_are_unlikely_to_locate_this_record_form = State(
+        enter="entering_we_are_unlikely_to_locate_this_record_form", final=True
     )
 
     we_may_hold_this_record_page = State(
@@ -160,7 +160,9 @@ class RoutingStateMachine(StateMachine):
         | initial.to(
             we_do_not_have_royal_navy_service_records_form, cond="is_royal_navy"
         )
-        | initial.to(we_are_unlikely_to_find_this_record_page, cond="likely_unfindable")
+        | initial.to(
+            we_are_unlikely_to_locate_this_record_form, cond="likely_unfindable"
+        )
     )
 
     continue_from_were_they_a_commissioned_officer_form = initial.to(
@@ -170,6 +172,11 @@ class RoutingStateMachine(StateMachine):
     continue_from_we_do_not_have_royal_navy_service_records_form = initial.to(
         are_you_sure_you_want_to_cancel_form
     )
+
+    continue_from_we_are_unlikely_to_locate_this_record_form = initial.to(
+        are_you_sure_you_want_to_cancel_form
+    )
+
     continue_from_we_may_hold_this_record_form = initial.to(
         what_was_their_date_of_birth_form
     )
@@ -265,9 +272,9 @@ class RoutingStateMachine(StateMachine):
             MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_THIS_RANK.value
         )
 
-    def entering_we_are_unlikely_to_find_this_record_page(self):
+    def entering_we_are_unlikely_to_locate_this_record_form(self):
         self.route_for_current_state = (
-            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_FIND_THIS_RECORD.value
+            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD.value
         )
 
     def entering_we_may_hold_this_record_page(self):
