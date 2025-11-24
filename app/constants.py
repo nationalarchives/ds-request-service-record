@@ -41,12 +41,12 @@ class MultiPageFormRoutes(Enum):
 
 
 class ServiceBranches(Enum):
-    BRITISH_ARMY = "British Army"
-    HOME_GUARD = "Home Guard"
-    ROYAL_AIR_FORCE = "Royal Air Force"
     ROYAL_NAVY = "Royal Navy (including Royal Marines)"
+    BRITISH_ARMY = "British Army"
+    ROYAL_AIR_FORCE = "Royal Air Force"
+    HOME_GUARD = "Home Guard"
     OTHER = "Other"
-    UNKNOWN = "Don't know"
+    UNKNOWN = "I do not know"
 
 
 class OrderFeesPence(Enum):

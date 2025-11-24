@@ -19,7 +19,7 @@ test.describe("the service branch form", () => {
       expectedHeading: /Were they a commissioned officer\?/,
     },
     {
-      branchLabel: "Don't know",
+      branchLabel: "I do not know",
       nextUrl: Paths.WERE_THEY_A_COMMISSIONED_OFFICER,
       expectedHeading: /Were they a commissioned officer\?/,
     },
@@ -37,7 +37,7 @@ test.describe("the service branch form", () => {
 
   test("has the correct heading", async ({ page }) => {
     await expect(page.locator("h1")).toHaveText(
-      /What was the person's service branch\?/,
+      /Which military branch did the person serve in\?/,
     );
   });
 
