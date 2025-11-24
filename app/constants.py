@@ -20,7 +20,7 @@ class MultiPageFormRoutes(Enum):
         "main.we_do_not_have_royal_navy_service_records"
     )
     WE_DO_NOT_HAVE_RECORDS_FOR_THIS_RANK = "main.we_do_not_have_records_for_this_rank"
-    WE_ARE_UNLIKELY_TO_FIND_THIS_RECORD = "main.we_are_unlikely_to_find_this_record"
+    WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD = "main.we_are_unlikely_to_locate_this_record"
     WE_MAY_HOLD_THIS_RECORD = "main.we_may_hold_this_record"
     WHAT_WAS_THEIR_DATE_OF_BIRTH = "main.what_was_their_date_of_birth"
     WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE = (
@@ -66,6 +66,7 @@ class ExternalLinks:
         "https://discovery.nationalarchives.gov.uk/mod-dsa-request-step1"
     )
     MOD_SERVICE = "https://www.gov.uk/get-copy-military-records-of-service/apply-for-the-records-of-a-deceased-serviceperson"
+    PAID_SEARCH = "https://www.nationalarchives.gov.uk/contact-us/our-paid-search-service/request-a-paid-search/"
 
 
 COUNTRY_CHOICES = [

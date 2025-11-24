@@ -214,11 +214,21 @@ def we_do_not_have_records_for_this_rank():
     )
 
 
-@bp.route("/we-may-be-unable-to-find-this-record/", methods=["GET"])
-def we_are_unlikely_to_find_this_record():
+@bp.route("/we-are-unlikely-to-locate-this-record/", methods=["GET", "POST"])
+@with_state_machine
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD.value
+)
+@with_form_prefilled_from_session(ExitThisForm)
+def we_are_unlikely_to_locate_this_record(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_we_are_unlikely_to_locate_this_record_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/we-may-be-unable-to-find-this-record.html",
+        "main/we-are-unlikely-to-locate-this-record.html",
         content=load_content(),
+        form=form,
+        paid_search_link=ExternalLinks.PAID_SEARCH,
     )
 
 

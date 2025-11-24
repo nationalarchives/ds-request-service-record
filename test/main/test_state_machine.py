@@ -109,8 +109,8 @@ def test_continue_from_service_person_alive_form_routes_by_condition(
         ),
         (
             "HOME_GUARD",
-            "we_are_unlikely_to_find_this_record_page",
-            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_FIND_THIS_RECORD.value,
+            "we_are_unlikely_to_locate_this_record_form",
+            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD.value,
         ),
         (
             "ROYAL_AIR_FORCE",
@@ -141,6 +141,16 @@ def test_continue_from_service_branch_form_routes_by_condition(
 def test_continue_from_we_do_not_have_royal_navy_service_records():
     sm = RoutingStateMachine()
     sm.continue_from_we_do_not_have_royal_navy_service_records_form()
+    assert sm.current_state.id == "are_you_sure_you_want_to_cancel_form"
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value
+    )
+
+
+def test_continue_from_we_are_unlikely_to_locate_this_record():
+    sm = RoutingStateMachine()
+    sm.continue_from_we_are_unlikely_to_locate_this_record_form()
     assert sm.current_state.id == "are_you_sure_you_want_to_cancel_form"
     assert (
         sm.route_for_current_state

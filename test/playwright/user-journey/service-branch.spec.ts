@@ -25,7 +25,7 @@ test.describe("the service branch form", () => {
     },
     {
       branchLabel: "Home Guard",
-      nextUrl: Paths.WE_ARE_UNLIKELY_TO_FIND_THIS_RECORD,
+      nextUrl: Paths.WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD,
       expectedHeading: /We are unlikely to be able to locate this record/,
     },
   ];
