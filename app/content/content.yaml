@@ -142,6 +142,27 @@ pages:
     paragraphs:
       - No information has been submitted to us. To send a new request for a military service record, please start a new request form.
     start_new_request: Start a new request
+  were_they_a_commissioned_officer:
+    heading: Were they a commissioned officer?
+    paragraphs:
+      - |
+        Service records are often categorised as either 'Commissioned Officers' or 'Other Ranks'. 
+        Information on whether the service person was a Commissioned Officer will help confirm if 
+        the service record has been transferred to The National Archives or is still with the Ministry 
+        of Defence.
+    summary: What are the commissioned officer ranks?
+    ranks:
+      - Second Lieutenant
+      - Lieutenant
+      - Captain
+      - Major
+      - Lieutenant Colonel
+      - Colonel
+      - Brigadier
+      - Major General
+      - Lieutenant General
+      - General
+      - Field Marshal
   have_you_previously_made_a_request:
     heading: Have you previously made a request?
   must_submit_subject_access_request:
