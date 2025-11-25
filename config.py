@@ -31,7 +31,7 @@ class Production(Features):
 
     SECRET_KEY: str = os.environ.get("SECRET_KEY", "")
 
-    DEBUG: bool = strtobool(os.getenv("DEBUG", "False"))
+    DEBUG: bool = False
 
     SENTRY_DSN: str = os.getenv("SENTRY_DSN", "")
     SENTRY_JS_ID: str = os.getenv("SENTRY_JS_ID", "")
@@ -89,12 +89,16 @@ class Production(Features):
 
 
 class Staging(Production):
+    DEBUG: bool = strtobool(os.getenv("DEBUG", "False"))
+
     SENTRY_SAMPLE_RATE: float = float(os.getenv("SENTRY_SAMPLE_RATE", "1"))
 
     CACHE_DEFAULT_TIMEOUT: int = int(os.environ.get("CACHE_DEFAULT_TIMEOUT", "60"))
 
 
 class Develop(Production):
+    DEBUG: bool = strtobool(os.getenv("DEBUG", "False"))
+    
     SENTRY_SAMPLE_RATE: float = float(os.getenv("SENTRY_SAMPLE_RATE", "0"))
 
     CACHE_DEFAULT_TIMEOUT: int = int(os.environ.get("CACHE_DEFAULT_TIMEOUT", "1"))
