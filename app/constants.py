@@ -2,11 +2,11 @@ from enum import Enum
 
 
 class MultiPageFormRoutes(Enum):
-    HOW_THE_PROCESS_WORKS = "main.how_the_process_works"
+    HOW_WE_PROCESS_REQUESTS = "main.how_we_process_requests"
     BEFORE_YOU_START = "main.before_you_start"
-    CHECK_ANCESTRY = "main.check_ancestry"
+    YOU_MAY_WANT_TO_CHECK_ANCESTRY = "main.you_may_want_to_check_ancestry"
     ARE_YOU_SURE_YOU_WANT_TO_CANCEL = "main.are_you_sure_you_want_to_cancel"
-    REQUEST_CANCELLED = "main.request_cancelled"
+    YOU_HAVE_CANCELLED_YOUR_REQUEST = "main.you_have_cancelled_your_request"
     HAVE_YOU_CHECKED_THE_CATALOGUE = "main.have_you_checked_the_catalogue"
     SEARCH_THE_CATALOGUE = "main.search_the_catalogue"
     IS_SERVICE_PERSON_ALIVE = "main.is_service_person_alive"
@@ -16,11 +16,11 @@ class MultiPageFormRoutes(Enum):
         "main.only_living_subjects_can_request_their_record"
     )
     WERE_THEY_A_COMMISSIONED_OFFICER_FORM = "main.were_they_a_commissioned_officer"
-    WE_DO_NOT_HAVE_RECORDS_FOR_THIS_SERVICE_BRANCH = (
-        "main.we_do_not_have_records_for_this_service_branch"
+    WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS = (
+        "main.we_do_not_have_royal_navy_service_records"
     )
     WE_DO_NOT_HAVE_RECORDS_FOR_THIS_RANK = "main.we_do_not_have_records_for_this_rank"
-    WE_ARE_UNLIKELY_TO_FIND_THIS_RECORD = "main.we_are_unlikely_to_find_this_record"
+    WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD = "main.we_are_unlikely_to_locate_this_record"
     WE_MAY_HOLD_THIS_RECORD = "main.we_may_hold_this_record"
     WHAT_WAS_THEIR_DATE_OF_BIRTH = "main.what_was_their_date_of_birth"
     WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE = (
@@ -41,12 +41,12 @@ class MultiPageFormRoutes(Enum):
 
 
 class ServiceBranches(Enum):
-    BRITISH_ARMY = "British Army"
-    HOME_GUARD = "Home Guard"
-    ROYAL_AIR_FORCE = "Royal Air Force"
     ROYAL_NAVY = "Royal Navy (including Royal Marines)"
+    BRITISH_ARMY = "British Army"
+    ROYAL_AIR_FORCE = "Royal Air Force"
+    HOME_GUARD = "Home Guard"
     OTHER = "Other"
-    UNKNOWN = "Don't know"
+    UNKNOWN = "I do not know"
 
 
 class OrderFeesPence(Enum):
@@ -59,6 +59,14 @@ class OrderFeesPence(Enum):
 class Ranks(Enum):
     OFFICER = "Officer"
     NON_OFFICER = "Non-Officer"
+
+
+class ExternalLinks:
+    SUBJECT_ACCESS_REQUEST_FORM = (
+        "https://discovery.nationalarchives.gov.uk/mod-dsa-request-step1"
+    )
+    MOD_SERVICE = "https://www.gov.uk/get-copy-military-records-of-service/apply-for-the-records-of-a-deceased-serviceperson"
+    PAID_SEARCH = "https://www.nationalarchives.gov.uk/contact-us/our-paid-search-service/request-a-paid-search/"
 
 
 COUNTRY_CHOICES = [

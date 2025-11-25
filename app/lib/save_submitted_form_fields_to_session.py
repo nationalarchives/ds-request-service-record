@@ -18,9 +18,9 @@ def save_submitted_form_fields_to_session(
         if field_name not in ["csrf_token", "submit"]:
             field_data = field.data
             if isinstance(field_data, datetime.date):
-                field_data = field_data.isoformat()
+                field_data = field_data.strftime("%d %B %Y")
             elif isinstance(field_data, datetime.datetime):
-                field_data = field_data.date().isoformat()
+                field_data = field_data.date().strftime("%d %B %Y")
             data[field_name] = field_data
     # We need to merge with existing data (if any) instead of overwriting - this caught me out initially
     existing = session_obj.get("form_data")

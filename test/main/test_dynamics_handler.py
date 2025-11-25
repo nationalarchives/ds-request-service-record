@@ -23,25 +23,25 @@ class SubjectStatusTests(unittest.TestCase):
         self.ctx.pop()
 
     def test_age_over_115_sets_FOIOP(self):
-        dob = "1900-01-01"
+        dob = "01 January 1900"
         r = DummyRecord(dob, None, "standard")
         self.assertEqual(subject_status(r), "? FOI DIRECT MOD FOIOP1")
 
     def test_evidence_of_death_sets_FOICD(self):
         recent_year = datetime.now().year - 40
-        dob = f"{recent_year}-06-15"
+        dob = f"15 June {recent_year}"
         r = DummyRecord(dob, "file.png", "standard")
         self.assertEqual(subject_status(r), "? FOI DIRECT MOD FOICD1")
 
     def test_no_evidence_sets_FOICDN_standard(self):
         recent_year = datetime.now().year - 30
-        dob = f"{recent_year}-03-10"
+        dob = f"10 March {recent_year}"
         r = DummyRecord(dob, None, "standard")
         self.assertEqual(subject_status(r), "? FOI DIRECT MOD FOICDN1")
 
     def test_no_evidence_sets_FOICDN_full(self):
         recent_year = datetime.now().year - 25
-        dob = f"{recent_year}-08-20"
+        dob = f"20 August {recent_year}"
         r = DummyRecord(dob, None, "full")
         self.assertEqual(subject_status(r), "? FOI DIRECT MOD FOICDN2")
 

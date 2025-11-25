@@ -58,14 +58,19 @@
 {% if 'cookie_preferences_set' not in request.cookies or not request.cookies.get('cookie_preferences_set') %}
 {{ tnaCookieBanner({
   'serviceName': 'The National Archives',
-  'cookiesUrl': 'https://www.nationalarchives.gov.uk/cookies/'
+  'cookiesUrl': 'https://www.nationalarchives.gov.uk/cookies/',
+  'preferencesSetKey': 'dontShowCookieNotice'
 }) | indent(6) }}
 {% endif %}
 {% endblock %}
 
 {% block header %}
 {{ tnaGlobalHeader({
-  'defaultContent': True
+  'defaultContent': True,
+  'phaseBanner': {
+    'phase': 'Alpha',
+    'message': 'This service is still in development.'
+  }
 }) | indent(6) }}
 {% endblock %}
 

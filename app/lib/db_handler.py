@@ -1,3 +1,4 @@
+from app.constants import ServiceBranches
 from app.lib.models import (
     DynamicsPayment,
     GOVUKDynamicsPayment,
@@ -139,4 +140,8 @@ def transform_form_data_to_record(form_data: dict) -> dict:
         transformed_data["delivery_type"] = form_data.get(
             "how_do_you_want_your_order_processed_full_option"
         )
+
+    if service_branch := form_data.get("service_branch"):
+        if service_branch in ServiceBranches.__members__:
+            transformed_data["service_branch"] = ServiceBranches[service_branch].value
     return transformed_data

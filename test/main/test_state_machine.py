@@ -32,48 +32,39 @@ def test_initial_state_has_no_route():
 def test_continue_from_start_form_sets_route():
     sm = RoutingStateMachine()
     sm.continue_from_start_form()
-    assert sm.current_state.id == "how_the_process_works_form"
-    assert sm.route_for_current_state == MultiPageFormRoutes.HOW_THE_PROCESS_WORKS.value
+    assert sm.current_state.id == "how_we_process_requests_form"
+    assert (
+        sm.route_for_current_state == MultiPageFormRoutes.HOW_WE_PROCESS_REQUESTS.value
+    )
 
 
 def test_continue_from_before_you_start_sets_route():
     sm = RoutingStateMachine()
     sm.continue_from_before_you_start_form()
-    assert sm.current_state.id == "check_ancestry_page"
-    assert sm.route_for_current_state == MultiPageFormRoutes.CHECK_ANCESTRY.value
+    assert sm.current_state.id == "you_may_want_to_check_ancestry_page"
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.YOU_MAY_WANT_TO_CHECK_ANCESTRY.value
+    )
 
 
 def test_continue_from_are_you_sure_you_want_to_cancel_sets_route():
     sm = RoutingStateMachine()
     sm.continue_from_are_you_sure_you_want_to_cancel_form()
-    assert sm.current_state.id == "request_cancelled_page"
-    assert sm.route_for_current_state == MultiPageFormRoutes.REQUEST_CANCELLED.value
-
-
-@pytest.mark.parametrize(
-    "answer,expected_state,expected_route",
-    [
-        (
-            "yes",
-            "service_person_alive_form",
-            MultiPageFormRoutes.IS_SERVICE_PERSON_ALIVE.value,
-        ),
-        (
-            "no",
-            "search_the_catalogue_page",
-            MultiPageFormRoutes.SEARCH_THE_CATALOGUE.value,
-        ),
-    ],
-)
-def test_continue_from_have_you_checked_the_catalogue_form_routes_by_condition(
-    answer, expected_state, expected_route
-):
-    sm = RoutingStateMachine()
-    sm.continue_from_have_you_checked_the_catalogue_form(
-        form=make_form(have_you_checked_the_catalogue=answer)
+    assert sm.current_state.id == "you_have_cancelled_your_request_page"
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.YOU_HAVE_CANCELLED_YOUR_REQUEST.value
     )
-    assert sm.current_state.id == expected_state
-    assert sm.route_for_current_state == expected_route
+
+
+def test_continue_from_you_may_want_to_check_ancestry_sets_route():
+    sm = RoutingStateMachine()
+    sm.continue_from_you_may_want_to_check_ancestry_form()
+    assert sm.current_state.id == "service_person_alive_form"
+    assert (
+        sm.route_for_current_state == MultiPageFormRoutes.IS_SERVICE_PERSON_ALIVE.value
+    )
 
 
 @pytest.mark.parametrize(
@@ -85,6 +76,11 @@ def test_continue_from_have_you_checked_the_catalogue_form_routes_by_condition(
             MultiPageFormRoutes.MUST_SUBMIT_SUBJECT_ACCESS_REQUEST.value,
         ),
         ("no", "service_branch_form", MultiPageFormRoutes.SERVICE_BRANCH_FORM.value),
+        (
+            "unknown",
+            "service_branch_form",
+            MultiPageFormRoutes.SERVICE_BRANCH_FORM.value,
+        ),
     ],
 )
 def test_continue_from_service_person_alive_form_routes_by_condition(
@@ -108,13 +104,13 @@ def test_continue_from_service_person_alive_form_routes_by_condition(
         ),
         (
             "ROYAL_NAVY",
-            "we_do_not_have_records_for_this_service_branch_page",
-            MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_THIS_SERVICE_BRANCH.value,
+            "we_do_not_have_royal_navy_service_records_form",
+            MultiPageFormRoutes.WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS.value,
         ),
         (
             "HOME_GUARD",
-            "we_are_unlikely_to_find_this_record_page",
-            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_FIND_THIS_RECORD.value,
+            "we_are_unlikely_to_locate_this_record_form",
+            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD.value,
         ),
         (
             "ROYAL_AIR_FORCE",
@@ -140,6 +136,38 @@ def test_continue_from_service_branch_form_routes_by_condition(
     sm.continue_from_service_branch_form(form=make_form(service_branch=answer))
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
+
+
+def test_continue_from_we_do_not_have_royal_navy_service_records():
+    sm = RoutingStateMachine()
+    sm.continue_from_we_do_not_have_royal_navy_service_records_form()
+    assert sm.current_state.id == "are_you_sure_you_want_to_cancel_form"
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value
+    )
+
+
+def test_continue_from_we_are_unlikely_to_locate_this_record():
+    sm = RoutingStateMachine()
+    sm.continue_from_we_are_unlikely_to_locate_this_record_form()
+    assert sm.current_state.id == "are_you_sure_you_want_to_cancel_form"
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value
+    )
+
+
+def test_continue_from_submit_subject_access_request_form():
+    sm = RoutingStateMachine()
+    sm.continue_from_submit_subject_access_request_form(
+        form=make_form(submit_subject_access_request=None)
+    )
+    assert sm.current_state.id == "are_you_sure_you_want_to_cancel_form"
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value
+    )
 
 
 @pytest.mark.parametrize(

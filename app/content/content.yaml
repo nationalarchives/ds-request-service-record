@@ -41,16 +41,17 @@ pages:
           fee: ██ █████ ███ ███
     delivery_method: |
       ████████ ██████ ██ █████ ██████ █████ ██ ████ ████
-  how_the_process_works:
-    heading: How the process works
+  how_we_process_requests:
+    heading: How we process requests
     paragraphs:
       - |
-        We are currently in the process of receiving 10 million paper records over a five-year period from the Ministry 
-        of Defence. The information you provide allows our advisors to check if we have received the paper record, and 
-        if we do have it, find the record in our repositories and scan it for you.
+        We are currently in the process of receiving ten million paper records over a five-year period 
+        from the Ministry of Defence. The information you provide allows our advisors to check if we 
+        have received the paper record, and if we do have it, find the record in our repositories and 
+        scan it for you.
     sub_heading: "Once you have submitted your request:"
     steps:
-      advisor_check: An advisor will check the database for a matching service record
+      advisor_check: An advisor will check our systems for a matching service record
       box_retrieved: If there is a match, the box with the record will be received
       transported_to_us: If offsite, this box will be transported by van to us
       scanned: Upon arrival the record will be scanned
@@ -61,16 +62,10 @@ pages:
     exit_this_form: Exit this form
     paragraphs:
       - |
-        These records are in the process of being transferred to The National Archives from 
-        The Ministry of Defence (MOD). There are just under ten million military service records 
-        being transferred.
-      - |
-        Once a request is made our staff will try to physically locate the record in our collection.
-      - |
-        To help our staff search for the record, you will need to provide information on the 
-        individual you are looking for.
+        To help our staff search for the record, you will need to provide 
+        information on the individual you are looking for.
     mandatory_information:
-      heading: Mandatory information that you will need for this request
+      heading: Mandatory information that you will need
       before_list:
         paragraphs:
           - "You will need to provide:"
@@ -80,33 +75,33 @@ pages:
         - Your contact details so we can answer your request
       after_list:
         paragraphs:
-          - If the information above isn’t provided, we will be unable to process your request.
+          - If the information above is not provided, we will be unable to process your request.
     proof_of_death_requirement:
-      heading: Proof of death required for individuals born after 1909
+      heading: Proof of death
       before_first_list:
         paragraphs:
           - |
-            If the person whose record you are looking for was born after 1909, we require a digital 
-            copy of proof of death for that individual. This is to protect any personal data that 
-            might be in the record that relates to a living person.
-          - "The copy of proof of death must be:"
-      first_list:
-        - In a JPG, GIF or PNG format
-        - No more than 5MB in size
-        - Clearly show all the information so our staff can read it
+            If the person whose record you are looking for was born after 1909 and is deceased, 
+            we require a digital copy of a proof of death. This is to protect any personal data 
+            in the record that might relate to a living person.
+          - "You'll need to submit one of the following forms of evidence:"
       before_second_list:
         paragraphs:
           - "Suitable forms of evidence include:"
-      second_list:
+      first_list:
         - |
-          [Copies of death certificates (opens in a new tab)](https://www.gov.uk/order-copy-birth-death-marriage-certificate)
+          [Copies of death certificates (opens in new tab)](https://www.gov.uk/order-copy-birth-death-marriage-certificate)
         - Published obituaries (detailing publication source, name of deceased, and date of birth and death)
         - |
-          [War dead records (opens in a new tab)](https://www.cwgc.org/find-records/find-war-dead/)
+          [Commonwealth War Graves’ (CWG) war dead records (opens in new tab)](https://www.cwgc.org/find-records/find-war-dead/)
+      second_list:
+        - In a JPG, GIF or PNG format
+        - No more than 5MB in size
+        - Clearly show all the information so our staff can read it
       after_second_list:
-        paragraphs:
-          - |
-            If you do not submit a proof of death when required, it is unlikely that we will be able to provide the record.
+        paragraph: |
+          If you do not submit a proof of death when required, it is 
+          unlikely that we will be able to provide the record.
     important_information_that_will_help:
       heading: Important information that will help our search
       paragraphs:
@@ -114,61 +109,56 @@ pages:
       list_items:
         - The service person's service number
         - The military branch that they served in
-        - Whether they were a commissioned officer or not
+        - If they were a commissioned officer
         - Anything else you might know about them that you think might help our search
+
     about_the_online_form:
       heading: About the online form
       paragraphs:
         - |
-          The application cannot be saved part way through. Please make sure you are ready to submit 
-          your request in one session.
-  check_ancestry:
-    heading: [Placeholder heading]
+          The application cannot be saved part way through. 
+          Please make sure you are ready to submit your request in one session.
+        - |
+          We will only use the data you provide to answer your request. 
+          [Our privacy notice (opens in new tab)](https://www.nationalarchives.gov.uk/legal/privacy-policy/) 
+          explains how we collect, use, and protect personal data.
+  you_may_want_to_check_ancestry:
+    heading: You may want to check Ancestry
     paragraphs:
       - |
-        [Placeholder paragraph]
+        Our partner, Ancestry, hold a portion of digitised records and your record may 
+        be available to order from them. Please visit their site and check for the 
+        record before proceeding.
+      - |
+        [Search Ancestry (opens in new tab)](https://www.ancestry.co.uk/search/)
+      - If you have already checked, or do not wish to check Ancestry, please continue your request.
   are_you_sure_you_want_to_cancel:
     heading: Are you sure you want to cancel?
     paragraphs:
       - You will need to start a new request from the beginning if you choose to cancel.
     no_continue: "No"
-  request_cancelled:
+  you_have_cancelled_your_request:
     heading: You have cancelled your request
     paragraphs:
       - No information has been submitted to us. To send a new request for a military service record, please start a new request form.
     start_new_request: Start a new request
-  have_you_checked_the_catalogue:
-    heading: Have you checked if this record is available in our catalogue?
-    paragraph: A portion of the service records we hold are listed in our catalogue and are available to order from there.
   have_you_previously_made_a_request:
     heading: Have you previously made a request?
-  search_the_catalogue:
-    heading: Search our catalogue
-    paragraphs:
-      - We are in the process of adding the service records we hold to our catalogue.
-      - |
-        If you locate a document reference whose description matches the details 
-        you are looking for, you can request a copy of the record directly from the catalogue.
-      - >
-        How to search for a military service record:
-    list_items:
-      - search our catalogue by surname, service number or year of birth, or by a combination of any of these
-      - if you have a service number, try searching with that alone
-      - try using just the year of birth (some records do not have a full date of birth)
-      - try variations on the spelling of the last name
-    call_to_action: Search the catalogue
   must_submit_subject_access_request:
-    heading: Submit a data request for a living subject
+    heading: Submit a data access request
     paragraphs:
       - |
-        You will need to use our [INSERT NAME HERE] form to request your own Ministry of Defence (MOD) 
-        service personnel record, or if you are acting on behalf of a living service personnel member.
-  we_do_not_have_records_for_this_service_branch:
+        You will need to use our service under the Data Protection Act to request your own 
+        Ministry of Defence (MOD) service personnel record, or if you are acting on behalf of 
+        a living service personnel member.
+    call_to_action: Submit a data access request
+  we_do_not_have_royal_navy_service_records:
     heading: We do not hold this record
     paragraphs:
       - |
-        The Royal Navy service personnel records will not be transferred to us until after April 2026. 
-        Please use the Ministry of Defence service to request access to Royal Navy records.
+        The Royal Navy service personnel records will not be transferred to us until after April 
+        2026. Please use the <strong>Ministry of Defence service</strong> to request access to Royal Navy records.
+    call_to_action: Request from the Ministry of Defence
   we_do_not_have_records_for_this_rank:
     heading: We do not have records for this rank
     paragraphs:
@@ -182,26 +172,25 @@ pages:
     paragraphs:
       - You will need to request the service record from the Ministry of Defence.
     call_to_action: Apply for MOD records
-  we_are_unlikely_to_find_this_record:
+  we_are_unlikely_to_locate_this_record:
     heading: We are unlikely to be able to locate this record
     paragraphs:
       - |
-        Due to the high volume of Home Guard records, 
-        with over 4 million transferred to The National Archives, 
-        and the storage method used for these records, 
-        it is unlikely that we will be able to locate the record 
-        of interest within a reasonable timeframe.
+        Due to the high volume of Home Guard records, with over 4 million transferred 
+        to The National Archives, and the storage method used for these records, it 
+        is unlikely that we will be able to locate the record of interest within a 
+        reasonable timeframe.
       - |
-        Records relating to the Durham Home Guard are currently 
-        available in our catalogue.
+        Records relating to the Durham Home Guard are currently available in our catalogue.
       - |
-        The remaining Home Guard records will be made available via 
-        our partner, Ancestry. We expect all Home Guard records that 
-        have been transferred will be available via Ancestry by September 2027.
+        The remaining Home Guard records will be made available via our partner, 
+        Ancestry. We expect all Home Guard records that have been transferred will 
+        be available via Ancestry by September 2027.
       - |
-        Please only proceed if you are unable to wait until September 2027 by 
-        requesting a paid search. You will then receive a quotation based on 
-        the estimated amount of time it will take to locate the record.
+        Please only proceed if you are unable to wait until September 2027 by requesting 
+        a paid search. You will then receive a quotation based on the estimated amount 
+        of time it will take to locate the record.
+    call_to_action: Request a paid search
   we_may_hold_this_record:
     heading: We may hold this record
     paragraphs:
@@ -234,7 +223,7 @@ pages:
     paragraphs:
       - You will need to upload a digital copy of a proof of death for the service person.
       - >
-        Suitable forms of evidence include:
+        The copy of proof of death must be:
     list_items:
       - "[copies of death certificates](https://www.gov.uk/order-copy-birth-death-marriage-certificate)"
       - published obituaries (detailing publication source, name of deceased, and date of birth and death)
@@ -295,25 +284,20 @@ forms:
   fields:
     start:
       call_to_action: Continue
-    how_the_process_works:
+    how_we_process_requests:
       call_to_action: Continue
     before_you_start:
       call_to_action: Start now
     ready_to_continue:
-      label: I have all the mandatory information to continue with my request now
+      label: I confirm I have all the mandatory information
       messages:
         required: You must confirm you have the mandatory information before starting
     are_you_sure_you_want_to_cancel:
       call_to_action: "Yes"
-    check_ancestry:
+    you_may_want_to_check_ancestry:
       call_to_action: Continue
-    have_you_checked_the_catalogue:
-      options:
-        yes: "Yes"
-        no: "No"
-      messages:
-        required: Tell us if you have checked our catalogue
-      call_to_action: Continue
+    submit_data_access_request:
+      call_to_action: Exit this form
     is_service_person_alive:
       label: Is the service person alive?
       messages:
@@ -365,7 +349,7 @@ forms:
     regiment:
       label: Regiment (optional)
     service_branch:
-      label: What was the person's service branch?
+      label: Which military branch did the person serve in?
       messages:
         required: Select the branch they served in
     additional_information:
@@ -378,10 +362,10 @@ forms:
       messages:
         required: Select yes if the service person died in service
     have_you_previously_made_a_request:
-      with_mod:
+      mod_reference:
         label: Have you made a request for this record with the Ministry of Defence before? (optional)
         hint_text: If so, please provide your reference number. This might start with 'APV' followed by a series of numbers.
-      with_tna:
+      case_reference_number:
         label: Have you made a request for this record with us before? (optional)
         hint_text: If so, provide your case reference number. This might start with 'CAS' or 'SPR' followed by a series of numbers.
       call_to_action: Continue

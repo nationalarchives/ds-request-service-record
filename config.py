@@ -31,7 +31,7 @@ class Production(Features):
 
     SECRET_KEY: str = os.environ.get("SECRET_KEY", "")
 
-    DEBUG: bool = strtobool(os.getenv("DEBUG", "False"))
+    DEBUG: bool = False
 
     SENTRY_DSN: str = os.getenv("SENTRY_DSN", "")
     SENTRY_JS_ID: str = os.getenv("SENTRY_JS_ID", "")
@@ -77,10 +77,7 @@ class Production(Features):
         SESSION_TYPE: str = "redis"
         SESSION_REDIS = Redis.from_url(SESSION_REDIS_URL)
 
-    AWS_ACCESS_KEY_ID: str = os.environ.get("AWS_ACCESS_KEY_ID", "")
-    AWS_SECRET_ACCESS_KEY: str = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
     AWS_DEFAULT_REGION: str = os.environ.get("AWS_DEFAULT_REGION", "")
-    AWS_SESSION_TOKEN: str = os.environ.get("AWS_SESSION_TOKEN", "")
     PROOF_OF_DEATH_BUCKET_NAME: str = os.environ.get("PROOF_OF_DEATH_BUCKET_NAME", "")
     MAX_UPLOAD_ATTEMPTS: int = int(os.environ.get("MAX_UPLOAD_ATTEMPTS", "3"))
 
@@ -91,12 +88,16 @@ class Production(Features):
 
 
 class Staging(Production):
+    DEBUG: bool = strtobool(os.getenv("DEBUG", "False"))
+
     SENTRY_SAMPLE_RATE: float = float(os.getenv("SENTRY_SAMPLE_RATE", "1"))
 
     CACHE_DEFAULT_TIMEOUT: int = int(os.environ.get("CACHE_DEFAULT_TIMEOUT", "60"))
 
 
 class Develop(Production):
+    DEBUG: bool = strtobool(os.getenv("DEBUG", "False"))
+    
     SENTRY_SAMPLE_RATE: float = float(os.getenv("SENTRY_SAMPLE_RATE", "0"))
 
     CACHE_DEFAULT_TIMEOUT: int = int(os.environ.get("CACHE_DEFAULT_TIMEOUT", "1"))

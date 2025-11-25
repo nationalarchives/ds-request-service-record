@@ -8,10 +8,10 @@ from wtforms import (
 )
 
 
-class CheckAncestry(FlaskForm):
+class HowTheProcessWorks(FlaskForm):
     content = load_content()
 
     submit = SubmitField(
-        get_field_content(content, "check_ancestry", "call_to_action"),
+        get_field_content(content, "how_we_process_requests", "call_to_action"),
         widget=TnaSubmitWidget(),
     )
