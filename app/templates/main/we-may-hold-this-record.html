@@ -30,7 +30,7 @@
         <form action="{{ url_for('main.we_may_hold_this_record') }}" method="post" novalidate>
           {{ form.csrf_token }}
           <div class="tna-button-group">
-            {{ form.submit(params={'accent':'true'}) }}
+            {{ form.submit(params={'classes':'tna-button--accent'}) }}
           </div>
         </form>
       </div>
