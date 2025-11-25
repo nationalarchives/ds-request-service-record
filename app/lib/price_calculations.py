@@ -31,8 +31,8 @@ def calculate_delivery_fee(country: str) -> int:
         raise ValueError("Could not retrieve delivery fee")
     
     response_data = response.json()
-    print(response_data)
-    return response_data
+    
+    return int(response_data) * 100 # Convert pounds to pence
 
 
 def calculate_amount_based_on_form_data(form_data: dict) -> int:
