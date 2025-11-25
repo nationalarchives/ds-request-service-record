@@ -77,10 +77,7 @@ class Production(Features):
         SESSION_TYPE: str = "redis"
         SESSION_REDIS = Redis.from_url(SESSION_REDIS_URL)
 
-    AWS_ACCESS_KEY_ID: str = os.environ.get("AWS_ACCESS_KEY_ID", "")
-    AWS_SECRET_ACCESS_KEY: str = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
     AWS_DEFAULT_REGION: str = os.environ.get("AWS_DEFAULT_REGION", "")
-    AWS_SESSION_TOKEN: str = os.environ.get("AWS_SESSION_TOKEN", "")
     PROOF_OF_DEATH_BUCKET_NAME: str = os.environ.get("PROOF_OF_DEATH_BUCKET_NAME", "")
     MAX_UPLOAD_ATTEMPTS: int = int(os.environ.get("MAX_UPLOAD_ATTEMPTS", "3"))
 
