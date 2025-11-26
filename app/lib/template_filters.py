@@ -1,4 +1,5 @@
 import re
+
 from app.constants import ExternalLinks
 
 

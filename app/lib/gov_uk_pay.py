@@ -3,7 +3,6 @@ from enum import Enum
 
 import requests
 from app.lib.db_handler import (
-    delete_service_record_request,
     get_dynamics_payment,
     get_gov_uk_dynamics_payment,
     get_service_record_request,
@@ -93,7 +92,7 @@ def process_valid_request(payment_id: str, payment_data: dict) -> None:
         raise ValueError(f"Service record not found for payment ID: {payment_id}")
 
     send_request_to_dynamics(record)
-    
+
     # Don't delete for now
     # delete_service_record_request(record)
 

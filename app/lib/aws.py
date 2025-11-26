@@ -25,7 +25,7 @@ def upload_proof_of_death(file: FileStorage) -> str | None:
 
     if current_app.config.get("ENVIRONMENT_NAME") == "test":
         return uuid_filename
-    
+
     return upload_file_to_s3(
         file=file,
         bucket_name=current_app.config["PROOF_OF_DEATH_BUCKET_NAME"],

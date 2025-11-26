@@ -388,7 +388,7 @@ class RoutingStateMachine(StateMachine):
     def does_not_have_email(self, form):
         """Condition method to determine if the user does not have an email address."""
         return form.does_not_have_email.data
-    
+
     def proof_of_death_uploaded_to_s3(self, form):
         """Condition method to determine if proof of death was successfully uploaded to S3."""
         if file_data := self.get_form_field_data(form, "proof_of_death"):
@@ -397,4 +397,4 @@ class RoutingStateMachine(StateMachine):
                 self.set_form_field_data(form, "proof_of_death", file)
                 return True
         self.set_form_field_data(form, "proof_of_death", None)
-        return False # TODO: Does this need to be True if upload fails? They won't progress otherwise.
+        return False  # TODO: Does this need to be True if upload fails? They won't progress otherwise.
