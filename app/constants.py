@@ -67,6 +67,13 @@ class ExternalLinks:
     )
     MOD_SERVICE = "https://www.gov.uk/get-copy-military-records-of-service/apply-for-the-records-of-a-deceased-serviceperson"
     PAID_SEARCH = "https://www.nationalarchives.gov.uk/contact-us/our-paid-search-service/request-a-paid-search/"
+    COPIES_OF_DEATH_CERTIFICATES = (
+        "https://www.gov.uk/order-copy-birth-death-marriage-certificate"
+    )
+    CWGC_WAR_DEAD_RECORDS = "https://www.cwgc.org/find-records/find-war-dead/"
+    PRIVACY_NOTICE = "https://www.nationalarchives.gov.uk/legal/privacy-policy/"
+    ANCESTRY_SEARCH = "https://www.ancestry.co.uk/search/"
+    FOI_REQUEST_GUIDANCE = "https://www.gov.uk/make-a-freedom-of-information-request"
 
 
 COUNTRY_CHOICES = [
