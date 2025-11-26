@@ -84,6 +84,13 @@ class Production(Features):
     EMAIL_FROM: str = os.environ.get("EMAIL_FROM", "")
     DYNAMICS_INBOX: str = os.environ.get("DYNAMICS_INBOX", "")
 
+    DELIVERY_FEE_API_URL: str = (
+        os.environ.get("RECORD_COPYING_SERVICE_API_URL", "") + "GetDeliveryPrice"
+    )
+    COUNTRY_API_URL: str = (
+        os.environ.get("RECORD_COPYING_SERVICE_API_URL", "") + "GetCountry"
+    )
+
 
 class Staging(Production):
     DEBUG: bool = strtobool(os.getenv("DEBUG", "False"))
@@ -95,7 +102,7 @@ class Staging(Production):
 
 class Develop(Production):
     DEBUG: bool = strtobool(os.getenv("DEBUG", "False"))
-    
+
     SENTRY_SAMPLE_RATE: float = float(os.getenv("SENTRY_SAMPLE_RATE", "0"))
 
     CACHE_DEFAULT_TIMEOUT: int = int(os.environ.get("CACHE_DEFAULT_TIMEOUT", "1"))

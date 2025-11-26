@@ -1,9 +1,9 @@
 # File: `tests/test_with_back_url_saved_to_session.py`
 import pytest
-from flask import Flask, session
 from app.lib.decorators.with_back_url_saved_to_session import (
     with_route_for_back_link_saved_to_session,
 )
+from flask import Flask
 
 
 @pytest.fixture

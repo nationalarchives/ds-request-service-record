@@ -1,10 +1,11 @@
 from functools import wraps
-from flask import request, session, url_for
+
+from flask import session
 
 """
 This decorator allows us to persist a back-link route in the Flask session.
 We need this because there are some pages that can be reached from multiple
-parts of the app and we want to ensure their 'Back' link always go to the 
+parts of the app and we want to ensure their 'Back' link always goes to the
 correct page.
 
 Provides:
@@ -12,9 +13,9 @@ Provides:
         Before the wrapped view runs, stores the given endpoint name under
         session["route_for_back_link"] so templates or later logic can build
         a consistent Back link (e.g., url_for(session["route_for_back_link"])).
-        
+
         This only needs to be added to specific 'gateway' views which once entered
-        indicate where the user should go back to from subsequent pages. 
+        indicate where the user should go back to from subsequent pages.
 
 Usage example:
     @with_route_for_back_link_saved_to_session(MultiPageFormRoutes.BEFORE_YOU_START.value)

@@ -1,4 +1,4 @@
-from app.constants import MultiPageFormRoutes, ExternalLinks
+from app.constants import ExternalLinks, MultiPageFormRoutes
 from app.lib.content import load_content
 from app.lib.decorators.state_machine_decorator import with_state_machine
 from app.lib.decorators.with_back_url_saved_to_session import (
@@ -16,9 +16,8 @@ from app.lib.save_submitted_form_fields_to_session import (
 from app.main import bp
 from app.main.forms.are_you_sure_you_want_to_cancel import AreYouSureYouWantToCancel
 from app.main.forms.before_you_start import BeforeYouStart
-from app.main.forms.you_may_want_to_check_ancestry import YouMayWantToCheckAncestry
-from app.main.forms.exit_this_form import ExitThisForm
 from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
+from app.main.forms.exit_this_form import ExitThisForm
 from app.main.forms.have_you_previously_made_a_request import (
     HaveYouPreviouslyMadeARequest,
 )
@@ -34,9 +33,10 @@ from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
 from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
 from app.main.forms.were_they_a_commissioned_officer import WereTheyACommissionedOfficer
 from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
+from app.main.forms.you_may_want_to_check_ancestry import YouMayWantToCheckAncestry
 from app.main.forms.your_details import YourDetails
 from app.main.forms.your_postal_address import YourPostalAddress
-from flask import redirect, render_template, request, url_for, session
+from flask import redirect, render_template, request, session, url_for
 
 
 @bp.route("/", methods=["GET", "POST"])
