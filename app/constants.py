@@ -82,9 +82,7 @@ def get_country_choices():
     If the API call fails, returns a default list with "United Kingdom" only.
     """
     try:
-        response = requests.get(
-            current_app.config.get("COUNTRY_SERVICE_API_URL"), timeout=5
-        )
+        response = requests.get(current_app.config.get("COUNTRY_API_URL"), timeout=5)
         response.raise_for_status()
         countries_data = response.json()
 
