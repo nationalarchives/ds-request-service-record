@@ -15,6 +15,8 @@ def slugify(s):
 def parse_markdown_links(s):
     if not s:
         return s
+    # Regex to match [text](url)
+    pattern = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
 
     def replacer(match):
         text = match.group(1)
@@ -22,5 +24,4 @@ def parse_markdown_links(s):
         url = getattr(ExternalLinks, key, key)
         return f'<a href="{url}" target="_blank" rel="noreferrer noopener">{text}</a>'
 
-    link_pattern = re.compile(r"\[([^\]]+)\]\(([^)\s]+)(?:\s+\"[^\"]+\")?\)")
-    return link_pattern.sub(replacer, s)
+    return pattern.sub(replacer, s)
