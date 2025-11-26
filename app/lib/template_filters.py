@@ -1,4 +1,5 @@
 import re
+from app.constants import ExternalLinks
 
 
 def slugify(s):
@@ -14,11 +15,12 @@ def slugify(s):
 def parse_markdown_links(s):
     if not s:
         return s
-    # Regex to match [text](url)
-    pattern = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
 
     def replacer(match):
-        text, url = match.group(1), match.group(2)
+        text = match.group(1)
+        key = match.group(2).strip()
+        url = getattr(ExternalLinks, key, key)
         return f'<a href="{url}" target="_blank" rel="noreferrer noopener">{text}</a>'
 
-    return pattern.sub(replacer, s)
+    link_pattern = re.compile(r"\[([^\]]+)\]\(([^)\s]+)(?:\s+\"[^\"]+\")?\)")
+    return link_pattern.sub(replacer, s)
