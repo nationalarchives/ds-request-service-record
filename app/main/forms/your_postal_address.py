@@ -1,4 +1,4 @@
-from app.constants import COUNTRY_CHOICES
+from app.constants import get_country_choices
 from app.lib.content import get_field_content, load_content
 from flask_wtf import FlaskForm
 from tna_frontend_jinja.wtforms import (
@@ -16,6 +16,10 @@ from wtforms.validators import InputRequired
 
 class YourPostalAddress(FlaskForm):
     content = load_content()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.requester_country.choices += get_country_choices()
 
     requester_address1 = StringField(
         get_field_content(content, "requester_address_line_1", "label"),
@@ -63,8 +67,7 @@ class YourPostalAddress(FlaskForm):
         get_field_content(content, "requester_country", "label"),
         choices=[
             get_field_content(content, "requester_country", "prompt_to_select"),
-        ]
-        + COUNTRY_CHOICES,
+        ],
         widget=TnaSelectWidget(),
         validators=[
             InputRequired(
