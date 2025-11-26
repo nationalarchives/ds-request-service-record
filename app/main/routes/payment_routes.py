@@ -38,7 +38,7 @@ def send_to_gov_uk_pay():
 
     try:
         amount = calculate_amount_based_on_form_data(form_data)
-    except ValueError as e:
+    except Exception as e:
         current_app.logger.error(f"Error calculating amount: {e}")
         return redirect(url_for("main.payment_link_creation_failed"))
 
