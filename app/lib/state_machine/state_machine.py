@@ -390,6 +390,7 @@ class RoutingStateMachine(StateMachine):
         return form.does_not_have_email.data
     
     def proof_of_death_uploaded_to_s3(self, form):
+        """Condition method to determine if proof of death was successfully uploaded to S3."""
         if file_data := self.get_form_field_data(form, "proof_of_death"):
             file = upload_proof_of_death(file=file_data)
             if file:
