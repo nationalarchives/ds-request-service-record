@@ -67,6 +67,11 @@ def create_app(config_class):
             "default-src": default_csp,
             "base-uri": csp_none,
             "object-src": csp_none,
+            "script-src": [
+                csp_self,
+                "https://www.googletagmanager.com",
+                "*.google-analytics.com",
+            ],
         }
         | csp_rules,
         feature_policy={

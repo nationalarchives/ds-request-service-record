@@ -6,7 +6,6 @@ from wtforms import (
     FileField,
     SubmitField,
 )
-from wtforms.validators import InputRequired
 
 
 class UploadAProofOfDeath(FlaskForm):

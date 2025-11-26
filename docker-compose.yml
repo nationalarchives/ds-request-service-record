@@ -27,6 +27,7 @@ services:
       - 65517:8080
     volumes:
       - ./:/app
+      - ~/.aws:/home/app/.aws
     depends_on:
       - db
       - redis
@@ -51,6 +52,7 @@ services:
     image: ghcr.io/nationalarchives/tna-python-dev:preview
     volumes:
       - ./:/app
+      - ~/.aws:/home/app/.aws
     depends_on:
       - db
 

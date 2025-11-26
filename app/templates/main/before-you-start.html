@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
+{% from "components/warning/macro.html" import tnaWarning %}
 
 {%- set pageTitle = content.app.title -%}
 
 {% block beforeContent %}
- {{ backLink(url_for('main.start')) }}
+  {{ backLink(url_for('main.how_we_process_requests')) }}
 {% endblock %}
 
 {% block content %}
@@ -36,7 +37,7 @@
         {% endfor %}
         <ul class="tna-ul">
           {% for item in content.pages.before_you_start.proof_of_death_requirement.first_list %}
-            <li>{{ item }}</li>
+            <li>{{ item | parse_markdown_links | safe }}</li>
           {% endfor %}
         </ul>
         {% for paragraph in content.pages.before_you_start.proof_of_death_requirement.before_second_list.paragraphs %}
@@ -44,12 +45,15 @@
         {% endfor %}
         <ul class="tna-ul">
           {% for item in content.pages.before_you_start.proof_of_death_requirement.second_list %}
-            <li>{{ item | parse_markdown_links | safe }}</li>
+            <li>{{ item }}</li>
           {% endfor %}
         </ul>
-        {% for paragraph in content.pages.before_you_start.proof_of_death_requirement.after_second_list.paragraphs %}
-          <p>{{ paragraph }}</p>
-        {% endfor %}
+
+        {{ tnaWarning({
+          "headingLevel": 3,
+          "body": content.pages.before_you_start.proof_of_death_requirement.after_second_list.paragraph
+        }) }}
+
         <h2 class="tna-heading-m">{{ content.pages.before_you_start.important_information_that_will_help.heading }}</h2>
         {% for paragraph in content.pages.before_you_start.important_information_that_will_help.paragraphs %}
           <p>{{ paragraph }}</p>
@@ -61,7 +65,7 @@
         </ul>
         <h2 class="tna-heading-m">{{ content.pages.before_you_start.about_the_online_form.heading }}</h2>
         {% for paragraph in content.pages.before_you_start.about_the_online_form.paragraphs %}
-          <p>{{ paragraph }}</p>
+          <p>{{ paragraph | parse_markdown_links | safe }}</p>
         {% endfor %}
         <form action="{{ url_for('main.before_you_start') }}" method="post" novalidate>
           {{ form.csrf_token }}
@@ -69,7 +73,8 @@
             {{ form.ready_to_continue() }}
           </div>
           <div class="tna-button-group">
-            <a href="{{ url_for('main.are_you_sure_you_want_to_cancel') }}" class="tna-button tna-button--plain">{{ content.pages.before_you_start.exit_this_form }}</a>
+            <a href="{{ url_for('main.are_you_sure_you_want_to_cancel') }}"
+               class="tna-button tna-button--plain">{{ content.pages.before_you_start.exit_this_form }}</a>
             {{ form.submit(params={'classes':'tna-button--accent'}) }}
           </div>
         </form>

@@ -1,12 +1,16 @@
 from enum import Enum
+from functools import lru_cache
+
+import requests
+from flask import current_app
 
 
 class MultiPageFormRoutes(Enum):
-    HOW_THE_PROCESS_WORKS = "main.how_the_process_works"
+    HOW_WE_PROCESS_REQUESTS = "main.how_we_process_requests"
     BEFORE_YOU_START = "main.before_you_start"
-    CHECK_ANCESTRY = "main.check_ancestry"
+    YOU_MAY_WANT_TO_CHECK_ANCESTRY = "main.you_may_want_to_check_ancestry"
     ARE_YOU_SURE_YOU_WANT_TO_CANCEL = "main.are_you_sure_you_want_to_cancel"
-    REQUEST_CANCELLED = "main.request_cancelled"
+    YOU_HAVE_CANCELLED_YOUR_REQUEST = "main.you_have_cancelled_your_request"
     HAVE_YOU_CHECKED_THE_CATALOGUE = "main.have_you_checked_the_catalogue"
     SEARCH_THE_CATALOGUE = "main.search_the_catalogue"
     IS_SERVICE_PERSON_ALIVE = "main.is_service_person_alive"
@@ -16,11 +20,11 @@ class MultiPageFormRoutes(Enum):
         "main.only_living_subjects_can_request_their_record"
     )
     WERE_THEY_A_COMMISSIONED_OFFICER_FORM = "main.were_they_a_commissioned_officer"
-    WE_DO_NOT_HAVE_RECORDS_FOR_THIS_SERVICE_BRANCH = (
-        "main.we_do_not_have_records_for_this_service_branch"
+    WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS = (
+        "main.we_do_not_have_royal_navy_service_records"
     )
     WE_DO_NOT_HAVE_RECORDS_FOR_THIS_RANK = "main.we_do_not_have_records_for_this_rank"
-    WE_ARE_UNLIKELY_TO_FIND_THIS_RECORD = "main.we_are_unlikely_to_find_this_record"
+    WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD = "main.we_are_unlikely_to_locate_this_record"
     WE_MAY_HOLD_THIS_RECORD = "main.we_may_hold_this_record"
     WHAT_WAS_THEIR_DATE_OF_BIRTH = "main.what_was_their_date_of_birth"
     WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE = (
@@ -41,12 +45,12 @@ class MultiPageFormRoutes(Enum):
 
 
 class ServiceBranches(Enum):
-    BRITISH_ARMY = "British Army"
-    HOME_GUARD = "Home Guard"
-    ROYAL_AIR_FORCE = "Royal Air Force"
     ROYAL_NAVY = "Royal Navy (including Royal Marines)"
+    BRITISH_ARMY = "British Army"
+    ROYAL_AIR_FORCE = "Royal Air Force"
+    HOME_GUARD = "Home Guard"
     OTHER = "Other"
-    UNKNOWN = "Don't know"
+    UNKNOWN = "I do not know"
 
 
 class OrderFeesPence(Enum):
@@ -61,250 +65,40 @@ class Ranks(Enum):
     NON_OFFICER = "Non-Officer"
 
 
-COUNTRY_CHOICES = [
-    "United Kingdom",
-    "Afghanistan",
-    "Aland Islands",
-    "Albania",
-    "Algeria",
-    "American Samoa",
-    "Andorra",
-    "Angola",
-    "Anguilla",
-    "Antarctica",
-    "Antigua and Barbuda",
-    "Argentina",
-    "Armenia",
-    "Aruba",
-    "Australia",
-    "Austria",
-    "Azerbaijan",
-    "BFPO",
-    "Bahamas",
-    "Bahrain",
-    "Bangladesh",
-    "Barbados",
-    "Belarus",
-    "Belgium",
-    "Belize",
-    "Benin",
-    "Bermuda",
-    "Bhutan",
-    "Bolivia",
-    "Bosnia and Herzegovina",
-    "Botswana",
-    "Bouvet Island",
-    "Brazil",
-    "British Indian Ocean Territory",
-    "British Virgin Islands",
-    "Brunei Darussalam",
-    "Bulgaria",
-    "Burkina Faso",
-    "Burundi",
-    "Cambodia",
-    "Cameroon",
-    "Canada",
-    "Cape Verde",
-    "Cayman Islands",
-    "Central African Republic",
-    "Chad",
-    "Channel Islands",
-    "Chile",
-    "China",
-    "Christmas Island",
-    "Cocos (Keeling) Islands",
-    "Colombia",
-    "Comoros",
-    "Congo",
-    "Cook Islands",
-    "Costa Rica",
-    "Cote D'Ivoire",
-    "Croatia",
-    "Cuba",
-    "Cyprus",
-    "Czech Republic",
-    "Democratic People's Republic of Korea",
-    "Denmark",
-    "Djibouti",
-    "Dominica",
-    "Dominican Republic",
-    "Ecuador",
-    "Egypt",
-    "El Salvador",
-    "Equatorial Guinea",
-    "Eritrea",
-    "Estonia",
-    "Ethiopia",
-    "Falkland Islands",
-    "Faroe Islands",
-    "Federated States of Micronesia",
-    "Fiji",
-    "Finland",
-    "France",
-    "French Guiana",
-    "French Polynesia",
-    "French Southern Territories",
-    "Gabon",
-    "Gambia",
-    "Georgia",
-    "Germany",
-    "Ghana",
-    "Gibraltar",
-    "Greece",
-    "Greenland",
-    "Grenada",
-    "Guadeloupe",
-    "Guam",
-    "Guatemala",
-    "Guinea",
-    "Guinea-Bissau",
-    "Guyana",
-    "Haiti",
-    "Heard Island and McDonald Islands",
-    "Holy See (Vatican City State)",
-    "Honduras",
-    "Hong Kong",
-    "Hungary",
-    "Iceland",
-    "India",
-    "Indonesia",
-    "Iraq",
-    "Ireland",
-    "Islamic Republic of Iran",
-    "Isle Of Man",
-    "Israel",
-    "Italy",
-    "Jamaica",
-    "Japan",
-    "Jordan",
-    "Kazakhstan",
-    "Kenya",
-    "Kiribati",
-    "Kuwait",
-    "Kyrgyzstan",
-    "Lao Peoples's Democratic Republic",
-    "Latvia",
-    "Lebanon",
-    "Lesotho",
-    "Liberia",
-    "Libyan Arab Jamahiriya",
-    "Liechtenstein",
-    "Lithuania",
-    "Luxembourg",
-    "Macao",
-    "Madagascar",
-    "Malawi",
-    "Malaysia",
-    "Maldives",
-    "Mali",
-    "Malta",
-    "Marshall Islands",
-    "Martinique",
-    "Mauritania",
-    "Mauritius",
-    "Mayotte",
-    "Mexico",
-    "Monaco",
-    "Mongolia",
-    "Montenegro",
-    "Montserrat",
-    "Morocco",
-    "Mozambique",
-    "Myanmar",
-    "Namibia",
-    "Nauru",
-    "Nepal",
-    "Netherlands Antilles",
-    "Netherlands",
-    "New Caledonia",
-    "New Zealand",
-    "Nicaragua",
-    "Niger",
-    "Nigeria",
-    "Niue",
-    "Norfolk Island",
-    "Northern Mariana Islands",
-    "Norway",
-    "Oman",
-    "Pakistan",
-    "Palau",
-    "Palestinian Occupied Territories",
-    "Panama",
-    "Papua New Guinea",
-    "Paraguay",
-    "Peru",
-    "Philippines",
-    "Pitcairn",
-    "Poland",
-    "Portugal",
-    "Puerto Rico",
-    "Qatar",
-    "Republic of Korea",
-    "Republic of Moldova",
-    "Reunion",
-    "Romania",
-    "Russian Federation",
-    "Rwanda",
-    "Saint Helena",
-    "Saint Kitts and Nevis",
-    "Saint Lucia",
-    "Saint Pierre and Miquelon",
-    "Saint Vincent and the Grenadines",
-    "Samoa",
-    "San Marino",
-    "Sao Tome and Principe",
-    "Saudi Arabia",
-    "Senegal",
-    "Serbia",
-    "Seychelles",
-    "Sierra Leone",
-    "Singapore",
-    "Slovakia",
-    "Slovenia",
-    "Solomon Islands",
-    "Somalia",
-    "South Africa",
-    "South Georgia and the South Sandwich Islands",
-    "Spain",
-    "Sri Lanka",
-    "Sudan",
-    "Suriname",
-    "Svalbard and Jan Mayen",
-    "Swaziland",
-    "Sweden",
-    "Switzerland",
-    "Syrian Arab Republic",
-    "Taiwan",
-    "Tajikistan",
-    "Thailand",
-    "The Democratic Republic of the Congo",
-    "The former Yugoslav Republic of Macedonia",
-    "Timor-Leste",
-    "Togo",
-    "Tokelau",
-    "Tonga",
-    "Trinidad and Tobago",
-    "Tunisia",
-    "Turkey",
-    "Turkmenistan",
-    "Turks and Caicos Islands",
-    "Tuvalu",
-    "Uganda",
-    "Ukraine",
-    "United Arab Emirates",
-    "United Republic of Tanzania",
-    "United States Minor Outlying Islands",
-    "United States",
-    "Uruguay",
-    "Uzbekistan",
-    "Vanuatu",
-    "Venezuela",
-    "Viet Nam",
-    "Virgin Islands",
-    "U.S.",
-    "Wallis and Futuna",
-    "Western Sahara",
-    "Yemen",
-    "Zambia",
-    "Zimbabwe",
-]
+class ExternalLinks:
+    SUBJECT_ACCESS_REQUEST_FORM = (
+        "https://discovery.nationalarchives.gov.uk/mod-dsa-request-step1"
+    )
+    MOD_SERVICE = "https://www.gov.uk/get-copy-military-records-of-service/apply-for-the-records-of-a-deceased-serviceperson"
+    PAID_SEARCH = "https://www.nationalarchives.gov.uk/contact-us/our-paid-search-service/request-a-paid-search/"
+    COPIES_OF_DEATH_CERTIFICATES = (
+        "https://www.gov.uk/order-copy-birth-death-marriage-certificate"
+    )
+    CWGC_WAR_DEAD_RECORDS = "https://www.cwgc.org/find-records/find-war-dead/"
+    PRIVACY_NOTICE = "https://www.nationalarchives.gov.uk/legal/privacy-policy/"
+    ANCESTRY_SEARCH = "https://www.ancestry.co.uk/search/"
+    FOI_REQUEST_GUIDANCE = "https://www.gov.uk/make-a-freedom-of-information-request"
+
+
+@lru_cache(maxsize=1)
+def get_country_choices():
+    """
+    Fetches country choices from the Record Copying Service API.
+    Caches the result to avoid repeated API calls.
+    Returns a list of country names sorted alphabetically.
+    If the API call fails, returns a default list with "United Kingdom" only.
+    """
+    try:
+        response = requests.get(current_app.config.get("COUNTRY_API_URL"), timeout=5)
+        response.raise_for_status()
+        countries_data = response.json()
+
+        if countries_data:
+            country_names = [country["Description"] for country in countries_data]
+            return sorted(country_names)
+    except Exception:
+        current_app.logger.error(
+            "Failed to fetch country choices from the API. Using default."
+        )
+
+    return ["United Kingdom"]

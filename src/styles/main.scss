@@ -2,7 +2,8 @@
 @use "@nationalarchives/frontend/nationalarchives/tools/a11y";
 
 .hide-legend {
-  .tna-form-item__header {
+  .tna-fieldset__heading,
+  .tna-form-item__label {
     @include a11y.visually-hidden;
   }
 }
@@ -27,11 +28,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      row-gap: 0.5rem;
+      row-gap: 1rem;
     }
 
     .process-icon {
-      font-size: 2.5rem;
+      font-size: 2rem;
     }
   }
 }

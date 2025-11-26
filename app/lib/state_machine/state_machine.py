@@ -53,75 +53,94 @@ class RoutingStateMachine(StateMachine):
 
     """
     initial = State(initial=True)  # The initial state of our machine
-    how_the_process_works_form = State(
-        enter="entering_how_the_process_works_form", final=True
+
+    how_we_process_requests_form = State(
+        enter="entering_how_we_process_requests_form", final=True
     )
-    check_ancestry_page = State(enter="entering_check_ancestry_page", final=True)
+
+    you_may_want_to_check_ancestry_page = State(
+        enter="entering_you_may_want_to_check_ancestry_page", final=True
+    )
+
     before_you_start_form = State(enter="entering_before_you_start_form", final=True)
-    request_cancelled_page = State(enter="entering_request_cancelled_page", final=True)
-
-    # This state has been temporarily disabled pending confirmation from UCD that it is
-    # still required. Why did it need to be commented out? Because the page that had
-    # come before it now goes somewhere else, and a state machine cannot have dangling
-    # states that are not reachable.
-
-    # have_you_checked_the_catalogue_form = State(
-    #     enter="entering_have_you_checked_the_catalogue_form", final=True
-    # )
-    search_the_catalogue_page = State(
-        enter="entering_search_the_catalogue_page", final=True
+    you_have_cancelled_your_request_page = State(
+        enter="entering_you_have_cancelled_your_request_page", final=True
     )
+
     service_person_alive_form = State(
         enter="entering_service_person_alive_form", final=True
     )
+
     subject_access_request_page = State(
         enter="entering_subject_access_request_page", final=True
     )
+
     service_branch_form = State(enter="entering_service_branch_form", final=True)
+
     were_they_a_commissioned_officer_form = State(
         enter="entering_were_they_a_commissioned_officer_form", final=True
     )
-    we_do_not_have_records_for_this_service_branch_page = State(
-        enter="entering_we_do_not_have_records_for_this_service_branch", final=True
+
+    we_do_not_have_royal_navy_service_records_form = State(
+        enter="entering_we_do_not_have_royal_navy_service_records_form", final=True
     )
+
     we_do_not_have_records_for_this_rank_page = State(
         enter="entering_we_do_not_have_records_for_this_rank_page", final=True
     )
-    we_are_unlikely_to_find_this_record_page = State(
-        enter="entering_we_are_unlikely_to_find_this_record_page", final=True
+
+    we_are_unlikely_to_locate_this_record_form = State(
+        enter="entering_we_are_unlikely_to_locate_this_record_form", final=True
     )
+
     we_may_hold_this_record_page = State(
         enter="entering_we_may_hold_this_record_page", final=True
     )
+
     what_was_their_date_of_birth_form = State(
-        enter="entering_what_was_their_date_of_birth_page", final=True
+        enter="entering_what_was_their_date_of_birth_form", final=True
     )
+
+    are_you_sure_you_want_to_cancel_form = State(
+        enter="entering_are_you_sure_you_want_to_cancel_form", final=True
+    )
+
     service_person_details_form = State(
         enter="entering_service_person_details_form", final=True
     )
+
     we_do_not_have_records_for_people_born_after_page = State(
         enter="entering_we_do_not_have_records_for_people_born_after_page", final=True
     )
+
     we_do_not_have_records_for_people_born_before_page = State(
         enter="entering_we_do_not_have_records_for_people_born_before_page", final=True
     )
+
     do_you_have_a_proof_of_death_form = State(
         enter="entering_do_you_have_a_proof_of_death_form", final=True
     )
+
     upload_a_proof_of_death_form = State(
         enter="entering_upload_a_proof_of_death_form", final=True
     )
+
     have_you_previously_made_a_request_form = State(
         enter="entering_have_you_previously_made_a_request_form", final=True
     )
+
     your_details_form = State(enter="entering_your_details_form", final=True)
+
     your_postal_address_form = State(
         enter="entering_your_postal_address_form", final=True
     )
+
     how_do_you_want_your_order_processed_form = State(
         enter="entering_how_do_you_want_your_order_processed_form", final=True
     )
+
     gov_uk_pay_redirect = State(enter="entering_gov_uk_pay_redirect", final=True)
+
     request_submitted_page = State(enter="entering_request_submitted_page", final=True)
 
     """
@@ -131,37 +150,54 @@ class RoutingStateMachine(StateMachine):
     that act as predicates that resolve to a boolean
     """
 
-    continue_from_start_form = initial.to(how_the_process_works_form)
+    continue_from_start_form = initial.to(how_we_process_requests_form)
 
-    continue_from_how_the_process_works_form = initial.to(before_you_start_form)
+    continue_from_how_we_process_requests_form = initial.to(before_you_start_form)
 
-    continue_from_before_you_start_form = initial.to(check_ancestry_page)
-
-    continue_from_are_you_sure_you_want_to_cancel_form = initial.to(
-        request_cancelled_page
+    continue_from_before_you_start_form = initial.to(
+        you_may_want_to_check_ancestry_page
     )
 
-    continue_from_have_you_checked_the_catalogue_form = initial.to(
-        service_person_alive_form, cond="has_checked_catalogue"
-    ) | initial.to(search_the_catalogue_page, unless="has_checked_catalogue")
+    continue_from_are_you_sure_you_want_to_cancel_form = initial.to(
+        you_have_cancelled_your_request_page
+    )
+
+    continue_from_you_may_want_to_check_ancestry_form = initial.to(
+        service_person_alive_form
+    )
 
     continue_from_service_person_alive_form = initial.to(
         subject_access_request_page, cond="living_subject"
     ) | initial.to(service_branch_form, unless="living_subject")
+
+    continue_from_submit_subject_access_request_form = initial.to(
+        are_you_sure_you_want_to_cancel_form
+    )
+
     continue_from_service_branch_form = (
         initial.to(
             were_they_a_commissioned_officer_form,
-            unless="go_to_mod or likely_unfindable",
+            unless="is_royal_navy or likely_unfindable",
         )
         | initial.to(
-            we_do_not_have_records_for_this_service_branch_page, cond="go_to_mod"
+            we_do_not_have_royal_navy_service_records_form, cond="is_royal_navy"
         )
-        | initial.to(we_are_unlikely_to_find_this_record_page, cond="likely_unfindable")
+        | initial.to(
+            we_are_unlikely_to_locate_this_record_form, cond="likely_unfindable"
+        )
     )
 
     continue_from_were_they_a_commissioned_officer_form = initial.to(
         we_may_hold_this_record_page, unless="was_officer"
     ) | initial.to(we_do_not_have_records_for_this_rank_page, cond="was_officer")
+
+    continue_from_we_do_not_have_royal_navy_service_records_form = initial.to(
+        are_you_sure_you_want_to_cancel_form
+    )
+
+    continue_from_we_are_unlikely_to_locate_this_record_form = initial.to(
+        are_you_sure_you_want_to_cancel_form
+    )
 
     continue_from_we_may_hold_this_record_form = initial.to(
         what_was_their_date_of_birth_form
@@ -213,139 +249,121 @@ class RoutingStateMachine(StateMachine):
 
     continue_on_return_from_gov_uk_redirect = initial.to(request_submitted_page)
 
-    def entering_how_the_process_works_form(self, event, state):
-        self.route_for_current_state = MultiPageFormRoutes.HOW_THE_PROCESS_WORKS.value
+    def entering_how_we_process_requests_form(self):
+        self.route_for_current_state = MultiPageFormRoutes.HOW_WE_PROCESS_REQUESTS.value
 
-    def entering_before_you_start_form(self, event, state):
+    def entering_before_you_start_form(self):
         self.route_for_current_state = MultiPageFormRoutes.BEFORE_YOU_START.value
 
-    def entering_check_ancestry_page(self, event, state):
-        self.route_for_current_state = MultiPageFormRoutes.CHECK_ANCESTRY.value
+    def entering_you_may_want_to_check_ancestry_page(self):
+        self.route_for_current_state = (
+            MultiPageFormRoutes.YOU_MAY_WANT_TO_CHECK_ANCESTRY.value
+        )
 
-    def entering_request_cancelled_page(self, event, state):
-        self.route_for_current_state = MultiPageFormRoutes.REQUEST_CANCELLED.value
+    def entering_you_have_cancelled_your_request_page(self):
+        self.route_for_current_state = (
+            MultiPageFormRoutes.YOU_HAVE_CANCELLED_YOUR_REQUEST.value
+        )
 
-    # This state has been temporarily disabled pending confirmation from UCD that it is
-    # still required. I've asked on 6/11
-    # def entering_have_you_checked_the_catalogue_form(self, event, state):
-    #     self.route_for_current_state = (
-    #         MultiPageFormRoutes.HAVE_YOU_CHECKED_THE_CATALOGUE.value
-    #     )
-
-    def entering_search_the_catalogue_page(self, event, state):
-        self.route_for_current_state = MultiPageFormRoutes.SEARCH_THE_CATALOGUE.value
-
-    def entering_service_person_alive_form(self, event, state):
+    def entering_service_person_alive_form(self):
         self.route_for_current_state = MultiPageFormRoutes.IS_SERVICE_PERSON_ALIVE.value
 
-    def entering_subject_access_request_page(self, event, state):
+    def entering_subject_access_request_page(self):
         self.route_for_current_state = (
             MultiPageFormRoutes.MUST_SUBMIT_SUBJECT_ACCESS_REQUEST.value
         )
 
-    def entering_service_branch_form(self, event, state):
+    def entering_service_branch_form(self):
         self.route_for_current_state = MultiPageFormRoutes.SERVICE_BRANCH_FORM.value
 
-    def entering_only_living_subjects_can_request_their_record_page(self, event, state):
+    def entering_only_living_subjects_can_request_their_record_page(self):
         self.route_for_current_state = (
             MultiPageFormRoutes.ONLY_LIVING_SUBJECTS_CAN_REQUEST_THEIR_RECORD.value
         )
 
-    def entering_were_they_a_commissioned_officer_form(self, form):
+    def entering_were_they_a_commissioned_officer_form(self):
         self.route_for_current_state = (
             MultiPageFormRoutes.WERE_THEY_A_COMMISSIONED_OFFICER_FORM.value
         )
 
-    def entering_we_do_not_have_records_for_this_service_branch(self, form):
+    def entering_we_do_not_have_royal_navy_service_records_form(self):
         self.route_for_current_state = (
-            MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_THIS_SERVICE_BRANCH.value
+            MultiPageFormRoutes.WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS.value
         )
 
-    def entering_we_do_not_have_records_for_this_rank_page(self, form):
+    def entering_we_do_not_have_records_for_this_rank_page(self):
         self.route_for_current_state = (
             MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_THIS_RANK.value
         )
 
-    def entering_we_are_unlikely_to_find_this_record_page(self, form):
+    def entering_we_are_unlikely_to_locate_this_record_form(self):
         self.route_for_current_state = (
-            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_FIND_THIS_RECORD.value
+            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD.value
         )
 
-    def entering_we_may_hold_this_record_page(self, form):
+    def entering_we_may_hold_this_record_page(self):
         self.route_for_current_state = MultiPageFormRoutes.WE_MAY_HOLD_THIS_RECORD.value
 
-    def entering_what_was_their_date_of_birth_page(self, form):
+    def entering_what_was_their_date_of_birth_form(self):
         self.route_for_current_state = (
             MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH.value
         )
 
-    def entering_service_person_details_form(self, form):
+    def entering_are_you_sure_you_want_to_cancel_form(self):
+        self.route_for_current_state = (
+            MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value
+        )
+
+    def entering_service_person_details_form(self):
         self.route_for_current_state = MultiPageFormRoutes.SERVICE_PERSON_DETAILS.value
 
-    def entering_we_do_not_have_records_for_people_born_after_page(self, form):
+    def entering_we_do_not_have_records_for_people_born_after_page(self):
         self.route_for_current_state = (
             MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER.value
         )
 
-    def entering_we_do_not_have_records_for_people_born_before_page(self, form):
+    def entering_we_do_not_have_records_for_people_born_before_page(self):
         self.route_for_current_state = (
             MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE.value
         )
 
-    def entering_do_you_have_a_proof_of_death_form(self, form):
+    def entering_do_you_have_a_proof_of_death_form(self):
         self.route_for_current_state = (
             MultiPageFormRoutes.DO_YOU_HAVE_A_PROOF_OF_DEATH.value
         )
 
-    def entering_upload_a_proof_of_death_form(self, form):
+    def entering_upload_a_proof_of_death_form(self):
         self.route_for_current_state = MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH.value
 
-    def entering_have_you_previously_made_a_request_form(self, form):
+    def entering_have_you_previously_made_a_request_form(self):
         self.route_for_current_state = (
             MultiPageFormRoutes.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST.value
         )
 
-    def entering_your_details_form(self, form):
+    def entering_your_details_form(self):
         self.route_for_current_state = MultiPageFormRoutes.YOUR_DETAILS.value
 
-    def entering_your_postal_address_form(self, form):
+    def entering_your_postal_address_form(self):
         self.route_for_current_state = MultiPageFormRoutes.YOUR_POSTAL_ADDRESS.value
 
-    def entering_how_do_you_want_your_order_processed_form(self, form):
+    def entering_how_do_you_want_your_order_processed_form(self):
         self.route_for_current_state = (
             MultiPageFormRoutes.HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED.value
         )
 
-    def entering_gov_uk_pay_redirect(self, form):
+    def entering_gov_uk_pay_redirect(self):
         self.route_for_current_state = MultiPageFormRoutes.SEND_TO_GOV_UK_PAY.value
 
     def entering_request_submitted_page(self):
         self.route_for_current_state = MultiPageFormRoutes.REQUEST_SUBMITTED.value
 
-    def on_enter_state(self, event, state):
-        """This method is called when entering any state."""
-        print(
-            f"State machine: Entering '{state.id}' state in response to '{event}' event. The next route is set to: '{self.route_for_current_state}'"
-        )
-
-    def on_exit_state(self, event, state):
-        """This method is called when exiting any state."""
-        self.route_for_current_state = None
-        print(
-            f"State machine: Exiting '{state.id}' state in response to '{event}' event."
-        )
-
-    def has_checked_catalogue(self, form):
-        """Condition method to determine if the user has checked the catalogue."""
-        return self.get_form_field_data(form, "have_you_checked_the_catalogue") == "yes"
-
     def living_subject(self, form):
         """Condition method to determine if the service person is alive."""
         return self.get_form_field_data(form, "is_service_person_alive") == "yes"
 
-    def go_to_mod(self, form):
-        """Condition method to determine if the user should be directed to the MOD."""
-        return self.get_form_field_data(form, "service_branch") in ["ROYAL_NAVY"]
+    def is_royal_navy(self, form):
+        """Condition method to determine if the service branch is Royal Navy."""
+        return form.service_branch.data in ["ROYAL_NAVY"]
 
     def likely_unfindable(self, form):
         """Condition method to determine if we may be unable to find the record."""
@@ -356,28 +374,17 @@ class RoutingStateMachine(StateMachine):
         return form.were_they_a_commissioned_officer.data == "yes"
 
     def born_too_late(self, form):
-        return (
-            self.get_form_field_data(form, "what_was_their_date_of_birth").year > 1939
-        )
+        """Condition method to determine if the service person's date of birth is too late for TNA to have record."""
+        return form.what_was_their_date_of_birth.data.year > 1939
 
     def born_too_early(self, form):
-        return (
-            self.get_form_field_data(form, "what_was_their_date_of_birth").year < 1800
-        )
+        """Condition method to determine if the service person's date of birth is too early for TNA to have record."""
+        return form.what_was_their_date_of_birth.data.year < 1800
 
     def birth_year_requires_proof_of_death(self, form):
-        return (
-            self.get_form_field_data(form, "what_was_their_date_of_birth").year > 1910
-        )
+        """Condition method to determine if the service person's date of birth requires a proof of death."""
+        return form.what_was_their_date_of_birth.data.year > 1910
 
     def does_not_have_email(self, form):
-        return self.get_form_field_data(form, "does_not_have_email")
-
-    def proof_of_death_uploaded_to_s3(self, form):
-        if file_data := self.get_form_field_data(form, "proof_of_death"):
-            file = upload_proof_of_death(file=file_data)
-            if file:
-                self.set_form_field_data(form, "proof_of_death", file)
-                return True
-            self.set_form_field_data(form, "proof_of_death", None)
-        return False
+        """Condition method to determine if the user does not have an email address."""
+        return form.does_not_have_email.data

@@ -13,10 +13,10 @@ test.describe("the 'You have cancelled your request' page", () => {
     );
   });
 
-  test("takes the user to the 'Are you sure you want to cancel?' page", async ({
-    page,
-  }) => {
-    await page.getByRole("link", { name: "Start a new request" }).click();
-    await expect(page).toHaveURL(Paths.JOURNEY_START);
+  test.describe("clicking 'Start a new request'", () => {
+    test("takes the user to the start page", async ({ page }) => {
+      await page.getByRole("link", { name: "Start a new request" }).click();
+      await expect(page).toHaveURL(Paths.JOURNEY_START);
+    });
   });
 });

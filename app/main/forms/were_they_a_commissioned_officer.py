@@ -5,12 +5,12 @@ from wtforms import RadioField, SubmitField
 from wtforms.validators import InputRequired
 
 
-class WasServicePersonAnOfficer(FlaskForm):
+class WereTheyACommissionedOfficer(FlaskForm):
     content = load_content()
 
     were_they_a_commissioned_officer = RadioField(
         get_field_content(content, "were_they_a_commissioned_officer", "label"),
-        choices=[("yes", "Yes"), ("no", "No"), ("unknown", "I don't know")],
+        choices=[("yes", "Yes"), ("no", "No"), ("unknown", "I do not know")],
         validators=[
             InputRequired(
                 message=get_field_content(

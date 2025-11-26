@@ -30,4 +30,11 @@ test.describe("the 'Before you start' form", () => {
     await await page.locator("form#cancel-request a").click();
     await expect(page).toHaveURL(Paths.BEFORE_YOU_START);
   });
+
+  test("clicking the 'Back' link takes the user to 'Before you start'", async ({
+    page,
+  }) => {
+    await page.getByRole("link", { name: "Back" }).click();
+    await expect(page).toHaveURL(Paths.BEFORE_YOU_START);
+  });
 });

@@ -7,6 +7,15 @@ from flask import current_app
 from werkzeug.datastructures.file_storage import FileStorage
 
 
+def get_boto3_session() -> boto3.session.Session:
+    """
+    Returns a boto3 session using the default credential chain.
+    When running on AWS infrastructure, this automatically uses IAM roles.
+    """
+    region = current_app.config.get("AWS_DEFAULT_REGION", "eu-west-2")
+    return boto3.session.Session(region_name=region)
+
+
 def upload_proof_of_death(file: FileStorage) -> str | None:
     """
     Function that uploads a proof of death file to S3, with a UUID as the filename.
@@ -42,13 +51,8 @@ def upload_file_to_s3(
             current_app.logger.error("File is empty, cannot upload to S3.")
             return None
 
-        s3 = boto3.client(
-            "s3",
-            aws_access_key_id=current_app.config["AWS_ACCESS_KEY_ID"],
-            aws_secret_access_key=current_app.config["AWS_SECRET_ACCESS_KEY"],
-            aws_session_token=current_app.config.get("AWS_SESSION_TOKEN"),
-            region_name=current_app.config.get("AWS_DEFAULT_REGION", "eu-west-2"),
-        )
+        session = get_boto3_session()
+        s3 = session.client("s3")
 
         filename = file.filename
 
@@ -77,13 +81,9 @@ def send_email(to: str, subject: str, body: str) -> None:
     """
     Function to send an email using AWS SES.
     """
-    ses = boto3.client(
-        "ses",
-        aws_access_key_id=current_app.config.get("AWS_ACCESS_KEY_ID"),
-        aws_secret_access_key=current_app.config.get("AWS_SECRET_ACCESS_KEY"),
-        aws_session_token=current_app.config.get("AWS_SESSION_TOKEN"),
-        region_name=current_app.config.get("AWS_DEFAULT_REGION", "eu-west-2"),
-    )
+
+    session = get_boto3_session()
+    ses = session.client("ses")
 
     ses.send_email(
         Source=current_app.config["EMAIL_FROM"],

@@ -1,5 +1,9 @@
+from app.constants import ExternalLinks, MultiPageFormRoutes
 from app.lib.content import load_content
 from app.lib.decorators.state_machine_decorator import with_state_machine
+from app.lib.decorators.with_back_url_saved_to_session import (
+    with_route_for_back_link_saved_to_session,
+)
 from app.lib.decorators.with_form_prefilled_from_session import (
     with_form_prefilled_from_session,
 )
@@ -12,27 +16,27 @@ from app.lib.save_submitted_form_fields_to_session import (
 from app.main import bp
 from app.main.forms.are_you_sure_you_want_to_cancel import AreYouSureYouWantToCancel
 from app.main.forms.before_you_start import BeforeYouStart
-from app.main.forms.check_ancestry import CheckAncestry
 from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
-from app.main.forms.have_you_checked_the_catalogue import HaveYouCheckedTheCatalogue
+from app.main.forms.exit_this_form import ExitThisForm
 from app.main.forms.have_you_previously_made_a_request import (
     HaveYouPreviouslyMadeARequest,
 )
 from app.main.forms.how_do_you_want_your_order_processed import (
     HowDoYouWantYourOrderProcessed,
 )
-from app.main.forms.how_the_process_works import HowTheProcessWorks
+from app.main.forms.how_we_process_requests import HowTheProcessWorks
 from app.main.forms.is_service_person_alive import IsServicePersonAlive
 from app.main.forms.service_branch import ServiceBranch
 from app.main.forms.service_person_details import ServicePersonDetails
 from app.main.forms.start_now import StartNow
 from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
 from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
-from app.main.forms.were_they_a_commissioned_officer import WasServicePersonAnOfficer
+from app.main.forms.were_they_a_commissioned_officer import WereTheyACommissionedOfficer
 from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
+from app.main.forms.you_may_want_to_check_ancestry import YouMayWantToCheckAncestry
 from app.main.forms.your_details import YourDetails
 from app.main.forms.your_postal_address import YourPostalAddress
-from flask import redirect, render_template, request, url_for
+from flask import redirect, render_template, request, session, url_for
 
 
 @bp.route("/", methods=["GET", "POST"])
@@ -47,21 +51,24 @@ def start(form, state_machine):
     return render_template("main/start.html", form=form, content=load_content())
 
 
-@bp.route("/how-the-process-works/", methods=["GET", "POST"])
+@bp.route("/how-we-process-requests/", methods=["GET", "POST"])
 @with_state_machine
 @with_form_prefilled_from_session(HowTheProcessWorks)
-def how_the_process_works(form, state_machine):
+def how_we_process_requests(form, state_machine):
     if form.validate_on_submit():
-        state_machine.continue_from_how_the_process_works_form()
+        state_machine.continue_from_how_we_process_requests_form()
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(
-        "main/how-the-process-works.html", form=form, content=load_content()
+        "main/how-we-process-requests.html", form=form, content=load_content()
     )
 
 
 @bp.route("/before-you-start/", methods=["GET", "POST"])
 @with_state_machine
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.BEFORE_YOU_START.value
+)
 @with_form_prefilled_from_session(BeforeYouStart)
 def before_you_start(form, state_machine):
     if form.validate_on_submit():
@@ -80,37 +87,29 @@ def are_you_sure_you_want_to_cancel(form, state_machine):
         state_machine.continue_from_are_you_sure_you_want_to_cancel_form()
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/are-you-sure-you-want-to-cancel.html", form=form, content=load_content()
+        "main/are-you-sure-you-want-to-cancel.html",
+        form=form,
+        content=load_content(),
+        route_for_back_link=session.get("route_for_back_link", False),
     )
 
 
 @bp.route("/request-cancelled/", methods=["GET"])
-def request_cancelled():
-    return render_template("main/request-cancelled.html", content=load_content())
+def you_have_cancelled_your_request():
+    return render_template(
+        "main/you-have-cancelled-your-request.html", content=load_content()
+    )
 
 
 @bp.route("/check-ancestry/", methods=["GET", "POST"])
 @with_state_machine
-@with_form_prefilled_from_session(CheckAncestry)
-def check_ancestry(form, state_machine):
-    return render_template(
-        "main/check-ancestry.html",
-        form=form,
-        content=load_content(),
-    )
-
-
-@bp.route("/have-you-checked-the-catalogue/", methods=["GET", "POST"])
-@with_state_machine
-@with_form_prefilled_from_session(HaveYouCheckedTheCatalogue)
-def have_you_checked_the_catalogue(form, state_machine):
+@with_form_prefilled_from_session(YouMayWantToCheckAncestry)
+def you_may_want_to_check_ancestry(form, state_machine):
     if form.validate_on_submit():
-        save_submitted_form_fields_to_session(form)
-        state_machine.continue_from_have_you_checked_the_catalogue_form(form)
+        state_machine.continue_from_you_may_want_to_check_ancestry_form()
         return redirect(url_for(state_machine.route_for_current_state))
-
     return render_template(
-        "main/have-you-checked-the-catalogue.html",
+        "main/you-may-want-to-check-ancestry.html",
         form=form,
         content=load_content(),
     )
@@ -132,11 +131,22 @@ def is_service_person_alive(form, state_machine):
     )
 
 
-@bp.route("/must-submit-subject-access/", methods=["GET"])
-def must_submit_subject_access_request():
+@bp.route("/must-submit-subject-access/", methods=["GET", "POST"])
+@with_state_machine
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.MUST_SUBMIT_SUBJECT_ACCESS_REQUEST.value
+)
+@with_form_prefilled_from_session(ExitThisForm)
+def must_submit_subject_access_request(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_submit_subject_access_request_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
+
     return render_template(
         "main/must-submit-subject-access-request.html",
+        form=form,
         content=load_content(),
+        subject_access_request_link=ExternalLinks.SUBJECT_ACCESS_REQUEST_FORM,
     )
 
 
@@ -162,8 +172,8 @@ def service_branch_form(form, state_machine):
     )
 
 
-@bp.route("/was-service-person-officer/", methods=["GET", "POST"])
-@with_form_prefilled_from_session(WasServicePersonAnOfficer)
+@bp.route("/were-they-a-commissioned-officer/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(WereTheyACommissionedOfficer)
 @with_state_machine
 def were_they_a_commissioned_officer(form, state_machine):
     if form.validate_on_submit():
@@ -172,22 +182,27 @@ def were_they_a_commissioned_officer(form, state_machine):
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(
-        "main/was-service-person-an-officer.html",
+        "main/were-they-a-commissioned-officer.html",
         form=form,
         content=load_content(),
     )
 
 
-@bp.route("/search-the-catalogue/", methods=["GET"])
-def search_the_catalogue():
-    return render_template("main/search-the-catalogue.html", content=load_content())
-
-
-@bp.route("/we-do-not-have-records-for-this-service-branch/", methods=["GET"])
-def we_do_not_have_records_for_this_service_branch():
+@bp.route("/we-do-not-have-royal-navy-service-branch-records/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(ExitThisForm)
+@with_state_machine
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS.value
+)
+def we_do_not_have_royal_navy_service_records(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_we_do_not_have_royal_navy_service_records_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/we-do-not-have-records-for-this-service-branch.html",
+        "main/we-do-not-have-royal-navy-service-branch-records.html",
+        form=form,
         content=load_content(),
+        mod_service_link=ExternalLinks.MOD_SERVICE,
     )
 
 
@@ -199,11 +214,21 @@ def we_do_not_have_records_for_this_rank():
     )
 
 
-@bp.route("/we-may-be-unable-to-find-this-record/", methods=["GET"])
-def we_are_unlikely_to_find_this_record():
+@bp.route("/we-are-unlikely-to-locate-this-record/", methods=["GET", "POST"])
+@with_state_machine
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD.value
+)
+@with_form_prefilled_from_session(ExitThisForm)
+def we_are_unlikely_to_locate_this_record(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_we_are_unlikely_to_locate_this_record_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/we-may-be-unable-to-find-this-record.html",
+        "main/we-are-unlikely-to-locate-this-record.html",
         content=load_content(),
+        form=form,
+        paid_search_link=ExternalLinks.PAID_SEARCH,
     )
 
 

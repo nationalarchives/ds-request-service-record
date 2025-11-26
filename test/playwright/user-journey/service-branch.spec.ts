@@ -10,7 +10,7 @@ test.describe("the service branch form", () => {
     },
     {
       branchLabel: "Royal Navy (including Royal Marines)",
-      nextUrl: Paths.WE_DO_NOT_HAVE_RECORDS_FOR_THIS_SERVICE_BRANCH,
+      nextUrl: Paths.WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS,
       expectedHeading: /We do not hold this record/,
     },
     {
@@ -19,13 +19,13 @@ test.describe("the service branch form", () => {
       expectedHeading: /Were they a commissioned officer\?/,
     },
     {
-      branchLabel: "Don't know",
+      branchLabel: "I do not know",
       nextUrl: Paths.WERE_THEY_A_COMMISSIONED_OFFICER,
       expectedHeading: /Were they a commissioned officer\?/,
     },
     {
       branchLabel: "Home Guard",
-      nextUrl: Paths.WE_ARE_UNLIKELY_TO_FIND_THIS_RECORD,
+      nextUrl: Paths.WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD,
       expectedHeading: /We are unlikely to be able to locate this record/,
     },
   ];
@@ -37,7 +37,7 @@ test.describe("the service branch form", () => {
 
   test("has the correct heading", async ({ page }) => {
     await expect(page.locator("h1")).toHaveText(
-      /What was the person's service branch\?/,
+      /Which military branch did the person serve in\?/,
     );
   });
 
