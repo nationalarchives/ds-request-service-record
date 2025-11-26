@@ -1,4 +1,6 @@
 from app.constants import MultiPageFormRoutes
+from app.lib.aws import upload_proof_of_death
+from flask import current_app
 from statemachine import State, StateMachine
 
 
@@ -17,6 +19,26 @@ class RoutingStateMachine(StateMachine):
     @route_for_current_state.setter
     def route_for_current_state(self, value):
         self._route_for_current_state = value
+
+    def get_form_field_data(self, form, field_name):
+        """Helper method to get the data for a specific field from the form with error handling."""
+        try:
+            return getattr(form, field_name).data
+        except AttributeError:
+            current_app.logger.error(
+                f"Form ({form}) does not have field '{field_name}'"
+            )
+            return None
+
+    def set_form_field_data(self, form, field_name, value):
+        """Helper method to set the data for a specific field in the form with error handling."""
+        try:
+            form_field = getattr(form, field_name)
+            form_field.data = value
+        except AttributeError:
+            current_app.logger.error(
+                f"Form ({form}) does not have field '{field_name}'"
+            )
 
     """
     These are our States. They represent the different stages of the user journey. In most cases, you
@@ -201,7 +223,9 @@ class RoutingStateMachine(StateMachine):
         upload_a_proof_of_death_form
     )
 
-    continue_from_upload_a_proof_of_death_form = initial.to(service_person_details_form)
+    continue_from_upload_a_proof_of_death_form = initial.to(
+        service_person_details_form, cond="proof_of_death_uploaded_to_s3"
+    ) | initial.to(upload_a_proof_of_death_form)
 
     continue_from_service_person_details_form = initial.to(
         have_you_previously_made_a_request_form
@@ -335,7 +359,7 @@ class RoutingStateMachine(StateMachine):
 
     def living_subject(self, form):
         """Condition method to determine if the service person is alive."""
-        return form.is_service_person_alive.data == "yes"
+        return self.get_form_field_data(form, "is_service_person_alive") == "yes"
 
     def is_royal_navy(self, form):
         """Condition method to determine if the service branch is Royal Navy."""
@@ -343,7 +367,7 @@ class RoutingStateMachine(StateMachine):
 
     def likely_unfindable(self, form):
         """Condition method to determine if we may be unable to find the record."""
-        return form.service_branch.data in ["HOME_GUARD"]
+        return self.get_form_field_data(form, "service_branch") in ["HOME_GUARD"]
 
     def was_officer(self, form):
         """Condition method to determine if the service person was an officer."""
@@ -364,3 +388,13 @@ class RoutingStateMachine(StateMachine):
     def does_not_have_email(self, form):
         """Condition method to determine if the user does not have an email address."""
         return form.does_not_have_email.data
+
+    def proof_of_death_uploaded_to_s3(self, form):
+        """Condition method to determine if proof of death was successfully uploaded to S3."""
+        if file_data := self.get_form_field_data(form, "proof_of_death"):
+            file = upload_proof_of_death(file=file_data)
+            if file:
+                self.set_form_field_data(form, "proof_of_death", file)
+                return True
+        self.set_form_field_data(form, "proof_of_death", None)
+        return False  # TODO: Does this need to be True if upload fails? They won't progress otherwise.

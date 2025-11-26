@@ -7,8 +7,8 @@ services:
         IMAGE_TAG: 0
     environment:
       - RUNTIME=develop
-      - ENVIRONMENT_NAME=develop
-      - CONFIG=config.Develop
+      - ENVIRONMENT_NAME=${ENVIRONMENT_NAME:-develop}
+      - CONFIG=${CONFIG:-config.Develop}
       - DEBUG=true
       - SECRET_KEY=abc123
       - NPM_DEVELOP_COMMAND=dev

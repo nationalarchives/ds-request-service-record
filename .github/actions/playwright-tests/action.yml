@@ -30,7 +30,16 @@ runs:
       if: steps.playwright-cache.outputs.cache-hit == 'true'
       run: npx playwright install-deps webkit
       shell: bash
+    - name: Write .env for compose (explicit)
+      run: |
+        echo "CONFIG=config.Test" > .env
+        echo "ENVIRONMENT_NAME=test" >> .env
+        cat .env
+      shell: bash
     - name: Start service
+      env:
+        ENVIRONMENT_NAME: test
+        CONFIG: config.Test
       run: docker compose up --detach --wait --wait-timeout 300 app || docker compose logs app
       shell: bash
     - name: Run tests
