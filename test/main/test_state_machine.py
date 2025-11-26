@@ -304,7 +304,7 @@ def test_continue_from_upload_a_proof_of_death_where_upload_proof_of_death_retur
 # upload by having it return a filename.
 @patch(
     "app.lib.state_machine.state_machine.upload_proof_of_death",
-    return_value="filename_on_s3.png",
+    return_value="filename_on_s3",
 )
 def test_continue_from_upload_a_proof_of_death_where_upload_proof_of_death_returns_a_filename(
     mock_upload,

@@ -50,7 +50,7 @@ def test_upload_file_to_s3_valid_file_returns_filename(context):
         )
 
     assert isinstance(result, str)
-    assert result == "override-name.png"
+    assert result == "override-name"
     mock_session.client.assert_called_once_with("s3")
     mock_s3.upload_fileobj.assert_called_once()
     # Verify the correct arguments were passed
