@@ -35,7 +35,7 @@
         <form action="{{ url_for('main.make_payment', id=payment.id) }}" method="post" novalidate>
           {{ form.csrf_token }}
           <div class="tna-button-group">
-            {{ form.submit(params={'accent':'true'}) }}
+            {{ form.submit(params={'classes':'tna-button--accent'}) }}
           </div>
         </form>
       </div>

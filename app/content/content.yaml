@@ -142,6 +142,27 @@ pages:
     paragraphs:
       - No information has been submitted to us. To send a new request for a military service record, please start a new request form.
     start_new_request: Start a new request
+  were_they_a_commissioned_officer:
+    heading: Were they a commissioned officer?
+    paragraphs:
+      - |
+        Service records are often categorised as either 'Commissioned Officers' or 'Other Ranks'. 
+        Information on whether the service person was a Commissioned Officer will help confirm if 
+        the service record has been transferred to The National Archives or is still with the Ministry 
+        of Defence.
+    summary: What are the commissioned officer ranks?
+    ranks:
+      - Second Lieutenant
+      - Lieutenant
+      - Captain
+      - Major
+      - Lieutenant Colonel
+      - Colonel
+      - Brigadier
+      - Major General
+      - Lieutenant General
+      - General
+      - Field Marshal
   have_you_previously_made_a_request:
     heading: Have you previously made a request?
   must_submit_subject_access_request:
@@ -194,19 +215,12 @@ pages:
   we_may_hold_this_record:
     heading: We may hold this record
     paragraphs:
-      - Based on the information you've provided, we may hold this record.
-    sub_heading: Further information you'll need to provide
-    sub_heading_paragraphs:
-      - >
-        For us to confirm we hold the record, you'll need to provide:
-    list_items:
-      - the first name and surname of the person you're requesting
-      - their service number, if you have it
-      - any further details that might help our search, such as their occupation, their place of birth, or their regiment
-      - if they are deceased and were born before 1909, a proof of death such as [death certificates](https://www.gov.uk/order-copy-birth-death-marriage-certificate) or [war dead records](https://www.cwgc.org/find-records/find-war-dead/)
-      - payment - you will need a debit or credit card
-    paragraphs_after_list:
-      - By completing this form you are requesting information from a UK public authority, The National Archives. We are therefore required to treat it as a Freedom of Information (FOI) request. [You can find out more about FOI on GOV.UK](https://www.gov.uk/make-a-freedom-of-information-request).
+      - Based on the information you’ve given, we may hold this record.
+      - |
+        By completing this form you are requesting information from a UK public authority, 
+        The National Archives. We are therefore required to treat it as a Freedom of 
+        Information (FOI) request. 
+        [You can find out more about FOI on GOV.UK (opens in new tab)](https://www.gov.uk/make-a-freedom-of-information-request).
   upload_a_proof_of_death:
     heading: Upload a proof of death
     paragraphs:

@@ -31,7 +31,7 @@ from app.main.forms.service_person_details import ServicePersonDetails
 from app.main.forms.start_now import StartNow
 from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
 from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
-from app.main.forms.were_they_a_commissioned_officer import WasServicePersonAnOfficer
+from app.main.forms.were_they_a_commissioned_officer import WereTheyACommissionedOfficer
 from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 from app.main.forms.you_may_want_to_check_ancestry import YouMayWantToCheckAncestry
 from app.main.forms.your_details import YourDetails
@@ -172,8 +172,8 @@ def service_branch_form(form, state_machine):
     )
 
 
-@bp.route("/was-service-person-officer/", methods=["GET", "POST"])
-@with_form_prefilled_from_session(WasServicePersonAnOfficer)
+@bp.route("/were-they-a-commissioned-officer/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(WereTheyACommissionedOfficer)
 @with_state_machine
 def were_they_a_commissioned_officer(form, state_machine):
     if form.validate_on_submit():
@@ -182,7 +182,7 @@ def were_they_a_commissioned_officer(form, state_machine):
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(
-        "main/was-service-person-an-officer.html",
+        "main/were-they-a-commissioned-officer.html",
         form=form,
         content=load_content(),
     )
