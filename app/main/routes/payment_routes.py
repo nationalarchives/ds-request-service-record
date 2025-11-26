@@ -36,12 +36,16 @@ def send_to_gov_uk_pay():
 
     id = str(uuid.uuid4())
 
-    amount = calculate_amount_based_on_form_data(form_data)
+    try:
+        amount = calculate_amount_based_on_form_data(form_data)
+    except ValueError as e:
+        current_app.logger.error(f"Error calculating amount: {e}")
+        return redirect(url_for("main.payment_link_creation_failed"))
 
     response = create_payment(
         amount=amount,
         description=content["app"]["title"],
-        reference="ServiceRecordRequest",
+        reference="ServiceRecordRequest",  # TODO: Dynamically generate reference
         email=requester_email,
         return_url=f"{url_for("main.handle_gov_uk_pay_request_response", _external=True)}?id={id}",
     )
