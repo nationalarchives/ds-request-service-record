@@ -396,4 +396,4 @@ class RoutingStateMachine(StateMachine):
                 self.set_form_field_data(form, "proof_of_death", file)
                 return True
         self.set_form_field_data(form, "proof_of_death", None)
-        return True # TODO: Does this need to be false if upload fails? They won't progress otherwise
+        return False # TODO: Does this need to be True if upload fails? They won't progress otherwise.
