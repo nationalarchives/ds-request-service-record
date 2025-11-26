@@ -1,6 +1,7 @@
+import re
 import unittest
 from pathlib import Path
-import re
+
 from app.lib.content import load_content
 
 
