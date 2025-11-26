@@ -90,10 +90,10 @@ pages:
           - "Suitable forms of evidence include:"
       first_list:
         - |
-          [Copies of death certificates (opens in new tab)](https://www.gov.uk/order-copy-birth-death-marriage-certificate)
+          [Copies of death certificates (opens in new tab)](COPIES_OF_DEATH_CERTIFICATES)
         - Published obituaries (detailing publication source, name of deceased, and date of birth and death)
         - |
-          [Commonwealth War Graves’ (CWG) war dead records (opens in new tab)](https://www.cwgc.org/find-records/find-war-dead/)
+          [Commonwealth War Graves’ (CWG) war dead records (opens in new tab)](CWGC_WAR_DEAD_RECORDS)
       second_list:
         - In a JPG, GIF or PNG format
         - No more than 5MB in size
@@ -120,7 +120,7 @@ pages:
           Please make sure you are ready to submit your request in one session.
         - |
           We will only use the data you provide to answer your request. 
-          [Our privacy notice (opens in new tab)](https://www.nationalarchives.gov.uk/legal/privacy-policy/) 
+          [Our privacy notice (opens in new tab)](PRIVACY_NOTICE) 
           explains how we collect, use, and protect personal data.
   you_may_want_to_check_ancestry:
     heading: You may want to check Ancestry
@@ -130,7 +130,7 @@ pages:
         be available to order from them. Please visit their site and check for the 
         record before proceeding.
       - |
-        [Search Ancestry (opens in new tab)](https://www.ancestry.co.uk/search/)
+        [Search Ancestry (opens in new tab)](ANCESTRY_SEARCH)
       - If you have already checked, or do not wish to check Ancestry, please continue your request.
   are_you_sure_you_want_to_cancel:
     heading: Are you sure you want to cancel?
@@ -220,7 +220,7 @@ pages:
         By completing this form you are requesting information from a UK public authority, 
         The National Archives. We are therefore required to treat it as a Freedom of 
         Information (FOI) request. 
-        [You can find out more about FOI on GOV.UK (opens in new tab)](https://www.gov.uk/make-a-freedom-of-information-request).
+        [You can find out more about FOI on GOV.UK (opens in new tab)](FOI_REQUEST_GUIDANCE).
   upload_a_proof_of_death:
     heading: Upload a proof of death
     paragraphs:
@@ -239,9 +239,9 @@ pages:
       - >
         The copy of proof of death must be:
     list_items:
-      - "[copies of death certificates](https://www.gov.uk/order-copy-birth-death-marriage-certificate)"
+      - "[copies of death certificates](COPIES_OF_DEATH_CERTIFICATES)"
       - published obituaries (detailing publication source, name of deceased, and date of birth and death)
-      - "[war dead records](https://www.cwgc.org/find-records/find-war-dead/)"
+      - "[war dead records](CWGC_WAR_DEAD_RECORDS)"
     warning: If you do not send a proof of death when required, it is likely that we will withold all of the requested information and cannot provide the record.
   confirm_payment_received:
     heading: Payment received
