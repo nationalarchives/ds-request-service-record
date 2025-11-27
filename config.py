@@ -78,7 +78,7 @@ class Production(Features):
         SESSION_TYPE: str = "redis"
         SESSION_REDIS = Redis.from_url(SESSION_REDIS_URL)
 
-    AWS_DEFAULT_REGION: str = os.environ.get("AWS_DEFAULT_REGION", "")
+    AWS_DEFAULT_REGION: str = os.environ.get("AWS_DEFAULT_REGION", "eu-west-2")
     PROOF_OF_DEATH_BUCKET_NAME: str = os.environ.get("PROOF_OF_DEATH_BUCKET_NAME", "")
     MAX_UPLOAD_ATTEMPTS: int = int(os.environ.get("MAX_UPLOAD_ATTEMPTS", "3"))
 
