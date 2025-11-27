@@ -64,11 +64,11 @@ In addition to the [base Docker image variables](https://github.com/nationalarch
 | `SQLALCHEMY_DATABASE_URI`        | SQLAlchemy database connection string                                       | _none_ (required)                                         |
 | `SQLALCHEMY_TRACK_MODIFICATIONS` | SQLAlchemy event system toggle                                              | `False`                                                   |
 | `SESSION_REDIS_URL`              | Redis URL connection string for sessions                                    | _none_                                                    |
-| `AWS_DEFAULT_REGION`             | AWS region for clients (SES/S3)                                             | `eu-west-2`                                                    |
+| `AWS_DEFAULT_REGION`             | AWS region for clients (SES/S3)                                             | `eu-west-2`                                               |
 | `PROOF_OF_DEATH_BUCKET_NAME`     | S3 bucket location for uploaded proof-of-death files                        | _none_ (required for file uploads)                        |
 | `MAX_UPLOAD_ATTEMPTS`            | Number of retry attempts for S3 uploads                                     | `3`                                                       |
 | `EMAIL_FROM`                     | The address which SES will send emails from                                 | _none_                                                    |
 | `DYNAMICS_INBOX`                 | The address which SES will send Dynamics emails to                          | _none_                                                    |
-| `RECORD_COPYING_SERVICE_API_URL` | The URL of the Record Copying Service API                           |                                                    |
+| `RECORD_COPYING_SERVICE_API_URL` | The URL of the Record Copying Service API                                   |                                                           |
 
 [^1] [Debugging in Flask](https://flask.palletsprojects.com/en/2.3.x/debugging/)
