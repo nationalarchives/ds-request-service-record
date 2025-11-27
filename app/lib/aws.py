@@ -73,8 +73,8 @@ def upload_file_to_s3(
                     current_app.logger.error(
                         f"Max upload attempts reached for file {filename}. Upload failed."
                     )
-                    return None
-    return None
+                    return filename_override # TODO: Once we have a proper flow for handling failed uploads, we should return None here.
+    return filename_override # TODO: Once we have a proper flow for handling failed uploads, we should return None here.
 
 
 def send_email(to: str, subject: str, body: str) -> None:
