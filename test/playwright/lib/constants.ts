@@ -20,7 +20,7 @@ export const Paths = {
   WERE_THEY_A_COMMISSIONED_OFFICER: `${basePath}/were-they-a-commissioned-officer/`,
   WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER: `${basePath}/we-do-not-have-records-for-people-born-after/`,
   WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE: `${basePath}/we-do-not-have-records-for-people-born-before/`,
-  WE_DO_NOT_HAVE_RECORDS_FOR_THIS_RANK: `${basePath}/we-do-not-have-records-for-this-rank/`,
+  WE_ARE_UNLIKELY_TO_HOLD_ARMY_OFFICER_RECORDS: `${basePath}/we-are-unlikely-to-hold-army-officer-records/`,
   WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS: `${basePath}/we-do-not-have-royal-navy-service-branch-records/`,
   WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD: `${basePath}/we-are-unlikely-to-locate-this-record/`,
   WE_MAY_HOLD_THIS_RECORD: `${basePath}/we-may-hold-this-record/`,

@@ -206,10 +206,10 @@ def we_do_not_have_royal_navy_service_records(form, state_machine):
     )
 
 
-@bp.route("/we-do-not-have-records-for-this-rank/", methods=["GET"])
-def we_do_not_have_records_for_this_rank():
+@bp.route("/we-are-unlikely-to-hold-army-officer-records/", methods=["GET"])
+def we_are_unlikely_to_hold_army_officer_records():
     return render_template(
-        "main/we-do-not-have-records-for-this-rank.html",
+        "main/we-are-unlikely-to-hold-army-officer-records.html",
         content=load_content(),
     )
 
