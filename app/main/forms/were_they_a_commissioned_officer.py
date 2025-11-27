@@ -1,12 +1,14 @@
 from app.lib.content import get_field_content, load_content
 from flask_wtf import FlaskForm
 from tna_frontend_jinja.wtforms import TnaRadiosWidget, TnaSubmitWidget
-from wtforms import RadioField, SubmitField
+from wtforms import RadioField, SubmitField, HiddenField
 from wtforms.validators import InputRequired
 
 
 class WereTheyACommissionedOfficer(FlaskForm):
     content = load_content()
+
+    service_branch = HiddenField("Service Branch")
 
     were_they_a_commissioned_officer = RadioField(
         get_field_content(content, "were_they_a_commissioned_officer", "label"),

@@ -172,31 +172,36 @@ def test_continue_from_submit_subject_access_request_form():
 
 
 @pytest.mark.parametrize(
-    "answer,expected_state,expected_route",
+    "service_branch,was_officer,expected_state,expected_route",
     [
         (
+            "BRITISH_ARMY",
             "no",
             "we_may_hold_this_record_page",
             MultiPageFormRoutes.WE_MAY_HOLD_THIS_RECORD.value,
         ),
         (
+            "BRITISH_ARMY",
             "unknown",
             "we_may_hold_this_record_page",
             MultiPageFormRoutes.WE_MAY_HOLD_THIS_RECORD.value,
         ),
         (
+            "BRITISH_ARMY",
             "yes",
-            "we_do_not_have_records_for_this_rank_page",
-            MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_THIS_RANK.value,
+            "we_are_unlikely_to_hold_army_officer_records_page",
+            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_ARMY_OFFICER_RECORDS.value,
         ),
     ],
 )
 def test_continue_from_were_they_a_commissioned_officer_form_routes_by_condition(
-    answer, expected_state, expected_route
+    service_branch, was_officer, expected_state, expected_route
 ):
     sm = RoutingStateMachine()
     sm.continue_from_were_they_a_commissioned_officer_form(
-        form=make_form(were_they_a_commissioned_officer=answer)
+        form=make_form(
+            service_branch=service_branch, were_they_a_commissioned_officer=was_officer
+        )
     )
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route

@@ -23,7 +23,9 @@ class MultiPageFormRoutes(Enum):
     WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS = (
         "main.we_do_not_have_royal_navy_service_records"
     )
-    WE_DO_NOT_HAVE_RECORDS_FOR_THIS_RANK = "main.we_do_not_have_records_for_this_rank"
+    WE_ARE_UNLIKELY_TO_HOLD_ARMY_OFFICER_RECORDS = (
+        "main.we_are_unlikely_to_hold_army_officer_records"
+    )
     WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD = "main.we_are_unlikely_to_locate_this_record"
     WE_MAY_HOLD_THIS_RECORD = "main.we_may_hold_this_record"
     WHAT_WAS_THEIR_DATE_OF_BIRTH = "main.what_was_their_date_of_birth"
