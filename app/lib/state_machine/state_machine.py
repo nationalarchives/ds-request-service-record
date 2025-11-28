@@ -93,10 +93,6 @@ class RoutingStateMachine(StateMachine):
         enter="entering_we_are_unlikely_to_hold_raf_officer_records_page", final=True
     )
 
-    we_are_unlikely_to_hold_officer_records_for_this_branch_page = State(
-        enter="entering_we_are_unlikely_to_hold_officer_records_for_this_branch_page", final=True
-    )
-
     we_are_unlikely_to_locate_this_record_form = State(
         enter="entering_we_are_unlikely_to_locate_this_record_form", final=True
     )
@@ -200,10 +196,6 @@ class RoutingStateMachine(StateMachine):
         | initial.to(
             we_are_unlikely_to_hold_raf_officer_records_page,
             cond="was_officer and service_branch_is_raf",
-        )
-        | initial.to(
-            we_are_unlikely_to_hold_officer_records_for_this_branch_page,
-            cond="was_officer and service_branch_is_other",
         )
         | initial.to(
             we_are_unlikely_to_hold_army_officer_records_page,
@@ -321,11 +313,6 @@ class RoutingStateMachine(StateMachine):
             MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_RAF_OFFICER_RECORDS.value
         )
 
-    def entering_we_are_unlikely_to_hold_officer_records_for_this_branch_page(self):
-        self.route_for_current_state = (
-            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS_FOR_THIS_BRANCH.value
-        )
-
     def entering_we_are_unlikely_to_locate_this_record_form(self):
         self.route_for_current_state = (
             MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD.value
@@ -410,10 +397,6 @@ class RoutingStateMachine(StateMachine):
     def service_branch_is_raf(self, form):
         """Condition method to determine if the service branch is Royal Air Force."""
         return form.service_branch.data == "ROYAL_AIR_FORCE"
-
-    def service_branch_is_other(self, form):
-        """Condition method to determine if the service branch is Other."""
-        return form.service_branch.data == "OTHER"
 
     def born_too_late(self, form):
         """Condition method to determine if the service person's date of birth is too late for TNA to have record."""

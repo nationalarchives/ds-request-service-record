@@ -21,7 +21,6 @@ export const Paths = {
   WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER: `${basePath}/we-do-not-have-records-for-people-born-after/`,
   WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE: `${basePath}/we-do-not-have-records-for-people-born-before/`,
   WE_ARE_UNLIKELY_TO_HOLD_RAF_OFFICER_RECORDS: `${basePath}/we-are-unlikely-to-hold-royal-air-force-officer-records/`,
-  WE_ARE_UNLIKELY_TO_HOLD_THIS_BRANCH_OFFICER_RECORDS: `${basePath}/we-are-unlikely-to-hold-officer-records-for-this-branch/`,
   WE_ARE_UNLIKELY_TO_HOLD_ARMY_OFFICER_RECORDS: `${basePath}/we-are-unlikely-to-hold-army-officer-records/`,
   WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS: `${basePath}/we-do-not-have-royal-navy-service-branch-records/`,
   WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD: `${basePath}/we-are-unlikely-to-locate-this-record/`,
