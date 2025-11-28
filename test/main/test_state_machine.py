@@ -192,6 +192,12 @@ def test_continue_from_submit_subject_access_request_form():
             "we_are_unlikely_to_hold_army_officer_records_page",
             MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_ARMY_OFFICER_RECORDS.value,
         ),
+        (
+            "ROYAL_AIR_FORCE",
+            "yes",
+            "we_are_unlikely_to_hold_raf_officer_records_page",
+            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_RAF_OFFICER_RECORDS.value,
+        ),
     ],
 )
 def test_continue_from_were_they_a_commissioned_officer_form_routes_by_condition(

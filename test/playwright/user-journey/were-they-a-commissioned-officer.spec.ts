@@ -19,35 +19,63 @@ test.describe("combinations of 'Which military branch' and 'Were they an officer
     );
   });
 
-  test.describe("when 'Army' is selected as the service branch", () => {
+  test.describe("when service branch and officer status is selected", () => {
     const selectionMappings = [
       {
+        serviceBranchLabel: "British Army",
         officerLabel: "Yes",
         nextUrl: Paths.WE_ARE_UNLIKELY_TO_HOLD_ARMY_OFFICER_RECORDS,
         expectedHeading: /We are unlikely to hold this record/,
       },
       {
+        serviceBranchLabel: "British Army",
         officerLabel: "No",
+        nextUrl: Paths.WE_MAY_HOLD_THIS_RECORD,
+        expectedHeading: /We may hold this record/,
+      },
+      {
+        serviceBranchLabel: "British Army",
+        officerLabel: "I do not know",
+        nextUrl: Paths.WE_MAY_HOLD_THIS_RECORD,
+        expectedHeading: /We may hold this record/,
+      },
+      {
+        serviceBranchLabel: "Royal Air Force",
+        officerLabel: "Yes",
+        nextUrl: Paths.WE_ARE_UNLIKELY_TO_HOLD_RAF_OFFICER_RECORDS,
+        expectedHeading: /We are unlikely to hold this record/,
+      },
+      {
+        serviceBranchLabel: "Royal Air Force",
+        officerLabel: "No",
+        nextUrl: Paths.WE_MAY_HOLD_THIS_RECORD,
+        expectedHeading: /We may hold this record/,
+      },
+      {
+        serviceBranchLabel: "Royal Air Force",
+        officerLabel: "I do not know",
         nextUrl: Paths.WE_MAY_HOLD_THIS_RECORD,
         expectedHeading: /We may hold this record/,
       },
     ];
 
-    selectionMappings.forEach(({ officerLabel, nextUrl, expectedHeading }) => {
-      test(`when '${officerLabel}' is selected for commissioned officer, the user is taken to ${nextUrl}`, async ({
-        page,
-      }) => {
-        await page.getByLabel("British Army", { exact: true }).check();
-        await page.getByRole("button", { name: /Continue/i }).click();
-        await expect(page.locator("h1")).toHaveText(
-          /Were they a commissioned officer\?/,
-        );
-        await page.getByLabel(officerLabel, { exact: true }).check();
-        await page.getByRole("button", { name: /Continue/i }).click();
-        await expect(page).toHaveURL(nextUrl);
-        await expect(page.locator("h1")).toHaveText(expectedHeading);
-      });
-    });
+    selectionMappings.forEach(
+      ({ serviceBranchLabel, officerLabel, nextUrl, expectedHeading }) => {
+        test(`when '${serviceBranchLabel}' is selected for service branch AND '${officerLabel}' is selected for commissioned officer, the user is taken to ${nextUrl}`, async ({
+          page,
+        }) => {
+          await page.getByLabel(serviceBranchLabel, { exact: true }).check();
+          await page.getByRole("button", { name: /Continue/i }).click();
+          await expect(page.locator("h1")).toHaveText(
+            /Were they a commissioned officer\?/,
+          );
+          await page.getByLabel(officerLabel, { exact: true }).check();
+          await page.getByRole("button", { name: /Continue/i }).click();
+          await expect(page).toHaveURL(nextUrl);
+          await expect(page.locator("h1")).toHaveText(expectedHeading);
+        });
+      },
+    );
   });
 
   //
