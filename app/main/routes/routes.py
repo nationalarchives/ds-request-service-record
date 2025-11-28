@@ -221,6 +221,13 @@ def we_are_unlikely_to_hold_raf_officer_records():
         content=load_content(),
     )
 
+@bp.route("/we-are-unlikely-to-hold-officer-records-for-this-branch/", methods=["GET"])
+def we_are_unlikely_to_hold_officer_records_for_this_branch():
+    return render_template(
+        "main/we-are-unlikely-to-hold-officer-records-for-this-branch.html",
+        content=load_content(),
+    )
+
 
 @bp.route("/we-are-unlikely-to-locate-this-record/", methods=["GET", "POST"])
 @with_state_machine

@@ -7,16 +7,16 @@
 {% endblock %}
 
 {% block content %}
-  <div class="tna-section tna-!--padding-top-s" data-template-id="unlikely-to-hold--raf-officer-records">
+  <div class="tna-section tna-!--padding-top-s" data-template-id="we-are-unlikely-to-hold-this-record--generic">
     <div class="tna-container">
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
-        <h1 class="tna-heading-xl">{{ content.pages.we_are_unlikely_to_hold_raf_officer_records.heading }}</h1>
-        {% for paragraph in content.pages.we_are_unlikely_to_hold_raf_officer_records.paragraphs %}
+        <h1 class="tna-heading-xl">{{ content.pages.we_are_unlikely_to_hold_officer_records_for_this_branch.heading }}</h1>
+        {% for paragraph in content.pages.we_are_unlikely_to_hold_officer_records_for_this_branch.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
         <ul class="tna-ul">
-          {% for rank in content.pages.we_are_unlikely_to_hold_raf_officer_records.list %}
+          {% for rank in content.pages.we_are_unlikely_to_hold_officer_records_for_this_branch.list %}
             <li>{{ rank }}</li>
           {% endfor %}
         </ul>

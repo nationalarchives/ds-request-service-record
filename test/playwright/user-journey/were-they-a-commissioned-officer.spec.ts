@@ -26,41 +26,54 @@ test.describe("combinations of 'Which military branch' and 'Were they an officer
         officerLabel: "Yes",
         nextUrl: Paths.WE_ARE_UNLIKELY_TO_HOLD_ARMY_OFFICER_RECORDS,
         expectedHeading: /We are unlikely to hold this record/,
+        expectedTemplateIdentifier: "unlikely-to-hold--army-officer-records",
       },
       {
         serviceBranchLabel: "British Army",
         officerLabel: "No",
         nextUrl: Paths.WE_MAY_HOLD_THIS_RECORD,
         expectedHeading: /We may hold this record/,
+        expectedTemplateIdentifier: "we-may-hold-this-record--generic",
       },
       {
         serviceBranchLabel: "British Army",
         officerLabel: "I do not know",
         nextUrl: Paths.WE_MAY_HOLD_THIS_RECORD,
         expectedHeading: /We may hold this record/,
+        expectedTemplateIdentifier: "we-may-hold-this-record--generic",
       },
       {
         serviceBranchLabel: "Royal Air Force",
         officerLabel: "Yes",
         nextUrl: Paths.WE_ARE_UNLIKELY_TO_HOLD_RAF_OFFICER_RECORDS,
         expectedHeading: /We are unlikely to hold this record/,
+        expectedTemplateIdentifier: "unlikely-to-hold--raf-officer-records",
       },
       {
         serviceBranchLabel: "Royal Air Force",
         officerLabel: "No",
         nextUrl: Paths.WE_MAY_HOLD_THIS_RECORD,
         expectedHeading: /We may hold this record/,
+        expectedTemplateIdentifier: "we-may-hold-this-record--generic",
       },
       {
         serviceBranchLabel: "Royal Air Force",
         officerLabel: "I do not know",
         nextUrl: Paths.WE_MAY_HOLD_THIS_RECORD,
         expectedHeading: /We may hold this record/,
+        expectedTemplateIdentifier: "we-may-hold-this-record--generic",
+      },
+      {
+        serviceBranchLabel: "Other",
+        officerLabel: "Yes",
+        nextUrl: Paths.WE_ARE_UNLIKELY_TO_HOLD_THIS_BRANCH_OFFICER_RECORDS,
+        expectedHeading: /We are unlikely to hold this record/,
+        expectedTemplateIdentifier: "we-are-unlikely-to-hold-this-record--generic",
       },
     ];
 
     selectionMappings.forEach(
-      ({ serviceBranchLabel, officerLabel, nextUrl, expectedHeading }) => {
+      ({ serviceBranchLabel, officerLabel, nextUrl, expectedHeading, expectedTemplateIdentifier }) => {
         test(`when '${serviceBranchLabel}' is selected for service branch AND '${officerLabel}' is selected for commissioned officer, the user is taken to ${nextUrl}`, async ({
           page,
         }) => {
@@ -73,6 +86,9 @@ test.describe("combinations of 'Which military branch' and 'Were they an officer
           await page.getByRole("button", { name: /Continue/i }).click();
           await expect(page).toHaveURL(nextUrl);
           await expect(page.locator("h1")).toHaveText(expectedHeading);
+          // Because the templates in this part of the journey can be only subtly different,
+          // we check for a template identifier to ensure the correct template is shown
+          await expect(page.locator(`[data-template-id="${expectedTemplateIdentifier}"]`)).toBeVisible();
         });
       },
     );
