@@ -214,6 +214,14 @@ def we_are_unlikely_to_hold_army_officer_records():
     )
 
 
+@bp.route("/we-are-unlikely-to-hold-royal-air-force-officer-records/", methods=["GET"])
+def we_are_unlikely_to_hold_raf_officer_records():
+    return render_template(
+        "main/we-are-unlikely-to-hold-raf-officer-records.html",
+        content=load_content(),
+    )
+
+
 @bp.route("/we-are-unlikely-to-locate-this-record/", methods=["GET", "POST"])
 @with_state_machine
 @with_route_for_back_link_saved_to_session(

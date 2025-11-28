@@ -89,6 +89,10 @@ class RoutingStateMachine(StateMachine):
         enter="entering_we_are_unlikely_to_hold_army_officer_records_page", final=True
     )
 
+    we_are_unlikely_to_hold_raf_officer_records_page = State(
+        enter="entering_we_are_unlikely_to_hold_raf_officer_records_page", final=True
+    )
+
     we_are_unlikely_to_locate_this_record_form = State(
         enter="entering_we_are_unlikely_to_locate_this_record_form", final=True
     )
@@ -187,11 +191,16 @@ class RoutingStateMachine(StateMachine):
         )
     )
 
-    continue_from_were_they_a_commissioned_officer_form = initial.to(
-        we_may_hold_this_record_page, unless="was_officer"
-    ) | initial.to(
-        we_are_unlikely_to_hold_army_officer_records_page,
-        cond="was_officer and service_branch_is_army",
+    continue_from_were_they_a_commissioned_officer_form = (
+        initial.to(we_may_hold_this_record_page, unless="was_officer")
+        | initial.to(
+            we_are_unlikely_to_hold_raf_officer_records_page,
+            cond="was_officer and service_branch_is_raf",
+        )
+        | initial.to(
+            we_are_unlikely_to_hold_army_officer_records_page,
+            cond="was_officer and service_branch_is_army",
+        )
     )
 
     continue_from_we_do_not_have_royal_navy_service_records_form = initial.to(
@@ -299,6 +308,11 @@ class RoutingStateMachine(StateMachine):
             MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_ARMY_OFFICER_RECORDS.value
         )
 
+    def entering_we_are_unlikely_to_hold_raf_officer_records_page(self):
+        self.route_for_current_state = (
+            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_RAF_OFFICER_RECORDS.value
+        )
+
     def entering_we_are_unlikely_to_locate_this_record_form(self):
         self.route_for_current_state = (
             MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD.value
@@ -379,6 +393,10 @@ class RoutingStateMachine(StateMachine):
     def service_branch_is_army(self, form):
         """Condition method to determine if the service branch is British Army."""
         return form.service_branch.data == "BRITISH_ARMY"
+
+    def service_branch_is_raf(self, form):
+        """Condition method to determine if the service branch is Royal Air Force."""
+        return form.service_branch.data == "ROYAL_AIR_FORCE"
 
     def born_too_late(self, form):
         """Condition method to determine if the service person's date of birth is too late for TNA to have record."""
