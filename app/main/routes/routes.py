@@ -207,7 +207,7 @@ def we_do_not_have_royal_navy_service_records(form, state_machine):
 
 
 @bp.route("/we-are-unlikely-to-hold-army-officer-records/", methods=["GET"])
-def we_are_unlikely_to_hold_officer_records__army():
+def we_are_unlikely_to_hold_army_officer_records():
     return render_template(
         "main/we-are-unlikely-to-hold-army-officer-records.html",
         content=load_content(),
@@ -215,14 +215,14 @@ def we_are_unlikely_to_hold_officer_records__army():
 
 
 @bp.route("/we-are-unlikely-to-hold-royal-air-force-officer-records/", methods=["GET"])
-def we_are_unlikely_to_hold_officer_records__raf():
+def we_are_unlikely_to_hold_raf_officer_records():
     return render_template(
         "main/we-are-unlikely-to-hold-raf-officer-records.html",
         content=load_content(),
     )
 
 @bp.route("/we-are-unlikely-to-hold-officer-records-for-this-branch/", methods=["GET"])
-def we_are_unlikely_to_hold_officer_records__generic():
+def we_are_unlikely_to_hold_officer_records_for_this_branch():
     return render_template(
         "main/we-are-unlikely-to-hold-officer-records-for-this-branch.html",
         content=load_content(),

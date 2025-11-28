@@ -180,14 +180,14 @@ pages:
         The Royal Navy service personnel records will not be transferred to us until after April 
         2026. Please use the <strong>Ministry of Defence service</strong> to request access to Royal Navy records.
     call_to_action: Request from the Ministry of Defence
-  we_are_unlikely_to_hold_officer_records__generic:
+  we_are_unlikely_to_hold_officer_records_for_this_branch:
     heading: We are unlikely to hold this record
     paragraphs:
       - |
         The majority of the service personnel records for Commissioned Officers have not yet been 
         transferred to The National Archives. Please use the Ministry of Defence service to request 
         access to the Officer records.
-  we_are_unlikely_to_hold_officer_records__raf:
+  we_are_unlikely_to_hold_raf_officer_records:
     heading: We are unlikely to hold this record
     paragraphs:
       - |
@@ -200,7 +200,7 @@ pages:
         in the list.
     list:
       - Royal Air Force
-  we_are_unlikely_to_hold_officer_records__army:
+  we_are_unlikely_to_hold_army_officer_records:
     heading: We are unlikely to hold this record
     paragraphs:
       - |

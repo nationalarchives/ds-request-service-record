@@ -24,7 +24,7 @@ test.describe("combinations of 'Which military branch' and 'Were they an officer
       {
         serviceBranchLabel: "British Army",
         officerLabel: "Yes",
-        nextUrl: Paths.we_are_unlikely_to_hold_officer_records__army,
+        nextUrl: Paths.WE_ARE_UNLIKELY_TO_HOLD_ARMY_OFFICER_RECORDS,
         expectedHeading: /We are unlikely to hold this record/,
         expectedTemplateIdentifier: "unlikely-to-hold--army-officer-records",
       },
@@ -45,7 +45,7 @@ test.describe("combinations of 'Which military branch' and 'Were they an officer
       {
         serviceBranchLabel: "Royal Air Force",
         officerLabel: "Yes",
-        nextUrl: Paths.we_are_unlikely_to_hold_officer_records__raf,
+        nextUrl: Paths.WE_ARE_UNLIKELY_TO_HOLD_RAF_OFFICER_RECORDS,
         expectedHeading: /We are unlikely to hold this record/,
         expectedTemplateIdentifier: "unlikely-to-hold--raf-officer-records",
       },
@@ -106,7 +106,7 @@ test.describe("combinations of 'Which military branch' and 'Were they an officer
   //   const selectionMappings = [
   //     {
   //       branchLabel: "Yes",
-  //       nextUrl: Paths.we_are_unlikely_to_hold_officer_records__army,
+  //       nextUrl: Paths.WE_ARE_UNLIKELY_TO_HOLD_ARMY_OFFICER_RECORDS,
   //       heading: /We are unlikely to hold this record/,
   //       description:
   //         "when 'Yes' is selected, presents the 'We are unlikely to hold this record' page ",
