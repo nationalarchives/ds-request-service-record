@@ -189,20 +189,20 @@ def test_continue_from_submit_subject_access_request_form():
         (
             "BRITISH_ARMY",
             "yes",
-            "we_are_unlikely_to_hold_army_officer_records_page",
-            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_ARMY_OFFICER_RECORDS.value,
+            "we_are_unlikely_to_hold_officer_records__army_page",
+            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY.value,
         ),
         (
             "ROYAL_AIR_FORCE",
             "yes",
-            "we_are_unlikely_to_hold_raf_officer_records_page",
-            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_RAF_OFFICER_RECORDS.value,
+            "we_are_unlikely_to_hold_officer_records__raf_page",
+            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__RAF.value,
         ),
         (
             "OTHER",
             "yes",
-            "we_are_unlikely_to_hold_officer_records_for_this_branch_page",
-            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS_FOR_THIS_BRANCH.value,
+            "we_are_unlikely_to_hold_officer_records__generic_page",
+            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__GENERIC.value,
         ),
     ],
 )
