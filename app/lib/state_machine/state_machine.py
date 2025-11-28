@@ -94,7 +94,8 @@ class RoutingStateMachine(StateMachine):
     )
 
     we_are_unlikely_to_hold_officer_records__generic_page = State(
-        enter="entering_we_are_unlikely_to_hold_officer_records__generic_page", final=True
+        enter="entering_we_are_unlikely_to_hold_officer_records__generic_page",
+        final=True,
     )
 
     we_are_unlikely_to_locate_this_record_form = State(
@@ -204,6 +205,10 @@ class RoutingStateMachine(StateMachine):
         | initial.to(
             we_are_unlikely_to_hold_officer_records__generic_page,
             cond="was_officer and service_branch_is_other",
+        )
+        | initial.to(
+            we_are_unlikely_to_hold_officer_records__generic_page,
+            cond="was_officer and service_branch_is_unknown",
         )
         | initial.to(
             we_are_unlikely_to_hold_officer_records__army_page,
@@ -414,6 +419,10 @@ class RoutingStateMachine(StateMachine):
     def service_branch_is_other(self, form):
         """Condition method to determine if the service branch is Other."""
         return form.service_branch.data == "OTHER"
+
+    def service_branch_is_unknown(self, form):
+        """Condition method to determine if the service branch is Unknown."""
+        return form.service_branch.data == "UNKNOWN"
 
     def born_too_late(self, form):
         """Condition method to determine if the service person's date of birth is too late for TNA to have record."""

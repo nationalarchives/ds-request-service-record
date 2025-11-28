@@ -85,6 +85,28 @@ test.describe("combinations of 'Which military branch' and 'Were they an officer
         expectedHeading: /We may hold this record/,
         expectedTemplateIdentifier: "we-may-hold-this-record--generic",
       },
+      {
+        serviceBranchLabel: "I do not know",
+        officerLabel: "Yes",
+        nextUrl: Paths.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__GENERIC,
+        expectedHeading: /We are unlikely to hold this record/,
+        expectedTemplateIdentifier:
+          "we-are-unlikely-to-hold-this-record--generic",
+      },
+      {
+        serviceBranchLabel: "I do not know",
+        officerLabel: "No",
+        nextUrl: Paths.WE_MAY_HOLD_THIS_RECORD,
+        expectedHeading: /We may hold this record/,
+        expectedTemplateIdentifier: "we-may-hold-this-record--generic",
+      },
+      {
+        serviceBranchLabel: "I do not know",
+        officerLabel: "I do not know",
+        nextUrl: Paths.WE_MAY_HOLD_THIS_RECORD,
+        expectedHeading: /We may hold this record/,
+        expectedTemplateIdentifier: "we-may-hold-this-record--generic",
+      },
     ];
 
     selectionMappings.forEach(

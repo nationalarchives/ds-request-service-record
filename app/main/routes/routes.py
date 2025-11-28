@@ -221,6 +221,7 @@ def we_are_unlikely_to_hold_officer_records__raf():
         content=load_content(),
     )
 
+
 @bp.route("/we-are-unlikely-to-hold-officer-records-for-this-branch/", methods=["GET"])
 def we_are_unlikely_to_hold_officer_records__generic():
     return render_template(

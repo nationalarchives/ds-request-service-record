@@ -204,6 +204,36 @@ def test_continue_from_submit_subject_access_request_form():
             "we_are_unlikely_to_hold_officer_records__generic_page",
             MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__GENERIC.value,
         ),
+        (
+            "OTHER",
+            "no",
+            "we_may_hold_this_record_page",
+            MultiPageFormRoutes.WE_MAY_HOLD_THIS_RECORD.value,
+        ),
+        (
+            "OTHER",
+            "unknown",
+            "we_may_hold_this_record_page",
+            MultiPageFormRoutes.WE_MAY_HOLD_THIS_RECORD.value,
+        ),
+        (
+            "UNKNOWN",
+            "yes",
+            "we_are_unlikely_to_hold_officer_records__generic_page",
+            MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__GENERIC.value,
+        ),
+        (
+            "UNKNOWN",
+            "no",
+            "we_may_hold_this_record_page",
+            MultiPageFormRoutes.WE_MAY_HOLD_THIS_RECORD.value,
+        ),
+        (
+            "UNKNOWN",
+            "unknown",
+            "we_may_hold_this_record_page",
+            MultiPageFormRoutes.WE_MAY_HOLD_THIS_RECORD.value,
+        ),
     ],
 )
 def test_continue_from_were_they_a_commissioned_officer_form_routes_by_condition(
