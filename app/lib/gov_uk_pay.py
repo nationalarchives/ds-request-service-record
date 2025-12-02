@@ -80,7 +80,7 @@ def process_valid_request(payment_id: str, payment_data: dict) -> None:
 
     record.provider_id = payment_data.get("provider_id", None)
     record.amount_received = (
-        f"£{payment_data.get('amount') / 100:.2f}"
+        f"{payment_data.get('amount') / 100:.2f}"
         if payment_data.get("amount") is not None
         else None
     )
