@@ -8,7 +8,7 @@ class DummyPayment:
     def __init__(self):
         self.id = "TEST-ID"
         self.status = "N"
-        self.payee_email = "james.biggs@nationalarchives.gov.uk"
+        self.payee_email = "john.doe@nationalarchives.gov.uk"
 
 
 class MainBlueprintTestCase(unittest.TestCase):
@@ -34,9 +34,9 @@ class MainBlueprintTestCase(unittest.TestCase):
                 "net_amount": 75.00,
                 "delivery_amount": 36.66,
                 "reference": "PAY-0125-33-123/4325",
-                "payee_email": "james.biggs@nationalarchives.gov.uk",
-                "first_name": "James",
-                "last_name": "Biggs",
+                "payee_email": "john.doe@gmail.com",
+                "first_name": "John",
+                "last_name": "Doe",
                 "details": "Order of 100x A4 pages",
             },
         )
@@ -55,8 +55,8 @@ class MainBlueprintTestCase(unittest.TestCase):
         dummy.net_amount = 7500
         dummy.delivery_amount = 3665
         dummy.total_amount = 11165
-        dummy.first_name = "James"
-        dummy.last_name = "Biggs"
+        dummy.first_name = "John"
+        dummy.last_name = "Doe"
         dummy.details = "Order of 100x A4 pages"
         mock_get_payment.return_value = dummy
 
