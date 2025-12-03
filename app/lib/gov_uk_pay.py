@@ -11,12 +11,9 @@ from app.lib.dynamics_handler import send_payment_to_dynamics, send_request_to_d
 from app.lib.models import db
 from flask import current_app
 
+SUCCESSFUL_PAYMENT_STATUSES: set[str] = {"success"}
 
-class GOV_UK_PAY_EVENT_TYPES(Enum):
-    EXPIRED = "card_payment_expired"
-    FAILED = "card_payment_failed"
-    SUCCEEDED = "card_payment_succeeded"
-
+UNFINISHED_PAYMENT_STATUSES: set[str] = {"created", "started", "submitted"}
 
 FAILED_PAYMENT_STATUSES: set[str] = {"failed", "cancelled", "error"}
 
@@ -39,9 +36,11 @@ def get_payment_data(payment_id: str) -> dict | None:
 
     return response.json()
 
+def get_payment_status(data: dict) -> str:
+    return data.get("state", {}).get("status")
 
 def validate_payment(data: dict) -> bool:
-    return data.get("state", {}).get("status") == "success"
+    return get_payment_status(data) == "success"
 
 
 def create_payment(
@@ -78,23 +77,29 @@ def create_payment(
 def process_valid_request(payment_id: str, payment_data: dict) -> None:
     record = get_service_record_request(payment_id=payment_id)
 
-    record.provider_id = payment_data.get("provider_id", None)
-    record.amount_received = (
-        f"{payment_data.get('amount') / 100:.2f}"
-        if payment_data.get("amount") is not None
-        else None
-    )
-    record.payment_reference = payment_data.get("reference", "")
-    record.payment_date = datetime.now().strftime("%d %B %Y")
-    db.session.commit()
-
     if record is None:
         raise ValueError(f"Service record not found for payment ID: {payment_id}")
+    
+    if record.status == "N":
+        record.provider_id = payment_data.get("provider_id", None)
+        record.amount_received = (
+            f"{payment_data.get('amount') / 100:.2f}"
+            if payment_data.get("amount") is not None
+            else None
+        )
+        record.payment_reference = payment_data.get("reference", "")
+        record.payment_date = datetime.now().strftime("%d %B %Y")
+        record.status = "P"
+        db.session.commit()
 
-    send_request_to_dynamics(record)
+    if record.status == "P":
+        send_request_to_dynamics(record)
+        record.status = "S"
+        db.session.commit()
 
-    # Don't delete for now
-    # delete_service_record_request(record)
+
+        # Don't delete for now
+        # delete_service_record_request(record)
 
 
 def process_valid_payment(id: str, provider_id: str) -> None:

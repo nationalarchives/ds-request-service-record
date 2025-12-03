@@ -17,8 +17,11 @@ from app.lib.db_handler import (
 )
 from app.lib.decorators.state_machine_decorator import with_state_machine
 from app.lib.gov_uk_pay import (
+    SUCCESSFUL_PAYMENT_STATUSES,
+    UNFINISHED_PAYMENT_STATUSES,
     create_payment,
     get_payment_data,
+    get_payment_status,
     process_valid_payment,
     process_valid_request,
     validate_payment,
@@ -43,7 +46,13 @@ def send_to_gov_uk_pay():
     if existing_record := hash_check(record_hash):
         payment_id = existing_record.payment_id
         
-        return redirect(f"https://card.payments.service.gov.uk/card_details/{payment_id}")
+        if payment_data := get_payment_data(payment_id):
+            payment_status = get_payment_status(payment_data)
+
+            if payment_status in SUCCESSFUL_PAYMENT_STATUSES:
+                return redirect(url_for("main.confirm_payment_received"))
+            elif payment_status in UNFINISHED_PAYMENT_STATUSES:
+                return redirect(f"https://card.payments.service.gov.uk/card_details/{payment_id}")
 
     id = str(uuid.uuid4())
 
