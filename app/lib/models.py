@@ -45,6 +45,8 @@ class ServiceRecordRequest(db.Model):
     processing_option = db.Column(db.String(32), nullable=True)
     payment_reference = db.Column(db.String(64), nullable=True)
     amount_received = db.Column(db.String(32), nullable=True)  # amount in £xx.xx format
+    record_hash = db.Column(db.String(64), nullable=False, unique=True)
+    status = db.Column(db.String(1), nullable=False, default="N")  # N=New, P=Paid, S=Sent
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
 
