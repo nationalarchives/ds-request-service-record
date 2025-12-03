@@ -1,3 +1,4 @@
+import hashlib
 import uuid
 from datetime import datetime
 
@@ -34,6 +35,10 @@ def send_to_gov_uk_pay():
     form_data = session.get("form_data", {})
     requester_email = form_data.get("requester_email", None)
 
+    transformed_form_data = transform_form_data_to_record(form_data)
+
+    record_hash = hashlib.sha256(str(transformed_form_data).encode()).hexdigest()
+
     id = str(uuid.uuid4())
 
     try:
@@ -59,10 +64,9 @@ def send_to_gov_uk_pay():
     if not payment_url or not payment_id:
         return redirect(url_for("main.payment_link_creation_failed"))
 
-    transformed_form_data = transform_form_data_to_record(form_data)
-
     data = {
         **transformed_form_data,
+        "record_hash": record_hash,
         "id": id,
         "payment_id": payment_id,
         "created_at": datetime.now(),
