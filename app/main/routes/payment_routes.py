@@ -12,6 +12,7 @@ from app.lib.db_handler import (
     get_dynamics_payment,
     get_gov_uk_dynamics_payment,
     get_payment_id_from_record_id,
+    hash_check,
     transform_form_data_to_record,
 )
 from app.lib.decorators.state_machine_decorator import with_state_machine
@@ -38,6 +39,11 @@ def send_to_gov_uk_pay():
     transformed_form_data = transform_form_data_to_record(form_data)
 
     record_hash = hashlib.sha256(str(transformed_form_data).encode()).hexdigest()
+
+    if existing_record := hash_check(record_hash):
+        payment_id = existing_record.payment_id
+        
+        return redirect(f"https://card.payments.service.gov.uk/card_details/{payment_id}")
 
     id = str(uuid.uuid4())
 
