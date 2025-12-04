@@ -228,6 +228,10 @@ class RoutingStateMachine(StateMachine):
         what_was_their_date_of_birth_form
     )
 
+    continue_from_we_are_unlikely_to_hold_officer_records_form = initial.to(
+        what_was_their_date_of_birth_form
+    )
+
     continue_from_what_was_their_date_of_birth_form = (
         initial.to(
             service_person_details_form,

@@ -15,11 +15,21 @@
         {% for paragraph in content.pages.we_are_unlikely_to_hold_officer_records__army.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
-        <ul class="tna-ul">
+        <ul class="tna-ul" id="exceptions-list">
           {% for rank in content.pages.we_are_unlikely_to_hold_officer_records__army.list %}
             <li>{{ rank }}</li>
           {% endfor %}
         </ul>
+        <form action="{{ url_for('main.we_are_unlikely_to_hold_officer_records__army') }}" method="post" novalidate>
+          {{ form.csrf_token }}
+          <div class="tna-button-group">
+            {{ form.submit(params={'classes':'tna-button--plain'}) }}
+            <a href="{{ mod_service_link }}" target="_blank"
+               rel="noreferrer noopener" class="tna-button tna-button--accent">
+              {{ content.pages.we_are_unlikely_to_hold_officer_records__army.call_to_action }}
+            </a>
+          </div>
+        </form>
       </div>
     </div>
   </div>

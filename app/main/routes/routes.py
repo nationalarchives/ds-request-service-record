@@ -30,6 +30,9 @@ from app.main.forms.service_branch import ServiceBranch
 from app.main.forms.service_person_details import ServicePersonDetails
 from app.main.forms.start_now import StartNow
 from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
+from app.main.forms.we_are_unlikely_to_hold_this_record import (
+    WeAreUnlikelyToHoldThisRecord,
+)
 from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
 from app.main.forms.were_they_a_commissioned_officer import WereTheyACommissionedOfficer
 from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
@@ -206,27 +209,52 @@ def we_do_not_have_royal_navy_service_records(form, state_machine):
     )
 
 
-@bp.route("/we-are-unlikely-to-hold-army-officer-records/", methods=["GET"])
-def we_are_unlikely_to_hold_officer_records__army():
+@bp.route("/we-are-unlikely-to-hold-army-officer-records/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(WeAreUnlikelyToHoldThisRecord)
+@with_state_machine
+def we_are_unlikely_to_hold_officer_records__army(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_we_are_unlikely_to_hold_officer_records_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/we-are-unlikely-to-hold-army-officer-records.html",
         content=load_content(),
+        form=form,
+        mod_service_link=ExternalLinks.MOD_SERVICE,
     )
 
 
-@bp.route("/we-are-unlikely-to-hold-royal-air-force-officer-records/", methods=["GET"])
-def we_are_unlikely_to_hold_officer_records__raf():
+@bp.route(
+    "/we-are-unlikely-to-hold-royal-air-force-officer-records/", methods=["GET", "POST"]
+)
+@with_form_prefilled_from_session(WeAreUnlikelyToHoldThisRecord)
+@with_state_machine
+def we_are_unlikely_to_hold_officer_records__raf(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_we_are_unlikely_to_hold_officer_records_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/we-are-unlikely-to-hold-raf-officer-records.html",
         content=load_content(),
+        form=form,
+        mod_service_link=ExternalLinks.MOD_SERVICE,
     )
 
 
-@bp.route("/we-are-unlikely-to-hold-officer-records-for-this-branch/", methods=["GET"])
-def we_are_unlikely_to_hold_officer_records__generic():
+@bp.route(
+    "/we-are-unlikely-to-hold-officer-records-for-this-branch/", methods=["GET", "POST"]
+)
+@with_form_prefilled_from_session(WeAreUnlikelyToHoldThisRecord)
+@with_state_machine
+def we_are_unlikely_to_hold_officer_records__generic(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_we_are_unlikely_to_hold_officer_records_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/we-are-unlikely-to-hold-officer-records-for-this-branch.html",
         content=load_content(),
+        form=form,
+        mod_service_link=ExternalLinks.MOD_SERVICE,
     )
 
 
