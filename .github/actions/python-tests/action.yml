@@ -7,7 +7,7 @@ runs:
       run: docker compose up --detach --wait --wait-timeout 300 app || docker compose logs app
       shell: bash
     - name: Create database
-      run: docker compose exec dev poetry run python create_database.py
+      run: docker compose exec app poetry run python create_database.py
       shell: bash
     - name: Run tests
       run: docker compose exec app poetry run python -m pytest
