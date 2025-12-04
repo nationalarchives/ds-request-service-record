@@ -261,6 +261,18 @@ def test_continue_from_we_may_hold_this_record():
     )
 
 
+def test_continue_from_we_are_unlikely_to_hold_officer_records():
+    sm = RoutingStateMachine()
+    sm.continue_from_we_are_unlikely_to_hold_officer_records_form(
+        form=make_form(we_are_unlikely_to_hold_officer_records=None)
+    )
+    assert sm.current_state.id == "what_was_their_date_of_birth_form"
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH.value
+    )
+
+
 @pytest.mark.parametrize(
     "date_of_birth,expected_state,expected_route",
     [
