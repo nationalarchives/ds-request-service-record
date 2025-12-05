@@ -20,14 +20,20 @@ from wtforms.validators import InputRequired, Optional
 class ServicePersonDetails(FlaskForm):
     content = load_content()
 
-    forenames = StringField(
-        get_field_content(content, "forenames", "label"),
+    first_name = StringField(
+        get_field_content(content, "first_name", "label"),
         widget=TnaTextInputWidget(),
         validators=[
             InputRequired(
-                message=get_field_content(content, "forenames", "messages")["required"]
+                message=get_field_content(content, "first_name", "messages")["required"]
             ),
         ],
+    )
+
+    middle_names = StringField(
+        get_field_content(content, "middle_names", "label"),
+        widget=TnaTextInputWidget(),
+        validators=[],
     )
 
     last_name = StringField(
@@ -80,7 +86,7 @@ class ServicePersonDetails(FlaskForm):
         validators=[],
     )
 
-    regiment = StringField(
+    regiment = TextAreaField(
         get_field_content(content, "regiment", "label"),
         widget=TnaTextInputWidget(),
         validators=[],

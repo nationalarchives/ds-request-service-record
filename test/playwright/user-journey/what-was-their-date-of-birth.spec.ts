@@ -32,7 +32,7 @@ test.describe("the 'What was their date of birth?' form", () => {
         await page.getByLabel("Year").fill("1799");
         await page.getByRole("button", { name: /Continue/i }).click();
         await expect(page.locator(".tna-fieldset__error")).toHaveText(
-          /The year of birth must be after 1800/,
+          /Date of birth must be after 31 December 1799. Records prior to this date are not contained in this collection./,
         );
       });
 

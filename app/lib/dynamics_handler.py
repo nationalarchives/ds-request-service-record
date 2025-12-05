@@ -14,7 +14,7 @@ DYNAMICS_REQUEST_FIELD_MAP = [
     ("county", "requester_county"),
     ("postcode", "requester_postcode"),
     ("mandatory_country", "requester_country"),
-    ("mandatory_certificate_forename", "forenames"),
+    ("mandatory_certificate_forename", "first_name"),
     ("mandatory_certificate_surname", "last_name"),
     ("mandatory_birth_date", "date_of_birth"),
     ("birth_place", "place_of_birth"),

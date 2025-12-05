@@ -418,11 +418,17 @@ class RoutingStateMachine(StateMachine):
 
     def born_too_late(self, form):
         """Condition method to determine if the service person's date of birth is too late for TNA to have record."""
-        return form.what_was_their_date_of_birth.data.year > BoundaryYears.LATEST_BIRTH_YEAR.value
+        return (
+            form.what_was_their_date_of_birth.data.year
+            > BoundaryYears.LATEST_BIRTH_YEAR.value
+        )
 
     def birth_year_requires_proof_of_death(self, form):
         """Condition method to determine if the service person's date of birth requires a proof of death."""
-        return form.what_was_their_date_of_birth.data.year > BoundaryYears.YEAR_FROM_WHICH_PROOF_OF_DEATH_IS_REQUIRED.value
+        return (
+            form.what_was_their_date_of_birth.data.year
+            > BoundaryYears.YEAR_FROM_WHICH_PROOF_OF_DEATH_IS_REQUIRED.value
+        )
 
     def does_not_have_email(self, form):
         """Condition method to determine if the user does not have an email address."""

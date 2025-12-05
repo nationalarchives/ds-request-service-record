@@ -38,7 +38,7 @@ def test_add_service_record_request(session):
     add_service_record_request(
         {
             "id": "testrecordid123",
-            "forenames": "John",
+            "first_name": "John",
             "last_name": "Doe",
             "requester_email": "john.doe@email.com",
             "died_in_service": "yes",
@@ -51,7 +51,7 @@ def test_add_service_record_request(session):
     )
     result = get_service_record_request(payment_id=payment_id)
     assert result is not None
-    assert result.forenames == "John"
+    assert result.first_name == "John"
     assert result.requester_email == "john.doe@email.com"
 
 
@@ -60,7 +60,7 @@ def test_get_service_record_request_by_payment_id(session):
 
     result = get_service_record_request(payment_id=payment_id)
     assert result is not None
-    assert result.forenames == "John"
+    assert result.first_name == "John"
     assert result.requester_email == "john.doe@email.com"
 
 
@@ -69,7 +69,7 @@ def test_get_service_record_request_by_record_id(session):
 
     result = get_service_record_request(record_id=record_id)
     assert result is not None
-    assert result.forenames == "John"
+    assert result.first_name == "John"
     assert result.requester_email == "john.doe@email.com"
 
 
@@ -78,7 +78,7 @@ def test_delete_service_record_request(session):
 
     add_service_record_request(
         {
-            "forenames": "John",
+            "first_name": "John",
             "last_name": "Doe",
             "requester_email": "john.doe@email.com",
             "died_in_service": "yes",
