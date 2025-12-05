@@ -221,7 +221,7 @@ pages:
     paragraphs:
       - Sorry, but here is some helpful information
   we_do_not_have_records_for_people_born_after:
-    heading: We do not have this record
+    heading: We do not have records for people born after 1939
     paragraphs:
       - You will need to request the service record from the Ministry of Defence.
     call_to_action: Apply for MOD records
@@ -263,7 +263,7 @@ pages:
       - no more than 5MB
       - clear and show all the death certificate
   service_person_details:
-    heading: About the service person
+    heading: Tell us as much as you know about the service person
   do_you_have_a_proof_of_death:
     heading: Provide a proof of death
     paragraphs:
@@ -371,6 +371,7 @@ forms:
       messages:
         required: Enter the service person's date of birth
         past_date: The date of birth must be in the past
+        born_too_early: The year of birth must be after 1800
       call_to_action: Continue
     place_of_birth:
       label: Place of birth (optional)

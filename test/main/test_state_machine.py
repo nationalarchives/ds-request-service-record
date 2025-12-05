@@ -286,14 +286,6 @@ def test_continue_from_we_are_unlikely_to_hold_officer_records():
     + [
         (
             date(year, 1, 1),
-            "we_do_not_have_records_for_people_born_before_page",
-            MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE.value,
-        )
-        for year in range(1750, 1800)
-    ]
-    + [
-        (
-            date(year, 1, 1),
             "service_person_details_form",
             MultiPageFormRoutes.SERVICE_PERSON_DETAILS.value,
         )

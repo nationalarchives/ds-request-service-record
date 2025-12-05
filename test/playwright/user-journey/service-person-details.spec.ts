@@ -1,14 +1,16 @@
 import { test, expect } from "@playwright/test";
 import { Paths } from "../lib/constants";
 
-test.describe("the 'About the service person form?' form", () => {
+test.describe("the 'Tell us as much as you know about the service person form?' form", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START); // We need to go here first because we prevent direct access to mid-journey pages
     await page.goto(Paths.SERVICE_PERSON_DETAILS);
   });
 
   test("has the correct heading", async ({ page }) => {
-    await expect(page.locator("h1")).toHaveText(/About the service person/);
+    await expect(page.locator("h1")).toHaveText(
+      /Tell us as much as you know about the service person/,
+    );
   });
 
   test.describe("when submitted", () => {
