@@ -133,14 +133,18 @@ def transform_form_data_to_record(form_data: dict) -> dict:
         transformed_data["date_of_birth"] = date_of_birth
 
     if form_data.get("processing_option") == "standard":
-        delivery_type = form_data.get("how_do_you_want_your_order_processed_standard_option")
+        delivery_type = form_data.get(
+            "how_do_you_want_your_order_processed_standard_option"
+        )
         if delivery_type == "printed":
             delivery_type = "PrintedTracked"
         else:
             delivery_type = "Digital"
         transformed_data["delivery_type"] = delivery_type
     elif form_data.get("processing_option") == "full":
-        delivery_type = form_data.get("how_do_you_want_your_order_processed_full_option")
+        delivery_type = form_data.get(
+            "how_do_you_want_your_order_processed_full_option"
+        )
         if delivery_type == "printed":
             delivery_type = "PrintedTracked"
         else:
