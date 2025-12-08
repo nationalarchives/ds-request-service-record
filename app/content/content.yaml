@@ -282,8 +282,9 @@ pages:
       - No more than 5MB in size
       - Clearly show all the information so our staff can read it
     warning: If you do not submit a proof of death when required, it is unlikely that we will be able to provide the record.
-  are_you_sure_you_want_to_proceed_without_a_proof_of_death:
+  are_you_sure_you_want_to_proceed_without_proof_of_death:
     heading: Are you sure you want to proceed without a proof of death?
+    warning: If you do not submit a proof of death when required, it is unlikely that we will be able to provide the record.
   confirm_payment_received:
     heading: Payment received
   payment_link_creation_failed:
@@ -393,6 +394,14 @@ forms:
       label: Do you have a proof of death?
       messages:
         required: Tell us if you have a proof of death
+      call_to_action: Continue
+    are_you_sure_you_want_to_proceed_without_proof_of_death:
+      options:
+        "yes": Yes, I would like to continue without a proof of death
+        "no": No, I would like to upload a proof of death
+      label: Please confirm your selection
+      messages:
+        required: You must confirm your selection to proceed
       call_to_action: Continue
     upload_a_proof_of_death:
       label: Upload a file

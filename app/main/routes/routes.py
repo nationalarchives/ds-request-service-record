@@ -17,6 +17,9 @@ from app.main import bp
 from app.main.forms.are_you_sure_you_want_to_cancel import AreYouSureYouWantToCancel
 from app.main.forms.before_you_start import BeforeYouStart
 from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
+from app.main.forms.are_you_sure_you_want_to_proceed_without_proof_of_death import (
+    AreYouSureYouWantToProceedWithoutProofOfDeath,
+)
 from app.main.forms.exit_this_form import ExitThisForm
 from app.main.forms.have_you_previously_made_a_request import (
     HaveYouPreviouslyMadeARequest,
@@ -323,9 +326,21 @@ def what_was_their_date_of_birth(form, state_machine):
 @bp.route(
     "/are-you-sure-you-want-to-proceed-without-proof-of-death/", methods=["GET", "POST"]
 )
-def are_you_sure_you_want_to_proceed_without_proof_of_death():
+@with_form_prefilled_from_session(AreYouSureYouWantToProceedWithoutProofOfDeath)
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_PROOF_OF_DEATH.value
+)
+@with_state_machine
+def are_you_sure_you_want_to_proceed_without_proof_of_death(form, state_machine):
+    if form.validate_on_submit():
+        save_submitted_form_fields_to_session(form)
+        state_machine.continue_from_are_you_sure_you_want_to_proceed_without_proof_of_death_form(
+            form
+        )
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/are-you-sure-you-want-to-proceed-without-proof-of-death.html",
+        form=form,
         content=load_content(),
     )
 
@@ -358,6 +373,7 @@ def service_person_details(form, state_machine):
         "main/service-person-details.html",
         form=form,
         content=load_content(),
+        route_for_back_link=session.get("route_for_back_link", False),
     )
 
 
@@ -445,6 +461,7 @@ def upload_a_proof_of_death(form, state_machine):
         "main/upload-a-proof-of-death.html",
         form=form,
         content=load_content(),
+        route_for_back_link=session.get("route_for_back_link", False),
     )
 
 

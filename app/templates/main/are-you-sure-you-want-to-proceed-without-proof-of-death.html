@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% from "components/warning/macro.html" import tnaWarning %}
 
 {%- set pageTitle = content.app.title -%}
 
@@ -11,7 +12,22 @@
     <div class="tna-container">
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
-        <h1 class="tna-heading-xl">{{ content.pages.are_you_sure_you_want_to_proceed_without_a_proof_of_death.heading }}</h1>
+        {% if form.errors %}
+          {{ tnaErrorSummary(wtforms_errors(form)) }}
+        {% endif %}
+        <h1
+          class="tna-heading-xl">{{ content.pages.are_you_sure_you_want_to_proceed_without_proof_of_death.heading }}</h1>
+        {{ tnaWarning({
+          "headingLevel": 2,
+          "body": content.pages.are_you_sure_you_want_to_proceed_without_proof_of_death.warning
+        }) }}
+        <form action="{{ url_for('main.are_you_sure_you_want_to_proceed_without_proof_of_death') }}" method="post" novalidate>
+          {{ form.csrf_token }}
+          {{ form.are_you_sure_you_want_to_proceed_without_proof_of_death(params={'headingLevel':2, 'headingSize':'l'}) }}
+          <div class="tna-button-group">
+            {{ form.submit(params={'classes':'tna-button--accent'}) }}
+          </div>
+        </form>
       </div>
     </div>
   </div>

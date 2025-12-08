@@ -337,6 +337,34 @@ def test_continue_from_do_you_have_a_proof_of_death(
     assert sm.route_for_current_state == expected_route
 
 
+@pytest.mark.parametrize(
+    "selection,expected_state,expected_route",
+    [
+        (
+            "yes",
+            "service_person_details_form",
+            MultiPageFormRoutes.SERVICE_PERSON_DETAILS.value,
+        ),
+        (
+            "no",
+            "upload_a_proof_of_death_form",
+            MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH.value,
+        ),
+    ],
+)
+def test_continue_from_are_you_sure_you_want_to_proceed_without_proof_of_death(
+    selection, expected_state, expected_route
+):
+    sm = RoutingStateMachine()
+    sm.continue_from_are_you_sure_you_want_to_proceed_without_proof_of_death_form(
+        form=make_form(
+            are_you_sure_you_want_to_proceed_without_proof_of_death=selection
+        )
+    )
+    assert sm.current_state.id == expected_state
+    assert sm.route_for_current_state == expected_route
+
+
 # In the real world, upload_proof_of_death interacts with AWS S3, so we mock it here. In this case
 # we test the scenario where it returns None, simulating a failed upload.
 @patch("app.lib.state_machine.state_machine.upload_proof_of_death", return_value=None)

@@ -250,6 +250,14 @@ class RoutingStateMachine(StateMachine):
         upload_a_proof_of_death_form, unless="does_not_have_proof_of_death"
     ) | initial.to(are_you_sure_you_want_to_proceed_without_proof_of_death_form)
 
+    continue_from_are_you_sure_you_want_to_proceed_without_proof_of_death_form = (
+        initial.to(
+            upload_a_proof_of_death_form,
+            unless="happy_to_proceed_without_proof_of_death",
+        )
+        | initial.to(service_person_details_form)
+    )
+
     continue_from_upload_a_proof_of_death_form = initial.to(
         service_person_details_form, cond="proof_of_death_uploaded_to_s3"
     ) | initial.to(upload_a_proof_of_death_form)
@@ -447,6 +455,12 @@ class RoutingStateMachine(StateMachine):
     def does_not_have_proof_of_death(self, form):
         """Condition method to determine if the user does not have a proof of death."""
         return form.do_you_have_a_proof_of_death.data == "no"
+
+    def happy_to_proceed_without_proof_of_death(self, form):
+        """Condition method to determine if the user is happy to proceed without a proof of death."""
+        return (
+            form.are_you_sure_you_want_to_proceed_without_proof_of_death.data == "yes"
+        )
 
     def proof_of_death_uploaded_to_s3(self, form):
         """Condition method to determine if proof of death was successfully uploaded to S3."""

@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
 {%- set pageTitle = content.app.title -%}
+{%- set back_link_endpoint = route_for_back_link if route_for_back_link else 'main.what_was_their_date_of_birth' -%}
 
 {% block beforeContent %}
-  {{ backLink(url_for('main.what_was_their_date_of_birth')) }}
+  {{ backLink(url_for(back_link_endpoint)) }}
 {% endblock %}
 
 {% block content %}
