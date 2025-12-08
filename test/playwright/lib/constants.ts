@@ -17,6 +17,7 @@ export const Paths = {
   SERVICE_BRANCH: `${basePath}/service-branch/`,
   SERVICE_PERSON_DETAILS: `${basePath}/service-person-details/`,
   UPLOAD_A_PROOF_OF_DEATH: `${basePath}/upload-a-proof-of-death/`,
+  ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_A_PROOF_OF_DEATH: `${basePath}/are-you-sure-you-want-to-proceed-without-proof-of-death/`,
   WERE_THEY_A_COMMISSIONED_OFFICER: `${basePath}/were-they-a-commissioned-officer/`,
   WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER: `${basePath}/we-do-not-have-records-for-people-born-after/`,
   WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE: `${basePath}/we-do-not-have-records-for-people-born-before/`,
