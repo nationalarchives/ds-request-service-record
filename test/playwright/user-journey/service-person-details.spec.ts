@@ -49,7 +49,6 @@ test.describe("the 'Tell us as much as you know about the service person form?' 
         page,
       }) => {
         await page.getByLabel("First name").fill("Thomas");
-        await page.getByLabel("Middle names").fill("Duffus");
         await page.getByLabel("Last name", { exact: true }).fill("Hardy");
         await page.getByLabel("Other last names (optional)").fill("Hardie");
         await page.getByLabel("Service number").fill("123456");
