@@ -25,22 +25,22 @@ pages:
               information and will be closed by default. However, we can complete a sensitivity 
               check of the record to assess what can be released. In some cases, we will not be able 
               to supply the record at all, or large parts of it will be redacted.
-    xxxx:
-      heading: ███
+    fees:
+      heading: Fees
       paragraphs:
-        - ████████ ██ █████ ████████ █████ ██ ████ ████
-        - ████████ ██████ ████████ ██████ █████
+        - We charge a fee to recover the administrative costs of answering your request.
+        - The fee will depend on the service you select. You can pay with a debit or credit card.
     table:
       headers:
         - Service option
-        - ██
+        - Fee
       rows:
         - option: Standard
-          fee: ███
+          fee: £42.25
         - option: Full sensitivity check
-          fee: ██ █████ ███ ███
+          fee: £48.87 plus £1.04 per page copying fee
     delivery_method: |
-      ████████ ██████ ██ █████ ██████ █████ ██ ████ ████
+      Records are delivered digitally via email. However, you can request a physical copy by post for an additional cost.
   how_we_process_requests:
     heading: How we process requests
     paragraphs:
