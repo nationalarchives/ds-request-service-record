@@ -269,14 +269,21 @@ pages:
   do_you_have_a_proof_of_death:
     heading: Provide a proof of death
     paragraphs:
-      - You will need to upload a digital copy of a proof of death for the service person.
+      - As you are requesting a record for someone born after 1909, you will need to provide a digital copy of a proof of death.
       - >
-        The copy of proof of death must be:
+        You'll need to submit one of the following forms of evidence:
     list_items:
-      - "[copies of death certificates](COPIES_OF_DEATH_CERTIFICATES)"
+      - "[copies of death certificates (opens in new tab)](COPIES_OF_DEATH_CERTIFICATES)"
       - published obituaries (detailing publication source, name of deceased, and date of birth and death)
-      - "[war dead records](CWGC_WAR_DEAD_RECORDS)"
-    warning: If you do not send a proof of death when required, it is likely that we will withold all of the requested information and cannot provide the record.
+      - "[Commonwealth War Graves’ (CWG) war dead records (opens in new tab)](CWGC_WAR_DEAD_RECORDS)"
+    copy_requirements: "The copy of proof of death must be:"
+    copy_requirements_list:
+      - In a JPG, GIF or PNG format
+      - No more than 5MB in size
+      - Clearly show all the information so our staff can read it
+    warning: If you do not submit a proof of death when required, it is unlikely that we will be able to provide the record.
+  are_you_sure_you_want_to_proceed_without_a_proof_of_death:
+    heading: Are you sure you want to proceed without a proof of death?
   confirm_payment_received:
     heading: Payment received
   payment_link_creation_failed:

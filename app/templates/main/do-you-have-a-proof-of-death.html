@@ -23,6 +23,12 @@
             <li>{{ item | parse_markdown_links | safe }}</li>
           {% endfor %}
         </ul>
+        <p>{{ content.pages.do_you_have_a_proof_of_death.copy_requirements }}</p>
+        <ul class="tna-ul">
+          {% for item in content.pages.do_you_have_a_proof_of_death.copy_requirements_list %}
+            <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
         <div class="tna-warning">
           <h2 class="tna-warning__heading">
             <span class="tna-visually-hidden">Important information</span><span class="tna-warning__heading-icon"
@@ -36,7 +42,7 @@
           {{ form.csrf_token }}
           {{ form.do_you_have_a_proof_of_death(params={'headingLevel':2, 'headingSize':'l'}) }}
           <div class="tna-button-group">
-            {{ form.submit(params={'accent':'true', 'icon': 'chevron-right', 'rightAlignIcon': 'true'}) }}
+            {{ form.submit(params={'classes':'tna-button--accent'}) }}
           </div>
         </form>
       </div>

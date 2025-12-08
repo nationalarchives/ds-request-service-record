@@ -130,6 +130,11 @@ class RoutingStateMachine(StateMachine):
         enter="entering_upload_a_proof_of_death_form", final=True
     )
 
+    are_you_sure_you_want_to_proceed_without_proof_of_death_form = State(
+        enter="entering_are_you_sure_you_want_to_proceed_without_proof_of_death_form",
+        final=True,
+    )
+
     have_you_previously_made_a_request_form = State(
         enter="entering_have_you_previously_made_a_request_form", final=True
     )
@@ -242,8 +247,8 @@ class RoutingStateMachine(StateMachine):
     )
 
     continue_from_do_you_have_a_proof_of_death_form = initial.to(
-        upload_a_proof_of_death_form
-    )
+        upload_a_proof_of_death_form, unless="does_not_have_proof_of_death"
+    ) | initial.to(are_you_sure_you_want_to_proceed_without_proof_of_death_form)
 
     continue_from_upload_a_proof_of_death_form = initial.to(
         service_person_details_form, cond="proof_of_death_uploaded_to_s3"
@@ -341,6 +346,11 @@ class RoutingStateMachine(StateMachine):
             MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH.value
         )
 
+    def entering_are_you_sure_you_want_to_proceed_without_proof_of_death_form(self):
+        self.route_for_current_state = (
+            MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_PROOF_OF_DEATH.value
+        )
+
     def entering_are_you_sure_you_want_to_cancel_form(self):
         self.route_for_current_state = (
             MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value
@@ -433,6 +443,10 @@ class RoutingStateMachine(StateMachine):
     def does_not_have_email(self, form):
         """Condition method to determine if the user does not have an email address."""
         return form.does_not_have_email.data
+
+    def does_not_have_proof_of_death(self, form):
+        """Condition method to determine if the user does not have a proof of death."""
+        return form.do_you_have_a_proof_of_death.data == "no"
 
     def proof_of_death_uploaded_to_s3(self, form):
         """Condition method to determine if proof of death was successfully uploaded to S3."""

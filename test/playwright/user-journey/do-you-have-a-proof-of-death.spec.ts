@@ -29,10 +29,10 @@ test.describe("The 'Do you have a proof of death?' form", () => {
       },
       {
         label: "No",
-        url: Paths.UPLOAD_A_PROOF_OF_DEATH,
-        heading: /Upload a proof of death/,
+        url: Paths.ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_A_PROOF_OF_DEATH,
+        heading: /Are you sure you want to proceed without a proof of death?/,
         description:
-          'when "No" is selected, the user is directed to "Upload a proof of death" form',
+          'when "No" is selected, the user is directed to "Are you sure you want to proceed without a proof of death?" form',
       },
     ];
 

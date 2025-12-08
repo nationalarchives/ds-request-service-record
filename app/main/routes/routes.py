@@ -320,6 +320,16 @@ def what_was_their_date_of_birth(form, state_machine):
     )
 
 
+@bp.route(
+    "/are-you-sure-you-want-to-proceed-without-proof-of-death/", methods=["GET", "POST"]
+)
+def are_you_sure_you_want_to_proceed_without_proof_of_death():
+    return render_template(
+        "main/are-you-sure-you-want-to-proceed-without-proof-of-death.html",
+        content=load_content(),
+    )
+
+
 @bp.route("/we-do-not-have-records-for-people-born-before/", methods=["GET"])
 def we_do_not_have_records_for_people_born_before():
     return render_template(

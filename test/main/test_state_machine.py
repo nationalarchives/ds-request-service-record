@@ -316,8 +316,8 @@ def test_continue_from_what_was_their_date_of_birth_form(
     [
         (
             "no",
-            "upload_a_proof_of_death_form",
-            MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH.value,
+            "are_you_sure_you_want_to_proceed_without_proof_of_death_form",
+            MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_PROOF_OF_DEATH.value,
         ),
         (
             "yes",
@@ -331,7 +331,7 @@ def test_continue_from_do_you_have_a_proof_of_death(
 ):
     sm = RoutingStateMachine()
     sm.continue_from_do_you_have_a_proof_of_death_form(
-        form=make_form(upload_a_proof_of_death=has_proof_of_death)
+        form=make_form(do_you_have_a_proof_of_death=has_proof_of_death)
     )
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
