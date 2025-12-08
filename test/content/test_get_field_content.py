@@ -10,7 +10,7 @@ class TestGetFieldContent(unittest.TestCase):
         self.test_content = {
             "forms": {
                 "fields": {
-                    "first_name": {
+                    "forenames": {
                         "label": "First name",
                         "messages": {
                             "required": "The service person's first name is required"
@@ -37,7 +37,7 @@ class TestGetFieldContent(unittest.TestCase):
             "label": "First name",
             "messages": {"required": "The service person's first name is required"},
         }
-        result = get_field_content(self.test_content, "first_name")
+        result = get_field_content(self.test_content, "forenames")
         self.assertEqual(result, expected)
 
     def test_get_specific_content_key(self):
@@ -47,14 +47,14 @@ class TestGetFieldContent(unittest.TestCase):
 
     def test_get_nested_content_key(self):
         """Test retrieving a nested content key from a field"""
-        result = get_field_content(self.test_content, "first_name", "messages")[
+        result = get_field_content(self.test_content, "forenames", "messages")[
             "required"
         ]
         self.assertEqual(result, "The service person's first name is required")
 
     def test_missing_content_key(self):
         """Test requesting a content key that doesn't exist"""
-        result = get_field_content(self.test_content, "first_name", "placeholder")
+        result = get_field_content(self.test_content, "forenames", "placeholder")
         self.assertIsNone(result)
 
     def test_missing_field(self):

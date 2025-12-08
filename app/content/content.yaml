@@ -357,12 +357,10 @@ forms:
       call_to_action: Continue
     we_may_hold_this_record:
       call_to_action: Continue
-    first_name:
+    forenames:
       label: First name
       messages:
         required: Enter first name
-    middle_names:
-      label: Middle names (optional)
     last_name:
       label: Last name
       messages:

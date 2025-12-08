@@ -18,8 +18,7 @@ class ServiceRecordRequest(db.Model):
     date_of_birth = db.Column(db.String(17))
     date_of_death = db.Column(db.String(17), nullable=True)
     died_in_service = db.Column(db.String(30))
-    first_name = db.Column(db.String(128))
-    middle_names = db.Column(db.String(128))
+    forenames = db.Column(db.String(128))
     last_name = db.Column(db.String(128))
     mod_reference = db.Column(db.String(64), nullable=True)
     catalogue_reference = db.Column(db.String(64), nullable=True)
@@ -65,7 +64,7 @@ class DynamicsPayment(db.Model):
     )  # postage/delivery amount in pence
     total_amount = db.Column(db.Integer, nullable=False)  # total amount in pence
     payee_email = db.Column(db.String(256), nullable=False)
-    first_name = db.Column(db.String(128), nullable=True)
+    forenames = db.Column(db.String(128), nullable=True)
     last_name = db.Column(db.String(128), nullable=True)
     details = db.Column(db.String(256), nullable=True)
     status = db.Column(
