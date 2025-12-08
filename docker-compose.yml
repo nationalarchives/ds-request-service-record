@@ -8,6 +8,7 @@ services:
     environment:
       - ENVIRONMENT_NAME=${ENVIRONMENT_NAME:-develop}
       - CONFIG=${CONFIG:-config.Develop}
+      - ALLOW_INSECURE=true
       - DEBUG=true
       - SECRET_KEY=abc123
       - NPM_DEVELOP_COMMAND=dev
