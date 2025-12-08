@@ -20,7 +20,7 @@ test.describe("have you previously made a request", () => {
       await expect(page.locator("h1")).toHaveText(/Your details/);
     });
 
-    test("clicking 'Back' from 'Have you previously made a request?' brings the user back to the 'Service person details' page", async ({
+    test("clicking 'Back' from 'Have you previously made a request for this record? ' brings the user back to the 'Service person details' page", async ({
       page,
     }) => {
       await page.getByRole("link", { name: "Back" }).click();

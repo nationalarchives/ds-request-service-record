@@ -191,7 +191,7 @@ def create_payment_endpoint():
 
     Optional params:
     - delivery_amount
-    - first_name
+    - forenames
     - last_name
     - details
     """
@@ -225,7 +225,7 @@ def create_payment_endpoint():
         "net_amount": data["net_amount"],
         "total_amount": data["net_amount"] + data.get("delivery_amount", 0),
         "payee_email": data["payee_email"],
-        "first_name": data.get("first_name", ""),
+        "forenames": data.get("forenames", ""),
         "last_name": data.get("last_name", ""),
         "delivery_amount": data.get("delivery_amount", 0),
         "details": data.get("details", ""),

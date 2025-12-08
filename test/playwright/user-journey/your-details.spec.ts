@@ -58,7 +58,7 @@ test.describe("your details", () => {
       });
     });
 
-    test("clicking 'Back' from 'Your details' brings the user back to the 'Have you previously made a request?' page", async ({
+    test("clicking 'Back' from 'Your details' brings the user back to the 'Have you previously made a request for this record? ' page", async ({
       page,
     }) => {
       await page.getByRole("link", { name: "Back" }).click();

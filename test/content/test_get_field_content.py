@@ -11,7 +11,7 @@ class TestGetFieldContent(unittest.TestCase):
             "forms": {
                 "fields": {
                     "forenames": {
-                        "label": "Forenames (including middle names)",
+                        "label": "First name",
                         "messages": {
                             "required": "The service person's first name is required"
                         },
@@ -34,7 +34,7 @@ class TestGetFieldContent(unittest.TestCase):
     def test_get_full_field_content(self):
         """Test retrieving the entire content for a field"""
         expected = {
-            "label": "Forenames (including middle names)",
+            "label": "First name",
             "messages": {"required": "The service person's first name is required"},
         }
         result = get_field_content(self.test_content, "forenames")
