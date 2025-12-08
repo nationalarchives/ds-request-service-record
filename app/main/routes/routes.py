@@ -211,6 +211,9 @@ def we_do_not_have_royal_navy_service_records(form, state_machine):
 
 @bp.route("/we-are-unlikely-to-hold-army-officer-records/", methods=["GET", "POST"])
 @with_form_prefilled_from_session(WeAreUnlikelyToHoldThisRecord)
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY.value
+)
 @with_state_machine
 def we_are_unlikely_to_hold_officer_records__army(form, state_machine):
     if form.validate_on_submit():
@@ -228,6 +231,9 @@ def we_are_unlikely_to_hold_officer_records__army(form, state_machine):
     "/we-are-unlikely-to-hold-royal-air-force-officer-records/", methods=["GET", "POST"]
 )
 @with_form_prefilled_from_session(WeAreUnlikelyToHoldThisRecord)
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__RAF.value
+)
 @with_state_machine
 def we_are_unlikely_to_hold_officer_records__raf(form, state_machine):
     if form.validate_on_submit():
@@ -238,11 +244,15 @@ def we_are_unlikely_to_hold_officer_records__raf(form, state_machine):
         content=load_content(),
         form=form,
         mod_service_link=ExternalLinks.MOD_SERVICE,
+        route_for_back_link=session.get("route_for_back_link", False),
     )
 
 
 @bp.route(
     "/we-are-unlikely-to-hold-officer-records-for-this-branch/", methods=["GET", "POST"]
+)
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__GENERIC.value
 )
 @with_form_prefilled_from_session(WeAreUnlikelyToHoldThisRecord)
 @with_state_machine
@@ -255,6 +265,7 @@ def we_are_unlikely_to_hold_officer_records__generic(form, state_machine):
         content=load_content(),
         form=form,
         mod_service_link=ExternalLinks.MOD_SERVICE,
+        route_for_back_link=session.get("route_for_back_link", False),
     )
 
 
@@ -278,6 +289,9 @@ def we_are_unlikely_to_locate_this_record(form, state_machine):
 
 @bp.route("/we-may-hold-this-record/", methods=["GET", "POST"])
 @with_form_prefilled_from_session(WeMayHoldThisRecord)
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.WE_MAY_HOLD_THIS_RECORD.value
+)
 @with_state_machine
 def we_may_hold_this_record(form, state_machine):
     if form.validate_on_submit():
@@ -302,6 +316,7 @@ def what_was_their_date_of_birth(form, state_machine):
         "main/what-was-their-date-of-birth.html",
         form=form,
         content=load_content(),
+        route_for_back_link=session.get("route_for_back_link", False),
     )
 
 
