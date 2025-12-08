@@ -1,4 +1,5 @@
 from app.lib.content import get_field_content, load_content
+from app.main.forms.validation_helpers.born_too_early import BornTooEarly
 from flask_wtf import FlaskForm
 from tna_frontend_jinja.wtforms import (
     TnaDateField,
@@ -26,6 +27,11 @@ class WhatWasTheirDateOfBirth(FlaskForm):
             tna_frontend_validators.PastDate(
                 message=get_field_content(content, "date_of_birth", "messages")[
                     "past_date"
+                ]
+            ),
+            BornTooEarly(
+                message=get_field_content(content, "date_of_birth", "messages")[
+                    "born_too_early"
                 ]
             ),
         ],

@@ -164,7 +164,7 @@ pages:
       - General
       - Field Marshal
   have_you_previously_made_a_request:
-    heading: Have you previously made a request?
+    heading: Have you previously made a request for this record?
   must_submit_subject_access_request:
     heading: Submit a data access request
     paragraphs:
@@ -187,6 +187,7 @@ pages:
         The majority of the service personnel records for Commissioned Officers have not yet been 
         transferred to The National Archives. Please use the Ministry of Defence service to request 
         access to the Officer records.
+    call_to_action: Request from the Ministry of Defence
   we_are_unlikely_to_hold_officer_records__raf:
     heading: We are unlikely to hold this record
     paragraphs:
@@ -200,6 +201,7 @@ pages:
         in the list.
     list:
       - Royal Air Force
+    call_to_action: Request from the Ministry of Defence
   we_are_unlikely_to_hold_officer_records__army:
     heading: We are unlikely to hold this record
     paragraphs:
@@ -213,12 +215,13 @@ pages:
     list:
       - Grenadier Guards
       - Welsh Guards
+    call_to_action: Request from the Ministry of Defence
   we_do_not_have_records_for_people_born_before:
     heading: We do not have records for people born before 1800
     paragraphs:
       - Sorry, but here is some helpful information
   we_do_not_have_records_for_people_born_after:
-    heading: We do not have this record
+    heading: We do not have records for people born after 1939
     paragraphs:
       - You will need to request the service record from the Ministry of Defence.
     call_to_action: Apply for MOD records
@@ -260,7 +263,9 @@ pages:
       - no more than 5MB
       - clear and show all the death certificate
   service_person_details:
-    heading: About the service person
+    heading: Tell us as much as you know about the service person
+    paragraphs:
+      - Answer as many questions on this page as you can. This will help our staff find the record.
   do_you_have_a_proof_of_death:
     heading: Provide a proof of death
     paragraphs:
@@ -353,13 +358,13 @@ forms:
     we_may_hold_this_record:
       call_to_action: Continue
     forenames:
-      label: Forenames (including middle names)
+      label: First name
       messages:
-        required: Enter forenames
+        required: Enter first name
     last_name:
       label: Last name
       messages:
-        required: Enter a last name
+        required: Enter last name
     other_last_names:
       label: Other last names (optional)
     date_of_birth:
@@ -368,12 +373,13 @@ forms:
       messages:
         required: Enter the service person's date of birth
         past_date: The date of birth must be in the past
+        born_too_early: Date of birth must be after 31 December 1799. Records prior to this date are not contained in this collection.
       call_to_action: Continue
     place_of_birth:
       label: Place of birth (optional)
     date_of_death:
       label: Date of death (optional)
-      description: The date of death must include a day, month, and year
+      description: For example, 31 3 2000, or 2000
       messages:
         past_date: The date of death must be in the past
     do_you_have_a_proof_of_death:
@@ -389,8 +395,10 @@ forms:
       call_to_action: Continue
     service_number:
       label: Service number (optional)
+      hint: The unique number assigned to a service person
     regiment:
-      label: Regiment (optional)
+      label: Regiment or squadron (optional)
+      hint: Provide the last regiment or squadron they served in if they served in more than one
     service_branch:
       label: Which military branch did the person serve in?
       messages:
@@ -398,8 +406,7 @@ forms:
     additional_information:
       label: Additional information (optional)
       description: |
-        If you have any additional information that might help us to find the service record, please provide it here.
-        This could include details such as the service person's rank, unit, occupation or any other relevant information.
+        Anything else you know about them that you think might help our search
     died_in_service:
       label: Did they die in service? (optional)
       messages:
@@ -463,3 +470,5 @@ forms:
         continue: Continue with a full record check order
       messages:
         no_radio_selected: Select how you would like your order processed
+    we_are_unlikely_to_hold_this_record:
+      call_to_action: Continue this request

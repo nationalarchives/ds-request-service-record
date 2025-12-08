@@ -35,9 +35,6 @@ class MultiPageFormRoutes(Enum):
     WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD = "main.we_are_unlikely_to_locate_this_record"
     WE_MAY_HOLD_THIS_RECORD = "main.we_may_hold_this_record"
     WHAT_WAS_THEIR_DATE_OF_BIRTH = "main.what_was_their_date_of_birth"
-    WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE = (
-        "main.we_do_not_have_records_for_people_born_before"
-    )
     WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER = (
         "main.we_do_not_have_records_for_people_born_after"
     )
@@ -86,6 +83,12 @@ class ExternalLinks:
     PRIVACY_NOTICE = "https://www.nationalarchives.gov.uk/legal/privacy-policy/"
     ANCESTRY_SEARCH = "https://www.ancestry.co.uk/search/"
     FOI_REQUEST_GUIDANCE = "https://www.gov.uk/make-a-freedom-of-information-request"
+
+
+class BoundaryYears(Enum):
+    EARLIEST_BIRTH_YEAR = 1800
+    YEAR_FROM_WHICH_PROOF_OF_DEATH_IS_REQUIRED = 1910
+    LATEST_BIRTH_YEAR = 1939
 
 
 @lru_cache(maxsize=1)
