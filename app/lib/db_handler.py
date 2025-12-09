@@ -8,6 +8,27 @@ from app.lib.models import (
 from flask import current_app
 
 
+def hash_check(record_hash: str) -> ServiceRecordRequest | None:
+    """
+    Check if a ServiceRecordRequest with the given hash already exists, return the record if found.
+    """
+    try:
+        existing_record = (
+            db.session.query(ServiceRecordRequest)
+            .filter_by(record_hash=record_hash)
+            .first()
+        )
+        if existing_record:
+            current_app.logger.info(
+                f"Duplicate record detected with hash: {record_hash}"
+            )
+            return existing_record
+        return None
+    except Exception as e:
+        current_app.logger.error(f"Error checking record hash: {e}")
+        return None        
+    
+
 def get_service_record_request(
     *, payment_id: str | None = None, record_id: str | None = None
 ) -> ServiceRecordRequest | None:

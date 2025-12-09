@@ -46,6 +46,7 @@ def test_add_service_record_request(session):
             "requester_country": "United Kingdom",
             "requester_contact_preference": "email",
             "service_branch": "british_army",
+            "record_hash": "dummyhashvalue",
             "payment_id": payment_id,
         }
     )
@@ -86,6 +87,7 @@ def test_delete_service_record_request(session):
             "requester_country": "United Kingdom",
             "requester_contact_preference": "email",
             "service_branch": "british_army",
+            "record_hash": "dummyhash",
             "payment_id": payment_id,
         }
     )
