@@ -43,13 +43,13 @@ def calculate_amount_based_on_form_data(form_data: dict) -> int:
 
     amount = OPTION_MAP[processing_option].get(
         form_data.get(
-            f"how_do_you_want_your_order_processed_{processing_option}_option"
+            f"choose_your_order_type_{processing_option}_option"
         )
     )
 
     if (
         processing_option == "standard"
-        and form_data.get("how_do_you_want_your_order_processed_standard_option")
+        and form_data.get("choose_your_order_type_standard_option")
         == "printed"
     ):
         if country := form_data.get("requester_country"):

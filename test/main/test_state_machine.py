@@ -456,8 +456,8 @@ def test_continue_from_have_you_previously_made_a_request():
         ),
         (
             False,
-            "how_do_you_want_your_order_processed_form",
-            MultiPageFormRoutes.HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED.value,
+            "choose_your_order_type_form",
+            MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE.value,
         ),
     ],
 )
@@ -492,26 +492,26 @@ def test_continue_from_your_postal_address():
             submit=None,
         )
     )
-    assert sm.current_state.id == "how_do_you_want_your_order_processed_form"
+    assert sm.current_state.id == "choose_your_order_type_form"
     assert (
         sm.route_for_current_state
-        == MultiPageFormRoutes.HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED.value
+        == MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE.value
     )
 
 
 @pytest.mark.parametrize("processing_option", ["standard", "full"])
-def test_continue_from_how_do_you_want_your_order_processed(processing_option):
+def test_continue_from_choose_your_order_type(processing_option):
     sm = RoutingStateMachine()
-    sm.continue_from_how_do_you_want_your_order_processed_form(
+    sm.continue_from_choose_your_order_type_form(
         form=make_form(
             processing_option=processing_option,
-            how_do_you_want_your_order_processed_standard=None,
-            how_do_you_want_your_order_processed_full=None,
+            choose_your_order_type_standard=None,
+            choose_your_order_type_full=None,
             submit=None,
         )
     )
-    assert sm.current_state.id == "gov_uk_pay_redirect"
-    assert sm.route_for_current_state == MultiPageFormRoutes.SEND_TO_GOV_UK_PAY.value
+    assert sm.current_state.id == "your_details_form"
+    assert sm.route_for_current_state == MultiPageFormRoutes.YOUR_DETAILS.value
 
 
 def test_continue_from_gov_uk_pay():

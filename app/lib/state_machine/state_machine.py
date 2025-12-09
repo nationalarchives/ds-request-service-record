@@ -145,11 +145,11 @@ class RoutingStateMachine(StateMachine):
         enter="entering_your_postal_address_form", final=True
     )
 
-    how_do_you_want_your_order_processed_form = State(
-        enter="entering_how_do_you_want_your_order_processed_form", final=True
+    choose_your_order_type_form = State(
+        enter="entering_choose_your_order_type_form", final=True
     )
 
-    gov_uk_pay_redirect = State(enter="entering_gov_uk_pay_redirect", final=True)
+    # gov_uk_pay_redirect = State(enter="entering_gov_uk_pay_redirect", final=True)
 
     request_submitted_page = State(enter="entering_request_submitted_page", final=True)
 
@@ -275,19 +275,19 @@ class RoutingStateMachine(StateMachine):
     )
 
     continue_from_have_you_previously_made_a_request_form = initial.to(
-        your_details_form
+        choose_your_order_type_form
     )
 
     continue_from_your_details_form = initial.to(
         your_postal_address_form, cond="does_not_have_email"
-    ) | initial.to(how_do_you_want_your_order_processed_form)
+    ) | initial.to(choose_your_order_type_form)
 
     continue_from_your_postal_address_form = initial.to(
-        how_do_you_want_your_order_processed_form
+        choose_your_order_type_form
     )
 
-    continue_from_how_do_you_want_your_order_processed_form = initial.to(
-        gov_uk_pay_redirect
+    continue_from_choose_your_order_type_form = initial.to(
+        your_details_form
     )
 
     continue_on_return_from_gov_uk_redirect = initial.to(request_submitted_page)
@@ -399,9 +399,9 @@ class RoutingStateMachine(StateMachine):
     def entering_your_postal_address_form(self):
         self.route_for_current_state = MultiPageFormRoutes.YOUR_POSTAL_ADDRESS.value
 
-    def entering_how_do_you_want_your_order_processed_form(self):
+    def entering_choose_your_order_type_form(self):
         self.route_for_current_state = (
-            MultiPageFormRoutes.HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED.value
+            MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE.value
         )
 
     def entering_gov_uk_pay_redirect(self):

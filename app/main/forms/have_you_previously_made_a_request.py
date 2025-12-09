@@ -3,25 +3,53 @@ from flask_wtf import FlaskForm
 from tna_frontend_jinja.wtforms import (
     TnaSubmitWidget,
     TnaTextInputWidget,
+    TnaRadiosWidget,
 )
 from wtforms import (
     StringField,
     SubmitField,
+    RadioField,
+)
+from wtforms.validators import InputRequired
+
+from app.main.forms.validation_helpers.text_field_conditionally_required import (
+    text_field_required_unless_radio_has_specific_selection,
 )
 
 
 class HaveYouPreviouslyMadeARequest(FlaskForm):
     content = load_content()
 
-    mod_reference = StringField(
-        get_field_content(
-            content, "have_you_previously_made_a_request", "mod_reference"
-        )["label"],
-        description=get_field_content(
-            content, "have_you_previously_made_a_request", "mod_reference"
-        )["hint_text"],
-        widget=TnaTextInputWidget(),
-        validators=[],
+    have_you_previously_made_a_request = RadioField(
+        get_field_content(content, "have_you_previously_made_a_request", "label"),
+        choices=[
+            (
+                "yes_mod",
+                get_field_content(
+                    content, "have_you_previously_made_a_request", "options"
+                )["yes_mod"],
+            ),
+            (
+                "yes_tna",
+                get_field_content(
+                    content, "have_you_previously_made_a_request", "options"
+                )["yes_tna"],
+            ),
+            (
+                "no",
+                get_field_content(
+                    content, "have_you_previously_made_a_request", "options"
+                )["no"],
+            ),
+        ],
+        validators=[
+            InputRequired(
+                message=get_field_content(
+                    content, "have_you_previously_made_a_request", "messages"
+                )["required"]
+            )
+        ],
+        widget=TnaRadiosWidget(),
     )
 
     case_reference_number = StringField(
@@ -32,7 +60,15 @@ class HaveYouPreviouslyMadeARequest(FlaskForm):
             content, "have_you_previously_made_a_request", "case_reference_number"
         )["hint_text"],
         widget=TnaTextInputWidget(),
-        validators=[],
+        validators=[
+            text_field_required_unless_radio_has_specific_selection(
+                radio_field_name="have_you_previously_made_a_request",
+                permissible_selection="no",
+                message=get_field_content(
+                    content, "have_you_previously_made_a_request", "messages"
+                )["reference_number_required"],
+            )
+        ],
     )
 
     submit = SubmitField(

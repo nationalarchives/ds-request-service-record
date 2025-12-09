@@ -1,16 +1,14 @@
 import { test, expect } from "@playwright/test";
 import { Paths } from "../lib/constants";
 
-test.describe("how do you want your order processed", () => {
+test.describe("choose your order type", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START);
-    await page.goto(Paths.HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED);
+    await page.goto(Paths.CHOOSE_YOUR_ORDER_TYPE);
   });
 
   test("has the correct heading", async ({ page }) => {
-    await expect(page.locator("h1")).toHaveText(
-      /How do you want your order processed?/,
-    );
+    await expect(page.locator("h1")).toHaveText(/Choose your order type/);
   });
 
   test.describe("when submitted", () => {
@@ -67,6 +65,13 @@ test.describe("how do you want your order processed", () => {
           });
         },
       );
+    });
+
+    test("clicking 'Back' from 'Choose your order type' brings the user back to the 'Have you previously made a request' page", async ({
+      page,
+    }) => {
+      await page.getByRole("link", { name: "Back" }).click();
+      await expect(page).toHaveURL(Paths.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
     });
   });
 });

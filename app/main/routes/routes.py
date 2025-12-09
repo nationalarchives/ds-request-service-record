@@ -25,8 +25,8 @@ from app.main.forms.exit_this_form import ExitThisForm
 from app.main.forms.have_you_previously_made_a_request import (
     HaveYouPreviouslyMadeARequest,
 )
-from app.main.forms.how_do_you_want_your_order_processed import (
-    HowDoYouWantYourOrderProcessed,
+from app.main.forms.choose_your_order_type import (
+    ChooseYourOrderType,
 )
 from app.main.forms.how_we_process_requests import HowTheProcessWorks
 from app.main.forms.is_service_person_alive import IsServicePersonAlive
@@ -439,16 +439,16 @@ def your_postal_address(form, state_machine):
     )
 
 
-@bp.route("/how-do-you-want-your-order-processed/", methods=["GET", "POST"])
+@bp.route("/choose-your-order-type/", methods=["GET", "POST"])
 @with_state_machine
-def how_do_you_want_your_order_processed(state_machine):
-    form = HowDoYouWantYourOrderProcessed()
+def choose_your_order_type(state_machine):
+    form = ChooseYourOrderType()
     if form.validate_on_submit():
         save_submitted_form_fields_to_session(form)
-        state_machine.continue_from_how_do_you_want_your_order_processed_form(form)
+        state_machine.continue_from_choose_your_order_type_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/how-do-you-want-your-order-processed.html",
+        "main/choose-your-order-type.html",
         form=form,
         content=load_content(),
     )

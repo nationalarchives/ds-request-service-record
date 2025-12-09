@@ -13,7 +13,7 @@ from wtforms import (
 )
 
 
-class HowDoYouWantYourOrderProcessed(FlaskForm):
+class ChooseYourOrderType(FlaskForm):
     content = load_content()
 
     # This field is not exposed to the user. It is used to determine which option the form
@@ -26,19 +26,19 @@ class HowDoYouWantYourOrderProcessed(FlaskForm):
         validate_choice=False,
     )
 
-    how_do_you_want_your_order_processed_standard_option = RadioField(
-        get_field_content(content, "how_do_you_want_your_order_processed", "label"),
+    choose_your_order_type_standard_option = RadioField(
+        get_field_content(content, "choose_your_order_type", "label"),
         choices=[
             (
                 "digital",
                 get_field_content(
-                    content, "how_do_you_want_your_order_processed", "standard"
+                    content, "choose_your_order_type", "standard"
                 )["digital"],
             ),
             (
                 "printed",
                 get_field_content(
-                    content, "how_do_you_want_your_order_processed", "standard"
+                    content, "choose_your_order_type", "standard"
                 )["printed"],
             ),
         ],
@@ -47,7 +47,7 @@ class HowDoYouWantYourOrderProcessed(FlaskForm):
                 other_field_name="processing_option",
                 other_field_value="standard",
                 message=get_field_content(
-                    content, "how_do_you_want_your_order_processed", "messages"
+                    content, "choose_your_order_type", "messages"
                 )["no_radio_selected"],
             )
         ],
@@ -55,19 +55,19 @@ class HowDoYouWantYourOrderProcessed(FlaskForm):
         widget=TnaRadiosWidget(),
     )
 
-    how_do_you_want_your_order_processed_full_option = RadioField(
-        get_field_content(content, "how_do_you_want_your_order_processed", "label"),
+    choose_your_order_type_full_option = RadioField(
+        get_field_content(content, "choose_your_order_type", "label"),
         choices=[
             (
                 "digital",
                 get_field_content(
-                    content, "how_do_you_want_your_order_processed", "full"
+                    content, "choose_your_order_type", "full"
                 )["digital"],
             ),
             (
                 "printed",
                 get_field_content(
-                    content, "how_do_you_want_your_order_processed", "full"
+                    content, "choose_your_order_type", "full"
                 )["printed"],
             ),
         ],
@@ -76,7 +76,7 @@ class HowDoYouWantYourOrderProcessed(FlaskForm):
                 other_field_name="processing_option",
                 other_field_value="full",
                 message=get_field_content(
-                    content, "how_do_you_want_your_order_processed", "messages"
+                    content, "choose_your_order_type", "messages"
                 )["no_radio_selected"],
             )
         ],
@@ -85,13 +85,13 @@ class HowDoYouWantYourOrderProcessed(FlaskForm):
     )
 
     submit_standard = SubmitField(
-        get_field_content(content, "how_do_you_want_your_order_processed", "standard")[
+        get_field_content(content, "choose_your_order_type", "standard")[
             "continue"
         ],
         widget=TnaSubmitWidget(),
     )
     submit_full_check = SubmitField(
-        get_field_content(content, "how_do_you_want_your_order_processed", "full")[
+        get_field_content(content, "choose_your_order_type", "full")[
             "continue"
         ],
         widget=TnaSubmitWidget(),

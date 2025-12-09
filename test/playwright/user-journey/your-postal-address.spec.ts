@@ -31,7 +31,7 @@ test.describe("your postal address", () => {
       await page.getByLabel("Address Line 1").fill("123 Non-existent Road");
       await page.getByLabel("Town or city").fill("Non-existent Town");
       await page.getByRole("button", { name: /Continue/i }).click();
-      await expect(page).toHaveURL(/how-do-you-want-your-order-processed/);
+      await expect(page).toHaveURL(/choose-your-order-type/);
     });
 
     test("clicking 'Back' from 'Your postal address' brings the user back to the 'Your details' page", async ({
