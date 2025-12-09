@@ -364,6 +364,14 @@ def test_continue_from_are_you_sure_you_want_to_proceed_without_proof_of_death(
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
 
+def test_continue_from_we_do_not_have_records_for_people_born_after_form():
+    sm = RoutingStateMachine()
+    sm.continue_from_we_do_not_have_records_for_people_born_after_form()
+    assert sm.current_state.id == "are_you_sure_you_want_to_cancel_form"
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value
+    )
 
 # In the real world, upload_proof_of_death interacts with AWS S3, so we mock it here. In this case
 # we test the scenario where it returns None, simulating a failed upload.

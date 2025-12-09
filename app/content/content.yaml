@@ -216,15 +216,11 @@ pages:
       - Grenadier Guards
       - Welsh Guards
     call_to_action: Request from the Ministry of Defence
-  we_do_not_have_records_for_people_born_before:
-    heading: We do not have records for people born before 1800
-    paragraphs:
-      - Sorry, but here is some helpful information
   we_do_not_have_records_for_people_born_after:
     heading: We do not have records for people born after 1939
     paragraphs:
       - You will need to request the service record from the Ministry of Defence.
-    call_to_action: Apply for MOD records
+    call_to_action: Request from the Ministry of Defence
   we_are_unlikely_to_locate_this_record:
     heading: We are unlikely to be able to locate this record
     paragraphs:

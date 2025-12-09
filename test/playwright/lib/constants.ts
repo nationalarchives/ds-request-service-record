@@ -20,7 +20,6 @@ export const Paths = {
   ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_A_PROOF_OF_DEATH: `${basePath}/are-you-sure-you-want-to-proceed-without-proof-of-death/`,
   WERE_THEY_A_COMMISSIONED_OFFICER: `${basePath}/were-they-a-commissioned-officer/`,
   WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER: `${basePath}/we-do-not-have-records-for-people-born-after/`,
-  WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE: `${basePath}/we-do-not-have-records-for-people-born-before/`,
   WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__RAF: `${basePath}/we-are-unlikely-to-hold-royal-air-force-officer-records/`,
   WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__GENERIC: `${basePath}/we-are-unlikely-to-hold-officer-records-for-this-branch/`,
   WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY: `${basePath}/we-are-unlikely-to-hold-army-officer-records/`,
