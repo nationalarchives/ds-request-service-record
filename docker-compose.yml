@@ -3,12 +3,12 @@ services:
     build:
       context: .
       args:
-        IMAGE: ghcr.io/nationalarchives/tna-python-root
-        IMAGE_TAG: 0
+        IMAGE: ghcr.io/nationalarchives/tna-python-dev
+        IMAGE_TAG: latest
     environment:
-      - RUNTIME=develop
       - ENVIRONMENT_NAME=${ENVIRONMENT_NAME:-develop}
       - CONFIG=${CONFIG:-config.Develop}
+      - ALLOW_INSECURE=true
       - DEBUG=true
       - SECRET_KEY=abc123
       - NPM_DEVELOP_COMMAND=dev
@@ -31,6 +31,9 @@ services:
     depends_on:
       - db
       - redis
+    healthcheck:
+      start_period: 10s
+      start_interval: 2s
 
   db:
     image: postgres:16.0
@@ -44,17 +47,6 @@ services:
     restart: always
     ports:
       - 65502:8080
-
-  dev:
-    environment:
-      - CONFIG=config.Test
-      - SQLALCHEMY_DATABASE_URI=postgresql://postgres:postgres@db:5432/postgres
-    image: ghcr.io/nationalarchives/tna-python-dev:preview
-    volumes:
-      - ./:/app
-      - ~/.aws:/home/app/.aws
-    depends_on:
-      - db
 
   docs:
     image: squidfunk/mkdocs-material

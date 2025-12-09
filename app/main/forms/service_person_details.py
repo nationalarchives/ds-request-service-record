@@ -80,7 +80,7 @@ class ServicePersonDetails(FlaskForm):
         validators=[],
     )
 
-    regiment = StringField(
+    regiment = TextAreaField(
         get_field_content(content, "regiment", "label"),
         widget=TnaTextInputWidget(),
         validators=[],

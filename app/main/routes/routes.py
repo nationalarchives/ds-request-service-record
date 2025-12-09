@@ -17,6 +17,9 @@ from app.main import bp
 from app.main.forms.are_you_sure_you_want_to_cancel import AreYouSureYouWantToCancel
 from app.main.forms.before_you_start import BeforeYouStart
 from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
+from app.main.forms.are_you_sure_you_want_to_proceed_without_proof_of_death import (
+    AreYouSureYouWantToProceedWithoutProofOfDeath,
+)
 from app.main.forms.exit_this_form import ExitThisForm
 from app.main.forms.have_you_previously_made_a_request import (
     HaveYouPreviouslyMadeARequest,
@@ -30,6 +33,9 @@ from app.main.forms.service_branch import ServiceBranch
 from app.main.forms.service_person_details import ServicePersonDetails
 from app.main.forms.start_now import StartNow
 from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
+from app.main.forms.we_are_unlikely_to_hold_this_record import (
+    WeAreUnlikelyToHoldThisRecord,
+)
 from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
 from app.main.forms.were_they_a_commissioned_officer import WereTheyACommissionedOfficer
 from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
@@ -206,27 +212,63 @@ def we_do_not_have_royal_navy_service_records(form, state_machine):
     )
 
 
-@bp.route("/we-are-unlikely-to-hold-army-officer-records/", methods=["GET"])
-def we_are_unlikely_to_hold_officer_records__army():
+@bp.route("/we-are-unlikely-to-hold-army-officer-records/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(WeAreUnlikelyToHoldThisRecord)
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY.value
+)
+@with_state_machine
+def we_are_unlikely_to_hold_officer_records__army(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_we_are_unlikely_to_hold_officer_records_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/we-are-unlikely-to-hold-army-officer-records.html",
         content=load_content(),
+        form=form,
+        mod_service_link=ExternalLinks.MOD_SERVICE,
     )
 
 
-@bp.route("/we-are-unlikely-to-hold-royal-air-force-officer-records/", methods=["GET"])
-def we_are_unlikely_to_hold_officer_records__raf():
+@bp.route(
+    "/we-are-unlikely-to-hold-royal-air-force-officer-records/", methods=["GET", "POST"]
+)
+@with_form_prefilled_from_session(WeAreUnlikelyToHoldThisRecord)
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__RAF.value
+)
+@with_state_machine
+def we_are_unlikely_to_hold_officer_records__raf(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_we_are_unlikely_to_hold_officer_records_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/we-are-unlikely-to-hold-raf-officer-records.html",
         content=load_content(),
+        form=form,
+        mod_service_link=ExternalLinks.MOD_SERVICE,
+        route_for_back_link=session.get("route_for_back_link", False),
     )
 
 
-@bp.route("/we-are-unlikely-to-hold-officer-records-for-this-branch/", methods=["GET"])
-def we_are_unlikely_to_hold_officer_records__generic():
+@bp.route(
+    "/we-are-unlikely-to-hold-officer-records-for-this-branch/", methods=["GET", "POST"]
+)
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__GENERIC.value
+)
+@with_form_prefilled_from_session(WeAreUnlikelyToHoldThisRecord)
+@with_state_machine
+def we_are_unlikely_to_hold_officer_records__generic(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_we_are_unlikely_to_hold_officer_records_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/we-are-unlikely-to-hold-officer-records-for-this-branch.html",
         content=load_content(),
+        form=form,
+        mod_service_link=ExternalLinks.MOD_SERVICE,
+        route_for_back_link=session.get("route_for_back_link", False),
     )
 
 
@@ -250,6 +292,9 @@ def we_are_unlikely_to_locate_this_record(form, state_machine):
 
 @bp.route("/we-may-hold-this-record/", methods=["GET", "POST"])
 @with_form_prefilled_from_session(WeMayHoldThisRecord)
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.WE_MAY_HOLD_THIS_RECORD.value
+)
 @with_state_machine
 def we_may_hold_this_record(form, state_machine):
     if form.validate_on_submit():
@@ -274,22 +319,46 @@ def what_was_their_date_of_birth(form, state_machine):
         "main/what-was-their-date-of-birth.html",
         form=form,
         content=load_content(),
+        route_for_back_link=session.get("route_for_back_link", False),
     )
 
 
-@bp.route("/we-do-not-have-records-for-people-born-before/", methods=["GET"])
-def we_do_not_have_records_for_people_born_before():
+@bp.route(
+    "/are-you-sure-you-want-to-proceed-without-proof-of-death/", methods=["GET", "POST"]
+)
+@with_form_prefilled_from_session(AreYouSureYouWantToProceedWithoutProofOfDeath)
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_PROOF_OF_DEATH.value
+)
+@with_state_machine
+def are_you_sure_you_want_to_proceed_without_proof_of_death(form, state_machine):
+    if form.validate_on_submit():
+        save_submitted_form_fields_to_session(form)
+        state_machine.continue_from_are_you_sure_you_want_to_proceed_without_proof_of_death_form(
+            form
+        )
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/we-do-not-have-records-for-people-born-before.html",
+        "main/are-you-sure-you-want-to-proceed-without-proof-of-death.html",
+        form=form,
         content=load_content(),
     )
 
-
-@bp.route("/we-do-not-have-records-for-people-born-after/", methods=["GET"])
-def we_do_not_have_records_for_people_born_after():
+@bp.route("/we-do-not-have-records-for-people-born-after/", methods=["GET", "POST"])
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER.value
+)
+@with_state_machine
+@with_form_prefilled_from_session(ExitThisForm)
+def we_do_not_have_records_for_people_born_after(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_we_do_not_have_records_for_people_born_after_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/we-do-not-have-records-for-people-born-after.html",
         content=load_content(),
+        form=form,
+        mod_service_link=ExternalLinks.MOD_SERVICE,
     )
 
 
@@ -305,6 +374,7 @@ def service_person_details(form, state_machine):
         "main/service-person-details.html",
         form=form,
         content=load_content(),
+        route_for_back_link=session.get("route_for_back_link", False),
     )
 
 
@@ -392,6 +462,7 @@ def upload_a_proof_of_death(form, state_machine):
         "main/upload-a-proof-of-death.html",
         form=form,
         content=load_content(),
+        route_for_back_link=session.get("route_for_back_link", False),
     )
 
 

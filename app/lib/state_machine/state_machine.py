@@ -1,4 +1,4 @@
-from app.constants import MultiPageFormRoutes
+from app.constants import MultiPageFormRoutes, BoundaryYears
 from app.lib.aws import upload_proof_of_death
 from flask import current_app
 from statemachine import State, StateMachine
@@ -122,16 +122,17 @@ class RoutingStateMachine(StateMachine):
         enter="entering_we_do_not_have_records_for_people_born_after_page", final=True
     )
 
-    we_do_not_have_records_for_people_born_before_page = State(
-        enter="entering_we_do_not_have_records_for_people_born_before_page", final=True
-    )
-
     do_you_have_a_proof_of_death_form = State(
         enter="entering_do_you_have_a_proof_of_death_form", final=True
     )
 
     upload_a_proof_of_death_form = State(
         enter="entering_upload_a_proof_of_death_form", final=True
+    )
+
+    are_you_sure_you_want_to_proceed_without_proof_of_death_form = State(
+        enter="entering_are_you_sure_you_want_to_proceed_without_proof_of_death_form",
+        final=True,
     )
 
     have_you_previously_made_a_request_form = State(
@@ -228,24 +229,37 @@ class RoutingStateMachine(StateMachine):
         what_was_their_date_of_birth_form
     )
 
+    continue_from_we_are_unlikely_to_hold_officer_records_form = initial.to(
+        what_was_their_date_of_birth_form
+    )
+
     continue_from_what_was_their_date_of_birth_form = (
         initial.to(
             service_person_details_form,
-            unless="born_too_late or born_too_early or birth_year_requires_proof_of_death",
+            unless="born_too_late or birth_year_requires_proof_of_death",
         )
         | initial.to(
             we_do_not_have_records_for_people_born_after_page, cond="born_too_late"
-        )
-        | initial.to(
-            we_do_not_have_records_for_people_born_before_page, cond="born_too_early"
         )
         | initial.to(
             do_you_have_a_proof_of_death_form, cond="birth_year_requires_proof_of_death"
         )
     )
 
+    continue_from_we_do_not_have_records_for_people_born_after_form = initial.to(
+        are_you_sure_you_want_to_cancel_form
+    )
+
     continue_from_do_you_have_a_proof_of_death_form = initial.to(
-        upload_a_proof_of_death_form
+        upload_a_proof_of_death_form, unless="does_not_have_proof_of_death"
+    ) | initial.to(are_you_sure_you_want_to_proceed_without_proof_of_death_form)
+
+    continue_from_are_you_sure_you_want_to_proceed_without_proof_of_death_form = (
+        initial.to(
+            upload_a_proof_of_death_form,
+            unless="happy_to_proceed_without_proof_of_death",
+        )
+        | initial.to(service_person_details_form)
     )
 
     continue_from_upload_a_proof_of_death_form = initial.to(
@@ -344,6 +358,11 @@ class RoutingStateMachine(StateMachine):
             MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH.value
         )
 
+    def entering_are_you_sure_you_want_to_proceed_without_proof_of_death_form(self):
+        self.route_for_current_state = (
+            MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_PROOF_OF_DEATH.value
+        )
+
     def entering_are_you_sure_you_want_to_cancel_form(self):
         self.route_for_current_state = (
             MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value
@@ -355,11 +374,6 @@ class RoutingStateMachine(StateMachine):
     def entering_we_do_not_have_records_for_people_born_after_page(self):
         self.route_for_current_state = (
             MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER.value
-        )
-
-    def entering_we_do_not_have_records_for_people_born_before_page(self):
-        self.route_for_current_state = (
-            MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE.value
         )
 
     def entering_do_you_have_a_proof_of_death_form(self):
@@ -426,19 +440,31 @@ class RoutingStateMachine(StateMachine):
 
     def born_too_late(self, form):
         """Condition method to determine if the service person's date of birth is too late for TNA to have record."""
-        return form.what_was_their_date_of_birth.data.year > 1939
-
-    def born_too_early(self, form):
-        """Condition method to determine if the service person's date of birth is too early for TNA to have record."""
-        return form.what_was_their_date_of_birth.data.year < 1800
+        return (
+            form.what_was_their_date_of_birth.data.year
+            > BoundaryYears.LATEST_BIRTH_YEAR.value
+        )
 
     def birth_year_requires_proof_of_death(self, form):
         """Condition method to determine if the service person's date of birth requires a proof of death."""
-        return form.what_was_their_date_of_birth.data.year > 1910
+        return (
+            form.what_was_their_date_of_birth.data.year
+            > BoundaryYears.YEAR_FROM_WHICH_PROOF_OF_DEATH_IS_REQUIRED.value
+        )
 
     def does_not_have_email(self, form):
         """Condition method to determine if the user does not have an email address."""
         return form.does_not_have_email.data
+
+    def does_not_have_proof_of_death(self, form):
+        """Condition method to determine if the user does not have a proof of death."""
+        return form.do_you_have_a_proof_of_death.data == "no"
+
+    def happy_to_proceed_without_proof_of_death(self, form):
+        """Condition method to determine if the user is happy to proceed without a proof of death."""
+        return (
+            form.are_you_sure_you_want_to_proceed_without_proof_of_death.data == "yes"
+        )
 
     def proof_of_death_uploaded_to_s3(self, form):
         """Condition method to determine if proof of death was successfully uploaded to S3."""

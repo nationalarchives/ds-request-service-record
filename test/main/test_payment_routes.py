@@ -35,7 +35,7 @@ class MainBlueprintTestCase(unittest.TestCase):
                 "delivery_amount": 36.66,
                 "reference": "PAY-0125-33-123/4325",
                 "payee_email": "john.doe@gmail.com",
-                "first_name": "John",
+                "forenames": "John",
                 "last_name": "Doe",
                 "details": "Order of 100x A4 pages",
             },
@@ -55,7 +55,7 @@ class MainBlueprintTestCase(unittest.TestCase):
         dummy.net_amount = 7500
         dummy.delivery_amount = 3665
         dummy.total_amount = 11165
-        dummy.first_name = "John"
+        dummy.forenames = "John"
         dummy.last_name = "Doe"
         dummy.details = "Order of 100x A4 pages"
         mock_get_payment.return_value = dummy

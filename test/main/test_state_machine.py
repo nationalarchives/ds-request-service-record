@@ -261,6 +261,18 @@ def test_continue_from_we_may_hold_this_record():
     )
 
 
+def test_continue_from_we_are_unlikely_to_hold_officer_records():
+    sm = RoutingStateMachine()
+    sm.continue_from_we_are_unlikely_to_hold_officer_records_form(
+        form=make_form(we_are_unlikely_to_hold_officer_records=None)
+    )
+    assert sm.current_state.id == "what_was_their_date_of_birth_form"
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH.value
+    )
+
+
 @pytest.mark.parametrize(
     "date_of_birth,expected_state,expected_route",
     [
@@ -270,14 +282,6 @@ def test_continue_from_we_may_hold_this_record():
             MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER.value,
         )
         for year in range(1940, 2000)
-    ]
-    + [
-        (
-            date(year, 1, 1),
-            "we_do_not_have_records_for_people_born_before_page",
-            MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE.value,
-        )
-        for year in range(1750, 1800)
     ]
     + [
         (
@@ -312,8 +316,8 @@ def test_continue_from_what_was_their_date_of_birth_form(
     [
         (
             "no",
-            "upload_a_proof_of_death_form",
-            MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH.value,
+            "are_you_sure_you_want_to_proceed_without_proof_of_death_form",
+            MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_PROOF_OF_DEATH.value,
         ),
         (
             "yes",
@@ -327,11 +331,47 @@ def test_continue_from_do_you_have_a_proof_of_death(
 ):
     sm = RoutingStateMachine()
     sm.continue_from_do_you_have_a_proof_of_death_form(
-        form=make_form(upload_a_proof_of_death=has_proof_of_death)
+        form=make_form(do_you_have_a_proof_of_death=has_proof_of_death)
     )
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
 
+
+@pytest.mark.parametrize(
+    "selection,expected_state,expected_route",
+    [
+        (
+            "yes",
+            "service_person_details_form",
+            MultiPageFormRoutes.SERVICE_PERSON_DETAILS.value,
+        ),
+        (
+            "no",
+            "upload_a_proof_of_death_form",
+            MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH.value,
+        ),
+    ],
+)
+def test_continue_from_are_you_sure_you_want_to_proceed_without_proof_of_death(
+    selection, expected_state, expected_route
+):
+    sm = RoutingStateMachine()
+    sm.continue_from_are_you_sure_you_want_to_proceed_without_proof_of_death_form(
+        form=make_form(
+            are_you_sure_you_want_to_proceed_without_proof_of_death=selection
+        )
+    )
+    assert sm.current_state.id == expected_state
+    assert sm.route_for_current_state == expected_route
+
+def test_continue_from_we_do_not_have_records_for_people_born_after_form():
+    sm = RoutingStateMachine()
+    sm.continue_from_we_do_not_have_records_for_people_born_after_form()
+    assert sm.current_state.id == "are_you_sure_you_want_to_cancel_form"
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value
+    )
 
 # In the real world, upload_proof_of_death interacts with AWS S3, so we mock it here. In this case
 # we test the scenario where it returns None, simulating a failed upload.

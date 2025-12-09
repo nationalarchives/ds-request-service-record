@@ -25,22 +25,22 @@ pages:
               information and will be closed by default. However, we can complete a sensitivity 
               check of the record to assess what can be released. In some cases, we will not be able 
               to supply the record at all, or large parts of it will be redacted.
-    xxxx:
-      heading: ███
+    fees:
+      heading: Fees
       paragraphs:
-        - ████████ ██ █████ ████████ █████ ██ ████ ████
-        - ████████ ██████ ████████ ██████ █████
+        - We charge a fee to recover the administrative costs of answering your request.
+        - The fee will depend on the service you select. You can pay with a debit or credit card.
     table:
       headers:
         - Service option
-        - ██
+        - Fee
       rows:
         - option: Standard
-          fee: ███
+          fee: £42.25
         - option: Full sensitivity check
-          fee: ██ █████ ███ ███
+          fee: £48.87 plus £1.04 per page copying fee
     delivery_method: |
-      ████████ ██████ ██ █████ ██████ █████ ██ ████ ████
+      Records are delivered digitally via email. However, you can request a physical copy by post for an additional cost.
   how_we_process_requests:
     heading: How we process requests
     paragraphs:
@@ -164,7 +164,7 @@ pages:
       - General
       - Field Marshal
   have_you_previously_made_a_request:
-    heading: Have you previously made a request?
+    heading: Have you previously made a request for this record?
   must_submit_subject_access_request:
     heading: Submit a data access request
     paragraphs:
@@ -187,6 +187,7 @@ pages:
         The majority of the service personnel records for Commissioned Officers have not yet been 
         transferred to The National Archives. Please use the Ministry of Defence service to request 
         access to the Officer records.
+    call_to_action: Request from the Ministry of Defence
   we_are_unlikely_to_hold_officer_records__raf:
     heading: We are unlikely to hold this record
     paragraphs:
@@ -200,6 +201,7 @@ pages:
         in the list.
     list:
       - Royal Air Force
+    call_to_action: Request from the Ministry of Defence
   we_are_unlikely_to_hold_officer_records__army:
     heading: We are unlikely to hold this record
     paragraphs:
@@ -213,15 +215,12 @@ pages:
     list:
       - Grenadier Guards
       - Welsh Guards
-  we_do_not_have_records_for_people_born_before:
-    heading: We do not have records for people born before 1800
-    paragraphs:
-      - Sorry, but here is some helpful information
+    call_to_action: Request from the Ministry of Defence
   we_do_not_have_records_for_people_born_after:
-    heading: We do not have this record
+    heading: We do not have records for people born after 1939
     paragraphs:
       - You will need to request the service record from the Ministry of Defence.
-    call_to_action: Apply for MOD records
+    call_to_action: Request from the Ministry of Defence
   we_are_unlikely_to_locate_this_record:
     heading: We are unlikely to be able to locate this record
     paragraphs:
@@ -260,18 +259,28 @@ pages:
       - no more than 5MB
       - clear and show all the death certificate
   service_person_details:
-    heading: About the service person
+    heading: Tell us as much as you know about the service person
+    paragraphs:
+      - Answer as many questions on this page as you can. This will help our staff find the record.
   do_you_have_a_proof_of_death:
     heading: Provide a proof of death
     paragraphs:
-      - You will need to upload a digital copy of a proof of death for the service person.
+      - As you are requesting a record for someone born after 1909, you will need to provide a digital copy of a proof of death.
       - >
-        The copy of proof of death must be:
+        You'll need to submit one of the following forms of evidence:
     list_items:
-      - "[copies of death certificates](COPIES_OF_DEATH_CERTIFICATES)"
+      - "[copies of death certificates (opens in new tab)](COPIES_OF_DEATH_CERTIFICATES)"
       - published obituaries (detailing publication source, name of deceased, and date of birth and death)
-      - "[war dead records](CWGC_WAR_DEAD_RECORDS)"
-    warning: If you do not send a proof of death when required, it is likely that we will withold all of the requested information and cannot provide the record.
+      - "[Commonwealth War Graves’ (CWG) war dead records (opens in new tab)](CWGC_WAR_DEAD_RECORDS)"
+    copy_requirements: "The copy of proof of death must be:"
+    copy_requirements_list:
+      - In a JPG, GIF or PNG format
+      - No more than 5MB in size
+      - Clearly show all the information so our staff can read it
+    warning: If you do not submit a proof of death when required, it is unlikely that we will be able to provide the record.
+  are_you_sure_you_want_to_proceed_without_proof_of_death:
+    heading: Are you sure you want to proceed without a proof of death?
+    warning: If you do not submit a proof of death when required, it is unlikely that we will be able to provide the record.
   confirm_payment_received:
     heading: Payment received
   payment_link_creation_failed:
@@ -353,13 +362,13 @@ forms:
     we_may_hold_this_record:
       call_to_action: Continue
     forenames:
-      label: Forenames (including middle names)
+      label: First name
       messages:
-        required: Enter forenames
+        required: Enter first name
     last_name:
       label: Last name
       messages:
-        required: Enter a last name
+        required: Enter last name
     other_last_names:
       label: Other last names (optional)
     date_of_birth:
@@ -368,18 +377,27 @@ forms:
       messages:
         required: Enter the service person's date of birth
         past_date: The date of birth must be in the past
+        born_too_early: Date of birth must be after 31 December 1799. Records prior to this date are not contained in this collection.
       call_to_action: Continue
     place_of_birth:
       label: Place of birth (optional)
     date_of_death:
       label: Date of death (optional)
-      description: The date of death must include a day, month, and year
+      description: For example, 31 3 2000, or 2000
       messages:
         past_date: The date of death must be in the past
     do_you_have_a_proof_of_death:
       label: Do you have a proof of death?
       messages:
         required: Tell us if you have a proof of death
+      call_to_action: Continue
+    are_you_sure_you_want_to_proceed_without_proof_of_death:
+      options:
+        "yes": Yes, I would like to continue without a proof of death
+        "no": No, I would like to upload a proof of death
+      label: Please confirm your selection
+      messages:
+        required: You must confirm your selection to proceed
       call_to_action: Continue
     upload_a_proof_of_death:
       label: Upload a file
@@ -389,8 +407,10 @@ forms:
       call_to_action: Continue
     service_number:
       label: Service number (optional)
+      hint: The unique number assigned to a service person
     regiment:
-      label: Regiment (optional)
+      label: Regiment or squadron (optional)
+      hint: Provide the last regiment or squadron they served in if they served in more than one
     service_branch:
       label: Which military branch did the person serve in?
       messages:
@@ -398,8 +418,7 @@ forms:
     additional_information:
       label: Additional information (optional)
       description: |
-        If you have any additional information that might help us to find the service record, please provide it here.
-        This could include details such as the service person's rank, unit, occupation or any other relevant information.
+        Anything else you know about them that you think might help our search
     died_in_service:
       label: Did they die in service? (optional)
       messages:
@@ -463,3 +482,5 @@ forms:
         continue: Continue with a full record check order
       messages:
         no_radio_selected: Select how you would like your order processed
+    we_are_unlikely_to_hold_this_record:
+      call_to_action: Continue this request

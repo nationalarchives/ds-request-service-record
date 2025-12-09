@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
+{% from "components/warning/macro.html" import tnaWarning %}
 
 {%- set pageTitle = content.app.title -%}
-{%- set back_link_endpoint = route_for_back_link if route_for_back_link else 'main.we_may_hold_this_record' -%}
 
 {% block beforeContent %}
-  {{ backLink(url_for(back_link_endpoint)) }}
+  {{ backLink(url_for('main.do_you_have_a_proof_of_death')) }}
 {% endblock %}
 
 {% block content %}
@@ -15,9 +15,15 @@
         {% if form.errors %}
           {{ tnaErrorSummary(wtforms_errors(form)) }}
         {% endif %}
-        <form action="{{ url_for('main.what_was_their_date_of_birth') }}" method="post" novalidate>
+        <h1
+          class="tna-heading-xl">{{ content.pages.are_you_sure_you_want_to_proceed_without_proof_of_death.heading }}</h1>
+        {{ tnaWarning({
+          "headingLevel": 2,
+          "body": content.pages.are_you_sure_you_want_to_proceed_without_proof_of_death.warning
+        }) }}
+        <form action="{{ url_for('main.are_you_sure_you_want_to_proceed_without_proof_of_death') }}" method="post" novalidate>
           {{ form.csrf_token }}
-          {{ form.what_was_their_date_of_birth(params={'headingLevel':1, 'headingSize':'xl'}) }}
+          {{ form.are_you_sure_you_want_to_proceed_without_proof_of_death(params={'headingLevel':2, 'headingSize':'l'}) }}
           <div class="tna-button-group">
             {{ form.submit(params={'classes':'tna-button--accent'}) }}
           </div>
@@ -25,4 +31,5 @@
       </div>
     </div>
   </div>
+
 {% endblock %}

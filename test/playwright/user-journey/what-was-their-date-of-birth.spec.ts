@@ -24,6 +24,18 @@ test.describe("the 'What was their date of birth?' form", () => {
         );
       });
 
+      test("with a date before 1800, the correct validation message is shown", async ({
+        page,
+      }) => {
+        await page.getByLabel("Day").fill("01");
+        await page.getByLabel("Month").fill("01");
+        await page.getByLabel("Year").fill("1799");
+        await page.getByRole("button", { name: /Continue/i }).click();
+        await expect(page.locator(".tna-fieldset__error")).toHaveText(
+          /Date of birth must be after 31 December 1799. Records prior to this date are not contained in this collection./,
+        );
+      });
+
       test("with a date in the future, the correct validation message is shown", async ({
         page,
       }) => {
@@ -68,27 +80,18 @@ test.describe("the 'What was their date of birth?' form", () => {
           day: "01",
           year: "1890",
           nextUrl: Paths.SERVICE_PERSON_DETAILS,
-          heading: /About the service person/,
+          heading: /Tell us as much as you know about the service person/,
           description:
-            "when the year of birth is 1890, the 'About the service person' page is shown and any 'Back' links work as expected",
-        },
-        {
-          month: "01",
-          day: "01",
-          year: "1690",
-          nextUrl: Paths.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_BEFORE,
-          heading: /We do not have records for people born before/,
-          description:
-            "when the year of birth is 1690, the 'We do not have records for people born before' page is shown and any 'Back' links work as expected",
+            "when the year of birth is 1890, the 'Tell us as much as you know about the service person' page is shown and any 'Back' links work as expected",
         },
         {
           month: "01",
           day: "01",
           year: "1950",
           nextUrl: Paths.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER,
-          heading: /We do not have this record/,
+          heading: /We do not have records for people born after 1939/,
           description:
-            "when the year of birth is 1950, the 'We do not have this record' page is shown and any 'Back' links work as expected",
+            "when the year of birth is 1950, the 'We do not have records for people born after 1939' page is shown and any 'Back' links work as expected",
         },
         {
           month: "01",
