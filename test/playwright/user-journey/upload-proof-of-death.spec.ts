@@ -22,6 +22,15 @@ test.describe("The 'Upload proof of death' form", () => {
   });
 
   test.describe("when submitted", () => {
+    test("without an uploaded file, allows the user to continue to the next page with a 'Back' link that functions as expected", async ({
+      page,
+    }) => {
+      await page.getByRole("button", { name: /Continue/i }).click();
+      await expect(page).toHaveURL(Paths.SERVICE_PERSON_DETAILS);
+      await page.getByRole("link", { name: "Back" }).click();
+      await expect(page).toHaveURL(Paths.UPLOAD_A_PROOF_OF_DEATH);
+    });
+
     test("with an uploaded file with the incorrect extension, shows an error", async ({
       page,
     }) => {
@@ -50,7 +59,7 @@ test.describe("The 'Upload proof of death' form", () => {
           /The selected file must be smaller than 5MB/,
         );
       });
-      test(`with a file that has a valid extension (of .${extension}) and is below the size limit, presents next page`, async ({
+      test(`with a file that has a valid extension (of .${extension}) and is below the size limit, presents next page with a 'Back' link that functions as expected`, async ({
         page,
       }) => {
         await page.getByLabel("Upload a file").setInputFiles({
@@ -60,6 +69,8 @@ test.describe("The 'Upload proof of death' form", () => {
         });
         await page.getByRole("button", { name: /Continue/i }).click();
         await expect(page).toHaveURL(Paths.SERVICE_PERSON_DETAILS);
+        await page.getByRole("link", { name: "Back" }).click();
+        await expect(page).toHaveURL(Paths.UPLOAD_A_PROOF_OF_DEATH);
       });
     });
   });

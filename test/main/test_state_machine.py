@@ -364,6 +364,7 @@ def test_continue_from_are_you_sure_you_want_to_proceed_without_proof_of_death(
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
 
+
 def test_continue_from_we_do_not_have_records_for_people_born_after_form():
     sm = RoutingStateMachine()
     sm.continue_from_we_do_not_have_records_for_people_born_after_form()
@@ -372,6 +373,7 @@ def test_continue_from_we_do_not_have_records_for_people_born_after_form():
         sm.route_for_current_state
         == MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value
     )
+
 
 # In the real world, upload_proof_of_death interacts with AWS S3, so we mock it here. In this case
 # we test the scenario where it returns None, simulating a failed upload.
@@ -406,13 +408,12 @@ def test_continue_from_upload_a_proof_of_death_where_upload_proof_of_death_retur
 
 # In this case we are again testing sm.continue_from_upload_a_proof_of_death_form but there is no
 # need to mock upload_proof_of_death as the form's proof_of_death field is None, simulating
-# the user not uploading a file (e.g. they submitted the form without selecting a file and our
-# validation didn't catch it for some reason).
-def test_continue_from_upload_a_proof_of_death_where_submitted_proof_of_death_is_none():
+# the user not uploading a file (e.g. they submitted the form without selecting a file).
+def test_continue_from_upload_a_proof_of_death_where_proof_of_death_is_not_provided():
     sm = RoutingStateMachine()
     sm.continue_from_upload_a_proof_of_death_form(form=make_form(proof_of_death=None))
-    assert sm.current_state.id == "upload_a_proof_of_death_form"
-    assert sm.route_for_current_state == "main.upload_a_proof_of_death"
+    assert sm.current_state.id == "service_person_details_form"
+    assert sm.route_for_current_state == "main.service_person_details"
 
 
 def test_continue_from_service_person_details():

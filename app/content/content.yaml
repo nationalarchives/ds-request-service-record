@@ -253,11 +253,12 @@ pages:
     heading: Upload a proof of death
     paragraphs:
       - >
-        The file must be:
+        The copy of proof of death must be:
     list_items:
-      - JPG, PNG or GIF
-      - no more than 5MB
-      - clear and show all the death certificate
+      - In a JPG, GIF or PNG format
+      - No more than 5MB in size
+      - Clearly show all the information so our staff can read it
+    if_unable_to_upload: If you are unable to upload your file, you can send it to us by replying directly to the email you will receive on completion of this form.
   service_person_details:
     heading: Tell us as much as you know about the service person
     paragraphs:
