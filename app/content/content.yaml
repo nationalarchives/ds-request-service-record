@@ -165,6 +165,7 @@ pages:
       - Field Marshal
   have_you_previously_made_a_request:
     heading: Have you previously made a request for this record?
+    prompt_to_provide_reference_number: If you selected yes, please provide the reference number for your previous request.
   must_submit_subject_access_request:
     heading: Submit a data access request
     paragraphs:
@@ -253,11 +254,12 @@ pages:
     heading: Upload a proof of death
     paragraphs:
       - >
-        The file must be:
+        The copy of proof of death must be:
     list_items:
-      - JPG, PNG or GIF
-      - no more than 5MB
-      - clear and show all the death certificate
+      - In a JPG, GIF or PNG format
+      - No more than 5MB in size
+      - Clearly show all the information so our staff can read it
+    if_unable_to_upload: If you are unable to upload your file, you can send it to us by replying directly to the email you will receive on completion of this form.
   service_person_details:
     heading: Tell us as much as you know about the service person
     paragraphs:
@@ -297,8 +299,8 @@ pages:
     heading: Your postal address
     paragraphs:
       - Please provide a postal address so we can contact you.
-  how_do_you_want_your_order_processed:
-    heading: How do you want your order processed?
+  choose_your_order_type:
+    heading: Choose your order type
     paragraphs:
       - There are two ways to request a record from us.
     order_type_one:
@@ -424,12 +426,17 @@ forms:
       messages:
         required: Select yes if the service person died in service
     have_you_previously_made_a_request:
-      mod_reference:
-        label: Have you made a request for this record with the Ministry of Defence before? (optional)
-        hint_text: If so, please provide your reference number. This might start with 'APV' followed by a series of numbers.
+      label: Select one option
+      messages:
+        required: Please select an option
+        reference_number_required: Enter the reference number for your previous request
+      options:
+        "yes_mod": Yes, to the Ministry of Defence
+        "yes_tna": Yes, to The National Archives
+        "no": "No"
       case_reference_number:
-        label: Have you made a request for this record with us before? (optional)
-        hint_text: If so, provide your case reference number. This might start with 'CAS' or 'SPR' followed by a series of numbers.
+        label: Reference number
+        hint_text: This might either start with 'APV', 'CAS' or 'SPR' followed by a series of numbers.
       call_to_action: Continue
     requester_first_name:
       label: First name
@@ -468,7 +475,7 @@ forms:
         required: Select a country
     proceed_to_payment:
       call_to_action: Proceed to make payment using GOV.UK Pay
-    how_do_you_want_your_order_processed:
+    choose_your_order_type:
       label: Please choose a format
       standard:
         label: Standard

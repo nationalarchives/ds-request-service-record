@@ -7,6 +7,7 @@ from app.lib.decorators.with_back_url_saved_to_session import (
 from app.lib.decorators.with_form_prefilled_from_session import (
     with_form_prefilled_from_session,
 )
+from app.lib.get_back_link_route import get_back_link_route
 from app.lib.save_catalogue_reference_to_session import (
     save_catalogue_reference_to_session,
 )
@@ -24,8 +25,8 @@ from app.main.forms.exit_this_form import ExitThisForm
 from app.main.forms.have_you_previously_made_a_request import (
     HaveYouPreviouslyMadeARequest,
 )
-from app.main.forms.how_do_you_want_your_order_processed import (
-    HowDoYouWantYourOrderProcessed,
+from app.main.forms.choose_your_order_type import (
+    ChooseYourOrderType,
 )
 from app.main.forms.how_we_process_requests import HowTheProcessWorks
 from app.main.forms.is_service_person_alive import IsServicePersonAlive
@@ -344,6 +345,7 @@ def are_you_sure_you_want_to_proceed_without_proof_of_death(form, state_machine)
         content=load_content(),
     )
 
+
 @bp.route("/we-do-not-have-records-for-people-born-after/", methods=["GET", "POST"])
 @with_route_for_back_link_saved_to_session(
     route=MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER.value
@@ -352,7 +354,9 @@ def are_you_sure_you_want_to_proceed_without_proof_of_death(form, state_machine)
 @with_form_prefilled_from_session(ExitThisForm)
 def we_do_not_have_records_for_people_born_after(form, state_machine):
     if form.validate_on_submit():
-        state_machine.continue_from_we_do_not_have_records_for_people_born_after_form(form)
+        state_machine.continue_from_we_do_not_have_records_for_people_born_after_form(
+            form
+        )
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/we-do-not-have-records-for-people-born-after.html",
@@ -435,16 +439,16 @@ def your_postal_address(form, state_machine):
     )
 
 
-@bp.route("/how-do-you-want-your-order-processed/", methods=["GET", "POST"])
+@bp.route("/choose-your-order-type/", methods=["GET", "POST"])
 @with_state_machine
-def how_do_you_want_your_order_processed(state_machine):
-    form = HowDoYouWantYourOrderProcessed()
+def choose_your_order_type(state_machine):
+    form = ChooseYourOrderType()
     if form.validate_on_submit():
         save_submitted_form_fields_to_session(form)
-        state_machine.continue_from_how_do_you_want_your_order_processed_form(form)
+        state_machine.continue_from_choose_your_order_type_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/how-do-you-want-your-order-processed.html",
+        "main/choose-your-order-type.html",
         form=form,
         content=load_content(),
     )
@@ -454,9 +458,20 @@ def how_do_you_want_your_order_processed(state_machine):
 @with_form_prefilled_from_session(UploadAProofOfDeath)
 @with_state_machine
 def upload_a_proof_of_death(form, state_machine):
-    if form.validate_on_submit():
+
+    valid_submission = form.validate_on_submit()
+
+    correct_back_link = get_back_link_route(
+        current_route=MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH.value,
+        valid_submission=valid_submission,
+        back_link_in_session=session.get("route_for_back_link", False),
+    )
+
+    if correct_back_link:
+        session["route_for_back_link"] = correct_back_link
+
+    if valid_submission:
         state_machine.continue_from_upload_a_proof_of_death_form(form)
-        save_submitted_form_fields_to_session(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/upload-a-proof-of-death.html",

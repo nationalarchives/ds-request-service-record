@@ -24,11 +24,14 @@
             <li>{{ item }}</li>
           {% endfor %}
         </ul>
+        <p class="tna-!--margin-bottom-m">
+          {{ content.pages.upload_a_proof_of_death.if_unable_to_upload }}
+        </p>
         <form action="{{ url_for('main.upload_a_proof_of_death') }}" method="post" enctype="multipart/form-data" novalidate>
           {{ form.proof_of_death }}
           {{ form.csrf_token }}
           <div class="tna-button-group">
-            {{ form.submit(params={'accent':'true', 'icon':'chevron-right', 'rightAlignIcon':'true'}) }}
+            {{ form.submit(params={'classes':'tna-button--accent'}) }}
           </div>
         </form>
       </div>

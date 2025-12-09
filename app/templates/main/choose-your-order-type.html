@@ -3,7 +3,7 @@
 {%- set pageTitle = content.app.title -%}
 
 {% block beforeContent %}
-  {{ backLink(url_for('main.your_details')) }}
+  {{ backLink(url_for('main.have_you_previously_made_a_request')) }}
 {% endblock %}
 
 {% block content %}
@@ -14,21 +14,21 @@
         {% if form.errors %}
           {{ tnaErrorSummary(wtforms_errors(form)) }}
         {% endif %}
-        <h1 class="tna-heading-xl">{{ content.pages.how_do_you_want_your_order_processed.heading }}</h1>
-        {% for paragraph in content.pages.how_do_you_want_your_order_processed.paragraphs %}
+        <h1 class="tna-heading-xl">{{ content.pages.choose_your_order_type.heading }}</h1>
+        {% for paragraph in content.pages.choose_your_order_type.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
         <h2 class="tna-heading-l">
-          {{ content.pages.how_do_you_want_your_order_processed.order_type_one.heading }}<br>
+          {{ content.pages.choose_your_order_type.order_type_one.heading }}<br>
           <span
-            class="tna-heading-s">{{ content.pages.how_do_you_want_your_order_processed.order_type_one.sub_heading }}</span>
+            class="tna-heading-s">{{ content.pages.choose_your_order_type.order_type_one.sub_heading }}</span>
         </h2>
-        {% for paragraph in content.pages.how_do_you_want_your_order_processed.order_type_one.paragraphs %}
+        {% for paragraph in content.pages.choose_your_order_type.order_type_one.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
-        {% if content.pages.how_do_you_want_your_order_processed.order_type_one.table_rows %}
+        {% if content.pages.choose_your_order_type.order_type_one.table_rows %}
           <table class="tna-table">
-            {% for row in content.pages.how_do_you_want_your_order_processed.order_type_one.table_rows %}
+            {% for row in content.pages.choose_your_order_type.order_type_one.table_rows %}
               <tr class="tna-table__row">
                 <th class="tna-table__header">{{ row.header }}</th>
                 <td class="tna-table__cell tna-table__cell--numeric">{{ row.data }}</td>
@@ -38,28 +38,28 @@
         {% endif %}
 
 
-        <form action="{{ url_for('main.how_do_you_want_your_order_processed') }}" method="post" novalidate
+        <form action="{{ url_for('main.choose_your_order_type') }}" method="post" novalidate
               class="form-separator">
           {{ form.csrf_token(id='standard-option') }}
           {# The processing_option fields are hard-coded to allow a single HowDoYouWantYourOrderProcessed form to be reused in the page #}
           <input type="hidden" name="processing_option" value="standard"/>
-          {{ form.how_do_you_want_your_order_processed_standard_option() }}
+          {{ form.choose_your_order_type_standard_option() }}
           <div class="tna-button-group">
             {{ form.submit_standard(params={'accent':'true'}) }}
           </div>
         </form>
 
         <h2 class="tna-heading-l">
-          {{ content.pages.how_do_you_want_your_order_processed.order_type_two.heading }}
+          {{ content.pages.choose_your_order_type.order_type_two.heading }}
         </h2>
 
-        {% for paragraph in content.pages.how_do_you_want_your_order_processed.order_type_two.paragraphs %}
+        {% for paragraph in content.pages.choose_your_order_type.order_type_two.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
 
-        {% if content.pages.how_do_you_want_your_order_processed.order_type_two.table_rows %}
+        {% if content.pages.choose_your_order_type.order_type_two.table_rows %}
           <table class="tna-table">
-            {% for row in content.pages.how_do_you_want_your_order_processed.order_type_two.table_rows %}
+            {% for row in content.pages.choose_your_order_type.order_type_two.table_rows %}
               <tr class="tna-table__row">
                 <th class="tna-table__header">{{ row.header }}</th>
                 <td class="tna-table__cell tna-table__cell--numeric">{{ row.data }}</td>
@@ -68,11 +68,11 @@
           </table>
         {% endif %}
 
-        <form action="{{ url_for('main.how_do_you_want_your_order_processed') }}" method="post" novalidate>
+        <form action="{{ url_for('main.choose_your_order_type') }}" method="post" novalidate>
           {{ form.csrf_token(id='full-option') }}
           {# The processing_option fields are hard-coded to allow a single HowDoYouWantYourOrderProcessed form to be reused in the page #}
           <input type="hidden" name="processing_option" value="full"/>
-          {{ form.how_do_you_want_your_order_processed_full_option() }}
+          {{ form.choose_your_order_type_full_option() }}
           <div class="tna-button-group">
             {{ form.submit_full_check(params={'accent':'true'}) }}
           </div>

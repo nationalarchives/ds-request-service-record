@@ -8,7 +8,7 @@ export const Paths = {
   ARE_YOU_SURE_YOU_WANT_TO_CANCEL: `${basePath}/are-you-sure-you-want-to-cancel/`,
   YOU_MAY_WANT_TO_CHECK_ANCESTRY: `${basePath}/check-ancestry/`,
   HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST: `${basePath}/have-you-previously-made-a-request/`,
-  HOW_DO_YOU_WANT_YOUR_ORDER_PROCESSED: `${basePath}/how-do-you-want-your-order-processed/`,
+  CHOOSE_YOUR_ORDER_TYPE: `${basePath}/choose-your-order-type/`,
   IS_SERVICE_PERSON_ALIVE: `${basePath}/is-service-person-alive/`,
   JOURNEY_START: `${basePath}/`,
   MUST_SUBMIT_SUBJECT_ACCESS: `${basePath}/must-submit-subject-access/`,

@@ -14,17 +14,88 @@ test.describe("have you previously made a request", () => {
   });
 
   test.describe("when submitted", () => {
-    test("the user is taken to the 'Your details' page", async ({ page }) => {
-      await page.getByRole("button", { name: /Continue/i }).click();
-      await expect(page).toHaveURL(Paths.YOUR_DETAILS);
-      await expect(page.locator("h1")).toHaveText(/Your details/);
-    });
-
-    test("clicking 'Back' from 'Have you previously made a request for this record? ' brings the user back to the 'Service person details' page", async ({
+    test("without a selection, the user is shown an error message", async ({
       page,
     }) => {
-      await page.getByRole("link", { name: "Back" }).click();
-      await expect(page).toHaveURL(Paths.SERVICE_PERSON_DETAILS);
+      await page.getByRole("button", { name: /Continue/i }).click();
+      await expect(page.locator(".tna-fieldset__error")).toHaveText(
+        /Please select an option/,
+      );
     });
+
+    const selectionMappings = [
+      {
+        description:
+          "with MoD selected and no reference number provided, there is an error message",
+        label: "Yes, to the Ministry of Defence",
+        populateReferenceNumber: false,
+        errorMessage: /Enter the reference number for your previous request/,
+      },
+      {
+        description:
+          "with TNA selected and no reference number provided, there is an error message",
+        label: "Yes, to The National Archives",
+        populateReferenceNumber: false,
+        errorMessage: /Enter the reference number for your previous request/,
+      },
+      {
+        description:
+          "with MoD selected and a reference number provided, the user proceeds to the 'Choose your order type' page",
+        label: "Yes, to the Ministry of Defence",
+        populateReferenceNumber: true,
+        expectedHeading: /Choose your order type/,
+      },
+      {
+        description:
+          "with TNA selected and a reference number provided, the user proceeds to the 'Choose your order type' page",
+        label: "Yes, to The National Archives",
+        populateReferenceNumber: true,
+        expectedHeading: /Choose your order type/,
+      },
+    ];
+
+    selectionMappings.forEach(
+      ({
+        description,
+        label,
+        errorMessage,
+        populateReferenceNumber,
+        expectedHeading,
+      }) => {
+        test(description, async ({ page }) => {
+          await page.getByLabel(label, { exact: true }).check();
+
+          if (populateReferenceNumber) {
+            await page.getByLabel("Reference number").fill("ABC123");
+            await page.getByRole("button", { name: /Continue/i }).click();
+            await expect(page).toHaveURL(Paths.CHOOSE_YOUR_ORDER_TYPE);
+            await expect(page.locator("h1")).toHaveText(
+              /Choose your order type/,
+            );
+          } else {
+            await page.getByRole("button", { name: /Continue/i }).click();
+            await expect(page.locator(".tna-error-summary")).toHaveText(
+              errorMessage,
+            );
+          }
+        });
+      },
+    );
+  });
+
+  test("with 'No' selected, the user is taken to the 'Choose your order type' page", async ({
+    page,
+  }) => {
+    await page.getByLabel("No", { exact: true }).check();
+    await page.getByRole("button", { name: /Continue/i }).click();
+    await expect(page).toHaveURL(Paths.CHOOSE_YOUR_ORDER_TYPE);
+    await expect(page.locator("h1")).toHaveText(/Choose your order type/);
+  });
+
+  test("clicking 'Back' from 'Have you previously made a request' brings the user back to the 'Service person details' page", async ({
+    page,
+  }) => {
+    await page.getByRole("link", { name: "Back" }).click();
+    await expect(page).toHaveURL(Paths.SERVICE_PERSON_DETAILS);
   });
 });

@@ -11,10 +11,14 @@
     <div class="tna-container">
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+        {% if form.errors %}
+          {{ tnaErrorSummary(wtforms_errors(form)) }}
+        {% endif %}
         <h1 class="tna-heading-xl">{{ content.pages.have_you_previously_made_a_request.heading }}</h1>
         <form action="{{ url_for('main.have_you_previously_made_a_request') }}" method="post" novalidate>
           {{ form.csrf_token }}
-          {{ form.mod_reference(params={'size':'m'}) }}
+          <p>{{ content.pages.have_you_previously_made_a_request.prompt_to_provide_reference_number }}</p>
+          {{ form.have_you_previously_made_a_request(params={'size':'m'}) }}
           {{ form.case_reference_number(params={'size':'m'}) }}
           <div class="tna-button-group">
             {{ form.submit(params={'classes':'tna-button--accent'}) }}
