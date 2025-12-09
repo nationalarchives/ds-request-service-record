@@ -246,6 +246,10 @@ class RoutingStateMachine(StateMachine):
         )
     )
 
+    continue_from_we_do_not_have_records_for_people_born_after_form = initial.to(
+        are_you_sure_you_want_to_cancel_form
+    )
+
     continue_from_do_you_have_a_proof_of_death_form = initial.to(
         upload_a_proof_of_death_form, unless="does_not_have_proof_of_death"
     ) | initial.to(are_you_sure_you_want_to_proceed_without_proof_of_death_form)

@@ -344,20 +344,21 @@ def are_you_sure_you_want_to_proceed_without_proof_of_death(form, state_machine)
         content=load_content(),
     )
 
-
-@bp.route("/we-do-not-have-records-for-people-born-before/", methods=["GET"])
-def we_do_not_have_records_for_people_born_before():
-    return render_template(
-        "main/we-do-not-have-records-for-people-born-before.html",
-        content=load_content(),
-    )
-
-
-@bp.route("/we-do-not-have-records-for-people-born-after/", methods=["GET"])
-def we_do_not_have_records_for_people_born_after():
+@bp.route("/we-do-not-have-records-for-people-born-after/", methods=["GET", "POST"])
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER.value
+)
+@with_state_machine
+@with_form_prefilled_from_session(ExitThisForm)
+def we_do_not_have_records_for_people_born_after(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_we_do_not_have_records_for_people_born_after_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/we-do-not-have-records-for-people-born-after.html",
         content=load_content(),
+        form=form,
+        mod_service_link=ExternalLinks.MOD_SERVICE,
     )
 
 
