@@ -9,6 +9,7 @@ from app.lib.db_handler import (
     add_gov_uk_dynamics_payment,
     add_service_record_request,
     delete_dynamics_payment,
+    delete_service_record_request,
     get_dynamics_payment,
     get_gov_uk_dynamics_payment,
     get_payment_id_from_record_id,
@@ -17,6 +18,7 @@ from app.lib.db_handler import (
 )
 from app.lib.decorators.state_machine_decorator import with_state_machine
 from app.lib.gov_uk_pay import (
+    FAILED_PAYMENT_STATUSES,
     SUCCESSFUL_PAYMENT_STATUSES,
     UNFINISHED_PAYMENT_STATUSES,
     create_payment,
@@ -53,6 +55,8 @@ def send_to_gov_uk_pay():
                 return redirect(url_for("main.confirm_payment_received"))
             elif payment_status in UNFINISHED_PAYMENT_STATUSES:
                 return redirect(f"https://card.payments.service.gov.uk/card_details/{payment_id}")
+            elif payment_status in FAILED_PAYMENT_STATUSES:
+                delete_service_record_request(existing_record)
 
     id = str(uuid.uuid4())
 
