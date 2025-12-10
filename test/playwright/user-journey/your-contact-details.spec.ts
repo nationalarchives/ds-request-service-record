@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { Paths } from "../lib/constants";
+
 test.describe("Your contact details", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START);
@@ -11,22 +12,6 @@ test.describe("Your contact details", () => {
   });
 
   test.describe("when submitted", () => {
-    test("without the form having been completed, shows an error", async ({
-      page,
-    }) => {
-      await page.getByRole("button", { name: /Continue/i }).click();
-      await expect(page.locator(".tna-form-item__error")).toHaveCount(3);
-      await expect(page.locator(".tna-form-item__error").first()).toHaveText(
-        /Enter your first name/,
-      );
-      await expect(page.locator(".tna-form-item__error").nth(1)).toHaveText(
-        /Enter you last name/,
-      );
-      await expect(page.locator(".tna-form-item__error").nth(2)).toHaveText(
-        /Enter an email address in the correct format, like name@example.com. If you do not have an email address, please select 'I do not have an email address' below/,
-      );
-    });
-
     test.describe("with the form completed", () => {
       test("takes the user to the 'What is your address?' page if the user doesn't have an email address", async ({
         page,
@@ -53,6 +38,81 @@ test.describe("Your contact details", () => {
         await page.getByLabel("Email", { exact: true }).fill("john@doe.com");
         await page.getByRole("button", { name: /Continue/i }).click();
         await expect(page).toHaveURL(Paths.YOUR_ORDER_SUMMARY);
+      });
+    });
+
+    test.describe("validation failure scenarios", () => {
+      test("without the form having been completed at all, shows an error", async ({
+        page,
+      }) => {
+        await page.getByRole("button", { name: /Continue/i }).click();
+        await expect(page.locator(".tna-form-item__error")).toHaveCount(3);
+        await expect(page.locator(".tna-form-item__error").first()).toHaveText(
+          /Enter your first name/,
+        );
+        await expect(page.locator(".tna-form-item__error").nth(1)).toHaveText(
+          /Enter your last name/,
+        );
+        await expect(page.locator(".tna-form-item__error").nth(2)).toHaveText(
+          /Enter an email address in the correct format, like name@example.com. If you do not have an email address, please select 'I do not have an email address' below/,
+        );
+      });
+
+      test("with names provided but no information about email, shows an error", async ({
+        page,
+      }) => {
+        await page.getByLabel("First name").fill("Francis");
+        await page.getByLabel("Last name").fill("Palgrave");
+        await page.getByRole("button", { name: /Continue/i }).click();
+        await expect(page.locator(".tna-form-item__error")).toHaveCount(1);
+        await expect(page.locator(".tna-form-item__error").first()).toHaveText(
+          /Enter an email address in the correct format, like name@example.com. If you do not have an email address, please select 'I do not have an email address' below/,
+        );
+      });
+
+      test("with 'I do not have an email' checked but no names provided, shows an error", async ({
+        page,
+      }) => {
+        await page
+          .getByLabel("I do not have an email address")
+          .check({ force: true });
+        await page.getByRole("button", { name: /Continue/i }).click();
+        await expect(page.locator(".tna-form-item__error")).toHaveCount(2);
+        await expect(page.locator(".tna-form-item__error").first()).toHaveText(
+          /Enter your first name/,
+        );
+        await expect(page.locator(".tna-form-item__error").nth(1)).toHaveText(
+          /Enter your last name/,
+        );
+      });
+
+      test("with names provided but an invalid email, shows an error", async ({
+        page,
+      }) => {
+        await page.getByLabel("First name").fill("Francis");
+        await page.getByLabel("Last name").fill("Palgrave");
+        await page.locator("#requester_email").fill("my email address");
+        await page.getByRole("button", { name: /Continue/i }).click();
+        await expect(page.locator(".tna-form-item__error")).toHaveCount(1);
+        await expect(page.locator(".tna-form-item__error").first()).toHaveText(
+          /Enter an email address in the correct format, like name@example.com/,
+        );
+      });
+
+      test("with 'I do not have an email' checked and an email provided, shows an error", async ({
+        page,
+      }) => {
+        await page.getByLabel("First name").fill("Francis");
+        await page.getByLabel("Last name").fill("Palgrave");
+        await page.locator("#requester_email").fill("test@example.com");
+        await page
+          .getByLabel("I do not have an email address")
+          .check({ force: true });
+        await page.getByRole("button", { name: /Continue/i }).click();
+        await expect(page.locator(".tna-form-item__error")).toHaveCount(1);
+        await expect(page.locator(".tna-form-item__error").first()).toHaveText(
+          /You have indicated that you do not have an email address. Please leave this field empty/,
+        );
       });
     });
 

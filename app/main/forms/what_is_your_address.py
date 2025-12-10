@@ -1,5 +1,8 @@
 from app.lib.get_country_choices import get_country_choices
 from app.lib.content import get_field_content, load_content
+from app.main.forms.validation_helpers.country_must_be_selected import (
+    country_must_be_selected,
+)
 from flask_wtf import FlaskForm
 from tna_frontend_jinja.wtforms import (
     TnaSelectWidget,
@@ -75,7 +78,13 @@ class WhatIsYourAddress(FlaskForm):
             get_field_content(content, "requester_country", "prompt_to_select"),
         ],
         widget=TnaSelectWidget(),
-        validators=[],
+        validators=[
+            country_must_be_selected(
+                message=get_field_content(content, "requester_country", "messages")[
+                    "required"
+                ]
+            )
+        ],
     )
 
     submit = SubmitField("Continue", widget=TnaSubmitWidget())

@@ -493,9 +493,7 @@ def test_continue_from_what_is_your_address():
         )
     )
     assert sm.current_state.id == "your_order_summary_form"
-    assert (
-        sm.route_for_current_state == MultiPageFormRoutes.YOUR_ORDER_SUMMARY.value
-    )
+    assert sm.route_for_current_state == MultiPageFormRoutes.YOUR_ORDER_SUMMARY.value
 
 
 @pytest.mark.parametrize("processing_option", ["standard", "full"])

@@ -465,7 +465,7 @@ forms:
     requester_last_name:
       label: Last name
       messages:
-        required: Enter you last name
+        required: Enter your last name
     does_not_have_email:
       label: Email address
       description: I do not have an email address
@@ -475,6 +475,7 @@ forms:
       messages:
         required: Enter an email address in the correct format, like name@example.com. If you do not have an email address, please select 'I do not have an email address' below
         address_format: Enter an email address in the correct format, like name@example.com
+        must_be_empty_if_no_email: You have indicated that you do not have an email address. Please leave this field empty
     requester_address_line_1:
       label: Address line 1
       messages:
@@ -494,6 +495,8 @@ forms:
     requester_country:
       label: Country
       prompt_to_select: Select a country
+      messages:
+        required: Select a country from the list
     proceed_to_payment:
       call_to_action: Proceed to make payment using GOV.UK Pay
     choose_your_order_type:

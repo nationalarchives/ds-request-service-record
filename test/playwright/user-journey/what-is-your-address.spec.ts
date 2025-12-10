@@ -16,7 +16,7 @@ test.describe("what is your address", () => {
       page,
     }) => {
       await page.getByRole("button", { name: /Continue/i }).click();
-      await expect(page.locator(".tna-form-item__error")).toHaveCount(3);
+      await expect(page.locator(".tna-form-item__error")).toHaveCount(4);
       await expect(page.locator(".tna-form-item__error").first()).toHaveText(
         /Enter address line 1, typically the building and street/,
       );
@@ -26,6 +26,9 @@ test.describe("what is your address", () => {
       await expect(page.locator(".tna-form-item__error").nth(2)).toHaveText(
         /Enter postcode/,
       );
+      await expect(page.locator(".tna-form-item__error").nth(3)).toHaveText(
+        /Select a country from the list/,
+      );
     });
 
     test("with the form completed, takes the user to the 'Your order summary' page", async ({
@@ -33,7 +36,8 @@ test.describe("what is your address", () => {
     }) => {
       await page.getByLabel("Address Line 1").fill("123 Non-existent Road");
       await page.getByLabel("Town or city").fill("Non-existent Town");
-      await page.getByLabel("Postcode").fill("NE1 XXX");
+      await page.getByLabel("Postcode").fill("TW9 4DU");
+      await page.getByLabel("Country").selectOption("United Kingdom");
       await page.getByRole("button", { name: /Continue/i }).click();
       await expect(page).toHaveURL(Paths.YOUR_ORDER_SUMMARY);
     });
