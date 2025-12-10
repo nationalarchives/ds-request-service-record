@@ -45,9 +45,10 @@ class MultiPageFormRoutes(Enum):
     DO_YOU_HAVE_A_PROOF_OF_DEATH = "main.do_you_have_a_proof_of_death"
     UPLOAD_A_PROOF_OF_DEATH = "main.upload_a_proof_of_death"
     HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST = "main.have_you_previously_made_a_request"
-    YOUR_DETAILS = "main.your_details"
+    YOUR_CONTACT_DETAILS = "main.your_contact_details"
     YOUR_POSTAL_ADDRESS = "main.your_postal_address"
     CHOOSE_YOUR_ORDER_TYPE = "main.choose_your_order_type"
+    YOUR_ORDER_SUMMARY = "main.your_order_summary"
     SEND_TO_GOV_UK_PAY = "main.send_to_gov_uk_pay"
     REQUEST_SUBMITTED = "main.request_submitted"
 

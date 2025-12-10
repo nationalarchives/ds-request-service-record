@@ -26,3 +26,16 @@ def parse_markdown_links(s):
         return f'<a href="{url}" target="_blank" rel="noreferrer noopener">{text}</a>'
 
     return pattern.sub(replacer, s)
+
+
+def parse_bold_text(s):
+    if not s:
+        return s
+    # Regex to match **text** (non-greedy)
+    pattern = re.compile(r"\*\*(.+?)\*\*")
+
+    def replacer(match):
+        text = match.group(1)
+        return f"<strong>{text}</strong>"
+
+    return pattern.sub(replacer, s)

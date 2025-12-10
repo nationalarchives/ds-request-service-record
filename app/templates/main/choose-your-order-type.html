@@ -16,65 +16,79 @@
         {% endif %}
         <h1 class="tna-heading-xl">{{ content.pages.choose_your_order_type.heading }}</h1>
         {% for paragraph in content.pages.choose_your_order_type.paragraphs %}
-          <p>{{ paragraph }}</p>
+          <p>{{ paragraph | parse_bold_text | safe }}</p>
         {% endfor %}
         <h2 class="tna-heading-l">
-          {{ content.pages.choose_your_order_type.order_type_one.heading }}<br>
+          {{ content.pages.choose_your_order_type.standard.heading }}<br>
           <span
-            class="tna-heading-s">{{ content.pages.choose_your_order_type.order_type_one.sub_heading }}</span>
+            class="tna-heading-s">{{ content.pages.choose_your_order_type.standard.sub_heading }}</span>
         </h2>
-        {% for paragraph in content.pages.choose_your_order_type.order_type_one.paragraphs %}
+        {% for paragraph in content.pages.choose_your_order_type.standard.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
-        {% if content.pages.choose_your_order_type.order_type_one.table_rows %}
+        {% if content.pages.choose_your_order_type.standard.table_rows %}
           <table class="tna-table">
-            {% for row in content.pages.choose_your_order_type.order_type_one.table_rows %}
+            {% for row in content.pages.choose_your_order_type.standard.table_rows %}
               <tr class="tna-table__row">
                 <th class="tna-table__header">{{ row.header }}</th>
-                <td class="tna-table__cell tna-table__cell--numeric">{{ row.data }}</td>
+                <td class="tna-table__cell">{{ row.data | safe }}</td>
               </tr>
             {% endfor %}
           </table>
         {% endif %}
-
-
         <form action="{{ url_for('main.choose_your_order_type') }}" method="post" novalidate
               class="form-separator">
           {{ form.csrf_token(id='standard-option') }}
-          {# The processing_option fields are hard-coded to allow a single HowDoYouWantYourOrderProcessed form to be reused in the page #}
+          {# The processing_option fields are hard-coded to allow a single form to be reused in the page #}
           <input type="hidden" name="processing_option" value="standard"/>
-          {{ form.choose_your_order_type_standard_option() }}
           <div class="tna-button-group">
-            {{ form.submit_standard(params={'accent':'true'}) }}
+            {{ form.submit_standard(params={'classes':'tna-button--accent'}) }}
           </div>
         </form>
-
         <h2 class="tna-heading-l">
-          {{ content.pages.choose_your_order_type.order_type_two.heading }}
+          {{ content.pages.choose_your_order_type.full_record_check.heading }}<br>
+          <span
+            class="tna-heading-s">{{ content.pages.choose_your_order_type.full_record_check.sub_heading }}</span>
         </h2>
-
-        {% for paragraph in content.pages.choose_your_order_type.order_type_two.paragraphs %}
+        {% for paragraph in content.pages.choose_your_order_type.full_record_check.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
-
-        {% if content.pages.choose_your_order_type.order_type_two.table_rows %}
-          <table class="tna-table">
-            {% for row in content.pages.choose_your_order_type.order_type_two.table_rows %}
-              <tr class="tna-table__row">
-                <th class="tna-table__header">{{ row.header }}</th>
-                <td class="tna-table__cell tna-table__cell--numeric">{{ row.data }}</td>
-              </tr>
-            {% endfor %}
-          </table>
-        {% endif %}
-
-        <form action="{{ url_for('main.choose_your_order_type') }}" method="post" novalidate>
-          {{ form.csrf_token(id='full-option') }}
-          {# The processing_option fields are hard-coded to allow a single HowDoYouWantYourOrderProcessed form to be reused in the page #}
+        <table class="tna-table">
+          <tr class="tna-table__row">
+            <th
+              class="tna-table__header">{{ content.pages.choose_your_order_type.full_record_check.table.costs_header }}</th>
+            <td class="tna-table__cell">
+              <p
+                class="tna-!--margin-bottom-s">{{ content.pages.choose_your_order_type.full_record_check.table.costs_data.payments_paragraph }}</p>
+              <ul class="tna-ul--no-list-style tna-ul--spaced">
+                {% for item in content.pages.choose_your_order_type.full_record_check.table.costs_data.list_items %}
+                  <li>{{ item }}</li>
+                {% endfor %}
+              </ul>
+            </td>
+          </tr>
+          <tr class="tna-table__row">
+            <th
+              class="tna-table__header">{{ content.pages.choose_your_order_type.full_record_check.table.delivery_header }}</th>
+            <td class="tna-table__cell">
+              {{ content.pages.choose_your_order_type.full_record_check.table.delivery_data }}
+            </td>
+          </tr>
+          <tr class="tna-table__row">
+            <th
+              class="tna-table__header">{{ content.pages.choose_your_order_type.full_record_check.table.refunds_header }}</th>
+            <td class="tna-table__cell">
+              {{ content.pages.choose_your_order_type.full_record_check.table.refunds_data | safe }}
+            </td>
+          </tr>
+        </table>
+        <form action="{{ url_for('main.choose_your_order_type') }}" method="post" novalidate
+              class="form-separator">
+          {{ form.csrf_token(id='full-check-option') }}
+          {# The processing_option fields are hard-coded to allow a single form to be reused in the page #}
           <input type="hidden" name="processing_option" value="full"/>
-          {{ form.choose_your_order_type_full_option() }}
           <div class="tna-button-group">
-            {{ form.submit_full_check(params={'accent':'true'}) }}
+            {{ form.submit_full_check(params={'classes':'tna-button--accent'}) }}
           </div>
         </form>
       </div>

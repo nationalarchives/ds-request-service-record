@@ -293,8 +293,8 @@ pages:
     heading: Payment incomplete
     paragraphs:
       - Your payment was not completed successfully.
-  your_details:
-    heading: Your details
+  your_contact_details:
+    heading: Your contact details
   your_postal_address:
     heading: Your postal address
     paragraphs:
@@ -302,33 +302,53 @@ pages:
   choose_your_order_type:
     heading: Choose your order type
     paragraphs:
-      - There are two ways to request a record from us.
-    order_type_one:
+      - >
+        There are two ways to request a record from us: **Standard**, or **Full record check**.
+      - For most applicants, Standard will provide the information they are looking for.
+      - We charge a fee for to recover the administrative costs. You’ll need a debit or credit card to pay.
+      - |
+        We deliver records as high-resolution PDF colour scans by email with a download link. If you do not 
+        have an email address, we can post them to you for an extra fee, but postal requests will take longer to handle.
+    standard:
       heading: Standard
       sub_heading: (Recommended)
       paragraphs:
         - |
-          Standard provides a subset of documents in the record. 
-          It will include information that would be of most interest to 
-          the families of service person, such as details provided when 
-          they enlisted, records of service and testimonials.
+          Standard provides a subset of documents in the record. It will include information that would be of most 
+          interest to the families of service person, such as details provided when they enlisted, 
+          records of service and testimonials.
+        - We charge a single fee for Standard, which covers all administrative costs and the delivery of the record.
       table_rows:
-        - header: When you'll get the record
-          data: We cannot confirm when you will receive the record. However, we will aim to respond to your request within 30 working days.
-        - header: ████ ██████ ███
-          data: █████ ██ ██████ ██ ██████ ████ ██████ ███
-    order_type_two:
-      heading: Full sensitivity check
+        - header: What it costs
+          data: £42.25
+        - header: When you will get the record
+          data: Within 20 to 30 working days
+        - header: Refunds
+          data: We will refund a £3.30 record copying fee if we do not hold the record. <br><br>No other refunds are available.
+    full_record_check:
+      heading: Full record check
       paragraphs:
         - |
-          Documents not provided in our standard subset will, in most cases, contain sensitive information and will be closed by default. 
-          However, we can complete a full sensitivity check of the record to assess what can be
-          released. In some cases, we will not be able to supply the record at all, or large parts of it will be redacted.
-      table_rows:
-        - header: When you'll get the record
-          data: We cannot confirm when you will receive the record. However, we will aim to respond to your request within 30 working days.
-        - header: ████ ██████ ███
-          data: █████ ██ ██████ ████ ██████ ███
+          Documents not provided in Standard will, in most cases, contain sensitive information and will be closed 
+          by default. However, we can complete a review of the record to assess what can be released.
+        - In some cases, we will not be able to supply the entire record at all, or large parts of it will be redacted.
+        - |
+          We charge two fees for a Full record check. The first covers the search for the record and a page check. 
+          If found, there is a second fee to copy the record, which is priced per page. 
+          We will quote you for the second payment via email.
+      table:
+        costs_header: What it costs
+        costs_data:
+          payments_paragraph: "There are two payments:"
+          list_items:
+            - An initial £48.87, which covers the record search and a check of the pages
+            - Plus, £1.04 per page found, for example 20 pages will cost £20.80
+        delivery_header: When you will get the record
+        delivery_data: Unknown, we aim to confirm if we hold the record within 30 days.
+        refunds_header: Refunds
+        refunds_data: We will refund a £9.92 page check fee if we do not hold the record. <br><br>No other refunds are available.
+  your_order_summary:
+    heading: Your order summary
   request_submitted:
     heading: Request submitted
     paragraphs:
@@ -451,6 +471,7 @@ forms:
       description: I do not have an email address
     requester_email:
       label: Email
+      hint: Where we will contact you about your request
       messages:
         required: Enter an email address in the correct format, like name@example.com. If you do not have an email address, please select 'I do not have an email address' below
         address_format: Enter an email address in the correct format, like name@example.com
@@ -478,16 +499,8 @@ forms:
     choose_your_order_type:
       label: Please choose a format
       standard:
-        label: Standard
-        digital: Digital standard
-        printed: Printed standard
-        continue: Continue with a standard order
-      full:
-        label: Full check
-        digital: Digital full record check
-        printed: Printed full record check
-        continue: Continue with a full record check order
-      messages:
-        no_radio_selected: Select how you would like your order processed
+        call_to_action: Choose standard
+      full_check:
+        call_to_action: Choose full record check
     we_are_unlikely_to_hold_this_record:
       call_to_action: Continue this request

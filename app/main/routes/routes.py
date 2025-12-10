@@ -41,7 +41,7 @@ from app.main.forms.we_may_hold_this_record import WeMayHoldThisRecord
 from app.main.forms.were_they_a_commissioned_officer import WereTheyACommissionedOfficer
 from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 from app.main.forms.you_may_want_to_check_ancestry import YouMayWantToCheckAncestry
-from app.main.forms.your_details import YourDetails
+from app.main.forms.your_contact_details import YourContactDetails
 from app.main.forms.your_postal_address import YourPostalAddress
 from flask import redirect, render_template, request, session, url_for
 
@@ -398,15 +398,17 @@ def have_you_previously_made_a_request(form, state_machine):
     )
 
 
-@bp.route("/your-details/", methods=["GET", "POST"])
-@with_form_prefilled_from_session(YourDetails)
+@bp.route("/your-contact-details/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(YourContactDetails)
 @with_state_machine
-def your_details(form, state_machine):
+def your_contact_details(form, state_machine):
     if form.validate_on_submit():
         save_submitted_form_fields_to_session(form)
-        state_machine.continue_from_your_details_form(form)
+        state_machine.continue_from_your_contact_details_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
-    return render_template("main/your-details.html", form=form, content=load_content())
+    return render_template(
+        "main/your-contact-details.html", form=form, content=load_content()
+    )
 
 
 @bp.route("/do-you-have-a-proof-of-death/", methods=["GET", "POST"])
@@ -478,6 +480,13 @@ def upload_a_proof_of_death(form, state_machine):
         form=form,
         content=load_content(),
         route_for_back_link=session.get("route_for_back_link", False),
+    )
+
+@bp.route("/your-order-summary/", methods=["GET"])
+def your_order_summary():
+    return render_template(
+        "main/your-order-summary.html",
+        content=load_content(),
     )
 
 
