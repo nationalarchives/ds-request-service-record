@@ -23,7 +23,7 @@
 
         <form action="{{ url_for('main.service_person_details') }}" method="post" novalidate>
           {{ form.csrf_token }}
-          {{ form.forenames(params={'headingLevel':2, 'size':'m', 'autocomplete':'off'}) }}
+          {{ form.first_name(params={'headingLevel':2, 'size':'m', 'autocomplete':'off'}) }}
           {{ form.last_name(params={'headingLevel':2, 'size':'m', 'autocomplete':'off'}) }}
           {{ form.other_last_names(params={'headingLevel':2, 'size':'m', 'autocomplete':'off'}) }}
           {{ form.service_number(params={'headingLevel':2, 'size':'m', 'autocomplete':'off', 'hint': content.forms.fields.service_number.hint }) }}
