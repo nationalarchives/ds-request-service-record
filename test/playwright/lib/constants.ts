@@ -28,6 +28,6 @@ export const Paths = {
   WE_MAY_HOLD_THIS_RECORD: `${basePath}/we-may-hold-this-record/`,
   WHAT_WAS_THEIR_DATE_OF_BIRTH: `${basePath}/what-was-their-date-of-birth/`,
   YOUR_CONTACT_DETAILS: `${basePath}/your-contact-details/`,
-  YOUR_POSTAL_ADDRESS: `${basePath}/your-postal-address/`,
+  WHAT_IS_YOUR_ADDRESS: `${basePath}/what-is-your-address/`,
   YOUR_ORDER_SUMMARY: `${basePath}/your-order-summary/`,
 };

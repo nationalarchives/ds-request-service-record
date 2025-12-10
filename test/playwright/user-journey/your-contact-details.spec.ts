@@ -28,7 +28,7 @@ test.describe("Your contact details", () => {
     });
 
     test.describe("with the form completed", () => {
-      test("takes the user to the 'Your postal address' page if the user doesn't have an email address", async ({
+      test("takes the user to the 'What is your address?' page if the user doesn't have an email address", async ({
         page,
       }) => {
         await page.getByLabel("First name").fill("John");
@@ -43,7 +43,7 @@ test.describe("Your contact details", () => {
           .getByLabel("I do not have an email address")
           .check({ force: true });
         await page.getByRole("button", { name: /Continue/i }).click();
-        await expect(page).toHaveURL(Paths.YOUR_POSTAL_ADDRESS);
+        await expect(page).toHaveURL(Paths.WHAT_IS_YOUR_ADDRESS);
       });
       test("takes the user to the 'Choose your order type' page if the user does have an email address", async ({
         page,
