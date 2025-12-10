@@ -17,7 +17,7 @@ from wtforms import (
 from wtforms.validators import Email, InputRequired
 
 
-class YourDetails(FlaskForm):
+class YourContactDetails(FlaskForm):
     content = load_content()
 
     requester_first_name = StringField(

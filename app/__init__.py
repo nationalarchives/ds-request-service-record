@@ -6,7 +6,7 @@ from app.lib.context_processor import cookie_preference, now_iso_8601
 from app.lib.models import db
 from app.lib.requires_session_key import requires_session_key
 from app.lib.talisman import talisman
-from app.lib.template_filters import parse_markdown_links, slugify
+from app.lib.template_filters import parse_markdown_links, slugify, parse_bold_text
 from flask import Flask
 from flask_session import Session
 from jinja2 import ChoiceLoader, PackageLoader
@@ -108,6 +108,7 @@ def create_app(config_class):
 
     app.add_template_filter(slugify)
     app.add_template_filter(parse_markdown_links)
+    app.add_template_filter(parse_bold_text)
 
     @app.context_processor
     def context_processor():

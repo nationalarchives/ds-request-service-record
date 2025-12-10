@@ -27,6 +27,6 @@ export const Paths = {
   WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD: `${basePath}/we-are-unlikely-to-locate-this-record/`,
   WE_MAY_HOLD_THIS_RECORD: `${basePath}/we-may-hold-this-record/`,
   WHAT_WAS_THEIR_DATE_OF_BIRTH: `${basePath}/what-was-their-date-of-birth/`,
-  YOUR_DETAILS: `${basePath}/your-details/`,
+  YOUR_CONTACT_DETAILS: `${basePath}/your-contact-details/`,
   YOUR_POSTAL_ADDRESS: `${basePath}/your-postal-address/`,
 };

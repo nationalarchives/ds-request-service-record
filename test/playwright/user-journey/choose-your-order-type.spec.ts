@@ -12,59 +12,19 @@ test.describe("choose your order type", () => {
   });
 
   test.describe("when submitted", () => {
-    test.describe("the 'standard' order form option", () => {
-      test("without any fields selected, shows the correct error message", async ({
-        page,
-      }) => {
-        await page
-          .getByRole("button", { name: /Continue with a standard order/i })
-          .click();
-        await expect(page.locator(".tna-fieldset__error")).toHaveCount(1);
-        await expect(page.locator(".tna-fieldset__error").first()).toHaveText(
-          /Select how you would like your order processed/,
-        );
-      });
-      ["Digital standard", "Printed standard"].forEach((option) => {
-        test(`with "${option}" selected, there is no error`, async ({
-          page,
-        }) => {
-          await page.getByLabel(option).check();
-          await page
-            .getByRole("button", { name: /Continue with a standard order/i })
-            .click();
-          await expect(page.locator(".tna-fieldset__error")).toHaveCount(0);
-        });
+    test.describe("with the 'Choose standard' option", () => {
+      test("the user is taken to 'Your contact details'", async ({ page }) => {
+        await page.getByRole("button", { name: /Choose standard/i }).click();
+        await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
       });
     });
-    test.describe("the 'full' order form option", () => {
-      test("without any fields selected, shows the correct error message", async ({
-        page,
-      }) => {
+    test.describe("with the 'Choose full record check' option", () => {
+      test("the user is taken to 'Your contact details'", async ({ page }) => {
         await page
-          .getByRole("button", {
-            name: /Continue with a full record check order/i,
-          })
+          .getByRole("button", { name: /Choose full record check/i })
           .click();
-        await expect(page.locator(".tna-fieldset__error")).toHaveCount(1);
-        await expect(page.locator(".tna-fieldset__error").first()).toHaveText(
-          /Select how you would like your order processed/,
-        );
+        await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
       });
-      ["Digital full record check", "Printed full record check"].forEach(
-        (option) => {
-          test(`with "${option}" selected, there is no error`, async ({
-            page,
-          }) => {
-            await page.getByLabel(option).check();
-            await page
-              .getByRole("button", {
-                name: /Continue with a full record check order/i,
-              })
-              .click();
-            await expect(page.locator(".tna-fieldset__error")).toHaveCount(0);
-          });
-        },
-      );
     });
 
     test("clicking 'Back' from 'Choose your order type' brings the user back to the 'Have you previously made a request' page", async ({
