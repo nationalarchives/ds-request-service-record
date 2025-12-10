@@ -7,6 +7,10 @@
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
         <h1 class="tna-heading-xl">{{ content.pages.confirm_payment_received.heading }}</h1>
+        Your payment reference number: {{ payment_reference }}
+        {% for paragraph in content.pages.confirm_payment_received.paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
       </div>
     </div>
   </div>

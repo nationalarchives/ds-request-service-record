@@ -285,6 +285,12 @@ pages:
     warning: If you do not submit a proof of death when required, it is unlikely that we will be able to provide the record.
   confirm_payment_received:
     heading: Payment received
+    paragraphs:
+      - What happens next
+      - |
+        We have sent your request to a member of our team. They will use the information provided to search for the record you are requesting.
+        We will contact you with the result of the search, or to ask for more information, within 30 working days.
+        You can get in touch with us by replying to your confirmation email.
   payment_link_creation_failed:
     heading: Payment link creation failed
     paragraphs:
