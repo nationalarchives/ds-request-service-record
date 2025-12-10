@@ -193,8 +193,9 @@ def handle_gov_uk_pay_payment_response():
 
     if validate_payment(gov_uk_payment_data):
         provider_id = gov_uk_payment_data.get("provider_id", None)
+        payment_date = gov_uk_payment_data.get("settlement_summary", {}).get("captured_date", None)
         try:
-            process_valid_payment(payment.id, provider_id)
+            process_valid_payment(payment.id, provider_id=provider_id, payment_date=payment_date)
         except Exception as e:
             current_app.logger.error(
                 f"Error processing valid payment of payment ID {gov_uk_payment_id}: {e}"
