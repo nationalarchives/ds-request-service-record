@@ -102,7 +102,7 @@ def process_valid_request(payment_id: str, payment_data: dict) -> None:
         # delete_service_record_request(record)
 
 
-def process_valid_payment(id: str, provider_id: str) -> None:
+def process_valid_payment(id: str, *, provider_id: str, payment_date: str) -> None:
     payment = get_gov_uk_dynamics_payment(id)
 
     if payment is None:
@@ -111,6 +111,7 @@ def process_valid_payment(id: str, provider_id: str) -> None:
     dynamics_payment = get_dynamics_payment(payment.dynamics_payment_id)
     dynamics_payment.status = "P"
     dynamics_payment.provider_id = provider_id
+    dynamics_payment.payment_date = datetime.strptime(payment_date, "%Y-%m-%d")
     db.session.commit()
 
     send_payment_to_mod_copying_app(dynamics_payment)
