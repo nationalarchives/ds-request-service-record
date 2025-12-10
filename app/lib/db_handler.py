@@ -150,7 +150,7 @@ def transform_form_data_to_record(form_data: dict) -> dict:
 
     if date_of_birth := form_data.get(
         "what_was_their_date_of_birth"
-    ):  # TODO: can this field go back to `date_of_birth` in the frontend?
+    ):
         transformed_data["date_of_birth"] = date_of_birth
 
     if form_data.get("processing_option") == "standard":
