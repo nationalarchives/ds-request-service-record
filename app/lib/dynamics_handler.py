@@ -42,15 +42,6 @@ DYNAMICS_REQUEST_FIELD_MAP = [
     ("provider_id", "provider_id"),
 ]
 
-DYNAMICS_PAYMENT_FIELD_MAP = [
-    ("payment_id", "id"),
-    ("case_number", "case_number"),
-    ("reference", "reference"),
-    ("provider_id", "provider_id"),
-    ("total_amount_pence", "total_amount"),
-]
-
-
 def send_request_to_dynamics(record: ServiceRecordRequest) -> None:
     send_email(
         to=current_app.config["DYNAMICS_INBOX"],
@@ -79,7 +70,7 @@ def send_payment_to_mod_copying_app(payment: DynamicsPayment) -> None:
     payload = {"CaseNumber": payment.case_number,
             "PayReference": payment.reference,
             "GovUkProviderId": payment.provider_id,
-            "Amount": (payment.total_amount_pence/100),
+            "Amount": (payment.total_amount/100),
             "Date": payment.payment_date.strftime("%Y-%m-%d")
         }
 
@@ -96,8 +87,6 @@ def send_payment_to_mod_copying_app(payment: DynamicsPayment) -> None:
         raise ValueError("Could not update MOD Copying app with payment details")
 
 
-
-
 def _generate_tagged_data(mapping: list[tuple[str, str | None]], obj) -> str:
     chunks = []
     for tag, attr in mapping:
@@ -111,6 +100,3 @@ def _generate_tagged_data(mapping: list[tuple[str, str | None]], obj) -> str:
 def generate_tagged_request(record: ServiceRecordRequest) -> str:
     return _generate_tagged_data(DYNAMICS_REQUEST_FIELD_MAP, record)
 
-
-def generate_tagged_payment(record: DynamicsPayment) -> str:
-    return _generate_tagged_data(DYNAMICS_PAYMENT_FIELD_MAP, record)
