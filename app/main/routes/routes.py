@@ -425,6 +425,7 @@ def do_you_have_a_proof_of_death(form, state_machine):
         content=load_content(),
     )
 
+
 @bp.route("/what-is-your-address/", methods=["GET", "POST"])
 @with_route_for_back_link_saved_to_session(
     route=MultiPageFormRoutes.WHAT_IS_YOUR_ADDRESS.value
@@ -483,6 +484,7 @@ def upload_a_proof_of_death(form, state_machine):
         content=load_content(),
         route_for_back_link=session.get("route_for_back_link", False),
     )
+
 
 @bp.route("/your-order-summary/", methods=["GET"])
 def your_order_summary():

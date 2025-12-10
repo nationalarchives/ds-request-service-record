@@ -90,6 +90,7 @@ class BoundaryYears(Enum):
     YEAR_FROM_WHICH_PROOF_OF_DEATH_IS_REQUIRED = 1910
     LATEST_BIRTH_YEAR = 1939
 
+
 FALLBACK_COUNTRY_CHOICES = [
     "United Kingdom",
     "Afghanistan",
