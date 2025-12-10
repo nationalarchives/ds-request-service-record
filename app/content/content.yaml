@@ -347,7 +347,8 @@ pages:
         delivery_data: Unknown, we aim to confirm if we hold the record within 30 days.
         refunds_header: Refunds
         refunds_data: We will refund a £9.92 page check fee if we do not hold the record. <br><br>No other refunds are available.
-
+  your_order_summary:
+    heading: Your order summary
   request_submitted:
     heading: Request submitted
     paragraphs:
@@ -470,6 +471,7 @@ forms:
       description: I do not have an email address
     requester_email:
       label: Email
+      hint: Where we will contact you about your request
       messages:
         required: Enter an email address in the correct format, like name@example.com. If you do not have an email address, please select 'I do not have an email address' below
         address_format: Enter an email address in the correct format, like name@example.com

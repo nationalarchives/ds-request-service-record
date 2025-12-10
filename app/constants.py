@@ -48,6 +48,7 @@ class MultiPageFormRoutes(Enum):
     YOUR_CONTACT_DETAILS = "main.your_contact_details"
     YOUR_POSTAL_ADDRESS = "main.your_postal_address"
     CHOOSE_YOUR_ORDER_TYPE = "main.choose_your_order_type"
+    YOUR_ORDER_SUMMARY = "main.your_order_summary"
     SEND_TO_GOV_UK_PAY = "main.send_to_gov_uk_pay"
     REQUEST_SUBMITTED = "main.request_submitted"
 

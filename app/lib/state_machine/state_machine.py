@@ -151,6 +151,10 @@ class RoutingStateMachine(StateMachine):
         enter="entering_choose_your_order_type_form", final=True
     )
 
+    your_order_summary_form = State(
+        enter="entering_your_order_summary_form", final=True
+    )
+
     # gov_uk_pay_redirect = State(enter="entering_gov_uk_pay_redirect", final=True)
 
     request_submitted_page = State(enter="entering_request_submitted_page", final=True)
@@ -282,7 +286,7 @@ class RoutingStateMachine(StateMachine):
 
     continue_from_your_contact_details_form = initial.to(
         your_postal_address_form, cond="does_not_have_email"
-    ) | initial.to(choose_your_order_type_form)
+    ) | initial.to(your_order_summary_form)
 
     continue_from_your_postal_address_form = initial.to(choose_your_order_type_form)
 
@@ -399,6 +403,9 @@ class RoutingStateMachine(StateMachine):
 
     def entering_choose_your_order_type_form(self):
         self.route_for_current_state = MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE.value
+
+    def entering_your_order_summary_form(self):
+        self.route_for_current_state = MultiPageFormRoutes.YOUR_ORDER_SUMMARY.value
 
     def entering_gov_uk_pay_redirect(self):
         self.route_for_current_state = MultiPageFormRoutes.SEND_TO_GOV_UK_PAY.value

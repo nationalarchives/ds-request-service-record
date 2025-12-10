@@ -52,7 +52,7 @@ test.describe("Your contact details", () => {
         await page.getByLabel("Last name").fill("Doe");
         await page.getByLabel("Email", { exact: true }).fill("john@doe.com");
         await page.getByRole("button", { name: /Continue/i }).click();
-        await expect(page).toHaveURL(Paths.CHOOSE_YOUR_ORDER_TYPE);
+        await expect(page).toHaveURL(Paths.YOUR_ORDER_SUMMARY);
       });
     });
 
