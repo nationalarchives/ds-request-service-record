@@ -461,11 +461,11 @@ def test_continue_from_have_you_previously_made_a_request():
         ),
     ],
 )
-def test_continue_from_your_details(
+def test_continue_from_your_contact_details(
     does_not_have_email, current_state_id, route_for_current_state
 ):
     sm = RoutingStateMachine()
-    sm.continue_from_your_details_form(
+    sm.continue_from_your_contact_details_form(
         form=make_form(
             requester_first_name=None,
             requester_last_name=None,
@@ -494,8 +494,7 @@ def test_continue_from_your_postal_address():
     )
     assert sm.current_state.id == "choose_your_order_type_form"
     assert (
-        sm.route_for_current_state
-        == MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE.value
+        sm.route_for_current_state == MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE.value
     )
 
 
@@ -510,8 +509,8 @@ def test_continue_from_choose_your_order_type(processing_option):
             submit=None,
         )
     )
-    assert sm.current_state.id == "your_details_form"
-    assert sm.route_for_current_state == MultiPageFormRoutes.YOUR_DETAILS.value
+    assert sm.current_state.id == "your_contact_details_form"
+    assert sm.route_for_current_state == MultiPageFormRoutes.YOUR_CONTACT_DETAILS.value
 
 
 def test_continue_from_gov_uk_pay():

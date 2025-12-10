@@ -34,11 +34,11 @@ test.describe("your postal address", () => {
       await expect(page).toHaveURL(/choose-your-order-type/);
     });
 
-    test("clicking 'Back' from 'Your postal address' brings the user back to the 'Your details' page", async ({
+    test("clicking 'Back' from 'Your postal address' brings the user back to the 'Your contact details' page", async ({
       page,
     }) => {
       await page.getByRole("link", { name: "Back" }).click();
-      await expect(page).toHaveURL(Paths.YOUR_DETAILS);
+      await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
     });
   });
 });

@@ -139,7 +139,9 @@ class RoutingStateMachine(StateMachine):
         enter="entering_have_you_previously_made_a_request_form", final=True
     )
 
-    your_details_form = State(enter="entering_your_details_form", final=True)
+    your_contact_details_form = State(
+        enter="entering_your_contact_details_form", final=True
+    )
 
     your_postal_address_form = State(
         enter="entering_your_postal_address_form", final=True
@@ -278,17 +280,13 @@ class RoutingStateMachine(StateMachine):
         choose_your_order_type_form
     )
 
-    continue_from_your_details_form = initial.to(
+    continue_from_your_contact_details_form = initial.to(
         your_postal_address_form, cond="does_not_have_email"
     ) | initial.to(choose_your_order_type_form)
 
-    continue_from_your_postal_address_form = initial.to(
-        choose_your_order_type_form
-    )
+    continue_from_your_postal_address_form = initial.to(choose_your_order_type_form)
 
-    continue_from_choose_your_order_type_form = initial.to(
-        your_details_form
-    )
+    continue_from_choose_your_order_type_form = initial.to(your_contact_details_form)
 
     continue_on_return_from_gov_uk_redirect = initial.to(request_submitted_page)
 
@@ -393,16 +391,14 @@ class RoutingStateMachine(StateMachine):
             MultiPageFormRoutes.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST.value
         )
 
-    def entering_your_details_form(self):
-        self.route_for_current_state = MultiPageFormRoutes.YOUR_DETAILS.value
+    def entering_your_contact_details_form(self):
+        self.route_for_current_state = MultiPageFormRoutes.YOUR_CONTACT_DETAILS.value
 
     def entering_your_postal_address_form(self):
         self.route_for_current_state = MultiPageFormRoutes.YOUR_POSTAL_ADDRESS.value
 
     def entering_choose_your_order_type_form(self):
-        self.route_for_current_state = (
-            MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE.value
-        )
+        self.route_for_current_state = MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE.value
 
     def entering_gov_uk_pay_redirect(self):
         self.route_for_current_state = MultiPageFormRoutes.SEND_TO_GOV_UK_PAY.value
