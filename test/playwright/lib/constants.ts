@@ -29,4 +29,5 @@ export const Paths = {
   WHAT_WAS_THEIR_DATE_OF_BIRTH: `${basePath}/what-was-their-date-of-birth/`,
   YOUR_CONTACT_DETAILS: `${basePath}/your-contact-details/`,
   YOUR_POSTAL_ADDRESS: `${basePath}/your-postal-address/`,
+  YOUR_ORDER_SUMMARY: `${basePath}/your-order-summary/`,
 };

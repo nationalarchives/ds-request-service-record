@@ -482,6 +482,13 @@ def upload_a_proof_of_death(form, state_machine):
         route_for_back_link=session.get("route_for_back_link", False),
     )
 
+@bp.route("/your-order-summary/", methods=["GET"])
+def your_order_summary():
+    return render_template(
+        "main/your-order-summary.html",
+        content=load_content(),
+    )
+
 
 @bp.route("/request-submitted/", methods=["GET"])
 def request_submitted():

@@ -456,8 +456,8 @@ def test_continue_from_have_you_previously_made_a_request():
         ),
         (
             False,
-            "choose_your_order_type_form",
-            MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE.value,
+            "your_order_summary_form",
+            MultiPageFormRoutes.YOUR_ORDER_SUMMARY.value,
         ),
     ],
 )
