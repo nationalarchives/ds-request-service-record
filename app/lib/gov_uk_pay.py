@@ -7,7 +7,7 @@ from app.lib.db_handler import (
     get_gov_uk_dynamics_payment,
     get_service_record_request,
 )
-from app.lib.dynamics_handler import send_payment_to_dynamics, send_request_to_dynamics
+from app.lib.dynamics_handler import send_payment_to_mod_copying_app, send_request_to_dynamics
 from app.lib.models import db
 from flask import current_app
 
@@ -54,7 +54,7 @@ def create_payment(
     payload = {
         "amount": amount,
         "description": description,
-        "reference": reference,  # TODO: Investigate the dynamic reference that other/current services use (TNA-xxxxx?)
+        "reference": reference,
         "return_url": return_url,
     }
 
@@ -102,14 +102,16 @@ def process_valid_request(payment_id: str, payment_data: dict) -> None:
         # delete_service_record_request(record)
 
 
-def process_valid_payment(id: str, provider_id: str) -> None:
+def process_valid_payment(id: str, *, provider_id: str, payment_date: str) -> None:
     payment = get_gov_uk_dynamics_payment(id)
 
     if payment is None:
         raise ValueError(f"Payment not found for GOV.UK payment ID: {id}")
-
-    get_dynamics_payment(payment.dynamics_payment_id).status = "P"
-    get_dynamics_payment(payment.dynamics_payment_id).provider_id = provider_id
+    
+    dynamics_payment = get_dynamics_payment(payment.dynamics_payment_id)
+    dynamics_payment.status = "P"
+    dynamics_payment.provider_id = provider_id
+    dynamics_payment.payment_date = datetime.strptime(payment_date, "%Y-%m-%d")
     db.session.commit()
 
-    send_payment_to_dynamics(get_dynamics_payment(payment.dynamics_payment_id))
+    send_payment_to_mod_copying_app(dynamics_payment)

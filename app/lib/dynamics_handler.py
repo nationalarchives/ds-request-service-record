@@ -1,5 +1,7 @@
 from datetime import datetime
 
+import requests
+
 from app.lib.aws import send_email
 from app.lib.models import DynamicsPayment, ServiceRecordRequest
 from flask import current_app
@@ -40,15 +42,6 @@ DYNAMICS_REQUEST_FIELD_MAP = [
     ("provider_id", "provider_id"),
 ]
 
-DYNAMICS_PAYMENT_FIELD_MAP = [
-    ("payment_id", "id"),
-    ("case_number", "case_number"),
-    ("reference", "reference"),
-    ("provider_id", "provider_id"),
-    ("total_amount_pence", "total_amount"),
-]
-
-
 def send_request_to_dynamics(record: ServiceRecordRequest) -> None:
     send_email(
         to=current_app.config["DYNAMICS_INBOX"],
@@ -73,15 +66,25 @@ def subject_status(record: ServiceRecordRequest) -> str:
     return f"? FOI DIRECT MOD {closure_status}{option}"
 
 
-def send_payment_to_dynamics(payment: DynamicsPayment) -> None:
-    tagged_data = generate_tagged_payment(payment)
+def send_payment_to_mod_copying_app(payment: DynamicsPayment) -> None:
+    payload = {"CaseNumber": payment.case_number,
+            "PayReference": payment.reference,
+            "GovUkProviderId": payment.provider_id,
+            "Amount": (payment.total_amount/100),
+            "Date": payment.payment_date.strftime("%Y-%m-%d")
+        }
 
-    send_email(
-        to=current_app.config["DYNAMICS_INBOX"],
-        subject=f"Payment received for Dynamics payment ID: {payment.id}",
-        body=tagged_data
-        + f"\n<paid_at>{datetime.now().strftime('%d %B %Y')}</paid_at>",
+    response = requests.post(
+        current_app.config["MOD_COPYING_API_URL"],
+        json=payload,
+        headers={"Content-Type": "application/json"},
     )
+
+    if response.status_code != 200:
+        current_app.logger.error(
+            f"Failed to update MOD Copying app for payment ID {payment.id}: {response.status_code} - {response.text}"
+        )
+        raise ValueError("Could not update MOD Copying app with payment details")
 
 
 def _generate_tagged_data(mapping: list[tuple[str, str | None]], obj) -> str:
@@ -97,6 +100,3 @@ def _generate_tagged_data(mapping: list[tuple[str, str | None]], obj) -> str:
 def generate_tagged_request(record: ServiceRecordRequest) -> str:
     return _generate_tagged_data(DYNAMICS_REQUEST_FIELD_MAP, record)
 
-
-def generate_tagged_payment(record: DynamicsPayment) -> str:
-    return _generate_tagged_data(DYNAMICS_PAYMENT_FIELD_MAP, record)
