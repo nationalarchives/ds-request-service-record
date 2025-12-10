@@ -1,8 +1,4 @@
 from enum import Enum
-from functools import lru_cache
-
-import requests
-from flask import current_app
 
 
 class MultiPageFormRoutes(Enum):
@@ -46,7 +42,7 @@ class MultiPageFormRoutes(Enum):
     UPLOAD_A_PROOF_OF_DEATH = "main.upload_a_proof_of_death"
     HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST = "main.have_you_previously_made_a_request"
     YOUR_CONTACT_DETAILS = "main.your_contact_details"
-    YOUR_POSTAL_ADDRESS = "main.your_postal_address"
+    WHAT_IS_YOUR_ADDRESS = "main.what_is_your_address"
     CHOOSE_YOUR_ORDER_TYPE = "main.choose_your_order_type"
     YOUR_ORDER_SUMMARY = "main.your_order_summary"
     SEND_TO_GOV_UK_PAY = "main.send_to_gov_uk_pay"

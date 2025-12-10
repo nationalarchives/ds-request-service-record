@@ -295,10 +295,10 @@ pages:
       - Your payment was not completed successfully.
   your_contact_details:
     heading: Your contact details
-  your_postal_address:
-    heading: Your postal address
+  what_is_your_address:
+    heading: What is your address?
     paragraphs:
-      - Please provide a postal address so we can contact you.
+      - You have not provided an email address. Please provide a postal address so we can contact you about your request.
   choose_your_order_type:
     heading: Choose your order type
     paragraphs:
@@ -488,12 +488,12 @@ forms:
     requester_county:
       label: County (optional)
     requester_postcode:
-      label: Postcode or Zip code (optional)
+      label: Postcode
+      messages:
+        required: Enter postcode
     requester_country:
       label: Country
       prompt_to_select: Select a country
-      messages:
-        required: Select a country
     proceed_to_payment:
       call_to_action: Proceed to make payment using GOV.UK Pay
     choose_your_order_type:

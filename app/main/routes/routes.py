@@ -42,7 +42,7 @@ from app.main.forms.were_they_a_commissioned_officer import WereTheyACommissione
 from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 from app.main.forms.you_may_want_to_check_ancestry import YouMayWantToCheckAncestry
 from app.main.forms.your_contact_details import YourContactDetails
-from app.main.forms.your_postal_address import YourPostalAddress
+from app.main.forms.what_is_your_address import WhatIsYourAddress
 from flask import redirect, render_template, request, session, url_for
 
 
@@ -425,17 +425,19 @@ def do_you_have_a_proof_of_death(form, state_machine):
         content=load_content(),
     )
 
-
-@bp.route("/your-postal-address/", methods=["GET", "POST"])
-@with_form_prefilled_from_session(YourPostalAddress)
+@bp.route("/what-is-your-address/", methods=["GET", "POST"])
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.WHAT_IS_YOUR_ADDRESS.value
+)
+@with_form_prefilled_from_session(WhatIsYourAddress)
 @with_state_machine
-def your_postal_address(form, state_machine):
+def what_is_your_address(form, state_machine):
     if form.validate_on_submit():
         save_submitted_form_fields_to_session(form)
-        state_machine.continue_from_your_postal_address_form(form)
+        state_machine.continue_from_what_is_your_address_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/your-postal-address.html",
+        "main/what-is-your-address.html",
         form=form,
         content=load_content(),
     )
@@ -487,6 +489,7 @@ def your_order_summary():
     return render_template(
         "main/your-order-summary.html",
         content=load_content(),
+        route_for_back_link=session.get("route_for_back_link", False),
     )
 
 

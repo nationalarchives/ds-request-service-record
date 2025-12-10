@@ -451,8 +451,8 @@ def test_continue_from_have_you_previously_made_a_request():
     [
         (
             True,
-            "your_postal_address_form",
-            MultiPageFormRoutes.YOUR_POSTAL_ADDRESS.value,
+            "what_is_your_address_form",
+            MultiPageFormRoutes.WHAT_IS_YOUR_ADDRESS.value,
         ),
         (
             False,
@@ -478,9 +478,9 @@ def test_continue_from_your_contact_details(
     assert sm.route_for_current_state == route_for_current_state
 
 
-def test_continue_from_your_postal_address():
+def test_continue_from_what_is_your_address():
     sm = RoutingStateMachine()
-    sm.continue_from_your_postal_address_form(
+    sm.continue_from_what_is_your_address_form(
         form=make_form(
             address_line_1=None,
             address_line_2=None,
@@ -492,9 +492,9 @@ def test_continue_from_your_postal_address():
             submit=None,
         )
     )
-    assert sm.current_state.id == "choose_your_order_type_form"
+    assert sm.current_state.id == "your_order_summary_form"
     assert (
-        sm.route_for_current_state == MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE.value
+        sm.route_for_current_state == MultiPageFormRoutes.YOUR_ORDER_SUMMARY.value
     )
 
 
