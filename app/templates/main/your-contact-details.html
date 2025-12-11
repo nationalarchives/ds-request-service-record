@@ -12,6 +12,9 @@
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
         <h1 class="tna-heading-xl">{{ content.pages.your_contact_details.heading }}</h1>
+        {% if form.errors %}
+          {{ tnaErrorSummary(wtforms_errors(form)) }}
+        {% endif %}
         <form action="{{ url_for('main.your_contact_details') }}" method="post" novalidate>
           {{ form.csrf_token }}
           {{ form.requester_first_name(params={'headingLevel':2, 'size':'m', 'autocomplete':'given-name'}) }}
