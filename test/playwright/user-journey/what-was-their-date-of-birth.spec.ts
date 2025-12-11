@@ -7,10 +7,12 @@ test.describe("the 'What was their date of birth?' form", () => {
     await page.goto(Paths.WHAT_WAS_THEIR_DATE_OF_BIRTH);
   });
 
-  test("has the correct heading", async ({ page }) => {
-    await expect(page.locator("h1")).toHaveText(
-      /What was their date of birth\?/,
-    );
+  test.describe("when first rendered", () => {
+    test("has the correct heading", async ({ page }) => {
+      await expect(page.locator("h1")).toHaveText(
+        /What was their date of birth\?/,
+      );
+    });
   });
 
   test.describe("when submitted", () => {
@@ -24,7 +26,7 @@ test.describe("the 'What was their date of birth?' form", () => {
         );
       });
 
-      test("with a date before 1800, the correct validation message is shown", async ({
+      test("with a date before 1 January 1800, the correct validation message is shown", async ({
         page,
       }) => {
         await page.getByLabel("Day").fill("01");
@@ -67,7 +69,7 @@ test.describe("the 'What was their date of birth?' form", () => {
             await page.getByLabel("Year").fill(year);
             await page.getByRole("button", { name: /Continue/i }).click();
             await expect(page.locator(".tna-fieldset__error")).toHaveText(
-              /must be a real date/,
+              /What was their date of birth\? must be a real date/,
             );
           });
         }

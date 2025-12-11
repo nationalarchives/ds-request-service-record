@@ -7,8 +7,10 @@ test.describe("what is your address", () => {
     await page.goto(Paths.WHAT_IS_YOUR_ADDRESS);
   });
 
-  test("has the correct heading", async ({ page }) => {
-    await expect(page.locator("h1")).toHaveText(/What is your address/);
+  test.describe("when first rendered", () => {
+    test("has the correct heading", async ({ page }) => {
+      await expect(page.locator("h1")).toHaveText(/What is your address/);
+    });
   });
 
   test.describe("when submitted", () => {

@@ -165,7 +165,7 @@ def only_living_subjects_can_request_their_record():
     )
 
 
-@bp.route("/service-branch/", methods=["GET", "POST"])
+@bp.route("/which-military-branch-did-the-person-serve-in/", methods=["GET", "POST"])
 @with_form_prefilled_from_session(ServiceBranch)
 @with_state_machine
 def service_branch_form(form, state_machine):
@@ -175,7 +175,7 @@ def service_branch_form(form, state_machine):
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(
-        "main/service-branch.html", form=form, content=load_content()
+        "main/which-military-branch-did-the-person-serve-in.html", form=form, content=load_content()
     )
 
 

@@ -7,8 +7,10 @@ test.describe("Your contact details", () => {
     await page.goto(Paths.YOUR_CONTACT_DETAILS);
   });
 
-  test("has the correct heading", async ({ page }) => {
-    await expect(page.locator("h1")).toHaveText(/Your contact details/);
+  test.describe("when first rendered", () => {
+    test("has the correct heading", async ({ page }) => {
+      await expect(page.locator("h1")).toHaveText(/Your contact details/);
+    });
   });
 
   test.describe("when submitted", () => {
