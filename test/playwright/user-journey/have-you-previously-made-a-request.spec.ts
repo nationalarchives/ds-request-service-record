@@ -7,10 +7,12 @@ test.describe("have you previously made a request", () => {
     await page.goto(Paths.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
   });
 
-  test("has the correct heading", async ({ page }) => {
-    await expect(page.locator("h1")).toHaveText(
-      /Have you previously made a request/,
-    );
+  test.describe("when first rendered", () => {
+    test("has the correct heading", async ({ page }) => {
+      await expect(page.locator("h1")).toHaveText(
+        /Have you previously made a request/,
+      );
+    });
   });
 
   test.describe("when submitted", () => {

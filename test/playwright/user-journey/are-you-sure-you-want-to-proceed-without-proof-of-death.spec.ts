@@ -9,10 +9,12 @@ test.describe("The 'Are you sure you want to proceed without a proof of death?' 
     );
   });
 
-  test("has the correct heading", async ({ page }) => {
-    await expect(page.locator("h1")).toHaveText(
-      /Are you sure you want to proceed without a proof of death?/,
-    );
+  test.describe("when first rendered", () => {
+    test("has the correct heading", async ({ page }) => {
+      await expect(page.locator("h1")).toHaveText(
+        /Are you sure you want to proceed without a proof of death?/,
+      );
+    });
   });
 
   test.describe("when submitted", () => {

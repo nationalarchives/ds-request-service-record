@@ -11,6 +11,13 @@ test.describe("the 'Submit a data access request' form", () => {
     await expect(page.locator("h1")).toHaveText(/Submit a data access request/);
   });
 
+  test("clicking the 'Back' link takes the user to the 'Is the service person alive? page'", async ({
+    page,
+  }) => {
+    await page.getByRole("link", { name: "Back" }).click();
+    await expect(page).toHaveURL(Paths.IS_SERVICE_PERSON_ALIVE);
+  });
+
   test.describe("clicking the 'Submit a data access request' button", () => {
     test("opens link in new tab", async ({ page }) => {
       // Trigger that opens a new tab (e.g. <a target="_blank">)

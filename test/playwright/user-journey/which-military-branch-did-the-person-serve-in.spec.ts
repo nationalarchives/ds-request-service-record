@@ -32,17 +32,26 @@ test.describe("the service branch form", () => {
 
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START); // We need to go here first because we prevent direct access to mid-journey pages
-    await page.goto(Paths.SERVICE_BRANCH);
+    await page.goto(Paths.WHICH_MILITARY_BRANCH_DID_THE_PERSON_SERVE_IN);
   });
 
-  test("has the correct heading", async ({ page }) => {
-    await expect(page.locator("h1")).toHaveText(
-      /Which military branch did the person serve in\?/,
-    );
+  test.describe("when first rendered", () => {
+    test("has the correct heading", async ({ page }) => {
+      await expect(page.locator("h1")).toHaveText(
+        /Which military branch did the person serve in\?/,
+      );
+    });
   });
 
-  test.describe("when submitted", () => {
-    test("without a selection, keeps the user on the page and shows a validation error", async ({
+  test.describe("when interacted with", () => {
+    test("clicking the 'Back' link takes the user to the 'Is the service person alive? page'", async ({
+      page,
+    }) => {
+      await page.getByRole("link", { name: "Back" }).click();
+      await expect(page).toHaveURL(Paths.IS_SERVICE_PERSON_ALIVE);
+    });
+
+    test("submitting without a selection, shows a validation error", async ({
       page,
     }) => {
       await page.getByRole("button", { name: /Continue/i }).click();
@@ -55,7 +64,7 @@ test.describe("the service branch form", () => {
         page,
       }) => {
         await page.goto(Paths.JOURNEY_START);
-        await page.goto(Paths.SERVICE_BRANCH);
+        await page.goto(Paths.WHICH_MILITARY_BRANCH_DID_THE_PERSON_SERVE_IN);
         await page.getByLabel(branchLabel, { exact: true }).check();
         await page.getByRole("button", { name: /Continue/i }).click();
         await expect(page).toHaveURL(nextUrl);
@@ -63,25 +72,23 @@ test.describe("the service branch form", () => {
       });
     });
 
-    test.describe("when the 'back' link is clicked, the user's previous selection is shown", () => {
+    test.describe("after submission, when the 'back' link is clicked, the user's previous selection is maintained", () => {
       selectionMappings.forEach(({ branchLabel, nextUrl }) => {
         test(`when ${branchLabel} had been submitted, ${branchLabel} is selected when the 'Back' link is clicked`, async ({
           page,
         }) => {
           await page.goto(Paths.JOURNEY_START);
-          await page.goto(Paths.SERVICE_BRANCH);
+          await page.goto(Paths.WHICH_MILITARY_BRANCH_DID_THE_PERSON_SERVE_IN);
           await page.getByLabel(branchLabel, { exact: true }).check();
           await page.getByRole("button", { name: /Continue/i }).click();
           await expect(page).toHaveURL(nextUrl);
-          const backLink = page.getByRole("link", { name: "Back" });
-          // if there's a "Back" link, click it
-          if ((await backLink.count()) > 0) {
-            await backLink.click();
-            await expect(page).toHaveURL(Paths.SERVICE_BRANCH);
-            await expect(
-              page.getByLabel(branchLabel, { exact: true }),
-            ).toBeChecked();
-          }
+          await page.getByRole("link", { name: "Back" }).click();
+          await expect(page).toHaveURL(
+            Paths.WHICH_MILITARY_BRANCH_DID_THE_PERSON_SERVE_IN,
+          );
+          await expect(
+            page.getByLabel(branchLabel, { exact: true }),
+          ).toBeChecked();
         });
       });
     });

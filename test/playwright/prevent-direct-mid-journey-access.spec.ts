@@ -2,7 +2,8 @@ import { test, expect } from "@playwright/test";
 
 test.describe("accessing mid-journey pages requirements", () => {
   const INDEX_URL = "/request-a-military-service-record/";
-  const PROTECTED_URL = "/request-a-military-service-record/service-branch/";
+  const PROTECTED_URL =
+    "/request-a-military-service-record/which-military-branch-did-the-person-serve-in/";
 
   test.beforeEach(async ({ page }) => {
     await page.context().clearCookies();
