@@ -57,7 +57,6 @@
         <form action="{{ url_for('main.start') }}" method="post" novalidate>
           {{ form.csrf_token }}
           <div class="tna-button-group ">
-            {# TODO: Use 'accent' parameter here. Only using 'classes' param because I can't work out why the 'accent' parameter isn't working. #}
             {{ form.submit(params={'classes': 'tna-button--accent'}) }}
           </div>
         </form>

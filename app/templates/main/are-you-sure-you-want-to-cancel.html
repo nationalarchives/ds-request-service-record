@@ -23,7 +23,6 @@
           <div class="tna-button-group ">
             <a href="{{ url_for(back_link_endpoint) }}"
                class="tna-button tna-button--plain">{{ content.pages.are_you_sure_you_want_to_cancel.no_continue }}</a>
-            {# TODO: Use 'accent' parameter here. Only using 'classes' param because I can't work out why the 'accent' parameter isn't working. #}
             {{ form.submit(params={'classes': 'tna-button--accent'}) }}
           </div>
         </form>
