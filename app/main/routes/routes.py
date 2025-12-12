@@ -105,7 +105,7 @@ def are_you_sure_you_want_to_cancel(form, state_machine):
     )
 
 
-@bp.route("/request-cancelled/", methods=["GET"])
+@bp.route("/you-have-cancelled-your-request/", methods=["GET"])
 def you_have_cancelled_your_request():
     return render_template(
         "main/you-have-cancelled-your-request.html", content=load_content()
