@@ -20,12 +20,6 @@ test.describe("Your contact details", () => {
       }) => {
         await page.getByLabel("First name").fill("John");
         await page.getByLabel("Last name").fill("Doe");
-        // TODO: Investigate why we need to force this checkbox to be checked - the label seems to be intercepting pointer events
-        // Update 16 October 2025:
-        // - Spent some time today investigating this but it's not clear what's causing the issue.
-        // - Some online searching suggests interception of pointer events seems is affecting other Playwright users too.
-        // - What I did find is that replacing `.check()` with `.dispatchEvent('click')` fixes the problem, so that's something
-        //   we might want to try if we can't get to the bottom of this.
         await page
           .getByLabel("I do not have an email address")
           .check({ force: true });

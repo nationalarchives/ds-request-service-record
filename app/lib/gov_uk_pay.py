@@ -7,7 +7,10 @@ from app.lib.db_handler import (
     get_gov_uk_dynamics_payment,
     get_service_record_request,
 )
-from app.lib.dynamics_handler import send_payment_to_mod_copying_app, send_request_to_dynamics
+from app.lib.dynamics_handler import (
+    send_payment_to_mod_copying_app,
+    send_request_to_dynamics,
+)
 from app.lib.models import db
 from flask import current_app
 
@@ -36,8 +39,10 @@ def get_payment_data(payment_id: str) -> dict | None:
 
     return response.json()
 
+
 def get_payment_status(data: dict) -> str:
     return data.get("state", {}).get("status")
+
 
 def validate_payment(data: dict) -> bool:
     return get_payment_status(data) == "success"
@@ -79,7 +84,7 @@ def process_valid_request(payment_id: str, payment_data: dict) -> None:
 
     if record is None:
         raise ValueError(f"Service record not found for payment ID: {payment_id}")
-    
+
     if record.status == "N":
         record.provider_id = payment_data.get("provider_id", None)
         record.amount_received = (
@@ -97,7 +102,6 @@ def process_valid_request(payment_id: str, payment_data: dict) -> None:
         record.status = "S"
         db.session.commit()
 
-
         # Don't delete for now
         # delete_service_record_request(record)
 
@@ -107,7 +111,7 @@ def process_valid_payment(id: str, *, provider_id: str, payment_date: str) -> No
 
     if payment is None:
         raise ValueError(f"Payment not found for GOV.UK payment ID: {id}")
-    
+
     dynamics_payment = get_dynamics_payment(payment.dynamics_payment_id)
     dynamics_payment.status = "P"
     dynamics_payment.provider_id = provider_id
