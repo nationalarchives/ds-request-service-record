@@ -11,7 +11,7 @@
   <div class="tna-container">
     <div
       class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
-      <h1 class="tna-heading-xl">{{ content.pages.start.heading }}</h1>
+      <h1 class="tna-heading-xl">{{ content.pages.request_a_military_service_record.heading }}</h1>
     </div>
   </div>
 </div>
@@ -19,31 +19,31 @@
   <div class="tna-container">
     <div
       class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny tna-!--padding-top-m">
-      {% for paragraph in content.pages.start.contents.paragraphs %}
+      {% for paragraph in content.pages.request_a_military_service_record.contents.paragraphs %}
         <p>{{ paragraph }}</p>
       {% endfor %}
-      <h2 class="tna-heading-l">{{ content.pages.start.ways_to_request_a_record.heading }}</h2>
-      <p>{{ content.pages.start.ways_to_request_a_record.paragraph }}</p>
-      {% for item in content.pages.start.ways_to_request_a_record.options %}
+      <h2 class="tna-heading-l">{{ content.pages.request_a_military_service_record.ways_to_request_a_record.heading }}</h2>
+      <p>{{ content.pages.request_a_military_service_record.ways_to_request_a_record.paragraph }}</p>
+      {% for item in content.pages.request_a_military_service_record.ways_to_request_a_record.options %}
         <h3 class="tna-heading-m">{{ item.title }}</h3>
         {% for paragraph in item.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
       {% endfor %}
-      <h2 class="tna-heading-l">{{ content.pages.start.fees.heading }}</h2>
-      {% for paragraph in content.pages.start.fees.paragraphs %}
+      <h2 class="tna-heading-l">{{ content.pages.request_a_military_service_record.fees.heading }}</h2>
+      {% for paragraph in content.pages.request_a_military_service_record.fees.paragraphs %}
         <p>{{ paragraph }}</p>
       {% endfor %}
       <table class="tna-table">
         <thead class="tna-table__head">
         <tr class="tna-table__row">
-          {% for header in content.pages.start.table.headers %}
+          {% for header in content.pages.request_a_military_service_record.table.headers %}
             <th class="tna-table__header">{{ header }}</th>
           {% endfor %}
         </tr>
         </thead>
         <tbody class="tna-table__body">
-        {% for row in content.pages.start.table.rows %}
+        {% for row in content.pages.request_a_military_service_record.table.rows %}
           <tr class="tna-table__row">
             <td class="tna-table__header">{{ row.option }}</td>
             <td class="tna-table__header">{{ row.fee }}</td>
@@ -51,7 +51,7 @@
         {% endfor %}
         </tbody>
       </table>
-      <p>{{ content.pages.start.delivery_method }}</p>
+      <p>{{ content.pages.request_a_military_service_record.delivery_method }}</p>
 
       <div class="tna-!--margin-top-m">
         <form action="{{ url_for('main.start') }}" method="post" novalidate>

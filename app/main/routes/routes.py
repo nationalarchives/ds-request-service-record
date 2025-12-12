@@ -32,7 +32,9 @@ from app.main.forms.how_we_process_requests import HowTheProcessWorks
 from app.main.forms.is_service_person_alive import IsServicePersonAlive
 from app.main.forms.service_branch import ServiceBranch
 from app.main.forms.service_person_details import ServicePersonDetails
-from app.main.forms.start_now import StartNow
+from app.main.forms.request_a_military_service_record import (
+    RequestAMilitaryServiceRecord,
+)
 from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
 from app.main.forms.we_are_unlikely_to_hold_this_record import (
     WeAreUnlikelyToHoldThisRecord,
@@ -48,14 +50,16 @@ from flask import redirect, render_template, request, session, url_for
 
 @bp.route("/", methods=["GET", "POST"])
 @with_state_machine
-@with_form_prefilled_from_session(StartNow)
+@with_form_prefilled_from_session(RequestAMilitaryServiceRecord)
 def start(form, state_machine):
     save_catalogue_reference_to_session(request)
     if form.validate_on_submit():
         state_machine.continue_from_start_form()
         return redirect(url_for(state_machine.route_for_current_state))
 
-    return render_template("main/start.html", form=form, content=load_content())
+    return render_template(
+        "main/request_a_military_service_record.html", form=form, content=load_content()
+    )
 
 
 @bp.route("/how-we-process-requests/", methods=["GET", "POST"])
@@ -175,7 +179,9 @@ def service_branch_form(form, state_machine):
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(
-        "main/which-military-branch-did-the-person-serve-in.html", form=form, content=load_content()
+        "main/which-military-branch-did-the-person-serve-in.html",
+        form=form,
+        content=load_content(),
     )
 
 

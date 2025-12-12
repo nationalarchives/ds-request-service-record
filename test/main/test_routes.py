@@ -19,7 +19,9 @@ class MainBlueprintTestCase(unittest.TestCase):
         self.assertEqual(rv.location, f"{self.domain}/healthcheck/live/")
 
     def test_requires_session_key_redirects(self):
-        rv = self.app.get("/request-a-service-record/which-military-branch-did-the-person-serve-in/")
+        rv = self.app.get(
+            "/request-a-service-record/which-military-branch-did-the-person-serve-in/"
+        )
         self.assertEqual(rv.status_code, 302)
         self.assertEqual(rv.location, "/request-a-military-service-record/")
 

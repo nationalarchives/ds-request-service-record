@@ -1,7 +1,7 @@
 app:
   title: Request a military service record
 pages:
-  start:
+  request_a_military_service_record:
     heading: Request a military service record
     contents:
       paragraphs:
@@ -356,7 +356,7 @@ pages:
       - Your reference number is [reference_number]
 forms:
   fields:
-    start:
+    request_a_military_service_record:
       call_to_action: Continue
     how_we_process_requests:
       call_to_action: Continue
