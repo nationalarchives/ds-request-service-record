@@ -42,6 +42,7 @@ DYNAMICS_REQUEST_FIELD_MAP = [
     ("provider_id", "provider_id"),
 ]
 
+
 def send_request_to_dynamics(record: ServiceRecordRequest) -> None:
     send_email(
         to=current_app.config["DYNAMICS_INBOX"],
@@ -67,12 +68,13 @@ def subject_status(record: ServiceRecordRequest) -> str:
 
 
 def send_payment_to_mod_copying_app(payment: DynamicsPayment) -> None:
-    payload = {"CaseNumber": payment.case_number,
-            "PayReference": payment.reference,
-            "GovUkProviderId": payment.provider_id,
-            "Amount": (payment.total_amount/100),
-            "Date": payment.payment_date.strftime("%Y-%m-%d")
-        }
+    payload = {
+        "CaseNumber": payment.case_number,
+        "PayReference": payment.reference,
+        "GovUkProviderId": payment.provider_id,
+        "Amount": (payment.total_amount / 100),
+        "Date": payment.payment_date.strftime("%Y-%m-%d"),
+    }
 
     response = requests.post(
         current_app.config["MOD_COPYING_API_URL"],
@@ -99,4 +101,3 @@ def _generate_tagged_data(mapping: list[tuple[str, str | None]], obj) -> str:
 
 def generate_tagged_request(record: ServiceRecordRequest) -> str:
     return _generate_tagged_data(DYNAMICS_REQUEST_FIELD_MAP, record)
-

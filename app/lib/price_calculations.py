@@ -42,15 +42,12 @@ def calculate_amount_based_on_form_data(form_data: dict) -> int:
         raise ValueError("Invalid processing option")
 
     amount = OPTION_MAP[processing_option].get(
-        form_data.get(
-            f"choose_your_order_type_{processing_option}_option"
-        )
+        form_data.get(f"choose_your_order_type_{processing_option}_option")
     )
 
     if (
         processing_option == "standard"
-        and form_data.get("choose_your_order_type_standard_option")
-        == "printed"
+        and form_data.get("choose_your_order_type_standard_option") == "printed"
     ):
         if country := form_data.get("requester_country"):
             amount += calculate_delivery_fee(country)

@@ -91,9 +91,7 @@ class Production(Features):
     COUNTRY_API_URL: str = (
         os.environ.get("RECORD_COPYING_SERVICE_API_URL", "") + "GetCountry"
     )
-    MOD_COPYING_API_URL: str = (
-        os.environ.get("MOD_COPYING_API_URL", "")
-    )
+    MOD_COPYING_API_URL: str = os.environ.get("MOD_COPYING_API_URL", "")
 
 
 class Staging(Production):
