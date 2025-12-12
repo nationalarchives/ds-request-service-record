@@ -142,7 +142,7 @@ def is_service_person_alive(form, state_machine):
     )
 
 
-@bp.route("/must-submit-subject-access/", methods=["GET", "POST"])
+@bp.route("/must-submit-subject-access-request/", methods=["GET", "POST"])
 @with_state_machine
 @with_route_for_back_link_saved_to_session(
     route=MultiPageFormRoutes.MUST_SUBMIT_SUBJECT_ACCESS_REQUEST.value
