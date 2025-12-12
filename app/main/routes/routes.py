@@ -112,7 +112,7 @@ def you_have_cancelled_your_request():
     )
 
 
-@bp.route("/check-ancestry/", methods=["GET", "POST"])
+@bp.route("/you-may-want-to-check-ancestry/", methods=["GET", "POST"])
 @with_state_machine
 @with_form_prefilled_from_session(YouMayWantToCheckAncestry)
 def you_may_want_to_check_ancestry(form, state_machine):
