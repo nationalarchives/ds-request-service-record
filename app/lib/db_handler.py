@@ -26,8 +26,8 @@ def hash_check(record_hash: str) -> ServiceRecordRequest | None:
         return None
     except Exception as e:
         current_app.logger.error(f"Error checking record hash: {e}")
-        return None        
-    
+        return None
+
 
 def get_service_record_request(
     *, payment_id: str | None = None, record_id: str | None = None
@@ -148,24 +148,18 @@ def transform_form_data_to_record(form_data: dict) -> dict:
         if hasattr(ServiceRecordRequest, field)
     }
 
-    if date_of_birth := form_data.get(
-        "what_was_their_date_of_birth"
-    ):  # TODO: can this field go back to `date_of_birth` in the frontend?
+    if date_of_birth := form_data.get("what_was_their_date_of_birth"):
         transformed_data["date_of_birth"] = date_of_birth
 
     if form_data.get("processing_option") == "standard":
-        delivery_type = form_data.get(
-            "choose_your_order_type_standard_option"
-        )
+        delivery_type = form_data.get("choose_your_order_type_standard_option")
         if delivery_type == "printed":
             delivery_type = "PrintedTracked"
         else:
             delivery_type = "Digital"
         transformed_data["delivery_type"] = delivery_type
     elif form_data.get("processing_option") == "full":
-        delivery_type = form_data.get(
-            "choose_your_order_type_full_option"
-        )
+        delivery_type = form_data.get("choose_your_order_type_full_option")
         if delivery_type == "printed":
             delivery_type = "PrintedTracked"
         else:

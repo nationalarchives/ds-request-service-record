@@ -7,30 +7,32 @@ test.describe("the 'We do not hold this record' form", () => {
     await page.goto(Paths.WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS);
   });
 
-  test("has the correct heading", async ({ page }) => {
-    await expect(page.locator("h1")).toHaveText(/We do not hold this record/);
-  });
-
-  test.describe("clicking the 'Request from the Ministry of Defence' button", () => {
-    test("opens link in new tab", async ({ page }) => {
-      // Trigger that opens a new tab (e.g. <a target="_blank">)
-      const [newPage] = await Promise.all([
-        page.waitForEvent("popup"), // waits for the new tab
-        page
-          .getByRole("link", { name: "Request from the Ministry of Defence" })
-          .click(),
-      ]);
-
-      await newPage.waitForLoadState("domcontentloaded");
-
-      // Assertions on the new tab
-      expect(newPage.url()).toContain(
-        "https://www.gov.uk/get-copy-military-records-of-service/apply-for-the-records-of-a-deceased-serviceperson",
-      );
+  test.describe("when first rendered", () => {
+    test("has the correct heading", async ({ page }) => {
+      await expect(page.locator("h1")).toHaveText(/We do not hold this record/);
     });
   });
 
-  test.describe("'Exit this form' and 'Back' links", () => {
+  test.describe("when interacted with", () => {
+    test.describe("clicking the 'Request from the Ministry of Defence' button", () => {
+      test("opens link in new tab", async ({ page }) => {
+        // Trigger that opens a new tab (e.g. <a target="_blank">)
+        const [newPage] = await Promise.all([
+          page.waitForEvent("popup"), // waits for the new tab
+          page
+            .getByRole("link", { name: "Request from the Ministry of Defence" })
+            .click(),
+        ]);
+
+        await newPage.waitForLoadState("domcontentloaded");
+
+        // Assertions on the new tab
+        expect(newPage.url()).toContain(
+          "https://www.gov.uk/get-copy-military-records-of-service/apply-for-the-records-of-a-deceased-serviceperson",
+        );
+      });
+    });
+
     test("clicking the 'Exit this form' button takes the user to 'Are you sure you want to cancel?'", async ({
       page,
     }) => {

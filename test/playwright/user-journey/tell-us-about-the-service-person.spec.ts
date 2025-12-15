@@ -7,14 +7,16 @@ test.describe("the 'Tell us as much as you know about the service person form?' 
     await page.goto(Paths.SERVICE_PERSON_DETAILS);
   });
 
-  test("has the correct heading", async ({ page }) => {
-    await expect(page.locator("h1")).toHaveText(
-      /Tell us as much as you know about the service person/,
-    );
+  test.describe("when first rendered", () => {
+    test("has the correct heading", async ({ page }) => {
+      await expect(page.locator("h1")).toHaveText(
+        /Tell us as much as you know about the service person/,
+      );
+    });
   });
 
-  test.describe("when submitted", () => {
-    test.describe("with invalid input", () => {
+  test.describe("when interacted with", () => {
+    test.describe("submitted with invalid input", () => {
       test("without any input, the validation summary is shown", async ({
         page,
       }) => {
@@ -36,7 +38,7 @@ test.describe("the 'Tell us as much as you know about the service person form?' 
         );
       });
     });
-    test.describe("with valid input", () => {
+    test.describe("submitted with valid input", () => {
       test("with only the required fields filled in, the user is taken to the next page", async ({
         page,
       }) => {

@@ -8,10 +8,12 @@ from wtforms import (
 )
 
 
-class StartNow(FlaskForm):
+class RequestAMilitaryServiceRecord(FlaskForm):
     content = load_content()
 
     submit = SubmitField(
-        get_field_content(content, "start", "call_to_action"),
+        get_field_content(
+            content, "request_a_military_service_record", "call_to_action"
+        ),
         widget=TnaSubmitWidget(),
     )

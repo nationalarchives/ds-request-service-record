@@ -1,5 +1,8 @@
-from app.constants import get_country_choices
+from app.lib.get_country_choices import get_country_choices
 from app.lib.content import get_field_content, load_content
+from app.main.forms.validation_helpers.country_must_be_selected import (
+    country_must_be_selected,
+)
 from flask_wtf import FlaskForm
 from tna_frontend_jinja.wtforms import (
     TnaSelectWidget,
@@ -14,7 +17,7 @@ from wtforms import (
 from wtforms.validators import InputRequired
 
 
-class YourPostalAddress(FlaskForm):
+class WhatIsYourAddress(FlaskForm):
     content = load_content()
 
     def __init__(self, *args, **kwargs):
@@ -60,7 +63,13 @@ class YourPostalAddress(FlaskForm):
     requester_postcode = StringField(
         get_field_content(content, "requester_postcode", "label"),
         widget=TnaTextInputWidget(),
-        validators=[],
+        validators=[
+            InputRequired(
+                message=get_field_content(content, "requester_postcode", "messages")[
+                    "required"
+                ]
+            )
+        ],
     )
 
     requester_country = SelectField(
@@ -70,7 +79,7 @@ class YourPostalAddress(FlaskForm):
         ],
         widget=TnaSelectWidget(),
         validators=[
-            InputRequired(
+            country_must_be_selected(
                 message=get_field_content(content, "requester_country", "messages")[
                     "required"
                 ]

@@ -143,8 +143,8 @@ class RoutingStateMachine(StateMachine):
         enter="entering_your_contact_details_form", final=True
     )
 
-    your_postal_address_form = State(
-        enter="entering_your_postal_address_form", final=True
+    what_is_your_address_form = State(
+        enter="entering_what_is_your_address_form", final=True
     )
 
     choose_your_order_type_form = State(
@@ -285,10 +285,10 @@ class RoutingStateMachine(StateMachine):
     )
 
     continue_from_your_contact_details_form = initial.to(
-        your_postal_address_form, cond="does_not_have_email"
+        what_is_your_address_form, cond="does_not_have_email"
     ) | initial.to(your_order_summary_form)
 
-    continue_from_your_postal_address_form = initial.to(choose_your_order_type_form)
+    continue_from_what_is_your_address_form = initial.to(your_order_summary_form)
 
     continue_from_choose_your_order_type_form = initial.to(your_contact_details_form)
 
@@ -398,8 +398,8 @@ class RoutingStateMachine(StateMachine):
     def entering_your_contact_details_form(self):
         self.route_for_current_state = MultiPageFormRoutes.YOUR_CONTACT_DETAILS.value
 
-    def entering_your_postal_address_form(self):
-        self.route_for_current_state = MultiPageFormRoutes.YOUR_POSTAL_ADDRESS.value
+    def entering_what_is_your_address_form(self):
+        self.route_for_current_state = MultiPageFormRoutes.WHAT_IS_YOUR_ADDRESS.value
 
     def entering_choose_your_order_type_form(self):
         self.route_for_current_state = MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE.value

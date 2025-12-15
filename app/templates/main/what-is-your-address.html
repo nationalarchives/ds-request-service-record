@@ -11,11 +11,14 @@
     <div class="tna-container">
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
-        <h1 class="tna-heading-xl">{{ content.pages.your_postal_address.heading }}</h1>
-        {% for paragraph in content.pages.your_postal_address.paragraphs %}
+        <h1 class="tna-heading-xl">{{ content.pages.what_is_your_address.heading }}</h1>
+        {% if form.errors %}
+          {{ tnaErrorSummary(wtforms_errors(form)) }}
+        {% endif %}
+        {% for paragraph in content.pages.what_is_your_address.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
-        <form action="{{ url_for('main.your_postal_address') }}" method="post" novalidate>
+        <form action="{{ url_for('main.what_is_your_address') }}" method="post" novalidate>
           {{ form.csrf_token }}
           {{ form.requester_address1(params={'headingLevel':2, 'size':'m', 'autocomplete':'address-line1'}) }}
           {{ form.requester_address2(params={'headingLevel':2, 'size':'m', 'autocomplete':'address-line2'}) }}
