@@ -499,10 +499,8 @@ def gov_uk_pay_redirect(id):
     if not response:
         return redirect(url_for("main.payment_link_creation_failed"))
 
-    # Safely extract payment URL from nested structure
-    links = response.get("_links", {})
-    next_url = links.get("next_url", {}) if isinstance(links, dict) else {}
-    gov_uk_payment_url = next_url.get("href", "") if isinstance(next_url, dict) else ""
+    # Extract payment URL and ID from response
+    gov_uk_payment_url = response.get("_links", {}).get("next_url", {}).get("href", "")
     gov_uk_payment_id = response.get("payment_id", "")
 
     if not gov_uk_payment_url or not gov_uk_payment_id:

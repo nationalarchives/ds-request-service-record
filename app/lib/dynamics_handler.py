@@ -152,7 +152,7 @@ def send_payment_to_mod_copying_app(payment: DynamicsPayment) -> None:
         current_app.logger.error(
             f"Failed to update MOD Copying app for payment ID {payment.id}: {e}"
         )
-        raise ValueError("Could not update MOD Copying app with payment details") from e
+        raise ValueError(f"Could not update MOD Copying app with payment details for payment ID {payment.id}") from e
 
 
 def _generate_tagged_data(mapping: list[tuple[str, str | None]], obj) -> str:

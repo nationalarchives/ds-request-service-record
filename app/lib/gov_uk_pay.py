@@ -89,16 +89,19 @@ def get_payment_status(data: dict) -> str | None:
     return data.get("state", {}).get("status")
 
 
-def validate_payment(data: dict) -> bool:
+def validate_payment(data: dict | None) -> bool:
     """
     Check if payment has been successfully completed.
     
     Args:
-        data: Payment data dictionary from GOV.UK Pay API.
+        data: Payment data dictionary from GOV.UK Pay API, or None.
         
     Returns:
         bool: True if payment is successful, False otherwise.
     """
+    if data is None:
+        return False
+    
     status = get_payment_status(data)
     return status is not None and status in SUCCESSFUL_PAYMENT_STATUSES
 
