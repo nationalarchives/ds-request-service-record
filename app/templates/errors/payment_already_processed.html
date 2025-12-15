@@ -1,0 +1,16 @@
+{% extends 'base.html' %} {%- set status_code = 400 -%} {% block header %} {{
+tnaHeader({ 'logo': { 'href': '/' } }) }} {% endblock %} {% block content %}
+<div class="tna-container">
+  <div
+    class="tna-column tna-column--width-2-3 tna-column--full-small tna-column--full-tiny tna-section"
+  >
+    <h1 class="tna-heading-xl">Payment already processed</h1>
+    <p>This payment has already been completed or cancelled.</p>
+    <p>
+      If you believe this is an error, please
+      <a href="https://www.nationalarchives.gov.uk/contact-us/">contact us</a>
+      for assistance.
+    </p>
+  </div>
+</div>
+{% endblock %}

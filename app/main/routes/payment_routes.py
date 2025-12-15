@@ -277,99 +277,6 @@ from flask import current_app, redirect, render_template, request, session, url_
 #     return redirect(url_for(state_machine.route_for_current_state))
 
 
-# @bp.route("/create-payment/", methods=["POST"])
-# def create_payment_endpoint():
-#     """
-#     Required params:
-#     - case_number
-#     - reference
-#     - net_amount
-#     - payee_email
-
-#     Optional params:
-#     - delivery_amount
-#     - first_name
-#     - last_name
-#     - details
-#     """
-#     data = request.json
-#     required = ["case_number", "reference", "net_amount", "payee_email"]
-
-#     if missing := [field for field in required if field not in data]:
-#         return {"error": f"Missing required fields: {', '.join(missing)}"}, 400
-
-#     try:
-#         data["net_amount"] = int(data["net_amount"] * 100)  # Convert to pence
-#         if data["net_amount"] <= 0:
-#             return {"error": "Net amount must be greater than zero"}, 400
-#     except (ValueError, TypeError):
-#         return {"error": "Invalid net amount format"}, 400
-
-#     if "delivery_amount" in data:
-#         try:
-#             data["delivery_amount"] = int(
-#                 data["delivery_amount"] * 100
-#             )  # Convert to pence
-#             if data["delivery_amount"] <= 0:
-#                 return {"error": "Delivery amount must be greater than zero"}, 400
-#         except (ValueError, TypeError):
-#             return {"error": "Invalid delivery amount format"}, 400
-
-#     # Exclude any extra fields to avoid unexpected errors
-#     data = {
-#         "case_number": data["case_number"],
-#         "reference": data["reference"],
-#         "net_amount": data["net_amount"],
-#         "total_amount": data["net_amount"] + data.get("delivery_amount", 0),
-#         "payee_email": data["payee_email"],
-#         "first_name": data.get("first_name", ""),
-#         "last_name": data.get("last_name", ""),
-#         "delivery_amount": data.get("delivery_amount", 0),
-#         "details": data.get("details", ""),
-#     }
-
-#     payment = add_dynamics_payment(data)
-#     if payment is None:
-#         return {"error": "Failed to create payment"}, 500
-
-#     try:
-#         payment.status = "S"  # Mark as Sent
-#         send_email(
-#             to=data["payee_email"],
-#             subject="Payment for Service Record Request",
-#             body=f"You have been requested to make a payment for a service record request. Please visit the following link to complete your payment: {url_for('main.make_payment', id=payment.id, _external=True)}",
-#         )
-#         db.session.commit()
-#     except Exception as e:
-#         current_app.logger.error(
-#             f"Error sending payment email: {e}, deleting payment record."
-#         )
-#         delete_dynamics_payment(payment)
-#         return {"error": "Failed to create payment"}, 500
-
-#     return {"message": f"Payment created and sent successfully: {payment.id}"}, 201
-
-
-# @bp.route("/payment/<id>/", methods=["GET", "POST"])
-# def make_payment(id):
-#     form = ProceedToPay()
-#     payment = get_dynamics_payment(id)
-#     content = load_content()
-
-#     if payment is None:
-#         return "Payment not found"
-
-#     if form.validate_on_submit():
-#         return redirect(url_for("main.gov_uk_pay_redirect", id=payment.id))
-
-#     return render_template(
-#         "main/payment/dynamics-payment.html",
-#         form=form,
-#         payment=payment,
-#         content=content,
-#     )
-
-
 # @bp.route("/payment-redirect/<id>/", methods=["GET"])
 # def gov_uk_pay_redirect(id):
 #     payment = get_dynamics_payment(id)
@@ -422,7 +329,26 @@ def gov_uk_pay_redirect(id):
 
 @bp.route("/payment/<id>/", methods=["GET", "POST"])
 def make_payment(id):
-    return None
+    payment = get_dynamics_payment(id)
+
+    if payment is None:
+        return "Payment not found"
+    
+    if payment.status == "P":
+        return render_template("errors/payment_already_processed.html"), 400
+
+    form = ProceedToPay()
+    content = load_content()
+
+    if form.validate_on_submit():
+        return redirect(url_for("main.gov_uk_pay_redirect", id=payment.id))
+
+    return render_template(
+        "main/payment/dynamics-payment.html",
+        form=form,
+        payment=payment,
+        content=content,
+    )
 
 def _validate_and_convert_amount(amount_value, field_name):
     """
