@@ -15,6 +15,7 @@ from app.lib.db_handler import (
     get_dynamics_payment,
     get_gov_uk_dynamics_payment,
     get_payment_id_from_record_id,
+    get_service_record_request,
     hash_check,
     transform_form_data_to_record,
 )
@@ -84,7 +85,7 @@ def _handle_existing_payment(existing_record):
     payment_status = get_payment_status(payment_data)
 
     if payment_status in SUCCESSFUL_PAYMENT_STATUSES:
-        return redirect(url_for("main.confirm_payment_received"))
+        return redirect(url_for("main.confirm_payment_received", id=existing_record.id))
     elif payment_status in UNFINISHED_PAYMENT_STATUSES:
         return redirect(
             f"https://card.payments.service.gov.uk/card_details/{payment_id}"
@@ -205,7 +206,7 @@ def handle_gov_uk_pay_payment_response():
                 f"Error processing valid payment of payment ID {gov_uk_payment_id}: {e}"
             )
 
-        return redirect(url_for("main.confirm_payment_received"))
+        return redirect(url_for("main.confirm_payment_received", id=id))
 
     # Let the user know it failed, ask if they want to retry
     return redirect(url_for("main.payment_incomplete"))
@@ -242,13 +243,13 @@ def handle_gov_uk_pay_request_response():
                 f"Error processing valid request of payment ID {gov_uk_payment_id}: {e}"
             )
 
-        return redirect(url_for("main.confirm_payment_received"))
+        return redirect(url_for("main.confirm_payment_received", id=id))
 
     # Let the user know it failed, ask if they want to retry
     return redirect(url_for("main.payment_incomplete"))
 
 
-@bp.route("/payment-link-creation_failed/")
+@bp.route("/payment-link-creation-failed/")
 def payment_link_creation_failed():
     content = load_content()
     return render_template(
@@ -262,11 +263,18 @@ def payment_incomplete():
     return render_template("main/payment/payment-incomplete.html", content=content)
 
 
-@bp.route("/confirm-payment-received/")
-def confirm_payment_received():
+@bp.route("/confirm-payment-received/<id>/")
+def confirm_payment_received(id):
+    record = get_service_record_request(id)
+    
+    if not record:
+        return redirect(url_for("main.start"))
+    
+    payment_data = get_payment_data(record.payment_id) if record.payment_id else None
+
     content = load_content()
     return render_template(
-        "main/payment/confirm-payment-received.html", content=content
+        "main/payment/confirm-payment-received.html", content=content, payment_data=payment_data, record=record
     )
 
 
