@@ -38,7 +38,7 @@ class ServiceRecordRequest(db.Model):
     service_branch = db.Column(db.String(64))
     service_number = db.Column(db.String(64), nullable=True)
     proof_of_death = db.Column(db.String(64), nullable=True)
-    payment_id = db.Column(db.String(64), nullable=True, unique=True)
+    gov_uk_payment_id = db.Column(db.String(64), nullable=True, unique=True)
     provider_id = db.Column(db.String(64), nullable=True)
     payment_date = db.Column(db.String(17), nullable=True)
     delivery_type = db.Column(db.String(32), nullable=True)

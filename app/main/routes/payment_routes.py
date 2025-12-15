@@ -15,6 +15,7 @@ from app.lib.db_handler import (
     get_dynamics_payment,
     get_gov_uk_dynamics_payment,
     get_payment_id_from_record_id,
+    get_service_record_request,
     hash_check,
     transform_form_data_to_record,
 )
@@ -314,18 +315,116 @@ from flask import current_app, redirect, render_template, request, session, url_
 
 #     return redirect(gov_uk_payment_url)
 
+def _generate_reference() -> str:
+    """
+    Generate a unique payment reference using Unix timestamp, random letter, and suffix.
+    Format: TNA<timestamp><letter><suffix>
+    Example: TNA1733756789X42
+    """
+    unix_timestamp = int(datetime.now().strftime("%Y%m%d"))
+    random_letter = random.choice(string.ascii_uppercase)
+    random_suffix = random.randint(10, 99)
+
+    return f"TNA{unix_timestamp}{random_letter}{random_suffix}"
 
 @bp.route("/send-to-gov-uk-pay/")
 def send_to_gov_uk_pay():
     return None
 
-@bp.route("/handle-gov-uk-pay-payment-response/")
-def handle_gov_uk_pay_payment_response():
-    return None
+@bp.route("/confirm-payment-received/")
+def confirm_payment_received():
+    content = load_content()
+    return render_template(
+        "main/payment/confirm-payment-received.html", content=content
+    )
+
+@bp.route("/handle-gov-uk-pay-response/<payment_type>/<id>/")
+def handle_gov_uk_pay_response(payment_type, id):
+    if payment_type == "dynamics":
+        payment = get_gov_uk_dynamics_payment(id)
+    elif payment_type == "service_record":
+        payment = get_service_record_request(id)
+    else:
+        return "Shouldn't be here"
+    
+    if payment is None:
+        # User got here with an ID that doesn't exist in the DB - could be our fault, or could be malicious, do something
+        return "Shouldn't be here"
+    
+    gov_uk_payment_id = payment.gov_uk_payment_id
+    gov_uk_payment_data = get_payment_data(gov_uk_payment_id) # TODO: <- improve this function to use the JSONAPIClient
+
+    if gov_uk_payment_data is None:
+        # Could not retrieve payment data from GOV.UK Pay - log and inform user
+        current_app.logger.error(
+            f"Could not retrieve payment data for GOV.UK payment ID: {gov_uk_payment_id}"
+        )
+        return "Some sort of error"  # TODO: We need to make a proper error page for this to show we couldn't connect to GOV.UK Pay API - maybe provide the GOV.UK Pay ID and to contact webmaster?
+    
+    if validate_payment(gov_uk_payment_data): # TODO: <- improve this function to use the JSONAPIClient
+        if payment_type == "dynamics":
+            provider_id = gov_uk_payment_data.get("provider_id", None)
+            payment_date = gov_uk_payment_data.get("settlement_summary", {}).get(
+                "captured_date", None
+            ) # TODO <- improve this function to use the JSONAPIClient?
+            try:
+                process_valid_payment(
+                    id=payment.dynamics_payment_id, provider_id=provider_id, payment_date=payment_date
+                )
+            except Exception as e:
+                current_app.logger.error(
+                    f"Error processing valid payment of payment ID {gov_uk_payment_id}: {e}"
+                )
+        elif payment_type == "service_record":
+            try:
+                process_valid_request(payment.id, gov_uk_payment_data)
+            except Exception as e:
+                current_app.logger.error(
+                    f"Error processing valid request of payment ID {gov_uk_payment_id}: {e}"
+                )    
+        return redirect(url_for("main.confirm_payment_received"))
+
+    # Let the user know it failed, ask if they want to retry
+    return redirect(url_for("main.payment_incomplete"))
+    
 
 @bp.route("/payment-redirect/<id>/", methods=["GET"])
 def gov_uk_pay_redirect(id):
-    return None
+    payment = get_dynamics_payment(id)
+
+    if payment is None:
+        return "Payment not found"
+
+    id = str(uuid.uuid4())
+
+    response = create_payment(
+        amount=payment.total_amount,
+        description=f"{payment.case_number}{(': ' + payment.details) if payment.details else ''}",
+        reference=payment.reference,
+        email=payment.payee_email,
+        return_url=f"{url_for('main.handle_gov_uk_pay_response', payment_type='dynamics', id=id, _external=True)}",
+    )
+
+    if not response:
+        return redirect(url_for("main.payment_link_creation_failed"))
+
+    gov_uk_payment_url = response.get("_links", {}).get("next_url", {}).get("href", "")
+    gov_uk_payment_id = response.get("payment_id", "")
+
+    if not gov_uk_payment_url or not gov_uk_payment_id:
+        return redirect(url_for("main.payment_link_creation_failed"))
+
+    data = {
+        "id": id,
+        "dynamics_payment_id": payment.id,
+        "gov_uk_payment_id": gov_uk_payment_id,
+        "created_at": datetime.now(),
+    }
+
+    add_gov_uk_dynamics_payment(data)
+
+    return redirect(gov_uk_payment_url)
+
 
 @bp.route("/payment/<id>/", methods=["GET", "POST"])
 def make_payment(id):
@@ -373,7 +472,6 @@ def _validate_and_convert_amount(amount_value, field_name):
         return amount_in_pence, None
     except (ValueError, TypeError):
         return None, ({"error": f"Invalid {field_name} format"}, 400)
-
 
 @bp.route("/create-payment/", methods=["POST"])
 def create_payment_endpoint():

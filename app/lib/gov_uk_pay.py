@@ -79,11 +79,11 @@ def create_payment(
     return response.json()
 
 
-def process_valid_request(payment_id: str, payment_data: dict) -> None:
-    record = get_service_record_request(payment_id=payment_id)
+def process_valid_request(id: str, payment_data: dict) -> None:
+    record = get_service_record_request(record_id=id)
 
     if record is None:
-        raise ValueError(f"Service record not found for payment ID: {payment_id}")
+        raise ValueError(f"Service record not found for payment ID: {id}")
 
     if record.status == "N":
         record.provider_id = payment_data.get("provider_id", None)
@@ -98,24 +98,20 @@ def process_valid_request(payment_id: str, payment_data: dict) -> None:
         db.session.commit()
 
     if record.status == "P":
-        send_request_to_dynamics(record)
-        record.status = "S"
-        db.session.commit()
-
-        # Don't delete for now
-        # delete_service_record_request(record)
+        if send_request_to_dynamics(record):
+            record.status = "S"
+            db.session.commit()
 
 
 def process_valid_payment(id: str, *, provider_id: str, payment_date: str) -> None:
-    payment = get_gov_uk_dynamics_payment(id)
+    payment = get_dynamics_payment(id)
 
     if payment is None:
-        raise ValueError(f"Payment not found for GOV.UK payment ID: {id}")
+        raise ValueError(f"Payment not found for payment ID: {id}")
 
-    dynamics_payment = get_dynamics_payment(payment.dynamics_payment_id)
-    dynamics_payment.status = "P"
-    dynamics_payment.provider_id = provider_id
-    dynamics_payment.payment_date = datetime.strptime(payment_date, "%Y-%m-%d")
+    payment.status = "P"
+    payment.provider_id = provider_id
+    payment.payment_date = datetime.strptime(payment_date, "%Y-%m-%d")
     db.session.commit()
 
-    send_payment_to_mod_copying_app(dynamics_payment)
+    send_payment_to_mod_copying_app(payment)
