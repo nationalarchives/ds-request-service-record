@@ -4,6 +4,7 @@ import { Paths } from "../lib/constants";
 test.describe("the 'Are you sure you want to cancel?' form", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START);
+    await page.goto(Paths.BEFORE_YOU_START);
     await page.goto(Paths.ARE_YOU_SURE_YOU_WANT_TO_CANCEL);
   });
 

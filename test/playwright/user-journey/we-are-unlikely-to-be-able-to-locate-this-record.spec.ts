@@ -4,6 +4,7 @@ import { Paths } from "../lib/constants";
 test.describe("the 'We are unlikely to be able to locate this record' form", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START);
+    await page.goto(Paths.WHICH_MILITARY_BRANCH_DID_THE_PERSON_SERVE_IN);
     await page.goto(Paths.WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD);
   });
 

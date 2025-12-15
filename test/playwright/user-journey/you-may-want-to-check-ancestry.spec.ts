@@ -4,6 +4,7 @@ import { Paths } from "../lib/constants";
 test.describe("the 'You may want to check ancestry' form", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START);
+    await page.goto(Paths.BEFORE_YOU_START);
     await page.goto(Paths.YOU_MAY_WANT_TO_CHECK_ANCESTRY);
   });
 

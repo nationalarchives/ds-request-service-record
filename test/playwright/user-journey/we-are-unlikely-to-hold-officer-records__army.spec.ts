@@ -4,6 +4,7 @@ import { Paths } from "../lib/constants";
 test.describe("The variant of 'We are unlikely to hold this record' for Army Officers", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START);
+    await page.goto(Paths.WERE_THEY_A_COMMISSIONED_OFFICER);
     await page.goto(Paths.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY);
   });
 

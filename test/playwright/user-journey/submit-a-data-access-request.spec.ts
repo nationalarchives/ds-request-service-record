@@ -4,6 +4,7 @@ import { Paths } from "../lib/constants";
 test.describe("the 'Submit a data access request' form", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START);
+    await page.goto(Paths.IS_SERVICE_PERSON_ALIVE);
     await page.goto(Paths.MUST_SUBMIT_SUBJECT_ACCESS);
   });
 

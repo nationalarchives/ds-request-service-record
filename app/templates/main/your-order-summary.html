@@ -2,10 +2,8 @@
 
 {%- set pageTitle = content.app.title -%}
 
-{%- set back_link_endpoint = route_for_back_link if route_for_back_link else 'main.your_contact_details' -%}
-
 {% block beforeContent %}
-  {{ backLink(url_for(back_link_endpoint)) }}
+  {{ backLink(url_for(back_link)) }}
 {% endblock %}
 
 {% block content %}

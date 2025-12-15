@@ -32,6 +32,7 @@ test.describe("the service branch form", () => {
 
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START); // We need to go here first because we prevent direct access to mid-journey pages
+    await page.goto(Paths.IS_SERVICE_PERSON_ALIVE);
     await page.goto(Paths.WHICH_MILITARY_BRANCH_DID_THE_PERSON_SERVE_IN);
   });
 

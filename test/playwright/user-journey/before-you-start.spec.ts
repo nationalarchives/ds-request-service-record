@@ -4,6 +4,7 @@ import { Paths } from "../lib/constants";
 test.describe("the 'Before you start' form", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START);
+    await page.goto(Paths.HOW_WE_PROCESS_REQUESTS);
     await page.goto(Paths.BEFORE_YOU_START);
   });
 

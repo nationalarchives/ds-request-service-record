@@ -4,6 +4,7 @@ import { Paths } from "../lib/constants";
 test.describe("The 'We do not have records for people born after 1939' form", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START);
+    await page.goto(Paths.WHAT_WAS_THEIR_DATE_OF_BIRTH);
     await page.goto(Paths.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER);
   });
 

@@ -4,6 +4,7 @@ import { Paths } from "../lib/constants";
 test.describe("Your contact details", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START);
+    await page.goto(Paths.CHOOSE_YOUR_ORDER_TYPE);
     await page.goto(Paths.YOUR_CONTACT_DETAILS);
   });
 

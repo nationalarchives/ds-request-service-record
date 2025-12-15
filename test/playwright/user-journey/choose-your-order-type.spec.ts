@@ -4,6 +4,7 @@ import { Paths } from "../lib/constants";
 test.describe("choose your order type", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START);
+    await page.goto(Paths.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
     await page.goto(Paths.CHOOSE_YOUR_ORDER_TYPE);
   });
 

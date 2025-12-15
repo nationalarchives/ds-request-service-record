@@ -4,6 +4,7 @@ import { Paths } from "../lib/constants";
 test.describe("the 'Is the person still alive?' form", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START); // We need to go here first because we prevent direct access to mid-journey pages
+    await page.goto(Paths.YOU_MAY_WANT_TO_CHECK_ANCESTRY);
     await page.goto(Paths.IS_SERVICE_PERSON_ALIVE);
   });
 
@@ -16,7 +17,7 @@ test.describe("the 'Is the person still alive?' form", () => {
   });
 
   test.describe("when interacted with", () => {
-    test("clicking the 'Back' link takes the user to the 'Have you checked the catalogue? page'", async ({
+    test("clicking the 'Back' link takes the user to the 'You may want to check Ancestry' page'", async ({
       page,
     }) => {
       await page.getByRole("link", { name: "Back" }).click();

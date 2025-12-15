@@ -3,7 +3,7 @@
 {%- set pageTitle = content.app.title -%}
 
 {% block beforeContent %}
-  {{ backLink(url_for('main.were_they_a_commissioned_officer')) }}
+  {{ backLink(url_for(back_link)) }}
 {% endblock %}
 
 {% block content %}

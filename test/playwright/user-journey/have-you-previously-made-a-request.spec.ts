@@ -4,6 +4,7 @@ import { Paths } from "../lib/constants";
 test.describe("have you previously made a request", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START);
+    await page.goto(Paths.SERVICE_PERSON_DETAILS);
     await page.goto(Paths.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
   });
 
