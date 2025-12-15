@@ -1,3 +1,10 @@
+"""
+Dynamics integration module.
+
+This module handles communication with Microsoft Dynamics and MOD Copying app,
+including sending service record requests and payment information.
+"""
+
 from datetime import datetime
 
 import requests
@@ -6,6 +13,7 @@ from app.lib.aws import send_email
 from app.lib.models import DynamicsPayment, ServiceRecordRequest
 from flask import current_app
 
+# Mapping of Dynamics field names to ServiceRecordRequest attributes
 DYNAMICS_REQUEST_FIELD_MAP = [
     ("mandatory_forename", "requester_first_name"),
     ("mandatory_surname", "requester_last_name"),
@@ -44,6 +52,12 @@ DYNAMICS_REQUEST_FIELD_MAP = [
 
 
 def send_request_to_dynamics(record: ServiceRecordRequest) -> None:
+    """
+    Send a service record request to Dynamics via email.
+    
+    Args:
+        record: ServiceRecordRequest instance to send.
+    """
     send_email(
         to=current_app.config["DYNAMICS_INBOX"],
         subject=subject_status(record),
@@ -51,45 +65,104 @@ def send_request_to_dynamics(record: ServiceRecordRequest) -> None:
     )
 
 
+def _determine_closure_status(record: ServiceRecordRequest, age: int) -> str:
+    """
+    Determine the FOI closure status code based on age and proof of death.
+    
+    Args:
+        record: ServiceRecordRequest instance.
+        age: Age calculated from date of birth.
+        
+    Returns:
+        str: Closure status code (FOIOP, FOICD, or FOICDN).
+    """
+    # Age threshold for open records
+    AGE_THRESHOLD_OPEN = 115
+    
+    if age >= AGE_THRESHOLD_OPEN:
+        return "FOIOP"
+    
+    return "FOICD" if record.proof_of_death else "FOICDN"
+
+
 def subject_status(record: ServiceRecordRequest) -> str:
+    """
+    Generate email subject line for Dynamics based on record details.
+    
+    The subject includes FOI status and processing option.
+    
+    Args:
+        record: ServiceRecordRequest instance.
+        
+    Returns:
+        str: Email subject line.
+    """
     dob = datetime.strptime(record.date_of_birth, "%d %B %Y")
     age = datetime.now().year - dob.year
 
-    if age >= 115:
-        closure_status = "FOIOP"
-    else:
-        if record.proof_of_death:
-            closure_status = "FOICD"
-        else:
-            closure_status = "FOICDN"
-
+    closure_status = _determine_closure_status(record, age)
     option = "1" if record.processing_option == "standard" else "2"
+    
     return f"? FOI DIRECT MOD {closure_status}{option}"
 
 
-def send_payment_to_mod_copying_app(payment: DynamicsPayment) -> None:
-    payload = {
+def _build_payment_payload(payment: DynamicsPayment) -> dict:
+    """
+    Build the payload for MOD Copying API from payment data.
+    
+    Args:
+        payment: DynamicsPayment instance.
+        
+    Returns:
+        dict: Payload for MOD Copying API request.
+    """
+    return {
         "CaseNumber": payment.case_number,
         "PayReference": payment.reference,
         "GovUkProviderId": payment.provider_id,
-        "Amount": (payment.total_amount / 100),
+        "Amount": payment.total_amount / 100,
         "Date": payment.payment_date.strftime("%Y-%m-%d"),
     }
 
-    response = requests.post(
-        current_app.config["MOD_COPYING_API_URL"],
-        json=payload,
-        headers={"Content-Type": "application/json"},
-    )
 
-    if response.status_code != 200:
-        current_app.logger.error(
-            f"Failed to update MOD Copying app for payment ID {payment.id}: {response.status_code} - {response.text}"
+def send_payment_to_mod_copying_app(payment: DynamicsPayment) -> None:
+    """
+    Send payment information to MOD Copying application.
+    
+    Args:
+        payment: DynamicsPayment instance to send.
+        
+    Raises:
+        ValueError: If the API request fails.
+    """
+    payload = _build_payment_payload(payment)
+
+    try:
+        response = requests.post(
+            current_app.config["MOD_COPYING_API_URL"],
+            json=payload,
+            headers={"Content-Type": "application/json"},
+            timeout=10
         )
-        raise ValueError("Could not update MOD Copying app with payment details")
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        current_app.logger.error(
+            f"Failed to update MOD Copying app for payment ID {payment.id}: {e}"
+        )
+        raise ValueError("Could not update MOD Copying app with payment details") from e
 
 
 def _generate_tagged_data(mapping: list[tuple[str, str | None]], obj) -> str:
+    """
+    Generate XML-tagged data from object attributes.
+    
+    Args:
+        mapping: List of tuples mapping tag names to object attributes.
+        obj: Object to extract attribute values from.
+        
+    Returns:
+        str: XML-tagged string with object data.
+    """
     chunks = []
     for tag, attr in mapping:
         value = getattr(obj, attr) if attr else None
@@ -100,4 +173,13 @@ def _generate_tagged_data(mapping: list[tuple[str, str | None]], obj) -> str:
 
 
 def generate_tagged_request(record: ServiceRecordRequest) -> str:
+    """
+    Generate tagged XML string for a service record request.
+    
+    Args:
+        record: ServiceRecordRequest instance.
+        
+    Returns:
+        str: XML-tagged representation of the record.
+    """
     return _generate_tagged_data(DYNAMICS_REQUEST_FIELD_MAP, record)

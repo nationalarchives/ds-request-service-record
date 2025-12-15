@@ -168,34 +168,62 @@ def _store_payment_record(
     )
 
 
+def _validate_payment_id(id: str | None) -> tuple[str, int] | None:
+    """
+    Validate payment ID parameter.
+    
+    Args:
+        id: Payment ID from request.
+        
+    Returns:
+        tuple: Error message and status code if invalid, None if valid.
+    """
+    if not id:
+        current_app.logger.warning("Payment response handler called without ID")
+        return "Payment ID is required", 400
+    return None
+
+
+def _extract_payment_details(payment_data: dict) -> tuple[str | None, str | None]:
+    """
+    Extract provider ID and payment date from GOV.UK Pay data.
+    
+    Args:
+        payment_data: Payment data from GOV.UK Pay API.
+        
+    Returns:
+        tuple: (provider_id, payment_date) extracted from payment data.
+    """
+    provider_id = payment_data.get("provider_id")
+    payment_date = payment_data.get("settlement_summary", {}).get("captured_date")
+    return provider_id, payment_date
+
+
 @bp.route("/handle-gov-uk-pay-payment-response/")
 def handle_gov_uk_pay_payment_response():
+    """Handle return from GOV.UK Pay for Dynamics payment flow."""
     id = request.args.get("id")
 
-    if not id:
-        # User got here without ID - likely manually, do something... (redirect to form?)
-        return "Shouldn't be here"
+    if error := _validate_payment_id(id):
+        return error
 
     payment = get_gov_uk_dynamics_payment(id)
     if payment is None:
-        # User got here with an ID that doesn't exist in the DB - could be our fault, or could be malicious, do something
-        return "Shouldn't be here"
+        current_app.logger.warning(f"Payment not found for ID: {id}")
+        return "Payment not found", 404
 
     gov_uk_payment_id = payment.gov_uk_payment_id
     gov_uk_payment_data = get_payment_data(gov_uk_payment_id)
 
     if gov_uk_payment_data is None:
-        # Could not retrieve payment data from GOV.UK Pay - log and inform user
         current_app.logger.error(
             f"Could not retrieve payment data for GOV.UK payment ID: {gov_uk_payment_id}"
         )
-        return "Some sort of error"  # TODO: We need to make a proper error page for this to show we couldn't connect to GOV.UK Pay API - maybe provide the GOV.UK Pay ID and to contact webmaster?
+        # TODO: Create proper error page with payment ID for user reference
+        return "Unable to retrieve payment information", 500
 
     if validate_payment(gov_uk_payment_data):
-        provider_id = gov_uk_payment_data.get("provider_id", None)
-        payment_date = gov_uk_payment_data.get("settlement_summary", {}).get(
-            "captured_date", None
-        )
+        provider_id, payment_date = _extract_payment_details(gov_uk_payment_data)
         try:
             process_valid_payment(
                 payment.id, provider_id=provider_id, payment_date=payment_date
@@ -207,32 +235,31 @@ def handle_gov_uk_pay_payment_response():
 
         return redirect(url_for("main.confirm_payment_received"))
 
-    # Let the user know it failed, ask if they want to retry
     return redirect(url_for("main.payment_incomplete"))
 
 
 @bp.route("/handle-gov-uk-pay-request-response/")
 def handle_gov_uk_pay_request_response():
+    """Handle return from GOV.UK Pay for service record request flow."""
     id = request.args.get("id")
 
-    if not id:
-        # User got here without ID - likely manually, do something... (redirect to form?)
-        return "Shouldn't be here"
+    if error := _validate_payment_id(id):
+        return error
 
     gov_uk_payment_id = get_payment_id_from_record_id(id)
 
     if gov_uk_payment_id is None:
-        # User got here with an ID that doesn't exist in the DB - could be our fault, or could be malicious, do something
-        return "Shouldn't be here"
+        current_app.logger.warning(f"No payment ID found for record ID: {id}")
+        return "Payment record not found", 404
 
     gov_uk_payment_data = get_payment_data(gov_uk_payment_id)
 
     if gov_uk_payment_data is None:
-        # Could not retrieve payment data from GOV.UK Pay - log and inform user
         current_app.logger.error(
             f"Could not retrieve payment data for GOV.UK payment ID: {gov_uk_payment_id}"
         )
-        return "Some sort of error"  # TODO: We need to make a proper error page for this to show we couldn't connect to GOV.UK Pay API - maybe provide the GOV.UK Pay ID and to contact webmaster?
+        # TODO: Create proper error page with payment ID for user reference
+        return "Unable to retrieve payment information", 500
 
     if validate_payment(gov_uk_payment_data):
         try:
@@ -244,7 +271,6 @@ def handle_gov_uk_pay_request_response():
 
         return redirect(url_for("main.confirm_payment_received"))
 
-    # Let the user know it failed, ask if they want to retry
     return redirect(url_for("main.payment_incomplete"))
 
 
@@ -277,46 +303,53 @@ def return_from_gov_uk_pay(state_machine):
     return redirect(url_for(state_machine.route_for_current_state))
 
 
-@bp.route("/create-payment/", methods=["POST"])
-def create_payment_endpoint():
+def _validate_required_fields(data: dict, required: list[str]) -> tuple[dict, int] | None:
     """
-    Required params:
-    - case_number
-    - reference
-    - net_amount
-    - payee_email
-
-    Optional params:
-    - delivery_amount
-    - first_name
-    - last_name
-    - details
+    Validate that all required fields are present.
+    
+    Args:
+        data: Request data dictionary.
+        required: List of required field names.
+        
+    Returns:
+        tuple: Error response and status code if validation fails, None otherwise.
     """
-    data = request.json
-    required = ["case_number", "reference", "net_amount", "payee_email"]
-
     if missing := [field for field in required if field not in data]:
         return {"error": f"Missing required fields: {', '.join(missing)}"}, 400
+    return None
 
+
+def _convert_amount_to_pence(amount: float, field_name: str) -> tuple[int, None] | tuple[None, tuple[dict, int]]:
+    """
+    Convert amount from pounds to pence and validate.
+    
+    Args:
+        amount: Amount in pounds.
+        field_name: Name of the field for error messages.
+        
+    Returns:
+        tuple: (converted_amount, None) on success, or (None, error_response) on failure.
+    """
     try:
-        data["net_amount"] = int(data["net_amount"] * 100)  # Convert to pence
-        if data["net_amount"] <= 0:
-            return {"error": "Net amount must be greater than zero"}, 400
+        pence = int(amount * 100)
+        if pence <= 0:
+            return None, ({"error": f"{field_name} must be greater than zero"}, 400)
+        return pence, None
     except (ValueError, TypeError):
-        return {"error": "Invalid net amount format"}, 400
+        return None, ({"error": f"Invalid {field_name} format"}, 400)
 
-    if "delivery_amount" in data:
-        try:
-            data["delivery_amount"] = int(
-                data["delivery_amount"] * 100
-            )  # Convert to pence
-            if data["delivery_amount"] <= 0:
-                return {"error": "Delivery amount must be greater than zero"}, 400
-        except (ValueError, TypeError):
-            return {"error": "Invalid delivery amount format"}, 400
 
-    # Exclude any extra fields to avoid unexpected errors
-    data = {
+def _build_payment_data(data: dict) -> dict:
+    """
+    Build sanitized payment data dictionary.
+    
+    Args:
+        data: Raw request data with validated amounts.
+        
+    Returns:
+        dict: Sanitized payment data for database.
+    """
+    return {
         "case_number": data["case_number"],
         "reference": data["reference"],
         "net_amount": data["net_amount"],
@@ -328,14 +361,56 @@ def create_payment_endpoint():
         "details": data.get("details", ""),
     }
 
-    payment = add_dynamics_payment(data)
+
+@bp.route("/create-payment/", methods=["POST"])
+def create_payment_endpoint():
+    """
+    Create a payment record and send email notification to payee.
+    
+    Required fields:
+        - case_number: Case identifier
+        - reference: Payment reference
+        - net_amount: Net amount in pounds
+        - payee_email: Email address of payee
+        
+    Optional fields:
+        - delivery_amount: Delivery cost in pounds
+        - first_name: Payee first name
+        - last_name: Payee last name
+        - details: Payment details description
+        
+    Returns:
+        JSON response with message or error, and appropriate HTTP status code.
+    """
+    data = request.json
+    required = ["case_number", "reference", "net_amount", "payee_email"]
+
+    if error := _validate_required_fields(data, required):
+        return error
+
+    # Convert net amount to pence
+    net_amount, error = _convert_amount_to_pence(data["net_amount"], "Net amount")
+    if error:
+        return error
+    data["net_amount"] = net_amount
+
+    # Convert delivery amount to pence if present
+    if "delivery_amount" in data:
+        delivery_amount, error = _convert_amount_to_pence(data["delivery_amount"], "Delivery amount")
+        if error:
+            return error
+        data["delivery_amount"] = delivery_amount
+
+    payment_data = _build_payment_data(data)
+    payment = add_dynamics_payment(payment_data)
+    
     if payment is None:
         return {"error": "Failed to create payment"}, 500
 
     try:
         payment.status = "S"  # Mark as Sent
         send_email(
-            to=data["payee_email"],
+            to=payment_data["payee_email"],
             subject="Payment for Service Record Request",
             body=f"You have been requested to make a payment for a service record request. Please visit the following link to complete your payment: {url_for('main.make_payment', id=payment.id, _external=True)}",
         )
@@ -352,12 +427,21 @@ def create_payment_endpoint():
 
 @bp.route("/payment/<id>/", methods=["GET", "POST"])
 def make_payment(id):
+    """
+    Display payment information and handle proceed to pay action.
+    
+    Args:
+        id: Payment identifier.
+        
+    Returns:
+        Rendered template or redirect to payment gateway.
+    """
     form = ProceedToPay()
     payment = get_dynamics_payment(id)
     content = load_content()
 
     if payment is None:
-        return "Payment not found"
+        return "Payment not found", 404
 
     if form.validate_on_submit():
         return redirect(url_for("main.gov_uk_pay_redirect", id=payment.id))
@@ -370,39 +454,64 @@ def make_payment(id):
     )
 
 
+def _build_payment_description(payment) -> str:
+    """
+    Build payment description from payment details.
+    
+    Args:
+        payment: DynamicsPayment instance.
+        
+    Returns:
+        str: Formatted payment description.
+    """
+    description = payment.case_number
+    if payment.details:
+        description += f": {payment.details}"
+    return description
+
+
 @bp.route("/payment-redirect/<id>/", methods=["GET"])
 def gov_uk_pay_redirect(id):
+    """
+    Create GOV.UK Pay payment and redirect user to payment gateway.
+    
+    Args:
+        id: Payment identifier.
+        
+    Returns:
+        Redirect to GOV.UK Pay or error page.
+    """
     payment = get_dynamics_payment(id)
 
     if payment is None:
-        return "Payment not found"
+        return "Payment not found", 404
 
-    id = str(uuid.uuid4())
+    payment_link_id = str(uuid.uuid4())
 
     response = create_payment(
         amount=payment.total_amount,
-        description=f"{payment.case_number}{': ' + payment.details if payment.details else ''}",
+        description=_build_payment_description(payment),
         reference=payment.reference,
         email=payment.payee_email,
-        return_url=f"{url_for("main.handle_gov_uk_pay_payment_response", _external=True)}?id={id}",
+        return_url=f"{url_for('main.handle_gov_uk_pay_payment_response', _external=True)}?id={payment_link_id}",
     )
 
     if not response:
         return redirect(url_for("main.payment_link_creation_failed"))
 
-    gov_uk_payment_url = response.get("_links", {}).get("next_url", "").get("href", "")
+    gov_uk_payment_url = response.get("_links", {}).get("next_url", {}).get("href", "")
     gov_uk_payment_id = response.get("payment_id", "")
 
     if not gov_uk_payment_url or not gov_uk_payment_id:
         return redirect(url_for("main.payment_link_creation_failed"))
 
-    data = {
-        "id": id,
+    gov_uk_payment_data = {
+        "id": payment_link_id,
         "dynamics_payment_id": payment.id,
         "gov_uk_payment_id": gov_uk_payment_id,
         "created_at": datetime.now(),
     }
 
-    add_gov_uk_dynamics_payment(data)
+    add_gov_uk_dynamics_payment(gov_uk_payment_data)
 
     return redirect(gov_uk_payment_url)
