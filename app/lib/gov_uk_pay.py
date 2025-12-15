@@ -31,6 +31,9 @@ RECORD_STATUS_NEW = "N"
 RECORD_STATUS_PAID = "P"
 RECORD_STATUS_SENT = "S"
 
+# Currency conversion constant
+PENCE_TO_POUNDS_DIVISOR = 100
+
 
 class GovUKPayError(Exception):
     """Base exception for GOV.UK Pay related errors."""
@@ -96,7 +99,8 @@ def validate_payment(data: dict) -> bool:
     Returns:
         bool: True if payment is successful, False otherwise.
     """
-    return get_payment_status(data) in SUCCESSFUL_PAYMENT_STATUSES
+    status = get_payment_status(data)
+    return status is not None and status in SUCCESSFUL_PAYMENT_STATUSES
 
 
 def create_payment(
@@ -154,7 +158,7 @@ def _update_record_with_payment_data(record, payment_data: dict) -> None:
     record.provider_id = payment_data.get("provider_id")
     
     if amount := payment_data.get("amount"):
-        record.amount_received = f"{amount / 100:.2f}"
+        record.amount_received = f"{amount / PENCE_TO_POUNDS_DIVISOR:.2f}"
     
     record.payment_reference = payment_data.get("reference", "")
     record.payment_date = datetime.now().strftime("%d %B %Y")

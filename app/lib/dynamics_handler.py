@@ -13,6 +13,12 @@ from app.lib.aws import send_email
 from app.lib.models import DynamicsPayment, ServiceRecordRequest
 from flask import current_app
 
+# Currency conversion constant
+PENCE_TO_POUNDS_DIVISOR = 100
+
+# Age threshold for open records (115+ years old)
+AGE_THRESHOLD_OPEN = 115
+
 # Mapping of Dynamics field names to ServiceRecordRequest attributes
 DYNAMICS_REQUEST_FIELD_MAP = [
     ("mandatory_forename", "requester_first_name"),
@@ -76,9 +82,6 @@ def _determine_closure_status(record: ServiceRecordRequest, age: int) -> str:
     Returns:
         str: Closure status code (FOIOP, FOICD, or FOICDN).
     """
-    # Age threshold for open records
-    AGE_THRESHOLD_OPEN = 115
-    
     if age >= AGE_THRESHOLD_OPEN:
         return "FOIOP"
     
@@ -120,7 +123,7 @@ def _build_payment_payload(payment: DynamicsPayment) -> dict:
         "CaseNumber": payment.case_number,
         "PayReference": payment.reference,
         "GovUkProviderId": payment.provider_id,
-        "Amount": payment.total_amount / 100,
+        "Amount": payment.total_amount / PENCE_TO_POUNDS_DIVISOR,
         "Date": payment.payment_date.strftime("%Y-%m-%d"),
     }
 
