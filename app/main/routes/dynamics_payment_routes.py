@@ -318,40 +318,6 @@ from flask import current_app, redirect, render_template, request, session, url_
 
 #     return redirect(gov_uk_payment_url)
 
-def _generate_reference() -> str:
-    """
-    Generate a unique payment reference using Unix timestamp, random letter, and suffix.
-    Format: TNA<timestamp><letter><suffix>
-    Example: TNA1733756789X42
-    """
-    unix_timestamp = int(datetime.now().strftime("%Y%m%d"))
-    random_letter = random.choice(string.ascii_uppercase)
-    random_suffix = random.randint(10, 99)
-
-    return f"TNA{unix_timestamp}{random_letter}{random_suffix}"
-
-@bp.route("/send-to-gov-uk-pay/")
-def send_to_gov_uk_pay():
-    """Initiate payment process for service record request."""
-    form_data = session.get("form_data")
-
-    if not form_data:
-        current_app.logger.warning("No form data in session")
-        return redirect(url_for("main.start"))
-
-    try:
-        record_hash = _generate_record_hash(form_data)
-        if existing_record := hash_check(record_hash):
-            if redirect_response := _handle_existing_payment(existing_record):
-                return redirect_response
-
-        payment_url = _create_new_payment(form_data, record_hash)
-        return redirect(payment_url)
-
-    except Exception as e:
-        current_app.logger.error(f"Unexpected error in payment creation: {e}")
-        return redirect(url_for("main.payment_link_creation_failed"))
-
 @bp.route("/confirm-payment-received/")
 def confirm_payment_received():
     content = load_content()
@@ -442,7 +408,10 @@ def gov_uk_pay_redirect(id):
         "created_at": datetime.now(),
     }
 
-    add_gov_uk_dynamics_payment(data)
+    gov_uk_dynamics_payment = add_gov_uk_dynamics_payment(data)
+
+    if not gov_uk_dynamics_payment:
+        return redirect(url_for("main.payment_link_creation_failed"))
 
     return redirect(gov_uk_payment_url)
 
