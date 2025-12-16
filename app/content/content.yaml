@@ -349,6 +349,11 @@ pages:
         refunds_data: We will refund a £9.92 page check fee if we do not hold the record. <br><br>No other refunds are available.
   your_order_summary:
     heading: Your order summary
+    order_type_term: Order type
+    price_term: Price
+    price_description: £[] plus £[] per page copying fee
+    format_term: Format
+    change_order_type: Change order
   request_submitted:
     heading: Request submitted
     paragraphs:
@@ -507,3 +512,5 @@ forms:
         call_to_action: Choose full record check
     we_are_unlikely_to_hold_this_record:
       call_to_action: Continue this request
+    your_order_summary:
+      call_to_action: Pay now

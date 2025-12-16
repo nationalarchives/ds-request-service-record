@@ -7,11 +7,14 @@ from tna_frontend_jinja.wtforms import (
 from wtforms import (
     RadioField,
     SubmitField,
+    HiddenField,
 )
 
 
 class ChooseYourOrderType(FlaskForm):
     content = load_content()
+
+    processing_option = HiddenField()
 
     submit_standard = SubmitField(
         get_field_content(content, "choose_your_order_type", "standard")[

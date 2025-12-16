@@ -45,6 +45,8 @@ from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 from app.main.forms.you_may_want_to_check_ancestry import YouMayWantToCheckAncestry
 from app.main.forms.your_contact_details import YourContactDetails
 from app.main.forms.what_is_your_address import WhatIsYourAddress
+from app.main.forms.your_order_summary import YourOrderSummary
+
 from flask import redirect, render_template, request, session, url_for
 
 
@@ -462,6 +464,7 @@ def choose_your_order_type(state_machine):
         "main/choose-your-order-type.html",
         form=form,
         content=load_content(),
+        route_for_back_link=session.get("route_for_back_link", False),
     )
 
 
@@ -492,11 +495,23 @@ def upload_a_proof_of_death(form, state_machine):
     )
 
 
-@bp.route("/your-order-summary/", methods=["GET"])
-def your_order_summary():
+@bp.route("/your-order-summary/", methods=["GET", "POST"])
+@with_route_for_back_link_saved_to_session(
+    route=MultiPageFormRoutes.YOUR_ORDER_SUMMARY.value
+)
+@with_form_prefilled_from_session(YourOrderSummary)
+@with_state_machine
+def your_order_summary(form, state_machine):
+
+    if form.validate_on_submit():
+        state_machine.continue_from_your_order_summary_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
+
     return render_template(
         "main/your-order-summary.html",
         content=load_content(),
+        form=form,
+        form_data=session.get("form_data", None),
         route_for_back_link=session.get("route_for_back_link", False),
     )
 

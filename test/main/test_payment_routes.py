@@ -24,9 +24,7 @@ def client(app):
 @patch("app.main.routes.payment_routes.db")
 @patch("app.main.routes.payment_routes.send_email")
 @patch("app.main.routes.payment_routes.add_dynamics_payment")
-def test_payment_creation_endpoint(
-    mock_add_payment, mock_send_email, mock_db, client
-):
+def test_payment_creation_endpoint(mock_add_payment, mock_send_email, mock_db, client):
     # Mock the payment creation to avoid real DB usage
     mock_add_payment.return_value = DummyPayment()
     mock_db.session.commit.return_value = None
@@ -70,4 +68,3 @@ def test_make_payment_page_renders(mock_get_payment, client):
     # Updated assertion to match current rendered heading
     assert dummy.case_number in rv.text
     assert dummy.reference in rv.text
-
