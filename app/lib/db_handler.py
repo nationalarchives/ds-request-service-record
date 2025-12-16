@@ -148,9 +148,6 @@ def transform_form_data_to_record(form_data: dict) -> dict:
         if hasattr(ServiceRecordRequest, field)
     }
 
-    if date_of_birth := form_data.get("what_was_their_date_of_birth"):
-        transformed_data["date_of_birth"] = date_of_birth
-
     if form_data.get("processing_option") == "standard":
         delivery_type = form_data.get("choose_your_order_type_standard_option")
         if delivery_type == "printed":

@@ -351,8 +351,11 @@ pages:
     heading: Your order summary
     order_type_term: Order type
     price_term: Price
-    price_description: £[] plus £[] per page copying fee
     format_term: Format
+    format_description_printed: Printed only (Received by tracked post)
+    format_description_digital: Digital only (Received by email)
+    processing_option_description_standard: Standard
+    processing_option_description_full: Full record check
     change_order_type: Change order
   request_submitted:
     heading: Request submitted

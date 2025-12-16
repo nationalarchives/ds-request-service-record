@@ -41,7 +41,7 @@
         <form action="{{ url_for('main.choose_your_order_type') }}" method="post" novalidate
               class="form-separator">
           {{ form.csrf_token(id='standard-option') }}
-          {{ form.processing_option(value='Standard', id='processing_option_standard') }}
+          {{ form.processing_option(value='standard', id='processing_option_standard') }}
           <div class="tna-button-group">
             {{ form.submit_standard(params={'classes':'tna-button--accent'}) }}
           </div>
@@ -86,7 +86,7 @@
         <form action="{{ url_for('main.choose_your_order_type') }}" method="post" novalidate
               class="form-separator">
           {{ form.csrf_token(id='full-check-option') }}
-          {{ form.processing_option(value='Full record check', id='processing_option_full_record_check') }}
+          {{ form.processing_option(value='full', id='processing_option_full_record_check') }}
           <div class="tna-button-group">
             {{ form.submit_full_check(params={'classes':'tna-button--accent'}) }}
           </div>

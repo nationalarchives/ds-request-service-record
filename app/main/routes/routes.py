@@ -8,6 +8,7 @@ from app.lib.decorators.with_form_prefilled_from_session import (
     with_form_prefilled_from_session,
 )
 from app.lib.get_back_link_route import get_back_link_route
+from app.lib.price_calculations import prepare_order_summary_data
 from app.lib.save_catalogue_reference_to_session import (
     save_catalogue_reference_to_session,
 )
@@ -507,12 +508,16 @@ def your_order_summary(form, state_machine):
         state_machine.continue_from_your_order_summary_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
 
+    form_data = session.get("form_data", None)
+    order_summary_data = prepare_order_summary_data(form_data)
+
     return render_template(
         "main/your-order-summary.html",
         content=load_content(),
         form=form,
-        form_data=session.get("form_data", None),
+        form_data=form_data,
         route_for_back_link=session.get("route_for_back_link", False),
+        order_summary_data=order_summary_data,
     )
 
 

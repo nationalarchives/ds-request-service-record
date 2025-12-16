@@ -17,7 +17,7 @@
         {% endif %}
         <form action="{{ url_for('main.what_was_their_date_of_birth') }}" method="post" novalidate>
           {{ form.csrf_token }}
-          {{ form.what_was_their_date_of_birth(params={'headingLevel':1, 'headingSize':'xl'}) }}
+          {{ form.date_of_birth(params={'headingLevel':1, 'headingSize':'xl'}) }}
           <div class="tna-button-group">
             {{ form.submit(params={'classes':'tna-button--accent'}) }}
           </div>
