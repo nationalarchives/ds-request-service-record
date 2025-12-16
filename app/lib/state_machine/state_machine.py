@@ -155,7 +155,7 @@ class RoutingStateMachine(StateMachine):
         enter="entering_your_order_summary_form", final=True
     )
 
-    # gov_uk_pay_redirect = State(enter="entering_gov_uk_pay_redirect", final=True)
+    gov_uk_pay_redirect = State(enter="entering_gov_uk_pay_redirect", final=True)
 
     request_submitted_page = State(enter="entering_request_submitted_page", final=True)
 
@@ -291,6 +291,8 @@ class RoutingStateMachine(StateMachine):
     continue_from_what_is_your_address_form = initial.to(your_order_summary_form)
 
     continue_from_choose_your_order_type_form = initial.to(your_contact_details_form)
+
+    continue_from_your_order_summary_form = initial.to(gov_uk_pay_redirect)
 
     continue_on_return_from_gov_uk_redirect = initial.to(request_submitted_page)
 
