@@ -1,12 +1,11 @@
 from app.constants import ServiceBranches
-from app.lib.models import (
+from app.lib.db.models import (
     DynamicsPayment,
     GOVUKDynamicsPayment,
     ServiceRecordRequest,
     db,
 )
 from flask import current_app
-
 
 def hash_check(record_hash: str) -> ServiceRecordRequest | None:
     """

@@ -2,7 +2,11 @@ from datetime import datetime
 from enum import Enum
 
 import requests
-from app.lib.db_handler import (
+from app.lib.db import (
+    db,
+    NEW_STATUS,
+    PAID_STATUS,
+    SENT_STATUS,
     get_dynamics_payment,
     get_gov_uk_dynamics_payment,
     get_service_record_request,
@@ -11,7 +15,6 @@ from app.lib.dynamics_handler import (
     send_payment_to_mod_copying_app,
     send_request_to_dynamics,
 )
-from app.lib.models import db
 from flask import current_app
 
 SUCCESSFUL_PAYMENT_STATUSES: set[str] = {"success"}
@@ -85,7 +88,7 @@ def process_valid_request(id: str, payment_data: dict) -> None:
     if record is None:
         raise ValueError(f"Service record not found for payment ID: {id}")
 
-    if record.status == "N":
+    if record.status == NEW_STATUS:
         record.provider_id = payment_data.get("provider_id", None)
         record.amount_received = (
             f"{payment_data.get('amount') / 100:.2f}"
@@ -94,12 +97,12 @@ def process_valid_request(id: str, payment_data: dict) -> None:
         )
         record.payment_reference = payment_data.get("reference", "")
         record.payment_date = datetime.now().strftime("%d %B %Y")
-        record.status = "P"
+        record.status = PAID_STATUS
         db.session.commit()
 
-    if record.status == "P":
+    if record.status == PAID_STATUS:
         if send_request_to_dynamics(record):
-            record.status = "S"
+            record.status = SENT_STATUS
             db.session.commit()
 
 
@@ -109,7 +112,7 @@ def process_valid_payment(id: str, *, provider_id: str, payment_date: str) -> No
     if payment is None:
         raise ValueError(f"Payment not found for payment ID: {id}")
 
-    payment.status = "P"
+    payment.status = PAID_STATUS
     payment.provider_id = provider_id
     payment.payment_date = datetime.strptime(payment_date, "%Y-%m-%d")
     db.session.commit()

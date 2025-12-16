@@ -2,12 +2,12 @@
 # as these are currently using + dropping the local DB
 
 import pytest
-from app.lib.db_handler import (
+from app.lib.db.db_handler import (
     add_service_record_request,
     delete_service_record_request,
     get_service_record_request,
 )
-from app.lib.models import db
+from app.lib.db.models import db
 
 from app import create_app
 

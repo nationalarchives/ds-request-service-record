@@ -6,7 +6,11 @@ from datetime import datetime
 
 from app.lib.aws import send_email
 from app.lib.content import load_content
-from app.lib.db_handler import (
+from app.lib.db import (
+    db,
+    SENT_STATUS,
+    PAID_STATUS,
+    NEW_STATUS,
     add_dynamics_payment,
     add_gov_uk_dynamics_payment,
     add_service_record_request,
@@ -31,7 +35,6 @@ from app.lib.gov_uk_pay import (
     process_valid_request,
     validate_payment,
 )
-from app.lib.models import db
 from app.lib.price_calculations import calculate_amount_based_on_form_data
 from app.main import bp
 from app.main.forms.proceed_to_pay import ProceedToPay
@@ -433,7 +436,7 @@ def make_payment(id):
     if payment is None:
         return "Payment not found"
     
-    if payment.status == "P":
+    if payment.status == PAID_STATUS:
         return render_template("errors/payment_already_processed.html"), 400
 
     form = ProceedToPay()
@@ -449,7 +452,7 @@ def make_payment(id):
         content=content,
     )
 
-def _validate_and_convert_amount(amount_value, field_name):
+def _validate_and_convert_amount(amount_value: float | int | str, field_name: str) -> tuple:
     """
     Validate and convert an amount to pence.
     
@@ -528,7 +531,7 @@ def create_payment_endpoint():
         return {"error": "Failed to create payment"}, 500
 
     try:
-        payment.status = "S"  # Mark as Sent
+        payment.status = SENT_STATUS
         db.session.commit()
     except Exception as e:
         current_app.logger.error(

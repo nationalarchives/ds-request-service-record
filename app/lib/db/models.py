@@ -1,6 +1,7 @@
 import uuid
 
 from flask_sqlalchemy import SQLAlchemy
+from .constants import NEW_STATUS
 
 db = SQLAlchemy()
 
@@ -47,7 +48,7 @@ class ServiceRecordRequest(db.Model):
     amount_received = db.Column(db.String(32), nullable=True)  # amount in £xx.xx format
     record_hash = db.Column(db.String(64), nullable=False, unique=True)
     status = db.Column(
-        db.String(1), nullable=False, default="N"
+        db.String(1), nullable=False, default=NEW_STATUS
     )  # N=New, P=Paid, S=Sent
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
@@ -72,7 +73,7 @@ class DynamicsPayment(db.Model):
     last_name = db.Column(db.String(128), nullable=True)
     details = db.Column(db.String(256), nullable=True)
     status = db.Column(
-        db.String(1), nullable=False, default="N"
+        db.String(1), nullable=False, default=NEW_STATUS
     )  # N=New, S=Sent, P=Paid
     provider_id = db.Column(
         db.String(64), nullable=True

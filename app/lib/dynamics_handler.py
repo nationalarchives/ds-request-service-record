@@ -3,7 +3,7 @@ from datetime import datetime
 import requests
 
 from app.lib.aws import send_email
-from app.lib.models import DynamicsPayment, ServiceRecordRequest
+from app.lib.db.models import DynamicsPayment, ServiceRecordRequest
 from flask import current_app
 
 DYNAMICS_REQUEST_FIELD_MAP = [
