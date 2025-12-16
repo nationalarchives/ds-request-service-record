@@ -362,6 +362,10 @@ pages:
     paragraphs:
       - Your request has been received and is being processed.
       - Your reference number is [reference_number]
+    what_happens_next:
+      heading: What happens next
+      paragraphs:
+        - We will be in touch with more information about your request.
 forms:
   fields:
     request_a_military_service_record:
