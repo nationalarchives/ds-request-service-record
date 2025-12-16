@@ -124,32 +124,51 @@ def get_gov_uk_dynamics_payment(id: str) -> GOVUKDynamicsPayment | None:
         return None
 
 
+def _normalize_delivery_type(delivery_type: str | None) -> str:
+    """
+    Normalize delivery type value to standard format.
+    
+    Args:
+        delivery_type: Raw delivery type from form.
+        
+    Returns:
+        str: Normalized delivery type (PrintedTracked or Digital).
+    """
+    return "PrintedTracked" if delivery_type == "printed" else "Digital"
+
 def transform_form_data_to_record(form_data: dict) -> dict:
+    """
+    Transform form data into ServiceRecordRequest format.
+    
+    Filters fields to only include those that exist on ServiceRecordRequest model,
+    and normalizes certain field values for database storage.
+    
+    Args:
+        form_data: Dictionary of form field values.
+        
+    Returns:
+        dict: Transformed data ready for ServiceRecordRequest creation.
+    """
+    # Filter to only valid ServiceRecordRequest fields
     transformed_data = {
         field: value
         for field, value in form_data.items()
         if hasattr(ServiceRecordRequest, field)
     }
 
+    # Handle date of birth field mapping
     if date_of_birth := form_data.get("what_was_their_date_of_birth"):
         transformed_data["date_of_birth"] = date_of_birth
 
-    if form_data.get("processing_option") == "standard":
-        delivery_type = form_data.get("choose_your_order_type_standard_option")
-        if delivery_type == "printed":
-            delivery_type = "PrintedTracked"
-        else:
-            delivery_type = "Digital"
-        transformed_data["delivery_type"] = delivery_type
-    elif form_data.get("processing_option") == "full":
-        delivery_type = form_data.get("choose_your_order_type_full_option")
-        if delivery_type == "printed":
-            delivery_type = "PrintedTracked"
-        else:
-            delivery_type = "Digital"
-        transformed_data["delivery_type"] = delivery_type
+    # Handle delivery type based on processing option
+    processing_option = form_data.get("processing_option")
+    if processing_option in ("standard", "full"):
+        delivery_field = f"choose_your_order_type_{processing_option}_option"
+        delivery_type = form_data.get(delivery_field)
+        transformed_data["delivery_type"] = _normalize_delivery_type(delivery_type)
 
     if service_branch := form_data.get("service_branch"):
         if service_branch in ServiceBranches.__members__:
             transformed_data["service_branch"] = ServiceBranches[service_branch].value
+            
     return transformed_data
