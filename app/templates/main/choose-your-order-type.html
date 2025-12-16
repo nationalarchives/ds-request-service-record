@@ -2,8 +2,10 @@
 
 {%- set pageTitle = content.app.title -%}
 
+{%- set back_link_endpoint = route_for_back_link if route_for_back_link else 'main.have_you_previously_made_a_request' -%}
+
 {% block beforeContent %}
-  {{ backLink(url_for('main.have_you_previously_made_a_request')) }}
+  {{ backLink(url_for(back_link_endpoint)) }}
 {% endblock %}
 
 {% block content %}
@@ -39,8 +41,7 @@
         <form action="{{ url_for('main.choose_your_order_type') }}" method="post" novalidate
               class="form-separator">
           {{ form.csrf_token(id='standard-option') }}
-          {# The processing_option fields are hard-coded to allow a single form to be reused in the page #}
-          <input type="hidden" name="processing_option" value="standard"/>
+          {{ form.processing_option(value='standard', id='processing_option_standard') }}
           <div class="tna-button-group">
             {{ form.submit_standard(params={'classes':'tna-button--accent'}) }}
           </div>
@@ -85,8 +86,7 @@
         <form action="{{ url_for('main.choose_your_order_type') }}" method="post" novalidate
               class="form-separator">
           {{ form.csrf_token(id='full-check-option') }}
-          {# The processing_option fields are hard-coded to allow a single form to be reused in the page #}
-          <input type="hidden" name="processing_option" value="full"/>
+          {{ form.processing_option(value='full', id='processing_option_full_record_check') }}
           <div class="tna-button-group">
             {{ form.submit_full_check(params={'classes':'tna-button--accent'}) }}
           </div>

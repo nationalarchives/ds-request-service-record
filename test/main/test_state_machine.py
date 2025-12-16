@@ -305,7 +305,7 @@ def test_continue_from_what_was_their_date_of_birth_form(
 ):
     sm = RoutingStateMachine()
     sm.continue_from_what_was_their_date_of_birth_form(
-        form=make_form(what_was_their_date_of_birth=date_of_birth)
+        form=make_form(date_of_birth=date_of_birth)
     )
     assert sm.current_state.id == expected_state
     assert sm.route_for_current_state == expected_route
@@ -509,6 +509,13 @@ def test_continue_from_choose_your_order_type(processing_option):
     )
     assert sm.current_state.id == "your_contact_details_form"
     assert sm.route_for_current_state == MultiPageFormRoutes.YOUR_CONTACT_DETAILS.value
+
+
+def test_continue_from_your_order_summary():
+    sm = RoutingStateMachine()
+    sm.continue_from_your_order_summary_form(form=make_form(submit=None))
+    assert sm.current_state.id == "gov_uk_pay_redirect"
+    assert sm.route_for_current_state == MultiPageFormRoutes.SEND_TO_GOV_UK_PAY.value
 
 
 def test_continue_from_gov_uk_pay():

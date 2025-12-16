@@ -155,7 +155,7 @@ class RoutingStateMachine(StateMachine):
         enter="entering_your_order_summary_form", final=True
     )
 
-    # gov_uk_pay_redirect = State(enter="entering_gov_uk_pay_redirect", final=True)
+    gov_uk_pay_redirect = State(enter="entering_gov_uk_pay_redirect", final=True)
 
     request_submitted_page = State(enter="entering_request_submitted_page", final=True)
 
@@ -291,6 +291,8 @@ class RoutingStateMachine(StateMachine):
     continue_from_what_is_your_address_form = initial.to(your_order_summary_form)
 
     continue_from_choose_your_order_type_form = initial.to(your_contact_details_form)
+
+    continue_from_your_order_summary_form = initial.to(gov_uk_pay_redirect)
 
     continue_on_return_from_gov_uk_redirect = initial.to(request_submitted_page)
 
@@ -447,15 +449,12 @@ class RoutingStateMachine(StateMachine):
 
     def born_too_late(self, form):
         """Condition method to determine if the service person's date of birth is too late for TNA to have record."""
-        return (
-            form.what_was_their_date_of_birth.data.year
-            > BoundaryYears.LATEST_BIRTH_YEAR.value
-        )
+        return form.date_of_birth.data.year > BoundaryYears.LATEST_BIRTH_YEAR.value
 
     def birth_year_requires_proof_of_death(self, form):
         """Condition method to determine if the service person's date of birth requires a proof of death."""
         return (
-            form.what_was_their_date_of_birth.data.year
+            form.date_of_birth.data.year
             > BoundaryYears.YEAR_FROM_WHICH_PROOF_OF_DEATH_IS_REQUIRED.value
         )
 

@@ -15,7 +15,7 @@ from wtforms.validators import InputRequired
 class WhatWasTheirDateOfBirth(FlaskForm):
     content = load_content()
 
-    what_was_their_date_of_birth = TnaDateField(
+    date_of_birth = TnaDateField(
         get_field_content(content, "date_of_birth", "label"),
         description=get_field_content(content, "date_of_birth", "description"),
         validators=[

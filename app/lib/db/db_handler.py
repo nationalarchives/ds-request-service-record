@@ -7,6 +7,8 @@ from app.lib.db.models import (
 )
 from flask import current_app
 
+from app.lib.price_calculations import get_delivery_type
+
 def hash_check(record_hash: str) -> ServiceRecordRequest | None:
     """
     Check if a ServiceRecordRequest with the given hash already exists, return the record if found.
@@ -124,18 +126,6 @@ def get_gov_uk_dynamics_payment(id: str) -> GOVUKDynamicsPayment | None:
         return None
 
 
-def _normalize_delivery_type(delivery_type: str | None) -> str:
-    """
-    Normalize delivery type value to standard format.
-    
-    Args:
-        delivery_type: Raw delivery type from form.
-        
-    Returns:
-        str: Normalized delivery type (PrintedTracked or Digital).
-    """
-    return "PrintedTracked" if delivery_type == "printed" else "Digital"
-
 def transform_form_data_to_record(form_data: dict) -> dict:
     """
     Transform form data into ServiceRecordRequest format.
@@ -156,16 +146,7 @@ def transform_form_data_to_record(form_data: dict) -> dict:
         if hasattr(ServiceRecordRequest, field)
     }
 
-    # Handle date of birth field mapping
-    if date_of_birth := form_data.get("what_was_their_date_of_birth"):
-        transformed_data["date_of_birth"] = date_of_birth
-
-    # Handle delivery type based on processing option
-    processing_option = form_data.get("processing_option")
-    if processing_option in ("standard", "full"):
-        delivery_field = f"choose_your_order_type_{processing_option}_option"
-        delivery_type = form_data.get(delivery_field)
-        transformed_data["delivery_type"] = _normalize_delivery_type(delivery_type)
+    transformed_data["delivery_type"] = get_delivery_type(form_data)
 
     if service_branch := form_data.get("service_branch"):
         if service_branch in ServiceBranches.__members__:

@@ -25,4 +25,9 @@ def get_back_link_route(
         ):
             return MultiPageFormRoutes.DO_YOU_HAVE_A_PROOF_OF_DEATH.value
         return back_link_in_session
+
+    if current_route == MultiPageFormRoutes.YOUR_ORDER_SUMMARY.value:
+        if valid_submission:
+            return MultiPageFormRoutes.YOUR_ORDER_SUMMARY.value
+
     return None

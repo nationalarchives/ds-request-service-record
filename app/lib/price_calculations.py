@@ -4,12 +4,12 @@ from flask import current_app
 
 OPTION_MAP = {
     "standard": {
-        "digital": OrderFeesPence.STANDARD_DIGITAL.value,
-        "printed": OrderFeesPence.STANDARD_PRINTED.value,
+        "Digital": OrderFeesPence.STANDARD_DIGITAL.value,
+        "PrintedTracked": OrderFeesPence.STANDARD_PRINTED.value,
     },
     "full": {
-        "digital": OrderFeesPence.FULL_DIGITAL.value,
-        "printed": OrderFeesPence.FULL_PRINTED.value,
+        "Digital": OrderFeesPence.FULL_DIGITAL.value,
+        "PrintedTracked": OrderFeesPence.FULL_PRINTED.value,
     },
 }
 
@@ -35,15 +35,14 @@ def calculate_delivery_fee(country: str) -> int:
 
 
 def calculate_amount_based_on_form_data(form_data: dict) -> int:
-    processing_option = form_data.get("processing_option")
+    delivery_option = get_delivery_option(form_data)
+    processing_option = form_data.get("processing_option", "standard")
     amount = 0
 
     if processing_option not in OPTION_MAP:
         raise ValueError("Invalid processing option")
 
-    amount = OPTION_MAP[processing_option].get(
-        form_data.get(f"choose_your_order_type_{processing_option}_option")
-    )
+    amount = OPTION_MAP[processing_option].get(delivery_option)
 
     if (
         processing_option == "standard"
@@ -58,3 +57,23 @@ def calculate_amount_based_on_form_data(form_data: dict) -> int:
         raise ValueError("Invalid processing option")
 
     return amount
+
+
+def prepare_order_summary_data(form_data: dict) -> dict:
+    processing_option = form_data.get("processing_option", "standard")
+    delivery_option = get_delivery_option(form_data)
+
+    order_summary_data = {
+        "processing_option": processing_option,
+        "delivery_option": delivery_option,
+        "amount_pence": calculate_amount_based_on_form_data(form_data),
+    }
+
+    return order_summary_data
+
+
+def get_delivery_option(form_data: dict) -> str:
+    delivery_option = (
+        "PrintedTracked" if form_data.get("does_not_have_email") else "Digital"
+    )
+    return delivery_option
