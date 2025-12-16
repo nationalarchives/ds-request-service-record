@@ -28,42 +28,24 @@ def hash_check(record_hash: str) -> ServiceRecordRequest | None:
         current_app.logger.error(f"Error checking record hash: {e}")
         return None
 
-
-def get_service_record_request(
-    *, payment_id: str | None = None, record_id: str | None = None
-) -> ServiceRecordRequest | None:
+def get_service_record_request(id: str = None) -> ServiceRecordRequest | None:
     """
-    Get a ServiceRecordRequest item by payment_id or record_id.
-    Must provide either a payment_id OR a record_id.
+    Get a ServiceRecordRequest item by its ID.
     """
-    if (payment_id is None and record_id is None) or (
-        payment_id is not None and record_id is not None
-    ):
-        raise ValueError("Invalid parameters: provide either payment_id or record_id.")
-
     try:
-        if record_id is not None:
-            record = db.session.get(ServiceRecordRequest, record_id)
-        else:
-            record = (
-                db.session.query(ServiceRecordRequest)
-                .filter_by(payment_id=payment_id)
-                .first()
-            )
+        record = db.session.get(ServiceRecordRequest, id)
     except Exception as e:
         current_app.logger.error(f"Error fetching service record request: {e}")
         return None
 
     if not record:
-        current_app.logger.error(
-            f"Service record not found for: {payment_id or record_id}"
-        )
+        current_app.logger.error(f"Service record not found for ID: {id}")
 
     return record
 
 
-def get_payment_id_from_record_id(record_id: str) -> str | None:
-    record = get_service_record_request(record_id=record_id)
+def get_payment_id_from_record_id(id: str) -> str | None:
+    record = get_service_record_request(id=id)
     return record.payment_id if record else None
 
 
@@ -79,13 +61,15 @@ def add_service_record_request(data: dict) -> ServiceRecordRequest | None:
     return record
 
 
-def delete_service_record_request(record: ServiceRecordRequest) -> None:
+def delete_service_record_request(record: ServiceRecordRequest) -> bool:
     try:
         db.session.delete(record)
         db.session.commit()
+        return True
     except Exception as e:
         current_app.logger.error(f"Error deleting service record request: {e}")
         db.session.rollback()
+        return False
 
 
 def get_dynamics_payment(id: str) -> DynamicsPayment | None:
@@ -107,7 +91,6 @@ def add_dynamics_payment(data: dict) -> DynamicsPayment | None:
     except Exception as e:
         current_app.logger.error(f"Error adding dynamics payment: {e}")
         db.session.rollback()
-
     return payment
 
 
@@ -120,7 +103,7 @@ def delete_dynamics_payment(record: DynamicsPayment) -> None:
         db.session.rollback()
 
 
-def add_gov_uk_dynamics_payment(data: dict) -> None:
+def add_gov_uk_dynamics_payment(data: dict) -> GOVUKDynamicsPayment | None:
     try:
         payment = GOVUKDynamicsPayment(**data)
         db.session.add(payment)
@@ -128,6 +111,7 @@ def add_gov_uk_dynamics_payment(data: dict) -> None:
     except Exception as e:
         current_app.logger.error(f"Error adding GOV.UK dynamics payment: {e}")
         db.session.rollback()
+    return payment
 
 
 def get_gov_uk_dynamics_payment(id: str) -> GOVUKDynamicsPayment | None:
