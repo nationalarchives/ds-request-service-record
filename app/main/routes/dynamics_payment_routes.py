@@ -332,7 +332,25 @@ def _generate_reference() -> str:
 
 @bp.route("/send-to-gov-uk-pay/")
 def send_to_gov_uk_pay():
-    return None
+    """Initiate payment process for service record request."""
+    form_data = session.get("form_data")
+
+    if not form_data:
+        current_app.logger.warning("No form data in session")
+        return redirect(url_for("main.start"))
+
+    try:
+        record_hash = _generate_record_hash(form_data)
+        if existing_record := hash_check(record_hash):
+            if redirect_response := _handle_existing_payment(existing_record):
+                return redirect_response
+
+        payment_url = _create_new_payment(form_data, record_hash)
+        return redirect(payment_url)
+
+    except Exception as e:
+        current_app.logger.error(f"Unexpected error in payment creation: {e}")
+        return redirect(url_for("main.payment_link_creation_failed"))
 
 @bp.route("/confirm-payment-received/")
 def confirm_payment_received():
