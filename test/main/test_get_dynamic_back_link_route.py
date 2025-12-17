@@ -22,19 +22,28 @@ def test_returns_route_when_key_exists_in_dynamic_back_links(flask_app):
 def test_returns_default_route_when_key_not_found(flask_app):
     with flask_app.test_request_context("/"):
         session["dynamic_back_links"] = {"main.other_page": "main.some_route"}
-        assert get_dynamic_back_link_route("main.nonexistent_route") == MultiPageFormRoutes.JOURNEY_START.value
+        assert (
+            get_dynamic_back_link_route("main.nonexistent_route")
+            == MultiPageFormRoutes.JOURNEY_START.value
+        )
 
 
 def test_returns_default_route_when_dynamic_back_links_empty(flask_app):
     with flask_app.test_request_context("/"):
         session["dynamic_back_links"] = {}
-        assert get_dynamic_back_link_route("main.any_route") == MultiPageFormRoutes.JOURNEY_START.value
+        assert (
+            get_dynamic_back_link_route("main.any_route")
+            == MultiPageFormRoutes.JOURNEY_START.value
+        )
 
 
 def test_returns_default_route_when_session_has_no_dynamic_back_links(flask_app):
     with flask_app.test_request_context("/"):
         # Do not set session["dynamic_back_links"]
-        assert get_dynamic_back_link_route("main.any_route") == MultiPageFormRoutes.JOURNEY_START.value
+        assert (
+            get_dynamic_back_link_route("main.any_route")
+            == MultiPageFormRoutes.JOURNEY_START.value
+        )
 
 
 def test_handles_multiple_keys_in_dynamic_back_links(flask_app):
@@ -47,5 +56,11 @@ def test_handles_multiple_keys_in_dynamic_back_links(flask_app):
         session["dynamic_back_links"] = dynamic_back_links
         assert get_dynamic_back_link_route("main.route_one") == "main.another_route"
         assert get_dynamic_back_link_route("main.route_two") == "main.yet_another_route"
-        assert get_dynamic_back_link_route("main.route_three") == "main.still_another_route"
-        assert get_dynamic_back_link_route("main.route_four") == MultiPageFormRoutes.JOURNEY_START.value
+        assert (
+            get_dynamic_back_link_route("main.route_three")
+            == "main.still_another_route"
+        )
+        assert (
+            get_dynamic_back_link_route("main.route_four")
+            == MultiPageFormRoutes.JOURNEY_START.value
+        )
