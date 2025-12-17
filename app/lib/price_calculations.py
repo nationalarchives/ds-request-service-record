@@ -44,10 +44,7 @@ def calculate_amount_based_on_form_data(form_data: dict) -> int:
 
     amount = OPTION_MAP[processing_option].get(delivery_type)
 
-    if (
-        processing_option == "standard"
-        and form_data.get("choose_your_order_type_standard_option") == "printed"
-    ):
+    if processing_option == "standard" and delivery_type == "PrintedTracked":
         if country := form_data.get("requester_country"):
             amount += calculate_delivery_fee(country)
         else:
