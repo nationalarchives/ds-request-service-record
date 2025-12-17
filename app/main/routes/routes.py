@@ -336,6 +336,11 @@ def we_may_hold_this_record(form, state_machine):
 
 @bp.route("/what-was-their-date-of-birth/", methods=["GET", "POST"])
 @with_form_prefilled_from_session(WhatWasTheirDateOfBirth)
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.SERVICE_PERSON_DETAILS: MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH
+    }
+)
 @with_state_machine
 def what_was_their_date_of_birth(form, state_machine):
     if form.validate_on_submit():
