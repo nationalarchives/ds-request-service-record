@@ -44,12 +44,12 @@ test.describe("the service branch form", () => {
   });
 
   test.describe("when interacted with", () => {
-    // test("clicking the 'Back' link takes the user to the 'Is the service person alive? page'", async ({
-    //   page,
-    // }) => {
-    //   await page.getByRole("link", { name: "Back" }).click();
-    //   await expect(page).toHaveURL(Paths.IS_SERVICE_PERSON_ALIVE);
-    // });
+    test("clicking the 'Back' link takes the user to the 'Is the service person alive? page'", async ({
+      page,
+    }) => {
+      await page.getByRole("link", { name: "Back" }).click();
+      await expect(page).toHaveURL(Paths.IS_SERVICE_PERSON_ALIVE);
+    });
 
     test("submitting without a selection, shows a validation error", async ({
       page,
@@ -72,25 +72,25 @@ test.describe("the service branch form", () => {
       });
     });
 
-    // test.describe("after submission, when the 'back' link is clicked, the user's previous selection is maintained", () => {
-    //   selectionMappings.forEach(({ branchLabel, nextUrl }) => {
-    //     test(`when ${branchLabel} had been submitted, ${branchLabel} is selected when the 'Back' link is clicked`, async ({
-    //       page,
-    //     }) => {
-    //       await page.goto(Paths.JOURNEY_START);
-    //       await page.goto(Paths.WHICH_MILITARY_BRANCH_DID_THE_PERSON_SERVE_IN);
-    //       await page.getByLabel(branchLabel, { exact: true }).check();
-    //       await page.getByRole("button", { name: /Continue/i }).click();
-    //       await expect(page).toHaveURL(nextUrl);
-    //       await page.getByRole("link", { name: "Back" }).click();
-    //       await expect(page).toHaveURL(
-    //         Paths.WHICH_MILITARY_BRANCH_DID_THE_PERSON_SERVE_IN,
-    //       );
-    //       await expect(
-    //         page.getByLabel(branchLabel, { exact: true }),
-    //       ).toBeChecked();
-    //     });
-    //   });
-    // });
+    test.describe("after submission, when the 'back' link is clicked, the user's previous selection is maintained", () => {
+      selectionMappings.forEach(({ branchLabel, nextUrl }) => {
+        test(`when ${branchLabel} had been submitted, ${branchLabel} is selected when the 'Back' link is clicked`, async ({
+          page,
+        }) => {
+          await page.goto(Paths.JOURNEY_START);
+          await page.goto(Paths.WHICH_MILITARY_BRANCH_DID_THE_PERSON_SERVE_IN);
+          await page.getByLabel(branchLabel, { exact: true }).check();
+          await page.getByRole("button", { name: /Continue/i }).click();
+          await expect(page).toHaveURL(nextUrl);
+          await page.getByRole("link", { name: "Back" }).click();
+          await expect(page).toHaveURL(
+            Paths.WHICH_MILITARY_BRANCH_DID_THE_PERSON_SERVE_IN,
+          );
+          await expect(
+            page.getByLabel(branchLabel, { exact: true }),
+          ).toBeChecked();
+        });
+      });
+    });
   });
 });
