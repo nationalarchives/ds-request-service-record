@@ -210,6 +210,10 @@ def were_they_a_commissioned_officer(form, state_machine):
 
 @bp.route("/we-do-not-have-royal-navy-service-branch-records/", methods=["GET", "POST"])
 @with_form_prefilled_from_session(ExitThisForm)
+@update_dynamic_back_link_mapping(
+    route_key=MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL,
+    back_link_value=MultiPageFormRoutes.WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS,
+)
 @with_state_machine
 def we_do_not_have_royal_navy_service_records(form, state_machine):
     if form.validate_on_submit():
