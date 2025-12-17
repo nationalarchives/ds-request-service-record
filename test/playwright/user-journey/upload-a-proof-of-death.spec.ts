@@ -60,7 +60,7 @@ test.describe("The 'Upload a proof of death' form", () => {
           /The selected file must be smaller than 5MB/,
         );
       });
-      test(`with a file that has a valid extention (of .${extension}) and is below the size limit, presents next page`, async ({
+      test(`with a file that has a valid extention (of .${extension}) and is below the size limit, presents next page and the 'Back' link works as expected`, async ({
         page,
       }) => {
         await page.getByLabel("Upload a file").setInputFiles({
@@ -70,6 +70,8 @@ test.describe("The 'Upload a proof of death' form", () => {
         });
         await page.getByRole("button", { name: /Continue/i }).click();
         await expect(page).toHaveURL(Paths.SERVICE_PERSON_DETAILS);
+        await page.getByRole("link", { name: "Back" }).click();
+        await expect(page).toHaveURL(Paths.UPLOAD_A_PROOF_OF_DEATH);
       });
     });
   });

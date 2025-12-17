@@ -493,6 +493,11 @@ def choose_your_order_type(state_machine):
 
 
 @bp.route("/upload-a-proof-of-death/", methods=["GET", "POST"])
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.SERVICE_PERSON_DETAILS: MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH,
+    }
+)
 @with_form_prefilled_from_session(UploadAProofOfDeath)
 @with_state_machine
 def upload_a_proof_of_death(form, state_machine):
