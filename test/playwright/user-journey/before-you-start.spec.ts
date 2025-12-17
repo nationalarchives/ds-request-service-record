@@ -108,6 +108,14 @@ test.describe("the 'Before you start' form", () => {
         await page.getByRole("link", { name: "Back" }).click();
         await expect(page).toHaveURL(Paths.BEFORE_YOU_START);
       });
+      test("having reached 'Are you sure you want to cancel?', clicking 'No' brings the user back", async ({
+        page,
+      }) => {
+        await page.getByRole("link", { name: "Exit this form" }).click();
+        await expect(page).toHaveURL(Paths.ARE_YOU_SURE_YOU_WANT_TO_CANCEL);
+        await page.locator("#cancel-request a").click();
+        await expect(page).toHaveURL(Paths.BEFORE_YOU_START);
+      });
     });
   });
 });

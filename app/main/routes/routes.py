@@ -1,10 +1,13 @@
 from app.constants import ExternalLinks, MultiPageFormRoutes
 from app.lib.content import load_content
 from app.lib.decorators.state_machine_decorator import with_state_machine
+from app.lib.decorators.update_dynamic_back_link_mapping import (
+    update_dynamic_back_link_mapping,
+)
 from app.lib.decorators.with_form_prefilled_from_session import (
     with_form_prefilled_from_session,
 )
-from app.lib.get_back_link_route import get_back_link_route
+from app.lib.get_dynamic_back_link_route import get_dynamic_back_link_route
 from app.lib.price_calculations import prepare_order_summary_data
 from app.lib.save_catalogue_reference_to_session import (
     save_catalogue_reference_to_session,
@@ -76,6 +79,10 @@ def how_we_process_requests(form, state_machine):
 
 
 @bp.route("/before-you-start/", methods=["GET", "POST"])
+@update_dynamic_back_link_mapping(
+    route_key=MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL,
+    back_link_value=MultiPageFormRoutes.BEFORE_YOU_START,
+)
 @with_state_machine
 @with_form_prefilled_from_session(BeforeYouStart)
 def before_you_start(form, state_machine):
@@ -91,6 +98,7 @@ def before_you_start(form, state_machine):
 @with_state_machine
 @with_form_prefilled_from_session(AreYouSureYouWantToCancel)
 def are_you_sure_you_want_to_cancel(form, state_machine):
+
     if form.validate_on_submit():
         state_machine.continue_from_are_you_sure_you_want_to_cancel_form()
         return redirect(url_for(state_machine.route_for_current_state))
@@ -98,6 +106,7 @@ def are_you_sure_you_want_to_cancel(form, state_machine):
         "main/are-you-sure-you-want-to-cancel.html",
         form=form,
         content=load_content(),
+        back_link_route=get_dynamic_back_link_route(key=request.endpoint),
     )
 
 
@@ -139,6 +148,10 @@ def is_service_person_alive(form, state_machine):
 
 
 @bp.route("/must-submit-subject-access-request/", methods=["GET", "POST"])
+@update_dynamic_back_link_mapping(
+    route_key=MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL,
+    back_link_value=MultiPageFormRoutes.MUST_SUBMIT_SUBJECT_ACCESS_REQUEST,
+)
 @with_state_machine
 @with_form_prefilled_from_session(ExitThisForm)
 def must_submit_subject_access_request(form, state_machine):
@@ -151,6 +164,7 @@ def must_submit_subject_access_request(form, state_machine):
         form=form,
         content=load_content(),
         subject_access_request_link=ExternalLinks.SUBJECT_ACCESS_REQUEST_FORM,
+        back_link_route=get_dynamic_back_link_route(key=request.endpoint),
     )
 
 
@@ -432,17 +446,7 @@ def choose_your_order_type(state_machine):
 @with_state_machine
 def upload_a_proof_of_death(form, state_machine):
 
-    valid_submission = form.validate_on_submit()
-
-    correct_back_link = get_back_link_route(
-        current_route=MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH.value,
-        valid_submission=valid_submission,
-    )
-
-    if correct_back_link:
-        session["route_for_back_link"] = correct_back_link
-
-    if valid_submission:
+    if form.validate_on_submit():
         state_machine.continue_from_upload_a_proof_of_death_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(

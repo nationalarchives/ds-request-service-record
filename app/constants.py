@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class MultiPageFormRoutes(Enum):
+    JOURNEY_START = "main.start"
     HOW_WE_PROCESS_REQUESTS = "main.how_we_process_requests"
     BEFORE_YOU_START = "main.before_you_start"
     YOU_MAY_WANT_TO_CHECK_ANCESTRY = "main.you_may_want_to_check_ancestry"
