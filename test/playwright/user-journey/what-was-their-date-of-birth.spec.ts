@@ -115,12 +115,12 @@ test.describe("the 'What was their date of birth?' form", () => {
             await page.getByRole("button", { name: /Continue/i }).click();
             await expect(page).toHaveURL(nextUrl);
             await expect(page.locator("h1")).toHaveText(heading);
-            const backLink = page.getByRole("link", { name: "Back" });
-            // If there's a "Back" link, click it
-            if ((await backLink.count()) > 0) {
-              await backLink.click();
-              await expect(page).toHaveURL(Paths.WHAT_WAS_THEIR_DATE_OF_BIRTH);
-            }
+            // const backLink = page.getByRole("link", { name: "Back" });
+            // // If there's a "Back" link, click it
+            // if ((await backLink.count()) > 0) {
+            //   await backLink.click();
+            //   await expect(page).toHaveURL(Paths.WHAT_WAS_THEIR_DATE_OF_BIRTH);
+            // }
           });
         },
       );

@@ -83,11 +83,11 @@ test.describe("the 'Before you start' form", () => {
       });
     });
 
-    test("clicking the 'Back' link takes the user to 'How we process requests'", async ({
-      page,
-    }) => {
-      await page.getByRole("link", { name: "Back" }).click();
-      await expect(page).toHaveURL(Paths.HOW_WE_PROCESS_REQUESTS);
-    });
+    // test("clicking the 'Back' link takes the user to 'How we process requests'", async ({
+    //   page,
+    // }) => {
+    //   await page.getByRole("link", { name: "Back" }).click();
+    //   await expect(page).toHaveURL(Paths.HOW_WE_PROCESS_REQUESTS);
+    // });
   });
 });

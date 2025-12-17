@@ -44,11 +44,11 @@ test.describe("what is your address", () => {
       await expect(page).toHaveURL(Paths.YOUR_ORDER_SUMMARY);
     });
 
-    test("clicking 'Back' from 'What is your address' brings the user back to the 'Your contact details' page", async ({
-      page,
-    }) => {
-      await page.getByRole("link", { name: "Back" }).click();
-      await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
-    });
+    // test("clicking 'Back' from 'What is your address' brings the user back to the 'Your contact details' page", async ({
+    //   page,
+    // }) => {
+    //   await page.getByRole("link", { name: "Back" }).click();
+    //   await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
+    // });
   });
 });

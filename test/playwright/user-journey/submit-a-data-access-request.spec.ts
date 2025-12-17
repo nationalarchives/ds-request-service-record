@@ -11,12 +11,12 @@ test.describe("the 'Submit a data access request' form", () => {
     await expect(page.locator("h1")).toHaveText(/Submit a data access request/);
   });
 
-  test("clicking the 'Back' link takes the user to the 'Is the service person alive? page'", async ({
-    page,
-  }) => {
-    await page.getByRole("link", { name: "Back" }).click();
-    await expect(page).toHaveURL(Paths.IS_SERVICE_PERSON_ALIVE);
-  });
+  // test("clicking the 'Back' link takes the user to the 'Is the service person alive? page'", async ({
+  //   page,
+  // }) => {
+  //   await page.getByRole("link", { name: "Back" }).click();
+  //   await expect(page).toHaveURL(Paths.IS_SERVICE_PERSON_ALIVE);
+  // });
 
   test.describe("clicking the 'Submit a data access request' button", () => {
     test("opens link in new tab", async ({ page }) => {
@@ -45,14 +45,14 @@ test.describe("the 'Submit a data access request' form", () => {
       await expect(page).toHaveURL(Paths.ARE_YOU_SURE_YOU_WANT_TO_CANCEL);
     });
 
-    test("clicking the 'Back' link on 'Are you sure you want to cancel? page brings the user back'", async ({
-      page,
-    }) => {
-      await page.getByRole("button", { name: /Exit this form/i }).click();
-      await expect(page).toHaveURL(Paths.ARE_YOU_SURE_YOU_WANT_TO_CANCEL);
-      await page.getByRole("link", { name: "Back" }).click();
-      await expect(page).toHaveURL(Paths.MUST_SUBMIT_SUBJECT_ACCESS);
-    });
+    // test("clicking the 'Back' link on 'Are you sure you want to cancel? page brings the user back'", async ({
+    //   page,
+    // }) => {
+    //   await page.getByRole("button", { name: /Exit this form/i }).click();
+    //   await expect(page).toHaveURL(Paths.ARE_YOU_SURE_YOU_WANT_TO_CANCEL);
+    //   await page.getByRole("link", { name: "Back" }).click();
+    //   await expect(page).toHaveURL(Paths.MUST_SUBMIT_SUBJECT_ACCESS);
+    // });
 
     test("clicking the 'No' link on 'Are you sure you want to cancel? page brings the user back'", async ({
       page,

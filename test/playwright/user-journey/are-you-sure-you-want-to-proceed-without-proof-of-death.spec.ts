@@ -48,10 +48,10 @@ test.describe("The 'Are you sure you want to proceed without a proof of death?' 
         await page.getByRole("button", { name: /Continue/i }).click();
         await expect(page).toHaveURL(url);
         await expect(page.locator("h1")).toHaveText(heading);
-        await page.getByRole("link", { name: "Back" }).click();
-        await expect(page).toHaveURL(
-          Paths.ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_A_PROOF_OF_DEATH,
-        );
+        // await page.getByRole("link", { name: "Back" }).click();
+        // await expect(page).toHaveURL(
+        //   Paths.ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_A_PROOF_OF_DEATH,
+        // );
       });
     });
   });

@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 
 {%- set pageTitle = content.app.title -%}
-{%- set back_link_endpoint = route_for_back_link if route_for_back_link else 'main.we_may_hold_this_record' -%}
 
 {% block beforeContent %}
-  {{ backLink(url_for(back_link_endpoint)) }}
+  {{ backLink(url_for('main.we_may_hold_this_record')) }}
 {% endblock %}
 
 {% block content %}

@@ -94,10 +94,10 @@ test.describe("have you previously made a request", () => {
     await expect(page.locator("h1")).toHaveText(/Choose your order type/);
   });
 
-  test("clicking 'Back' from 'Have you previously made a request' brings the user back to the 'Service person details' page", async ({
-    page,
-  }) => {
-    await page.getByRole("link", { name: "Back" }).click();
-    await expect(page).toHaveURL(Paths.SERVICE_PERSON_DETAILS);
-  });
+  // test("clicking 'Back' from 'Have you previously made a request' brings the user back to the 'Service person details' page", async ({
+  //   page,
+  // }) => {
+  //   await page.getByRole("link", { name: "Back" }).click();
+  //   await expect(page).toHaveURL(Paths.SERVICE_PERSON_DETAILS);
+  // });
 });

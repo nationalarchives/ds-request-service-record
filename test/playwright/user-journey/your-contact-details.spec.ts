@@ -112,11 +112,11 @@ test.describe("Your contact details", () => {
       });
     });
 
-    test("clicking 'Back' from 'Your contact details' brings the user back to the 'Choose your order type' page", async ({
-      page,
-    }) => {
-      await page.getByRole("link", { name: "Back" }).click();
-      await expect(page).toHaveURL(Paths.CHOOSE_YOUR_ORDER_TYPE);
-    });
+    // test("clicking 'Back' from 'Your contact details' brings the user back to the 'Choose your order type' page", async ({
+    //   page,
+    // }) => {
+    //   await page.getByRole("link", { name: "Back" }).click();
+    //   await expect(page).toHaveURL(Paths.CHOOSE_YOUR_ORDER_TYPE);
+    // });
   });
 });

@@ -2,10 +2,8 @@
 
 {%- set pageTitle = content.app.title -%}
 
-{%- set back_link_endpoint = route_for_back_link if route_for_back_link else 'main.have_you_previously_made_a_request' -%}
-
 {% block beforeContent %}
-  {{ backLink(url_for(back_link_endpoint)) }}
+  {{ backLink(url_for('main.have_you_previously_made_a_request')) }}
 {% endblock %}
 
 {% block content %}
