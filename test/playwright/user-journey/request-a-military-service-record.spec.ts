@@ -25,7 +25,9 @@ test.describe("the 'Request a military service record' form", () => {
       await page.getByRole("button", { name: /Continue/i }).click();
       await expect(page).toHaveURL(Paths.HOW_WE_PROCESS_REQUESTS);
     });
-    test("clicking the 'Back' link on the next page brings the user back", async ({ page }) => {
+    test("clicking the 'Back' link on the next page brings the user back", async ({
+      page,
+    }) => {
       await page.getByRole("button", { name: /Continue/i }).click();
       await expect(page).toHaveURL(Paths.HOW_WE_PROCESS_REQUESTS);
       await page.getByRole("link", { name: "Back" }).click();
