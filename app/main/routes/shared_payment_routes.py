@@ -1,5 +1,3 @@
-
-
 from app.lib.db import get_gov_uk_dynamics_payment, get_service_record_request
 from app.lib.gov_uk_pay import get_payment_data, validate_payment, process_valid_payment, process_valid_request
 from flask import current_app, redirect, url_for

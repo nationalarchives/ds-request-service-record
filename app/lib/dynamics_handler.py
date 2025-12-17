@@ -43,12 +43,19 @@ DYNAMICS_REQUEST_FIELD_MAP = [
 ]
 
 
-def send_request_to_dynamics(record: ServiceRecordRequest) -> None:
-    send_email(
-        to=current_app.config["DYNAMICS_INBOX"],
-        subject=subject_status(record),
-        body=generate_tagged_request(record),
-    )
+def send_request_to_dynamics(record: ServiceRecordRequest) -> bool:
+    try:
+        send_email(
+            to=current_app.config["DYNAMICS_INBOX"],
+            subject=subject_status(record),
+            body=generate_tagged_request(record),
+        )
+        return True
+    except Exception as e:
+        current_app.logger.error(
+            f"Failed to send service record request ID {record.id} to Dynamics: {e}"
+        )
+        return False
 
 
 def subject_status(record: ServiceRecordRequest) -> str:
