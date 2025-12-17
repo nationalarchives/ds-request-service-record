@@ -21,6 +21,15 @@ test.describe("The 'Upload a proof of death' form", () => {
     );
   });
 
+  test.describe("when interacted with", () => {
+    test("clicking the 'Back' link takes the user to the 'Provide a proof of death' page", async ({
+      page,
+    }) => {
+      await page.getByRole("link", { name: "Back" }).click();
+      await expect(page).toHaveURL(Paths.DO_YOU_HAVE_A_PROOF_OF_DEATH);
+    });
+  })
+
   test.describe("when submitted", () => {
 
     test("with an uploaded file with the incorrect extension, shows an error", async ({
