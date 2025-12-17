@@ -12,7 +12,6 @@ test.describe("The 'Provide a proof of death?' form", () => {
   });
 
   test.describe("when interacted with", () => {
-
     test("clicking the 'Back' link takes the user to the 'What was their date of birth?' page", async ({
       page,
     }) => {
