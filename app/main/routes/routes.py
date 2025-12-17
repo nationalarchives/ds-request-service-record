@@ -426,6 +426,10 @@ def your_contact_details(form, state_machine):
 
 
 @bp.route("/do-you-have-a-proof-of-death/", methods=["GET", "POST"])
+@update_dynamic_back_link_mapping(
+    route_key=MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH,
+    back_link_value=MultiPageFormRoutes.DO_YOU_HAVE_A_PROOF_OF_DEATH,
+)
 @with_form_prefilled_from_session(DoYouHaveAProofOfDeath)
 @with_state_machine
 def do_you_have_a_proof_of_death(form, state_machine):
@@ -482,6 +486,7 @@ def upload_a_proof_of_death(form, state_machine):
         "main/upload-a-proof-of-death.html",
         form=form,
         content=load_content(),
+        back_link_route=get_dynamic_back_link_route(key=request.endpoint),
     )
 
 
