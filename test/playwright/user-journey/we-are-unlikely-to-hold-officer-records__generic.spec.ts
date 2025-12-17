@@ -18,12 +18,12 @@ test.describe("The variant of 'We are unlikely to hold this record' where servic
   });
 
   test.describe("when interacted with", () => {
-    // test('clicking "Back" takes the user back to the "Were they a commissioned officer?" page', async ({
-    //   page,
-    // }) => {
-    //   await page.getByRole("link", { name: "Back" }).click();
-    //   await expect(page).toHaveURL(Paths.WERE_THEY_A_COMMISSIONED_OFFICER);
-    // });
+    test('clicking "Back" takes the user back to the "Were they a commissioned officer?" page', async ({
+      page,
+    }) => {
+      await page.getByRole("link", { name: "Back" }).click();
+      await expect(page).toHaveURL(Paths.WERE_THEY_A_COMMISSIONED_OFFICER);
+    });
 
     test.describe("clicking 'Continue this request' button", () => {
       test("takes the user to the 'What was their date of birth?' page", async ({
@@ -35,19 +35,19 @@ test.describe("The variant of 'We are unlikely to hold this record' where servic
         await expect(page).toHaveURL(Paths.WHAT_WAS_THEIR_DATE_OF_BIRTH);
       });
 
-      // test("once on 'What was their date of birth?' page, clicking 'Back' brings the user back", async ({
-      //   page,
-      // }) => {
-      //   await page.goto(Paths.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__GENERIC);
-      //   await page
-      //     .getByRole("button", { name: "Continue this request" })
-      //     .click();
-      //   await expect(page).toHaveURL(Paths.WHAT_WAS_THEIR_DATE_OF_BIRTH);
-      //   await page.getByRole("link", { name: "Back" }).click();
-      //   await expect(page).toHaveURL(
-      //     Paths.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__GENERIC,
-      //   );
-      // });
+      test("once on 'What was their date of birth?' page, clicking 'Back' brings the user back", async ({
+        page,
+      }) => {
+        await page.goto(Paths.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__GENERIC);
+        await page
+          .getByRole("button", { name: "Continue this request" })
+          .click();
+        await expect(page).toHaveURL(Paths.WHAT_WAS_THEIR_DATE_OF_BIRTH);
+        await page.getByRole("link", { name: "Back" }).click();
+        await expect(page).toHaveURL(
+          Paths.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__GENERIC,
+        );
+      });
     });
 
     test.describe("clicking the 'Request from the Ministry of Defence' link", () => {

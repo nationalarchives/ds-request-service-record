@@ -229,6 +229,10 @@ def we_do_not_have_royal_navy_service_records(form, state_machine):
 
 @bp.route("/we-are-unlikely-to-hold-army-officer-records/", methods=["GET", "POST"])
 @with_form_prefilled_from_session(WeAreUnlikelyToHoldThisRecord)
+@update_dynamic_back_link_mapping(
+    route_key=MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH,
+    back_link_value=MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY,
+)
 @with_state_machine
 def we_are_unlikely_to_hold_officer_records__army(form, state_machine):
     if form.validate_on_submit():
@@ -246,6 +250,10 @@ def we_are_unlikely_to_hold_officer_records__army(form, state_machine):
     "/we-are-unlikely-to-hold-royal-air-force-officer-records/", methods=["GET", "POST"]
 )
 @with_form_prefilled_from_session(WeAreUnlikelyToHoldThisRecord)
+@update_dynamic_back_link_mapping(
+    route_key=MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH,
+    back_link_value=MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__RAF,
+)
 @with_state_machine
 def we_are_unlikely_to_hold_officer_records__raf(form, state_machine):
     if form.validate_on_submit():
@@ -261,6 +269,10 @@ def we_are_unlikely_to_hold_officer_records__raf(form, state_machine):
 
 @bp.route(
     "/we-are-unlikely-to-hold-officer-records-for-this-branch/", methods=["GET", "POST"]
+)
+@update_dynamic_back_link_mapping(
+    route_key=MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH,
+    back_link_value=MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__GENERIC,
 )
 @with_form_prefilled_from_session(WeAreUnlikelyToHoldThisRecord)
 @with_state_machine
@@ -321,6 +333,7 @@ def what_was_their_date_of_birth(form, state_machine):
         "main/what-was-their-date-of-birth.html",
         form=form,
         content=load_content(),
+        back_link_route=get_dynamic_back_link_route(key=request.endpoint),
     )
 
 
