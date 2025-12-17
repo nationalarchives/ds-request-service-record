@@ -83,7 +83,7 @@ def create_payment(
 
 
 def process_valid_request(id: str, payment_data: dict) -> None:
-    record = get_service_record_request(record_id=id)
+    record = get_service_record_request(id=id)
 
     if record is None:
         raise ValueError(f"Service record not found for payment ID: {id}")
