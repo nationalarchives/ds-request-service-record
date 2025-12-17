@@ -1,3 +1,4 @@
+# python
 import pytest
 from flask import Flask, session
 from app.lib.decorators.update_dynamic_back_link_mapping import (
@@ -22,8 +23,9 @@ class TestUpdateDynamicBackLinkMapping:
         with flask_app.test_request_context():
 
             @update_dynamic_back_link_mapping(
-                route_key=MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL,
-                back_link_value=MultiPageFormRoutes.BEFORE_YOU_START,
+                mappings={
+                    MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL: MultiPageFormRoutes.BEFORE_YOU_START
+                }
             )
             def view():
                 return "success"
@@ -42,8 +44,9 @@ class TestUpdateDynamicBackLinkMapping:
             }
 
             @update_dynamic_back_link_mapping(
-                route_key=MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL,
-                back_link_value=MultiPageFormRoutes.BEFORE_YOU_START,
+                mappings={
+                    MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL: MultiPageFormRoutes.BEFORE_YOU_START
+                }
             )
             def view():
                 return "success"
@@ -63,8 +66,9 @@ class TestUpdateDynamicBackLinkMapping:
             }
 
             @update_dynamic_back_link_mapping(
-                route_key=MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL,
-                back_link_value="main.new_route_value",
+                mappings={
+                    MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL: "main.new_route_value"
+                }
             )
             def view():
                 return "success"
@@ -79,7 +83,7 @@ class TestUpdateDynamicBackLinkMapping:
         """Should pass all arguments through to decorated view."""
         with flask_app.test_request_context():
 
-            @update_dynamic_back_link_mapping(route_key="test", back_link_value="/test")
+            @update_dynamic_back_link_mapping(mappings={"test": "/test"})
             def view(*args, **kwargs):
                 return {"args": args, "kwargs": kwargs}
 
@@ -91,7 +95,7 @@ class TestUpdateDynamicBackLinkMapping:
         """Should propagate exceptions from decorated view."""
         with flask_app.test_request_context():
 
-            @update_dynamic_back_link_mapping(route_key="test", back_link_value="/test")
+            @update_dynamic_back_link_mapping(mappings={"test": "/test"})
             def view():
                 raise ValueError("Test error")
 
@@ -101,7 +105,7 @@ class TestUpdateDynamicBackLinkMapping:
     def test_requires_keyword_arguments(self):
         """Should require keyword-only arguments."""
         with pytest.raises(TypeError):
-            update_dynamic_back_link_mapping("route", "/back")
+            update_dynamic_back_link_mapping({"route": "/back"})
 
     def test_preserves_other_session_data(self, flask_app):
         """Should not affect other session data."""
@@ -109,7 +113,7 @@ class TestUpdateDynamicBackLinkMapping:
             session["user_id"] = 123
             session["preferences"] = {"theme": "dark"}
 
-            @update_dynamic_back_link_mapping(route_key="test", back_link_value="/test")
+            @update_dynamic_back_link_mapping(mappings={"test": "/test"})
             def view():
                 return "success"
 
@@ -118,3 +122,20 @@ class TestUpdateDynamicBackLinkMapping:
             assert session["user_id"] == 123
             assert session["preferences"] == {"theme": "dark"}
             assert session["dynamic_back_links"] == {"test": "/test"}
+
+    def test_adds_multiple_mappings(self, flask_app):
+        """Should add multiple key/value pairs at once."""
+        with flask_app.test_request_context():
+
+            @update_dynamic_back_link_mapping(
+                mappings={
+                    "a": "/a",
+                    "b": "/b",
+                }
+            )
+            def view():
+                return "success"
+
+            view()
+
+            assert session["dynamic_back_links"] == {"a": "/a", "b": "/b"}
