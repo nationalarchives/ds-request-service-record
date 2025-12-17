@@ -14,6 +14,13 @@ test.describe("the 'Before you start' form", () => {
   });
 
   test.describe("when interacted with", () => {
+    test("clicking the 'Back' link takes the user to 'How we process requests'", async ({
+      page,
+    }) => {
+      await page.getByRole("link", { name: "Back" }).click();
+      await expect(page).toHaveURL(Paths.HOW_WE_PROCESS_REQUESTS);
+    });
+
     test.describe("clicking the external links", () => {
       test("clicking the 'Copies of death certificates (opens in new tab)' link opens link in new tab", async ({
         page,
@@ -72,6 +79,18 @@ test.describe("the 'Before you start' form", () => {
         await page.getByRole("button", { name: /Start now/i }).click();
         await expect(page).toHaveURL(Paths.YOU_MAY_WANT_TO_CHECK_ANCESTRY);
       });
+
+      test("having reached 'You may want to check Ancestry' page, clicking 'Back' brings the user back", async ({
+        page,
+      }) => {
+        await page
+          .getByLabel(/I have all the mandatory information/)
+          .check({ force: true });
+        await page.getByRole("button", { name: /Start now/i }).click();
+        await expect(page).toHaveURL(Paths.YOU_MAY_WANT_TO_CHECK_ANCESTRY);
+        await page.getByRole("link", { name: "Back" }).click();
+        await expect(page).toHaveURL(Paths.BEFORE_YOU_START);
+      });
     });
 
     test.describe("the 'Exit this form' link", () => {
@@ -81,13 +100,14 @@ test.describe("the 'Before you start' form", () => {
         await page.getByRole("link", { name: "Exit this form" }).click();
         await expect(page).toHaveURL(Paths.ARE_YOU_SURE_YOU_WANT_TO_CANCEL);
       });
+      test("having reached 'Are you sure you want to cancel?', clicking 'Back' brings the user back", async ({
+        page,
+      }) => {
+        await page.getByRole("link", { name: "Exit this form" }).click();
+        await expect(page).toHaveURL(Paths.ARE_YOU_SURE_YOU_WANT_TO_CANCEL);
+        await page.getByRole("link", { name: "Back" }).click();
+        await expect(page).toHaveURL(Paths.BEFORE_YOU_START);
+      });
     });
-
-    // test("clicking the 'Back' link takes the user to 'How we process requests'", async ({
-    //   page,
-    // }) => {
-    //   await page.getByRole("link", { name: "Back" }).click();
-    //   await expect(page).toHaveURL(Paths.HOW_WE_PROCESS_REQUESTS);
-    // });
   });
 });
