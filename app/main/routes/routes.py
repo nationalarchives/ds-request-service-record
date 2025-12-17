@@ -277,6 +277,10 @@ def we_are_unlikely_to_hold_officer_records__generic(form, state_machine):
 
 
 @bp.route("/we-are-unlikely-to-locate-this-record/", methods=["GET", "POST"])
+@update_dynamic_back_link_mapping(
+    route_key=MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL,
+    back_link_value=MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD,
+)
 @with_state_machine
 @with_form_prefilled_from_session(ExitThisForm)
 def we_are_unlikely_to_locate_this_record(form, state_machine):
