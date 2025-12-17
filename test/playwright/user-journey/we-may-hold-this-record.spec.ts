@@ -22,23 +22,17 @@ test.describe("the 'We may hold this record' form", () => {
     });
 
     test.describe("clicking the 'You can find out more about FOI on GOV.UK (opens in a new tab)' button", () => {
-      test("opens link in new tab", async ({ page }) => {
-        // Trigger that opens a new tab (e.g. <a target="_blank">)
-        const [newPage] = await Promise.all([
-          page.waitForEvent("popup"), // waits for the new tab
-          page
-            .getByRole("link", {
-              name: "You can find out more about FOI on GOV.UK (opens in new tab)",
-            })
-            .click(),
-        ]);
-
-        await newPage.waitForLoadState("domcontentloaded");
-
-        // Assertions on the new tab
-        expect(newPage.url()).toContain(
+      test("has the correct destination and is set to open in new tab", async ({
+        page,
+      }) => {
+        const link = page.getByRole("link", {
+          name: "You can find out more about FOI on GOV.UK (opens in new tab)",
+        });
+        await expect(link).toHaveAttribute(
+          "href",
           "https://www.gov.uk/make-a-freedom-of-information-request",
         );
+        await expect(link).toHaveAttribute("target", "_blank");
       });
     });
 
