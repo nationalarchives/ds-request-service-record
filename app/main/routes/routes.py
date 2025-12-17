@@ -361,6 +361,10 @@ def are_you_sure_you_want_to_proceed_without_proof_of_death(form, state_machine)
 
 
 @bp.route("/we-do-not-have-records-for-people-born-after/", methods=["GET", "POST"])
+@update_dynamic_back_link_mapping(
+    route_key=MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL,
+    back_link_value=MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER,
+)
 @with_state_machine
 @with_form_prefilled_from_session(ExitThisForm)
 def we_do_not_have_records_for_people_born_after(form, state_machine):
