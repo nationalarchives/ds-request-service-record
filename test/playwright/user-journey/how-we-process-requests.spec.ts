@@ -13,12 +13,12 @@ test.describe("the 'How we process requests' form", () => {
     });
   });
 
-  // test("clicking 'Back' takes the user to 'Request a military service record'", async ({
-  //   page,
-  // }) => {
-  //   await page.getByRole("link", { name: "Back" }).click();
-  //   await expect(page).toHaveURL(Paths.JOURNEY_START);
-  // });
+  test("clicking 'Back' takes the user to 'Request a military service record'", async ({
+    page,
+  }) => {
+    await page.getByRole("link", { name: "Back" }).click();
+    await expect(page).toHaveURL(Paths.JOURNEY_START);
+  });
 
   test.describe("when clicking 'Continue'", () => {
     test("the user is taken to the 'Before you start' page", async ({
