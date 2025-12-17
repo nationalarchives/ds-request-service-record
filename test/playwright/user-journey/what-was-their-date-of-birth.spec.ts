@@ -99,7 +99,7 @@ test.describe("the 'What was their date of birth?' form", () => {
           month: "01",
           day: "01",
           year: "1925",
-          nextUrl: Paths.DO_YOU_HAVE_A_PROOF_OF_DEATH,
+          nextUrl: Paths.PROVIDE_A_PROOF_OF_DEATH,
           heading: /Provide a proof of death/,
           description:
             "when the year of birth is 1925, the 'Provide proof of death' page is shown and any 'Back' links work as expected",

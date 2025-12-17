@@ -18,7 +18,7 @@ from app.lib.save_submitted_form_fields_to_session import (
 from app.main import bp
 from app.main.forms.are_you_sure_you_want_to_cancel import AreYouSureYouWantToCancel
 from app.main.forms.before_you_start import BeforeYouStart
-from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
+from app.main.forms.provide_a_proof_of_death import ProvideAProofOfDeath
 from app.main.forms.are_you_sure_you_want_to_proceed_without_proof_of_death import (
     AreYouSureYouWantToProceedWithoutProofOfDeath,
 )
@@ -425,20 +425,20 @@ def your_contact_details(form, state_machine):
     )
 
 
-@bp.route("/do-you-have-a-proof-of-death/", methods=["GET", "POST"])
+@bp.route("/provide-a-proof-of-death/", methods=["GET", "POST"])
 @update_dynamic_back_link_mapping(
     route_key=MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH,
-    back_link_value=MultiPageFormRoutes.DO_YOU_HAVE_A_PROOF_OF_DEATH,
+    back_link_value=MultiPageFormRoutes.PROVIDE_A_PROOF_OF_DEATH,
 )
-@with_form_prefilled_from_session(DoYouHaveAProofOfDeath)
+@with_form_prefilled_from_session(ProvideAProofOfDeath)
 @with_state_machine
-def do_you_have_a_proof_of_death(form, state_machine):
+def provide_a_proof_of_death(form, state_machine):
     if form.validate_on_submit():
         save_submitted_form_fields_to_session(form)
-        state_machine.continue_from_do_you_have_a_proof_of_death_form(form)
+        state_machine.continue_from_provide_a_proof_of_death_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/do-you-have-a-proof-of-death.html",
+        "main/provide-a-proof-of-death.html",
         form=form,
         content=load_content(),
     )

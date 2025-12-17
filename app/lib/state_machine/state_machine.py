@@ -122,8 +122,8 @@ class RoutingStateMachine(StateMachine):
         enter="entering_we_do_not_have_records_for_people_born_after_page", final=True
     )
 
-    do_you_have_a_proof_of_death_form = State(
-        enter="entering_do_you_have_a_proof_of_death_form", final=True
+    provide_a_proof_of_death_form = State(
+        enter="entering_provide_a_proof_of_death_form", final=True
     )
 
     upload_a_proof_of_death_form = State(
@@ -248,7 +248,7 @@ class RoutingStateMachine(StateMachine):
             we_do_not_have_records_for_people_born_after_page, cond="born_too_late"
         )
         | initial.to(
-            do_you_have_a_proof_of_death_form, cond="birth_year_requires_proof_of_death"
+            provide_a_proof_of_death_form, cond="birth_year_requires_proof_of_death"
         )
     )
 
@@ -256,7 +256,7 @@ class RoutingStateMachine(StateMachine):
         are_you_sure_you_want_to_cancel_form
     )
 
-    continue_from_do_you_have_a_proof_of_death_form = initial.to(
+    continue_from_provide_a_proof_of_death_form = initial.to(
         upload_a_proof_of_death_form, unless="does_not_have_proof_of_death"
     ) | initial.to(are_you_sure_you_want_to_proceed_without_proof_of_death_form)
 
@@ -384,9 +384,9 @@ class RoutingStateMachine(StateMachine):
             MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER.value
         )
 
-    def entering_do_you_have_a_proof_of_death_form(self):
+    def entering_provide_a_proof_of_death_form(self):
         self.route_for_current_state = (
-            MultiPageFormRoutes.DO_YOU_HAVE_A_PROOF_OF_DEATH.value
+            MultiPageFormRoutes.PROVIDE_A_PROOF_OF_DEATH.value
         )
 
     def entering_upload_a_proof_of_death_form(self):

@@ -4,7 +4,7 @@ import { Paths } from "../lib/constants";
 test.describe("The 'Provide a proof of death?' form", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START);
-    await page.goto(Paths.DO_YOU_HAVE_A_PROOF_OF_DEATH);
+    await page.goto(Paths.PROVIDE_A_PROOF_OF_DEATH);
   });
 
   test("has the correct heading", async ({ page }) => {
@@ -53,7 +53,7 @@ test.describe("The 'Provide a proof of death?' form", () => {
           await expect(page.locator("h1")).toHaveText(heading);
           // Here we are checking that the 'Back' link always takes the user to the correct page
           await page.getByRole("link", { name: "Back" }).click();
-          await expect(page).toHaveURL(Paths.DO_YOU_HAVE_A_PROOF_OF_DEATH);
+          await expect(page).toHaveURL(Paths.PROVIDE_A_PROOF_OF_DEATH);
         });
       });
     });

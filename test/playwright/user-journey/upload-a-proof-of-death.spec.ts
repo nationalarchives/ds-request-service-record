@@ -4,7 +4,7 @@ import { Paths } from "../lib/constants";
 test.describe("The 'Upload a proof of death' form", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START);
-    await page.goto(Paths.DO_YOU_HAVE_A_PROOF_OF_DEATH);
+    await page.goto(Paths.PROVIDE_A_PROOF_OF_DEATH);
     await page.goto(Paths.UPLOAD_A_PROOF_OF_DEATH);
   });
 
@@ -27,7 +27,7 @@ test.describe("The 'Upload a proof of death' form", () => {
       page,
     }) => {
       await page.getByRole("link", { name: "Back" }).click();
-      await expect(page).toHaveURL(Paths.DO_YOU_HAVE_A_PROOF_OF_DEATH);
+      await expect(page).toHaveURL(Paths.PROVIDE_A_PROOF_OF_DEATH);
     });
   })
 
