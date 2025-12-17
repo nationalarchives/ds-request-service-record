@@ -136,9 +136,7 @@ test.describe("combinations of 'Which military branch' and 'Were they an officer
           ).toBeVisible();
           // Here we are checking that the 'Back' link always takes the user to the correct page
           await page.getByRole("link", { name: "Back" }).click();
-          await expect(page).toHaveURL(
-            Paths.WERE_THEY_A_COMMISSIONED_OFFICER,
-          );
+          await expect(page).toHaveURL(Paths.WERE_THEY_A_COMMISSIONED_OFFICER);
         });
       },
     );

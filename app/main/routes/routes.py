@@ -308,6 +308,10 @@ def we_are_unlikely_to_locate_this_record(form, state_machine):
 
 
 @bp.route("/we-may-hold-this-record/", methods=["GET", "POST"])
+@update_dynamic_back_link_mapping(
+    route_key=MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH,
+    back_link_value=MultiPageFormRoutes.WE_MAY_HOLD_THIS_RECORD,
+)
 @with_form_prefilled_from_session(WeMayHoldThisRecord)
 @with_state_machine
 def we_may_hold_this_record(form, state_machine):

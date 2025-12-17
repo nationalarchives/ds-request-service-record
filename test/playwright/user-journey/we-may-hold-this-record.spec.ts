@@ -14,6 +14,13 @@ test.describe("the 'We may hold this record' form", () => {
   });
 
   test.describe("when interacted with", () => {
+    test("clicking 'Back' takes the user to 'Were they a commissioned officer?' page", async ({
+      page,
+    }) => {
+      await page.getByRole("link", { name: "Back" }).click();
+      await expect(page).toHaveURL(Paths.WERE_THEY_A_COMMISSIONED_OFFICER);
+    });
+
     test.describe("clicking the 'You can find out more about FOI on GOV.UK (opens in a new tab)' button", () => {
       test("opens link in new tab", async ({ page }) => {
         // Trigger that opens a new tab (e.g. <a target="_blank">)
@@ -46,14 +53,14 @@ test.describe("the 'We may hold this record' form", () => {
         );
       });
 
-      // test("clicking 'Back' from 'What was their date of birth?' brings the user back to the 'We may hold this record' page", async ({
-      //   page,
-      // }) => {
-      //   await page.getByRole("button", { name: /Continue/i }).click();
-      //   await expect(page).toHaveURL(Paths.WHAT_WAS_THEIR_DATE_OF_BIRTH);
-      //   await page.getByRole("link", { name: "Back" }).click();
-      //   await expect(page).toHaveURL(Paths.WE_MAY_HOLD_THIS_RECORD);
-      // });
+      test("clicking 'Back' from 'What was their date of birth?' brings the user back to the 'We may hold this record' page", async ({
+        page,
+      }) => {
+        await page.getByRole("button", { name: /Continue/i }).click();
+        await expect(page).toHaveURL(Paths.WHAT_WAS_THEIR_DATE_OF_BIRTH);
+        await page.getByRole("link", { name: "Back" }).click();
+        await expect(page).toHaveURL(Paths.WE_MAY_HOLD_THIS_RECORD);
+      });
     });
   });
 });

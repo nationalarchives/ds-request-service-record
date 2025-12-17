@@ -14,7 +14,6 @@ test.describe("the 'We do not hold this record' form", () => {
   });
 
   test.describe("when interacted with", () => {
-
     test("clicking the 'Back' link takes the user to 'Which military branch did the person serve in?'", async ({
       page,
     }) => {
