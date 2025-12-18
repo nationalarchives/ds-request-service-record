@@ -419,6 +419,11 @@ def service_person_details(form, state_machine):
 
 
 @bp.route("/have-you-previously-made-a-request/", methods=["GET", "POST"])
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE: MultiPageFormRoutes.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST,
+    }
+)
 @with_form_prefilled_from_session(HaveYouPreviouslyMadeARequest)
 @with_state_machine
 def have_you_previously_made_a_request(form, state_machine):
@@ -504,6 +509,7 @@ def choose_your_order_type(state_machine):
         "main/choose-your-order-type.html",
         form=form,
         content=load_content(),
+        back_link_route=get_dynamic_back_link_route(key=request.endpoint),
     )
 
 
@@ -529,6 +535,11 @@ def upload_a_proof_of_death(form, state_machine):
 
 
 @bp.route("/your-order-summary/", methods=["GET", "POST"])
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE: MultiPageFormRoutes.YOUR_ORDER_SUMMARY,
+    }
+)
 @with_form_prefilled_from_session(YourOrderSummary)
 @with_state_machine
 def your_order_summary(form, state_machine):

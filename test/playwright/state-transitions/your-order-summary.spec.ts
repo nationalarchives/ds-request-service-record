@@ -117,6 +117,14 @@ test.describe("Routes to 'Your order summary'", () => {
         await page.getByRole("link", { name: "Change order" }).click();
         await expect(page).toHaveURL(Paths.CHOOSE_YOUR_ORDER_TYPE);
       });
+      test("clicking 'Back' from 'Choose your order type' page brings the user back", async ({
+        page,
+      }) => {
+        await page.getByRole("link", { name: "Change order" }).click();
+        await expect(page).toHaveURL(Paths.CHOOSE_YOUR_ORDER_TYPE);
+        await page.getByRole("link", { name: "Back" }).click();
+        await expect(page).toHaveURL(Paths.YOUR_ORDER_SUMMARY);
+      });
     });
   });
   test.describe("the 'Back' links function as expected", () => {
