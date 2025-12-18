@@ -264,7 +264,7 @@ pages:
     heading: Tell us as much as you know about the service person
     paragraphs:
       - Answer as many questions on this page as you can. This will help our staff find the record.
-  do_you_have_a_proof_of_death:
+  provide_a_proof_of_death:
     heading: Provide a proof of death
     paragraphs:
       - As you are requesting a record for someone born after 1909, you will need to provide a digital copy of a proof of death.

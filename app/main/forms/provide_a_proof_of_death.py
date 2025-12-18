@@ -5,7 +5,7 @@ from wtforms import RadioField, SubmitField
 from wtforms.validators import InputRequired
 
 
-class DoYouHaveAProofOfDeath(FlaskForm):
+class ProvideAProofOfDeath(FlaskForm):
     content = load_content()
 
     do_you_have_a_proof_of_death = RadioField(

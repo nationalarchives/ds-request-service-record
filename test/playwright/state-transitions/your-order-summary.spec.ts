@@ -110,13 +110,6 @@ test.describe("Routes to 'Your order summary'", () => {
       await completeOrderToSummary(page, "standard", false);
     });
 
-    test("clicking the 'Back' link takes the user to 'Your contact details'", async ({
-      page,
-    }) => {
-      await page.getByRole("link", { name: "Back" }).click();
-      await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
-    });
-
     test.describe("the 'Change order' link", () => {
       test("takes the user to the 'Choose your order type' page", async ({
         page,
@@ -124,8 +117,7 @@ test.describe("Routes to 'Your order summary'", () => {
         await page.getByRole("link", { name: "Change order" }).click();
         await expect(page).toHaveURL(Paths.CHOOSE_YOUR_ORDER_TYPE);
       });
-
-      test("having reached the 'Choose your order type' page, clicking 'Back' brings the user back here", async ({
+      test("clicking 'Back' from 'Choose your order type' page brings the user back", async ({
         page,
       }) => {
         await page.getByRole("link", { name: "Change order" }).click();
@@ -133,6 +125,25 @@ test.describe("Routes to 'Your order summary'", () => {
         await page.getByRole("link", { name: "Back" }).click();
         await expect(page).toHaveURL(Paths.YOUR_ORDER_SUMMARY);
       });
+    });
+  });
+  test.describe("the 'Back' links function as expected", () => {
+    test("when the user has provided an email address", async ({ page }) => {
+      await selectOrderType(page, "standard");
+      await fillContactDetails(page, true);
+      await expect(page).toHaveURL(Paths.YOUR_ORDER_SUMMARY);
+      await page.getByRole("link", { name: "Back" }).click();
+      await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
+    });
+    test("when the user has provided a postal address", async ({ page }) => {
+      await selectOrderType(page, "standard");
+      await fillContactDetails(page, false);
+      await fillPostalAddress(page);
+      await expect(page).toHaveURL(Paths.YOUR_ORDER_SUMMARY);
+      await page.getByRole("link", { name: "Back" }).click();
+      await expect(page).toHaveURL(Paths.WHAT_IS_YOUR_ADDRESS);
+      await page.getByRole("link", { name: "Back" }).click();
+      await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
     });
   });
 });

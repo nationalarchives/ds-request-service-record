@@ -14,18 +14,18 @@
         {% if form.errors %}
           {{ tnaErrorSummary(wtforms_errors(form)) }}
         {% endif %}
-        <h1 class="tna-heading-xl">{{ content.pages.do_you_have_a_proof_of_death.heading }}</h1>
-        {% for paragraph in content.pages.do_you_have_a_proof_of_death.paragraphs %}
+        <h1 class="tna-heading-xl">{{ content.pages.provide_a_proof_of_death.heading }}</h1>
+        {% for paragraph in content.pages.provide_a_proof_of_death.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
         <ul class="tna-ul">
-          {% for item in content.pages.do_you_have_a_proof_of_death.list_items %}
+          {% for item in content.pages.provide_a_proof_of_death.list_items %}
             <li>{{ item | parse_markdown_links | safe }}</li>
           {% endfor %}
         </ul>
-        <p>{{ content.pages.do_you_have_a_proof_of_death.copy_requirements }}</p>
+        <p>{{ content.pages.provide_a_proof_of_death.copy_requirements }}</p>
         <ul class="tna-ul">
-          {% for item in content.pages.do_you_have_a_proof_of_death.copy_requirements_list %}
+          {% for item in content.pages.provide_a_proof_of_death.copy_requirements_list %}
             <li>{{ item }}</li>
           {% endfor %}
         </ul>
@@ -35,10 +35,10 @@
                                                                                 aria-hidden="true">!</span>
           </h2>
           <div class="tna-warning__body">
-            {{ content.pages.do_you_have_a_proof_of_death.warning }}
+            {{ content.pages.provide_a_proof_of_death.warning }}
           </div>
         </div>
-        <form action="{{ url_for('main.do_you_have_a_proof_of_death') }}" method="post" novalidate>
+        <form action="{{ url_for('main.provide_a_proof_of_death') }}" method="post" novalidate>
           {{ form.csrf_token }}
           {{ form.do_you_have_a_proof_of_death(params={'headingLevel':2, 'headingSize':'l'}) }}
           <div class="tna-button-group">

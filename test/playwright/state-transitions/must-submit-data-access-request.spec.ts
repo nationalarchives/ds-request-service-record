@@ -18,22 +18,18 @@ test.describe("the 'Submit a data access request' form", () => {
     await expect(page).toHaveURL(Paths.IS_SERVICE_PERSON_ALIVE);
   });
 
-  test.describe("clicking the 'Submit a data access request' button", () => {
-    test("opens link in new tab", async ({ page }) => {
-      // Trigger that opens a new tab (e.g. <a target="_blank">)
-      const [newPage] = await Promise.all([
-        page.waitForEvent("popup"), // waits for the new tab
-        page
-          .getByRole("link", { name: "Submit a data access request" })
-          .click(),
-      ]);
-
-      await newPage.waitForLoadState("domcontentloaded");
-
-      // Assertions on the new tab
-      expect(newPage.url()).toContain(
+  test.describe("'Submit a data access request' link", () => {
+    test("has the correct destination and is set to open in new tab", async ({
+      page,
+    }) => {
+      const link = page.getByRole("link", {
+        name: "Submit a data access request",
+      });
+      await expect(link).toHaveAttribute(
+        "href",
         "https://discovery.nationalarchives.gov.uk/mod-dsa-request-step1",
       );
+      await expect(link).toHaveAttribute("target", "_blank");
     });
   });
 

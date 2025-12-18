@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 
 {%- set pageTitle = content.app.title -%}
-{%- set back_link_endpoint = route_for_back_link if route_for_back_link else 'main.before_you_start' -%}
 
 {% block beforeContent %}
-  {{ backLink(url_for(back_link_endpoint)) }}
+  {{ backLink(url_for(back_link_route)) }}
 {% endblock %}
 
 {% block content %}
@@ -13,7 +12,6 @@
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
         <h1 class="tna-heading-xl">{{ content.pages.are_you_sure_you_want_to_cancel.heading }}</h1>
-
         {% for paragraph in content.pages.are_you_sure_you_want_to_cancel.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
@@ -21,7 +19,7 @@
               novalidate>
           {{ form.csrf_token }}
           <div class="tna-button-group ">
-            <a href="{{ url_for(back_link_endpoint) }}"
+            <a href="{{ url_for(back_link_route) }}"
                class="tna-button tna-button--plain">{{ content.pages.are_you_sure_you_want_to_cancel.no_continue }}</a>
             {{ form.submit(params={'classes': 'tna-button--accent'}) }}
           </div>

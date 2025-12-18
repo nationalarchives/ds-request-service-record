@@ -117,7 +117,7 @@ test.describe("combinations of 'Which military branch' and 'Were they an officer
         expectedHeading,
         expectedTemplateIdentifier,
       }) => {
-        test(`when '${serviceBranchLabel}' is selected for service branch AND '${officerLabel}' is selected for commissioned officer, the user is taken to ${nextUrl}`, async ({
+        test(`when '${serviceBranchLabel}' is selected for service branch AND '${officerLabel}' is selected for commissioned officer, the user is taken to ${nextUrl} and the 'Back' link works as expected`, async ({
           page,
         }) => {
           await page.getByLabel(serviceBranchLabel, { exact: true }).check();
@@ -134,6 +134,9 @@ test.describe("combinations of 'Which military branch' and 'Were they an officer
           await expect(
             page.locator(`[data-template-id="${expectedTemplateIdentifier}"]`),
           ).toBeVisible();
+          // Here we are checking that the 'Back' link always takes the user to the correct page
+          await page.getByRole("link", { name: "Back" }).click();
+          await expect(page).toHaveURL(Paths.WERE_THEY_A_COMMISSIONED_OFFICER);
         });
       },
     );

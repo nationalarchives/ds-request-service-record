@@ -16,7 +16,7 @@ test.describe("the 'Is the person still alive?' form", () => {
   });
 
   test.describe("when interacted with", () => {
-    test("clicking the 'Back' link takes the user to the 'Have you checked the catalogue? page'", async ({
+    test("clicking the 'Back' link takes the user to the 'You may want to check Ancestry' page", async ({
       page,
     }) => {
       await page.getByRole("link", { name: "Back" }).click();

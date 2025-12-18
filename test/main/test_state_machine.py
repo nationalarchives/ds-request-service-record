@@ -294,8 +294,8 @@ def test_continue_from_we_are_unlikely_to_hold_officer_records():
     + [
         (
             date(year, 1, 1),
-            "do_you_have_a_proof_of_death_form",
-            MultiPageFormRoutes.DO_YOU_HAVE_A_PROOF_OF_DEATH.value,
+            "provide_a_proof_of_death_form",
+            MultiPageFormRoutes.PROVIDE_A_PROOF_OF_DEATH.value,
         )
         for year in range(1911, 1939)
     ],
@@ -326,11 +326,11 @@ def test_continue_from_what_was_their_date_of_birth_form(
         ),
     ],
 )
-def test_continue_from_do_you_have_a_proof_of_death(
+def test_continue_from_provide_a_proof_of_death(
     has_proof_of_death, expected_state, expected_route
 ):
     sm = RoutingStateMachine()
-    sm.continue_from_do_you_have_a_proof_of_death_form(
+    sm.continue_from_provide_a_proof_of_death_form(
         form=make_form(do_you_have_a_proof_of_death=has_proof_of_death)
     )
     assert sm.current_state.id == expected_state
