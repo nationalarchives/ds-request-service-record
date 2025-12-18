@@ -14,12 +14,12 @@ test.describe("choose your order type", () => {
   });
 
   test.describe("when interacted with", () => {
-    // test("clicking 'Back' from 'Choose your order type' brings the user back to the 'Have you previously made a request' page", async ({
-    //   page,
-    // }) => {
-    //   await page.getByRole("link", { name: "Back" }).click();
-    //   await expect(page).toHaveURL(Paths.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
-    // });
+    test("clicking 'Back' from 'Choose your order type' brings the user back to the 'Have you previously made a request' page", async ({
+      page,
+    }) => {
+      await page.getByRole("link", { name: "Back" }).click();
+      await expect(page).toHaveURL(Paths.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
+    });
 
     test.describe("when submitted", () => {
       test.describe("with the 'Choose standard' option", () => {
