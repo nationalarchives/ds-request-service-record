@@ -16,12 +16,12 @@ test.describe("the 'You may want to check ancestry' form", () => {
   });
 
   test.describe("when interacted with", () => {
-    // test("clicking the 'Back' link takes the user to 'Before you start'", async ({
-    //   page,
-    // }) => {
-    //   await page.getByRole("link", { name: "Back" }).click();
-    //   await expect(page).toHaveURL(Paths.BEFORE_YOU_START);
-    // });
+    test("clicking the 'Back' link takes the user to 'Before you start'", async ({
+      page,
+    }) => {
+      await page.getByRole("link", { name: "Back" }).click();
+      await expect(page).toHaveURL(Paths.BEFORE_YOU_START);
+    });
 
     test("clicking the 'Search Ancestry (opens in new tab)' link opens link in new tab", async ({
       page,

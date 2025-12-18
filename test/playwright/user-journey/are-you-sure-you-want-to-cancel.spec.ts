@@ -24,21 +24,5 @@ test.describe("the 'Are you sure you want to cancel?' form", () => {
       await page.locator("form#cancel-request button[type=submit]").click();
       await expect(page).toHaveURL(Paths.YOU_HAVE_CANCELLED_YOUR_REQUEST);
     });
-
-    // test("clicking 'No' takes the user to 'Before you start'", async ({
-    //   page,
-    // }) => {
-    //   // Falling back to a CSS selector here because there are multiple elements with the same role and name
-    //   // I've tried to ensure it's not brittle
-    //   await await page.locator("form#cancel-request a").click();
-    //   await expect(page).toHaveURL(Paths.BEFORE_YOU_START);
-    // });
-
-    // test("clicking the 'Back' link takes the user to 'Before you start'", async ({
-    //   page,
-    // }) => {
-    //   await page.getByRole("link", { name: "Back" }).click();
-    //   await expect(page).toHaveURL(Paths.BEFORE_YOU_START);
-    // });
   });
 });

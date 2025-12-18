@@ -65,20 +65,20 @@ test.describe("the 'Is the person still alive?' form", () => {
       });
     });
 
-    // test.describe("clicking the 'Back' link after a submission", () => {
-    //   selectionMappings.forEach(({ label, url, heading }) => {
-    //     test(`when '${label}' was submitted, clicking 'Back' brings the user back to 'Is the service person alive?' with '${label}' selected`, async ({
-    //       page,
-    //     }) => {
-    //       await page.getByLabel(label, { exact: true }).check();
-    //       await page.getByRole("button", { name: /Continue/i }).click();
-    //       await expect(page).toHaveURL(url);
-    //       await expect(page.locator("h1")).toHaveText(heading);
-    //       await page.getByRole("link", { name: "Back" }).click();
-    //       await expect(page).toHaveURL(Paths.IS_SERVICE_PERSON_ALIVE);
-    //       await expect(page.getByLabel(label, { exact: true })).toBeChecked();
-    //     });
-    //   });
-    // });
+    test.describe("clicking the 'Back' link after a submission", () => {
+      selectionMappings.forEach(({ label, url, heading }) => {
+        test(`when '${label}' was submitted, clicking 'Back' brings the user back to 'Is the service person alive?' with '${label}' selected`, async ({
+          page,
+        }) => {
+          await page.getByLabel(label, { exact: true }).check();
+          await page.getByRole("button", { name: /Continue/i }).click();
+          await expect(page).toHaveURL(url);
+          await expect(page.locator("h1")).toHaveText(heading);
+          await page.getByRole("link", { name: "Back" }).click();
+          await expect(page).toHaveURL(Paths.IS_SERVICE_PERSON_ALIVE);
+          await expect(page.getByLabel(label, { exact: true })).toBeChecked();
+        });
+      });
+    });
   });
 });

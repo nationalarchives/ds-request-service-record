@@ -3,7 +3,7 @@ import { Paths } from "../lib/constants";
 
 test.describe("the 'We may hold this record' form", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(Paths.JOURNEY_START); // We need to go here first because we prevent direct access to mid-journey pages
+    await page.goto(Paths.JOURNEY_START);
     await page.goto(Paths.WE_MAY_HOLD_THIS_RECORD);
   });
 

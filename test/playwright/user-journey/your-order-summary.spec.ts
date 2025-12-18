@@ -110,13 +110,6 @@ test.describe("Routes to 'Your order summary'", () => {
       await completeOrderToSummary(page, "standard", false);
     });
 
-    // test("clicking the 'Back' link takes the user to 'Your contact details'", async ({
-    //   page,
-    // }) => {
-    //   await page.getByRole("link", { name: "Back" }).click();
-    //   await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
-    // });
-
     test.describe("the 'Change order' link", () => {
       test("takes the user to the 'Choose your order type' page", async ({
         page,
@@ -124,15 +117,6 @@ test.describe("Routes to 'Your order summary'", () => {
         await page.getByRole("link", { name: "Change order" }).click();
         await expect(page).toHaveURL(Paths.CHOOSE_YOUR_ORDER_TYPE);
       });
-
-      // test("having reached the 'Choose your order type' page, clicking 'Back' brings the user back here", async ({
-      //   page,
-      // }) => {
-      //   await page.getByRole("link", { name: "Change order" }).click();
-      //   await expect(page).toHaveURL(Paths.CHOOSE_YOUR_ORDER_TYPE);
-      //   await page.getByRole("link", { name: "Back" }).click();
-      //   await expect(page).toHaveURL(Paths.YOUR_ORDER_SUMMARY);
-      // });
     });
   });
 });

@@ -27,13 +27,13 @@ test.describe("the 'How we process requests' form", () => {
       await page.getByRole("button", { name: /Continue/i }).click();
       await expect(page).toHaveURL(Paths.BEFORE_YOU_START);
     });
-    // test("clicking 'Back' from the 'Before you start' page brings the user back", async ({
-    //   page,
-    // }) => {
-    //   await page.getByRole("button", { name: /Continue/i }).click();
-    //   await expect(page).toHaveURL(Paths.BEFORE_YOU_START);
-    //   await page.getByRole("link", { name: "Back" }).click();
-    //   await expect(page).toHaveURL(Paths.HOW_WE_PROCESS_REQUESTS);
-    // });
+    test("clicking 'Back' from the 'Before you start' page brings the user back", async ({
+      page,
+    }) => {
+      await page.getByRole("button", { name: /Continue/i }).click();
+      await expect(page).toHaveURL(Paths.BEFORE_YOU_START);
+      await page.getByRole("link", { name: "Back" }).click();
+      await expect(page).toHaveURL(Paths.HOW_WE_PROCESS_REQUESTS);
+    });
   });
 });
