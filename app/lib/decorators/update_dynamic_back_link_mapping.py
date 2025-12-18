@@ -1,9 +1,10 @@
 # python
+from enum import Enum
 from functools import wraps
 from flask import session
 
 
-def update_dynamic_back_link_mapping(*, mappings: dict[str, str]):
+def update_dynamic_back_link_mapping(*, mappings: dict[Enum, Enum]):
     """Update dynamic back link mappings in session with provided dictionary."""
 
     def decorator(view_func):
