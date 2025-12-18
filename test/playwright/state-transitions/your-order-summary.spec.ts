@@ -119,4 +119,23 @@ test.describe("Routes to 'Your order summary'", () => {
       });
     });
   });
+  test.describe("the 'Back' links function as expected", () => {
+    test("when the user has provided an email address", async ({ page }) => {
+      await selectOrderType(page, "standard");
+      await fillContactDetails(page, true);
+      await expect(page).toHaveURL(Paths.YOUR_ORDER_SUMMARY);
+      await page.getByRole("link", { name: "Back" }).click();
+      await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
+    });
+    test("when the user has provided a postal address", async ({ page }) => {
+      await selectOrderType(page, "standard");
+      await fillContactDetails(page, false);
+      await fillPostalAddress(page);
+      await expect(page).toHaveURL(Paths.YOUR_ORDER_SUMMARY);
+      await page.getByRole("link", { name: "Back" }).click();
+      await expect(page).toHaveURL(Paths.WHAT_IS_YOUR_ADDRESS);
+      await page.getByRole("link", { name: "Back" }).click();
+      await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
+    });
+  });
 });

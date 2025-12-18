@@ -435,6 +435,11 @@ def have_you_previously_made_a_request(form, state_machine):
 
 
 @bp.route("/your-contact-details/", methods=["GET", "POST"])
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.YOUR_ORDER_SUMMARY: MultiPageFormRoutes.YOUR_CONTACT_DETAILS,
+    }
+)
 @with_form_prefilled_from_session(YourContactDetails)
 @with_state_machine
 def your_contact_details(form, state_machine):
@@ -468,6 +473,11 @@ def provide_a_proof_of_death(form, state_machine):
 
 
 @bp.route("/what-is-your-address/", methods=["GET", "POST"])
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.YOUR_ORDER_SUMMARY: MultiPageFormRoutes.WHAT_IS_YOUR_ADDRESS,
+    }
+)
 @with_form_prefilled_from_session(WhatIsYourAddress)
 @with_state_machine
 def what_is_your_address(form, state_machine):
@@ -536,6 +546,7 @@ def your_order_summary(form, state_machine):
         form=form,
         form_data=form_data,
         order_summary_data=order_summary_data,
+        back_link_route=get_dynamic_back_link_route(key=request.endpoint),
     )
 
 
