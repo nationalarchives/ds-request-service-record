@@ -128,9 +128,13 @@ def create_app(config_class):
 
     from .healthcheck import bp as healthcheck_bp
     from .main import bp as site_bp
+    from .sitemap import bp as sitemap_bp
 
-    app.register_blueprint(site_bp, url_prefix="/request-a-military-service-record")
+    service_url_prefix = "/request-a-military-service-record"
+
     app.register_blueprint(healthcheck_bp, url_prefix="/healthcheck")
+    app.register_blueprint(sitemap_bp, url_prefix=service_url_prefix)
+    app.register_blueprint(site_bp, url_prefix=service_url_prefix)
 
     db.init_app(app)
 
