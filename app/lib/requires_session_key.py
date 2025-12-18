@@ -13,6 +13,7 @@ def requires_session_key(app_or_blueprint):
             "healthcheck.healthcheck",
             "main.create_payment_endpoint",
             "main.make_payment",
+            "sitemap.index",
         ]
 
         short_session_id = request.cookies.get("session", "unknown")[0:7]
