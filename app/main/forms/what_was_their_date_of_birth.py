@@ -35,6 +35,9 @@ class WhatWasTheirDateOfBirth(FlaskForm):
                 ]
             ),
         ],
+        invalid_date_error_message=get_field_content(
+            content, "date_of_birth", "messages"
+        )["invalid_date"],
     )
 
     submit = SubmitField(

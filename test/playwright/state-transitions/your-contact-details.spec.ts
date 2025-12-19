@@ -57,7 +57,7 @@ test.describe("Your contact details", () => {
             /Enter your last name/,
           );
           await expect(page.locator(".tna-form-item__error").nth(2)).toHaveText(
-            /Enter an email address in the correct format, like name@example.com. If you do not have an email address, please select 'I do not have an email address' below/,
+            /Enter an email address in the correct format like name@example.com, or select 'I do not have an email address'/,
           );
         });
 
@@ -71,7 +71,7 @@ test.describe("Your contact details", () => {
           await expect(
             page.locator(".tna-form-item__error").first(),
           ).toHaveText(
-            /Enter an email address in the correct format, like name@example.com. If you do not have an email address, please select 'I do not have an email address' below/,
+            /Enter an email address in the correct format like name@example.com, or select 'I do not have an email address'/,
           );
         });
 
@@ -120,7 +120,7 @@ test.describe("Your contact details", () => {
           await expect(
             page.locator(".tna-form-item__error").first(),
           ).toHaveText(
-            /You have indicated that you do not have an email address. Please leave this field empty/,
+            /Email must be blank if you have selected 'I do not have an email address'/,
           );
         });
       });

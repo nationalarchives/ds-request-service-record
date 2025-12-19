@@ -29,7 +29,7 @@ test.describe("The 'Are you sure you want to proceed without a proof of death?' 
       test("without a selection, shows an error", async ({ page }) => {
         await page.getByRole("button", { name: /Continue/i }).click();
         await expect(page.locator(".tna-fieldset__error")).toHaveText(
-          /You must confirm your selection to proceed/,
+          /Confirm if you want to continue without providing a proof of death/,
         );
       });
 
