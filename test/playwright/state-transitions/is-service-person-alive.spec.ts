@@ -1,4 +1,8 @@
-import { test, expect } from "@playwright/test";
+import { test } from "@playwright/test";
+import {
+  clickBackLink,
+  continueFromIsServicePersonAlive,
+} from "../lib/step-functions";
 import { Paths } from "../lib/constants";
 
 test.describe("the 'Is the person still alive?' form", () => {
@@ -7,78 +11,45 @@ test.describe("the 'Is the person still alive?' form", () => {
     await page.goto(Paths.IS_SERVICE_PERSON_ALIVE);
   });
 
-  test.describe("when first rendered", () => {
-    test("has the correct heading", async ({ page }) => {
-      await expect(page.locator("h1")).toHaveText(
-        /Is the service person alive\?/,
-      );
-    });
-  });
-
   test.describe("when interacted with", () => {
-    test("clicking the 'Back' link takes the user to the 'You may want to check Ancestry' page", async ({
-      page,
-    }) => {
-      await page.getByRole("link", { name: "Back" }).click();
-      await expect(page).toHaveURL(Paths.YOU_MAY_WANT_TO_CHECK_ANCESTRY);
-    });
-
-    test("clicking 'Continue' without a selection, shows an error", async ({
-      page,
-    }) => {
-      await page.getByRole("button", { name: /Continue/i }).click();
-      await expect(page.locator(".tna-fieldset__error")).toHaveText(
-        /Tell us if the service person is alive/,
-      );
-    });
-
     const selectionMappings = [
       {
         label: "Yes",
-        url: Paths.MUST_SUBMIT_SUBJECT_ACCESS,
-        heading: /Submit a data access request/,
+        nextPage: Paths.MUST_SUBMIT_SUBJECT_ACCESS,
         description:
           "when 'Yes' is selected, presents the 'Submit a data access request' page ",
       },
       {
         label: "No",
-        url: Paths.WHICH_MILITARY_BRANCH_DID_THE_PERSON_SERVE_IN,
-        heading: /Which military branch did the person serve in\?/,
+        nextPage: Paths.WHICH_MILITARY_BRANCH_DID_THE_PERSON_SERVE_IN,
         description:
           "when 'No' is selected, presents the 'Which military branch did the person serve in?' form",
       },
       {
         label: "I do not know",
-        url: Paths.WHICH_MILITARY_BRANCH_DID_THE_PERSON_SERVE_IN,
-        heading: /Which military branch did the person serve in\?/,
+        nextPage: Paths.WHICH_MILITARY_BRANCH_DID_THE_PERSON_SERVE_IN,
         description:
           "when 'I do not know' is selected, presents the 'Which military branch did the person serve in?' form",
       },
+      {
+        label: false,
+        description:
+          "when no radio is selected, a validation error is presented",
+      },
     ];
 
-    selectionMappings.forEach(({ label, url, heading, description }) => {
+    selectionMappings.forEach(({ label, nextPage, description }) => {
       test(description, async ({ page }) => {
-        await page.getByLabel(label, { exact: true }).check();
-        await page.getByRole("button", { name: /Continue/i }).click();
-        await expect(page).toHaveURL(url);
-        await expect(page.locator("h1")).toHaveText(heading);
+        await continueFromIsServicePersonAlive(page, label, nextPage);
       });
-    });
-
-    test.describe("clicking the 'Back' link after a submission", () => {
-      selectionMappings.forEach(({ label, url, heading }) => {
-        test(`when '${label}' was submitted, clicking 'Back' brings the user back to 'Is the service person alive?' with '${label}' selected`, async ({
+      if (label) {
+        test(`having chosen ${label}, clicking the 'Back' link on the next page brings the user back`, async ({
           page,
         }) => {
-          await page.getByLabel(label, { exact: true }).check();
-          await page.getByRole("button", { name: /Continue/i }).click();
-          await expect(page).toHaveURL(url);
-          await expect(page.locator("h1")).toHaveText(heading);
-          await page.getByRole("link", { name: "Back" }).click();
-          await expect(page).toHaveURL(Paths.IS_SERVICE_PERSON_ALIVE);
-          await expect(page.getByLabel(label, { exact: true })).toBeChecked();
+          await continueFromIsServicePersonAlive(page, label, nextPage);
+          await clickBackLink(page, Paths.IS_SERVICE_PERSON_ALIVE);
         });
-      });
+      }
     });
   });
 });

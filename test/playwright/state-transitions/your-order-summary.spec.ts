@@ -22,17 +22,13 @@ async function fillPostalAddress(page) {
   await page.getByRole("button", { name: /Continue/i }).click();
 }
 
-async function selectOrderType(page, orderType: "standard" | "full") {
+async function selectOrderType(page, orderType) {
   const buttonName =
     orderType === "standard" ? /Choose standard/i : /Choose full record check/i;
   await page.getByRole("button", { name: buttonName }).click();
 }
 
-async function completeOrderToSummary(
-  page,
-  orderType: "standard" | "full",
-  hasEmail = false,
-) {
+async function completeOrderToSummary(page, orderType, hasEmail = false) {
   await expect(page.locator("h1")).toHaveText(/Choose your order type/);
   await selectOrderType(page, orderType);
   await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
@@ -54,12 +50,12 @@ test.describe("Routes to 'Your order summary'", () => {
 
   const providedByPostTests = [
     {
-      orderType: "standard" as const,
+      orderType: "standard",
       price: "£47.16",
       description: "Standard",
     },
     {
-      orderType: "full" as const,
+      orderType: "full",
       price: "£48.87",
       description: "Full record check",
     },
@@ -82,12 +78,12 @@ test.describe("Routes to 'Your order summary'", () => {
 
   const providedByEmailTests = [
     {
-      orderType: "standard" as const,
+      orderType: "standard",
       price: "£42.25",
       description: "Standard",
     },
     {
-      orderType: "full" as const,
+      orderType: "full",
       price: "£48.87",
       description: "Full record check",
     },
