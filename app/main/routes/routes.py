@@ -443,6 +443,7 @@ def have_you_previously_made_a_request(form, state_machine):
 @update_dynamic_back_link_mapping(
     mappings={
         MultiPageFormRoutes.YOUR_ORDER_SUMMARY: MultiPageFormRoutes.YOUR_CONTACT_DETAILS,
+        MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE: MultiPageFormRoutes.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST,
     }
 )
 @with_form_prefilled_from_session(YourContactDetails)
