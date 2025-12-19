@@ -1,5 +1,9 @@
-import { test, expect } from "@playwright/test";
+import { test } from "@playwright/test";
 import { Paths } from "../lib/constants";
+import {
+  clickBackLink,
+  continueFromChooseYourOrderType,
+} from "../lib/step-functions";
 
 test.describe("choose your order type", () => {
   test.beforeEach(async ({ page }) => {
@@ -8,38 +12,19 @@ test.describe("choose your order type", () => {
     await page.goto(Paths.CHOOSE_YOUR_ORDER_TYPE);
   });
 
-  test.describe("when first rendered", () => {
-    test("has the correct heading", async ({ page }) => {
-      await expect(page.locator("h1")).toHaveText(/Choose your order type/);
-    });
-  });
-
-  test.describe("when interacted with", () => {
-    test("clicking 'Back' from 'Choose your order type' brings the user back to the 'Have you previously made a request' page", async ({
-      page,
-    }) => {
-      await page.getByRole("link", { name: "Back" }).click();
-      await expect(page).toHaveURL(Paths.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
-    });
-
-    test.describe("when submitted", () => {
-      test.describe("with the 'Choose standard' option", () => {
-        test("the user is taken to 'Your contact details'", async ({
-          page,
-        }) => {
-          await page.getByRole("button", { name: /Choose standard/i }).click();
-          await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
-        });
+  test.describe("works as expected", () => {
+    ["Choose standard", "Choose full record check"].forEach((buttonText) => {
+      test(`selecting '${buttonText}' continues to 'Your order summary'`, async ({
+        page,
+      }) => {
+        await continueFromChooseYourOrderType(page, buttonText);
       });
-      test.describe("with the 'Choose full record check' option", () => {
-        test("the user is taken to 'Your contact details'", async ({
-          page,
-        }) => {
-          await page
-            .getByRole("button", { name: /Choose full record check/i })
-            .click();
-          await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
-        });
+
+      test(`clicking 'Back' from 'Your order summary' after selecting '${buttonText}' returns to 'Choose your order type'`, async ({
+        page,
+      }) => {
+        await continueFromChooseYourOrderType(page, buttonText);
+        await clickBackLink(page, Paths.CHOOSE_YOUR_ORDER_TYPE);
       });
     });
   });

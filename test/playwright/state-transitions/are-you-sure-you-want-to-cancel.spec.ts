@@ -1,5 +1,6 @@
-import { test, expect } from "@playwright/test";
+import { test } from "@playwright/test";
 import { Paths } from "../lib/constants";
+import { continueFromAreYouSureYouWantToCancel } from "../lib/step-functions";
 
 test.describe("the 'Are you sure you want to cancel?' form", () => {
   test.beforeEach(async ({ page }) => {
@@ -7,22 +8,9 @@ test.describe("the 'Are you sure you want to cancel?' form", () => {
     await page.goto(Paths.ARE_YOU_SURE_YOU_WANT_TO_CANCEL);
   });
 
-  test.describe("when first rendered", () => {
-    test("has the correct heading", async ({ page }) => {
-      await expect(page.locator("h1")).toHaveText(
-        /Are you sure you want to cancel?/,
-      );
-    });
-  });
-
-  test.describe("when interacted with", () => {
-    test("clicking 'Yes' takes the user to 'You have cancelled your request'", async ({
-      page,
-    }) => {
-      // Falling back to a CSS selector here because there are multiple elements with the same role and name
-      // I've tried to ensure it's not brittle
-      await page.locator("form#cancel-request button[type=submit]").click();
-      await expect(page).toHaveURL(Paths.YOU_HAVE_CANCELLED_YOUR_REQUEST);
+  test.describe("works as expected", () => {
+    test("when continuing to cancel", async ({ page }) => {
+      await continueFromAreYouSureYouWantToCancel(page, true);
     });
   });
 });

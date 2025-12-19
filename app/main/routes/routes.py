@@ -1,4 +1,3 @@
-# python
 from app.constants import ExternalLinks, MultiPageFormRoutes
 from app.lib.content import load_content
 from app.lib.decorators.state_machine_decorator import with_state_machine
@@ -163,7 +162,7 @@ def must_submit_subject_access_request(form, state_machine):
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(
-        "main/must-submit-subject-access-request.html",
+        "main/submit-subject-access-request.html",
         form=form,
         content=load_content(),
         subject_access_request_link=ExternalLinks.SUBJECT_ACCESS_REQUEST_FORM,
