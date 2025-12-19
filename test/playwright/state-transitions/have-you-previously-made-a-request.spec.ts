@@ -21,7 +21,7 @@ test.describe("have you previously made a request", () => {
     }) => {
       await page.getByRole("button", { name: /Continue/i }).click();
       await expect(page.locator(".tna-fieldset__error")).toHaveText(
-        /Please select an option/,
+        /Tell us if you have made a request for this record before/,
       );
     });
 

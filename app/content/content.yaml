@@ -412,6 +412,7 @@ forms:
         required: Enter the service person's date of birth
         past_date: The date of birth must be in the past
         born_too_early: Date of birth must be after 31 December 1799. Records prior to this date are not contained in this collection.
+        invalid_date: Date of birth must be a real date
       call_to_action: Continue
     place_of_birth:
       label: Place of birth (optional)
@@ -431,7 +432,7 @@ forms:
         "no": No, I would like to upload a proof of death
       label: Please confirm your selection
       messages:
-        required: You must confirm your selection to proceed
+        required: Confirm if you want to continue without providing a proof of death
       call_to_action: Continue
     upload_a_proof_of_death:
       label: Upload a file
@@ -460,7 +461,7 @@ forms:
     have_you_previously_made_a_request:
       label: Select one option
       messages:
-        required: Please select an option
+        required: Tell us if you have made a request for this record before
         reference_number_required: Enter the reference number for your previous request
       options:
         "yes_mod": Yes, to the Ministry of Defence
@@ -485,9 +486,9 @@ forms:
       label: Email
       hint: Where we will contact you about your request
       messages:
-        required: Enter an email address in the correct format, like name@example.com. If you do not have an email address, please select 'I do not have an email address' below
+        required: Enter an email address in the correct format like name@example.com, or select 'I do not have an email address'
         address_format: Enter an email address in the correct format, like name@example.com
-        must_be_empty_if_no_email: You have indicated that you do not have an email address. Please leave this field empty
+        must_be_empty_if_no_email: Email must be blank if you have selected 'I do not have an email address'
     requester_address_line_1:
       label: Address line 1
       messages:

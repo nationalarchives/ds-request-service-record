@@ -69,7 +69,7 @@ test.describe("the 'What was their date of birth?' form", () => {
             await page.getByLabel("Year").fill(year);
             await page.getByRole("button", { name: /Continue/i }).click();
             await expect(page.locator(".tna-fieldset__error")).toHaveText(
-              /What was their date of birth\? must be a real date/,
+              /Date of birth must be a real date/,
             );
           });
         }
