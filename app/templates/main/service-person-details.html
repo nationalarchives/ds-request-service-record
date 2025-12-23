@@ -15,7 +15,7 @@
         {% if form.errors %}
           {{ tnaErrorSummary(wtforms_errors(form)) }}
         {% endif %}
-        <h1 class="tna-heading-xl">{{ content.pages.service_person_details.heading }}</h1>
+        <h1 class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.service_person_details.heading }}</h1>
 
         {% for paragraph in content.pages.service_person_details.paragraphs %}
           <p>{{ paragraph }}</p>
