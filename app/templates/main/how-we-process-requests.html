@@ -11,14 +11,15 @@
     <div class="tna-container">
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
-        <h1 class="tna-heading-xl">{{ content.pages.how_we_process_requests.heading }}</h1>
+        <h1 class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.how_we_process_requests.heading }}</h1>
         {% for paragraph in content.pages.how_we_process_requests.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
         <h2 class="tna-heading-s">{{ content.pages.how_we_process_requests.sub_heading }}</h2>
         <ol class="process-steps tna-!--margin-top-l">
           <li>
-            <span><i class="fa-solid fa-users process-icon"></i><i class="fa-solid fa-chevron-down chevron-icon"></i></span>
+            <span><i class="fa-solid fa-users process-icon"></i><i
+              class="fa-solid fa-chevron-down chevron-icon"></i></span>
             <span>{{ content.pages.how_we_process_requests.steps.advisor_check }}</span>
           </li>
           <li>
@@ -26,15 +27,18 @@
             <span>{{ content.pages.how_we_process_requests.steps.box_retrieved }}</span>
           </li>
           <li>
-            <span><i class="fa-solid fa-van-shuttle process-icon"></i><i class="fa-solid fa-chevron-down chevron-icon"></i></span>
+            <span><i class="fa-solid fa-van-shuttle process-icon"></i><i
+              class="fa-solid fa-chevron-down chevron-icon"></i></span>
             <span>{{ content.pages.how_we_process_requests.steps.transported_to_us }}</span>
           </li>
           <li>
-            <span><i class="fa-solid fa-file process-icon"></i><i class="fa-solid fa-chevron-down chevron-icon"></i></span>
+            <span><i class="fa-solid fa-file process-icon"></i><i
+              class="fa-solid fa-chevron-down chevron-icon"></i></span>
             <span>{{ content.pages.how_we_process_requests.steps.scanned }}</span>
           </li>
           <li>
-            <span><i class="fa-solid fa-highlighter process-icon"></i><i class="fa-solid fa-chevron-down chevron-icon"></i></span>
+            <span><i class="fa-solid fa-highlighter process-icon"></i><i
+              class="fa-solid fa-chevron-down chevron-icon"></i></span>
             <span>{{ content.pages.how_we_process_requests.steps.sensitivity_review }}</span>
           </li>
           <li>

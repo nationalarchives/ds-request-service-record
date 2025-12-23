@@ -11,15 +11,17 @@
     <div class="tna-container">
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
-        <h1 class="tna-heading-xl">{{ content.pages.your_order_summary.heading }}</h1>
+        <h1 class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.your_order_summary.heading }}</h1>
         <dl class="order-summary tna-!--margin-top-m">
           <dt><span><i
             class="fa-solid fa-file"></i></span><span>{{ content.pages.your_order_summary.order_type_term }}</span></dt>
           <dd>
             {% if order_summary_data.processing_option == "standard" %}
-              <span></span><span id="processing-option">{{ content.pages.your_order_summary.processing_option_description_standard }}</span>
+              <span></span><span
+              id="processing-option">{{ content.pages.your_order_summary.processing_option_description_standard }}</span>
             {% elif order_summary_data.processing_option == "full" %}
-              <span></span><span id="processing-option">{{ content.pages.your_order_summary.processing_option_description_full }}</span>
+              <span></span><span
+              id="processing-option">{{ content.pages.your_order_summary.processing_option_description_full }}</span>
             {% endif %}
           </dd>
           <dt><span><i
@@ -28,7 +30,7 @@
           <dd>
             <span></span><span id="price">£{{ order_summary_data.amount_pence / 100 }}
             {% if order_summary_data.delivery_option == "PrintedTracked" %}
-            plus £1.04 per page copying fee
+              plus £1.04 per page copying fee
             {% endif %}
           </span>
           </dd>

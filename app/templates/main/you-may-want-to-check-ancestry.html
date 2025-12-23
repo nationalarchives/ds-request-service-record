@@ -3,30 +3,30 @@
 {%- set pageTitle = content.app.title -%}
 
 {% block beforeContent %}
- {{ backLink(url_for('main.before_you_start')) }}
+  {{ backLink(url_for('main.before_you_start')) }}
 {% endblock %}
 
 {% block content %}
-<div class="tna-section tna-!--padding-top-s">
-  <div class="tna-container">
-    <div
-      class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
-      <h1 class="tna-heading-xl">{{ content.pages.you_may_want_to_check_ancestry.heading }}</h1>
-      {% for paragraph in content.pages.you_may_want_to_check_ancestry.paragraphs %}
-        <p>{{ paragraph | parse_markdown_links | safe }}</p>
-      {% endfor %}
+  <div class="tna-section tna-!--padding-top-s">
+    <div class="tna-container">
+      <div
+        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+        <h1 class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.you_may_want_to_check_ancestry.heading }}</h1>
+        {% for paragraph in content.pages.you_may_want_to_check_ancestry.paragraphs %}
+          <p>{{ paragraph | parse_markdown_links | safe }}</p>
+        {% endfor %}
 
-      <div class="tna-!--margin-top-m">
-        <form action="{{ url_for('main.you_may_want_to_check_ancestry') }}" method="post" novalidate>
-          {{ form.csrf_token }}
-          <div class="tna-button-group">
-            {{ form.submit(params={'classes': 'tna-button--accent'}) }}
-          </div>
-        </form>
+        <div class="tna-!--margin-top-m">
+          <form action="{{ url_for('main.you_may_want_to_check_ancestry') }}" method="post" novalidate>
+            {{ form.csrf_token }}
+            <div class="tna-button-group">
+              {{ form.submit(params={'classes': 'tna-button--accent'}) }}
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
 
 {% endblock %}
