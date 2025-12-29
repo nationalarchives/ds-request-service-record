@@ -21,10 +21,9 @@ class TestUpdateDynamicBackLinkMapping:
     def test_adds_mapping_to_empty_session(self, flask_app):
         """Should create new dynamic_back_links when session is empty."""
         with flask_app.test_request_context():
-
             @update_dynamic_back_link_mapping(
                 mappings={
-                    MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL: MultiPageFormRoutes.BEFORE_YOU_START
+                    MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value: MultiPageFormRoutes.BEFORE_YOU_START.value
                 }
             )
             def view():
@@ -33,7 +32,7 @@ class TestUpdateDynamicBackLinkMapping:
             view()
 
             assert session["dynamic_back_links"] == {
-                MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL: MultiPageFormRoutes.BEFORE_YOU_START
+                MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value: MultiPageFormRoutes.BEFORE_YOU_START.value
             }
 
     def test_adds_mapping_to_existing_session(self, flask_app):
@@ -45,7 +44,7 @@ class TestUpdateDynamicBackLinkMapping:
 
             @update_dynamic_back_link_mapping(
                 mappings={
-                    MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL: MultiPageFormRoutes.BEFORE_YOU_START
+                    MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value: MultiPageFormRoutes.BEFORE_YOU_START.value
                 }
             )
             def view():
@@ -55,19 +54,19 @@ class TestUpdateDynamicBackLinkMapping:
 
             assert session["dynamic_back_links"] == {
                 "main.some_other_route": "main.another_route",
-                MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL: MultiPageFormRoutes.BEFORE_YOU_START,
+                MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value: MultiPageFormRoutes.BEFORE_YOU_START.value,
             }
 
     def test_overwrites_existing_route_key(self, flask_app):
         """Should overwrite existing route key with new value."""
         with flask_app.test_request_context():
             session["dynamic_back_links"] = {
-                MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL: "main.old_route_value"
+                MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value: "main.old_route_value"
             }
 
             @update_dynamic_back_link_mapping(
                 mappings={
-                    MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL: "main.new_route_value"
+                    MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value: "main.new_route_value"
                 }
             )
             def view():
@@ -76,13 +75,12 @@ class TestUpdateDynamicBackLinkMapping:
             view()
 
             assert session["dynamic_back_links"] == {
-                MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL: "main.new_route_value"
+                MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value: "main.new_route_value"
             }
 
     def test_passes_arguments_to_view(self, flask_app):
         """Should pass all arguments through to decorated view."""
         with flask_app.test_request_context():
-
             @update_dynamic_back_link_mapping(mappings={"test": "/test"})
             def view(*args, **kwargs):
                 return {"args": args, "kwargs": kwargs}
@@ -94,7 +92,6 @@ class TestUpdateDynamicBackLinkMapping:
     def test_propagates_exceptions(self, flask_app):
         """Should propagate exceptions from decorated view."""
         with flask_app.test_request_context():
-
             @update_dynamic_back_link_mapping(mappings={"test": "/test"})
             def view():
                 raise ValueError("Test error")
@@ -126,7 +123,6 @@ class TestUpdateDynamicBackLinkMapping:
     def test_adds_multiple_mappings(self, flask_app):
         """Should add multiple key/value pairs at once."""
         with flask_app.test_request_context():
-
             @update_dynamic_back_link_mapping(
                 mappings={
                     "a": "/a",
