@@ -1,15 +1,15 @@
 import { test, expect } from "@playwright/test";
 import { Paths } from "../lib/constants";
+import {
+  clickBackLink,
+  continueFromUploadAProofOfDeath,
+} from "../lib/step-functions";
 
 test.describe("The 'Upload a proof of death' form", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START);
     await page.goto(Paths.PROVIDE_A_PROOF_OF_DEATH);
     await page.goto(Paths.UPLOAD_A_PROOF_OF_DEATH);
-  });
-
-  test("has the correct heading", async ({ page }) => {
-    await expect(page.locator("h1")).toHaveText(/Upload a proof of death/);
   });
 
   test("the form should have the enctype='multipart/form-data'", async ({
@@ -26,22 +26,22 @@ test.describe("The 'Upload a proof of death' form", () => {
     test("clicking the 'Back' link takes the user to the 'Provide a proof of death' page", async ({
       page,
     }) => {
-      await page.getByRole("link", { name: "Back" }).click();
-      await expect(page).toHaveURL(Paths.PROVIDE_A_PROOF_OF_DEATH);
+      await clickBackLink(page, Paths.PROVIDE_A_PROOF_OF_DEATH);
     });
   });
 
   test.describe("when submitted", () => {
+    const bufferSizeBelowLimit = 1024 * 1024 * 4; // 4MB
+    const bufferSizeAboveLimit = 1024 * 1024 * 6; // 6MB
+
     test("with an uploaded file with the incorrect extension, shows an error", async ({
       page,
     }) => {
-      await page.getByLabel("Upload a file").setInputFiles({
-        name: "file.txt",
-        mimeType: "text/plain",
-        buffer: Buffer.from("this is a test file"),
-      });
-      await page.getByRole("button", { name: /Continue/i }).click();
-      await expect(page.locator(".tna-form-item__error")).toHaveText(
+      await continueFromUploadAProofOfDeath(
+        page,
+        ".docx",
+        bufferSizeBelowLimit,
+        false,
         /The selected file must be a JPG, GIF or PNG/,
       );
     });
@@ -50,28 +50,28 @@ test.describe("The 'Upload a proof of death' form", () => {
       test(`with a valid extension (of .${extension}) which is above the size limit, shows an error`, async ({
         page,
       }) => {
-        await page.getByLabel("Upload a file").setInputFiles({
-          name: `image.${extension}`,
-          mimeType: "text/plain",
-          buffer: Buffer.alloc(6 * 1024 * 1024),
-        });
-        await page.getByRole("button", { name: /Continue/i }).click();
-        await expect(page.locator(".tna-form-item__error")).toHaveText(
+        await continueFromUploadAProofOfDeath(
+          page,
+          `.${extension}`,
+          bufferSizeAboveLimit,
+          false,
           /The selected file must be smaller than 5MB/,
         );
       });
+
       test(`with a file that has a valid extention (of .${extension}) and is below the size limit, presents next page and the 'Back' link works as expected`, async ({
         page,
       }) => {
-        await page.getByLabel("Upload a file").setInputFiles({
-          name: `image.${extension}`,
-          mimeType: "text/plain",
-          buffer: Buffer.alloc(2 * 1024 * 1024),
-        });
-        await page.getByRole("button", { name: /Continue/i }).click();
-        await expect(page).toHaveURL(Paths.SERVICE_PERSON_DETAILS);
-        await page.getByRole("link", { name: "Back" }).click();
-        await expect(page).toHaveURL(Paths.UPLOAD_A_PROOF_OF_DEATH);
+        await continueFromUploadAProofOfDeath(
+          page,
+          `.${extension}`,
+          bufferSizeBelowLimit,
+          true,
+          null,
+        );
+
+        // Now test that the 'Back' link works as expected
+        await clickBackLink(page, Paths.UPLOAD_A_PROOF_OF_DEATH);
       });
     });
   });
