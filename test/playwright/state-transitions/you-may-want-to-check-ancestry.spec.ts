@@ -23,13 +23,13 @@ test.describe("the 'You may want to check ancestry' form", () => {
     await clickBackLink(page, Paths.YOU_MAY_WANT_TO_CHECK_ANCESTRY);
   });
 
-  test("clicking the 'Search Ancestry (opens in new tab)' link opens link in new tab", async ({
+  test("the 'Search Ancestry (opens in new tab)' is configured correctly", async ({
     page,
   }) => {
     await checkExternalLink(
       page,
       "Search Ancestry (opens in new tab)",
-      "https://www.ancestry.co.uk/search/",
+      "https://www.ancestry.co.uk/search/categories/mil_draft/",
     );
   });
 });
