@@ -3,15 +3,17 @@ from datetime import datetime
 
 from app.lib.aws import send_email
 from app.lib.content import load_content
-from app.lib.db import (
+from app.lib.db.constants import (
     PAID_STATUS,
     SENT_STATUS,
+)
+from app.lib.db.db_handler import (
     add_dynamics_payment,
     add_gov_uk_dynamics_payment,
-    db,
     delete_dynamics_payment,
     get_dynamics_payment,
 )
+from app.lib.db.models import db
 from app.lib.gov_uk_pay import (
     create_payment,
 )

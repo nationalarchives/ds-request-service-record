@@ -1,5 +1,8 @@
 from app.lib.content import load_content
-from app.lib.db import get_gov_uk_dynamics_payment, get_service_record_request
+from app.lib.db.db_handler import (
+    get_gov_uk_dynamics_payment,
+    get_service_record_request,
+)
 from app.lib.gov_uk_pay import (
     get_payment_data,
     process_valid_payment,

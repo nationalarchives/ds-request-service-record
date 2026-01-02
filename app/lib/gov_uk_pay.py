@@ -1,14 +1,16 @@
 from datetime import datetime
 
 import requests
-from app.lib.db import (
+from app.lib.db.constants import (
     NEW_STATUS,
     PAID_STATUS,
     SENT_STATUS,
-    db,
+)
+from app.lib.db.db_handler import (
     get_dynamics_payment,
     get_service_record_request,
 )
+from app.lib.db.models import db
 from app.lib.dynamics_handler import (
     send_payment_to_mod_copying_app,
     send_request_to_dynamics,

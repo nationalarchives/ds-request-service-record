@@ -5,7 +5,7 @@ import uuid
 from datetime import datetime
 
 from app.lib.content import load_content
-from app.lib.db import (
+from app.lib.db.db_handler import (
     add_service_record_request,
     delete_service_record_request,
     hash_check,
