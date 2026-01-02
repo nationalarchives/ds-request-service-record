@@ -73,8 +73,6 @@
             {{ form.ready_to_continue() }}
           </div>
           <div class="tna-button-group">
-            <a href="{{ url_for('main.are_you_sure_you_want_to_cancel') }}"
-               class="tna-button tna-button--plain">{{ content.pages.before_you_start.exit_this_form }}</a>
             {{ form.submit(params={'classes':'tna-button--accent'}) }}
           </div>
         </form>
