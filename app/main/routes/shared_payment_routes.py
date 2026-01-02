@@ -79,7 +79,7 @@ def handle_gov_uk_pay_response(payment_type, id):
 
     if payment_type == "dynamics":
         _process_dynamics_payment(payment, client, payment.gov_uk_payment_id)
-    else:  # service_record
+    else:
         _process_service_record_payment(payment, client, payment.gov_uk_payment_id)
 
     return redirect(url_for("main.confirm_payment_received"))

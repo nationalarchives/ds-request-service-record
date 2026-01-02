@@ -16,9 +16,8 @@ from app.lib.gov_uk_pay import (
     FAILED_PAYMENT_STATUSES,
     SUCCESSFUL_PAYMENT_STATUSES,
     UNFINISHED_PAYMENT_STATUSES,
+    GOVUKPayAPIClient,
     create_payment,
-    get_payment_data,
-    get_payment_status,
 )
 from app.lib.price_calculations import calculate_amount_based_on_form_data
 from app.main import bp
@@ -145,16 +144,17 @@ def _store_payment_record(
 def _handle_existing_payment(existing_record):
     """Handle redirection for existing payment records."""
     payment_id = existing_record.gov_uk_payment_id
-    payment_data = get_payment_data(payment_id)
+    client = GOVUKPayAPIClient()
+    client.get_payment(payment_id)
 
-    if not payment_data:
+    if not client.data:
         current_app.logger.warning(
             f"Could not retrieve payment data for existing record: {existing_record.id}"
         )
         delete_service_record_request(existing_record)
         return None
 
-    payment_status = get_payment_status(payment_data)
+    payment_status = client.get_payment_status()
 
     if payment_status in SUCCESSFUL_PAYMENT_STATUSES:
         return redirect(url_for("main.confirm_payment_received"))

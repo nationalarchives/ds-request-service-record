@@ -50,34 +50,6 @@ class GOVUKPayAPIClient(JSONAPIClient):
         status = self.get_payment_status()
         return status in SUCCESSFUL_PAYMENT_STATUSES
 
-
-def get_payment_data(payment_id: str) -> dict | None:
-    headers = {
-        "Authorization": f"Bearer {current_app.config["GOV_UK_PAY_API_KEY"]}",
-        "Content-Type": "application/json",
-    }
-
-    response = requests.get(
-        f"{current_app.config["GOV_UK_PAY_API_URL"]}/{payment_id}", headers=headers
-    )
-
-    try:
-        response.raise_for_status()
-    except Exception as e:
-        current_app.logger.error(f"Error fetching payment data: {e}")
-        return None
-
-    return response.json()
-
-
-def get_payment_status(data: dict) -> str:
-    return data.get("state", {}).get("status")
-
-
-def validate_payment(data: dict) -> bool:
-    return get_payment_status(data) == "success"
-
-
 def create_payment(
     amount: int, description: str, reference: str, email: str | None, return_url: str
 ) -> dict | None:
