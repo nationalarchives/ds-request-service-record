@@ -1,12 +1,10 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {%- set pageTitle = content.app.title -%}
 
-{%- set back_link_endpoint = route_for_back_link if route_for_back_link else 'main.have_you_previously_made_a_request' -%}
-
 {% block beforeContent %}
-  {{ backLink(url_for(back_link_endpoint)) }}
-{% endblock %}
+  {{ backLink(url_for(back_link_route)) }}
+{% endblock beforeContent %}
 
 {% block content %}
   <div class="tna-section tna-!--padding-top-s">
@@ -16,7 +14,7 @@
         {% if form.errors %}
           {{ tnaErrorSummary(wtforms_errors(form)) }}
         {% endif %}
-        <h1 class="tna-heading-xl">{{ content.pages.choose_your_order_type.heading }}</h1>
+        <h1 class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.choose_your_order_type.heading }}</h1>
         {% for paragraph in content.pages.choose_your_order_type.paragraphs %}
           <p>{{ paragraph | parse_bold_text | safe }}</p>
         {% endfor %}
@@ -94,4 +92,4 @@
       </div>
     </div>
   </div>
-{% endblock %}
+{% endblock content %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{%- set pageTitle = content.app.title -%}
+
+{% block beforeContent %}
+  {{ backLink(url_for('main.what_was_their_date_of_birth')) }}
+{% endblock beforeContent %}
+
+{% block content %}
+  <div class="tna-section tna-!--padding-top-s">
+    <div class="tna-container">
+      <div
+        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+        {% if form.errors %}
+          {{ tnaErrorSummary(wtforms_errors(form)) }}
+        {% endif %}
+        <h1 class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.provide_a_proof_of_death.heading }}</h1>
+        {% for paragraph in content.pages.provide_a_proof_of_death.paragraphs %}
+          <p>{{ paragraph | parse_last_birth_year_for_open_records | safe }}</p>
+        {% endfor %}
+        <ul class="tna-ul">
+          {% for item in content.pages.provide_a_proof_of_death.list_items %}
+            <li>{{ item | parse_markdown_links | safe }}</li>
+          {% endfor %}
+        </ul>
+        <p>{{ content.pages.provide_a_proof_of_death.copy_requirements }}</p>
+        <ul class="tna-ul">
+          {% for item in content.pages.provide_a_proof_of_death.copy_requirements_list %}
+            <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+        <div class="tna-warning">
+          <h2 class="tna-warning__heading">
+            <span class="tna-visually-hidden">Important information</span><span class="tna-warning__heading-icon"
+                                                                                aria-hidden="true">!</span>
+          </h2>
+          <div class="tna-warning__body">
+            {{ content.pages.provide_a_proof_of_death.warning }}
+          </div>
+        </div>
+        <form action="{{ url_for('main.provide_a_proof_of_death') }}" method="post" novalidate>
+          {{ form.csrf_token }}
+          {{ form.do_you_have_a_proof_of_death(params={'headingLevel':2, 'headingSize':'l'}) }}
+          <div class="tna-button-group">
+            {{ form.submit(params={'classes':'tna-button--accent'}) }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

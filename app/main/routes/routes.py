@@ -1,13 +1,13 @@
 from app.constants import ExternalLinks, MultiPageFormRoutes
 from app.lib.content import load_content
 from app.lib.decorators.state_machine_decorator import with_state_machine
-from app.lib.decorators.with_back_url_saved_to_session import (
-    with_route_for_back_link_saved_to_session,
+from app.lib.decorators.update_dynamic_back_link_mapping import (
+    update_dynamic_back_link_mapping,
 )
 from app.lib.decorators.with_form_prefilled_from_session import (
     with_form_prefilled_from_session,
 )
-from app.lib.get_back_link_route import get_back_link_route
+from app.lib.get_dynamic_back_link_route import get_dynamic_back_link_route
 from app.lib.price_calculations import prepare_order_summary_data
 from app.lib.save_catalogue_reference_to_session import (
     save_catalogue_reference_to_session,
@@ -24,13 +24,13 @@ from app.main.forms.before_you_start import BeforeYouStart
 from app.main.forms.choose_your_order_type import (
     ChooseYourOrderType,
 )
-from app.main.forms.do_you_have_a_proof_of_death import DoYouHaveAProofOfDeath
 from app.main.forms.exit_this_form import ExitThisForm
 from app.main.forms.have_you_previously_made_a_request import (
     HaveYouPreviouslyMadeARequest,
 )
 from app.main.forms.how_we_process_requests import HowTheProcessWorks
 from app.main.forms.is_service_person_alive import IsServicePersonAlive
+from app.main.forms.provide_a_proof_of_death import ProvideAProofOfDeath
 from app.main.forms.request_a_military_service_record import (
     RequestAMilitaryServiceRecord,
 )
@@ -78,10 +78,12 @@ def how_we_process_requests(form, state_machine):
 
 
 @bp.route("/before-you-start/", methods=["GET", "POST"])
-@with_state_machine
-@with_route_for_back_link_saved_to_session(
-    route=MultiPageFormRoutes.BEFORE_YOU_START.value
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL: MultiPageFormRoutes.BEFORE_YOU_START,
+    }
 )
+@with_state_machine
 @with_form_prefilled_from_session(BeforeYouStart)
 def before_you_start(form, state_machine):
     if form.validate_on_submit():
@@ -96,6 +98,7 @@ def before_you_start(form, state_machine):
 @with_state_machine
 @with_form_prefilled_from_session(AreYouSureYouWantToCancel)
 def are_you_sure_you_want_to_cancel(form, state_machine):
+
     if form.validate_on_submit():
         state_machine.continue_from_are_you_sure_you_want_to_cancel_form()
         return redirect(url_for(state_machine.route_for_current_state))
@@ -103,7 +106,7 @@ def are_you_sure_you_want_to_cancel(form, state_machine):
         "main/are-you-sure-you-want-to-cancel.html",
         form=form,
         content=load_content(),
-        route_for_back_link=session.get("route_for_back_link", False),
+        back_link_route=get_dynamic_back_link_route(key=request.endpoint),
     )
 
 
@@ -145,10 +148,12 @@ def is_service_person_alive(form, state_machine):
 
 
 @bp.route("/must-submit-subject-access-request/", methods=["GET", "POST"])
-@with_state_machine
-@with_route_for_back_link_saved_to_session(
-    route=MultiPageFormRoutes.MUST_SUBMIT_SUBJECT_ACCESS_REQUEST.value
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL: MultiPageFormRoutes.MUST_SUBMIT_SUBJECT_ACCESS_REQUEST,
+    }
 )
+@with_state_machine
 @with_form_prefilled_from_session(ExitThisForm)
 def must_submit_subject_access_request(form, state_machine):
     if form.validate_on_submit():
@@ -156,10 +161,11 @@ def must_submit_subject_access_request(form, state_machine):
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(
-        "main/must-submit-subject-access-request.html",
+        "main/submit-subject-access-request.html",
         form=form,
         content=load_content(),
         subject_access_request_link=ExternalLinks.SUBJECT_ACCESS_REQUEST_FORM,
+        back_link_route=get_dynamic_back_link_route(key=request.endpoint),
     )
 
 
@@ -205,10 +211,12 @@ def were_they_a_commissioned_officer(form, state_machine):
 
 @bp.route("/we-do-not-have-royal-navy-service-branch-records/", methods=["GET", "POST"])
 @with_form_prefilled_from_session(ExitThisForm)
-@with_state_machine
-@with_route_for_back_link_saved_to_session(
-    route=MultiPageFormRoutes.WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS.value
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL: MultiPageFormRoutes.WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS,
+    }
 )
+@with_state_machine
 def we_do_not_have_royal_navy_service_records(form, state_machine):
     if form.validate_on_submit():
         state_machine.continue_from_we_do_not_have_royal_navy_service_records_form(form)
@@ -223,8 +231,10 @@ def we_do_not_have_royal_navy_service_records(form, state_machine):
 
 @bp.route("/we-are-unlikely-to-hold-army-officer-records/", methods=["GET", "POST"])
 @with_form_prefilled_from_session(WeAreUnlikelyToHoldThisRecord)
-@with_route_for_back_link_saved_to_session(
-    route=MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY.value
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH: MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY,
+    }
 )
 @with_state_machine
 def we_are_unlikely_to_hold_officer_records__army(form, state_machine):
@@ -243,8 +253,10 @@ def we_are_unlikely_to_hold_officer_records__army(form, state_machine):
     "/we-are-unlikely-to-hold-royal-air-force-officer-records/", methods=["GET", "POST"]
 )
 @with_form_prefilled_from_session(WeAreUnlikelyToHoldThisRecord)
-@with_route_for_back_link_saved_to_session(
-    route=MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__RAF.value
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH: MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__RAF,
+    }
 )
 @with_state_machine
 def we_are_unlikely_to_hold_officer_records__raf(form, state_machine):
@@ -256,15 +268,16 @@ def we_are_unlikely_to_hold_officer_records__raf(form, state_machine):
         content=load_content(),
         form=form,
         mod_service_link=ExternalLinks.MOD_SERVICE,
-        route_for_back_link=session.get("route_for_back_link", False),
     )
 
 
 @bp.route(
     "/we-are-unlikely-to-hold-officer-records-for-this-branch/", methods=["GET", "POST"]
 )
-@with_route_for_back_link_saved_to_session(
-    route=MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__GENERIC.value
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH: MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__GENERIC,
+    }
 )
 @with_form_prefilled_from_session(WeAreUnlikelyToHoldThisRecord)
 @with_state_machine
@@ -277,15 +290,16 @@ def we_are_unlikely_to_hold_officer_records__generic(form, state_machine):
         content=load_content(),
         form=form,
         mod_service_link=ExternalLinks.MOD_SERVICE,
-        route_for_back_link=session.get("route_for_back_link", False),
     )
 
 
 @bp.route("/we-are-unlikely-to-locate-this-record/", methods=["GET", "POST"])
-@with_state_machine
-@with_route_for_back_link_saved_to_session(
-    route=MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD.value
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL: MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD,
+    }
 )
+@with_state_machine
 @with_form_prefilled_from_session(ExitThisForm)
 def we_are_unlikely_to_locate_this_record(form, state_machine):
     if form.validate_on_submit():
@@ -300,10 +314,12 @@ def we_are_unlikely_to_locate_this_record(form, state_machine):
 
 
 @bp.route("/we-may-hold-this-record/", methods=["GET", "POST"])
-@with_form_prefilled_from_session(WeMayHoldThisRecord)
-@with_route_for_back_link_saved_to_session(
-    route=MultiPageFormRoutes.WE_MAY_HOLD_THIS_RECORD.value
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH: MultiPageFormRoutes.WE_MAY_HOLD_THIS_RECORD,
+    }
 )
+@with_form_prefilled_from_session(WeMayHoldThisRecord)
 @with_state_machine
 def we_may_hold_this_record(form, state_machine):
     if form.validate_on_submit():
@@ -318,6 +334,11 @@ def we_may_hold_this_record(form, state_machine):
 
 @bp.route("/what-was-their-date-of-birth/", methods=["GET", "POST"])
 @with_form_prefilled_from_session(WhatWasTheirDateOfBirth)
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.SERVICE_PERSON_DETAILS: MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH
+    }
+)
 @with_state_machine
 def what_was_their_date_of_birth(form, state_machine):
     if form.validate_on_submit():
@@ -328,17 +349,20 @@ def what_was_their_date_of_birth(form, state_machine):
         "main/what-was-their-date-of-birth.html",
         form=form,
         content=load_content(),
-        route_for_back_link=session.get("route_for_back_link", False),
+        back_link_route=get_dynamic_back_link_route(key=request.endpoint),
     )
 
 
 @bp.route(
     "/are-you-sure-you-want-to-proceed-without-proof-of-death/", methods=["GET", "POST"]
 )
-@with_form_prefilled_from_session(AreYouSureYouWantToProceedWithoutProofOfDeath)
-@with_route_for_back_link_saved_to_session(
-    route=MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_PROOF_OF_DEATH.value
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH: MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_PROOF_OF_DEATH,
+        MultiPageFormRoutes.SERVICE_PERSON_DETAILS: MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_PROOF_OF_DEATH,
+    }
 )
+@with_form_prefilled_from_session(AreYouSureYouWantToProceedWithoutProofOfDeath)
 @with_state_machine
 def are_you_sure_you_want_to_proceed_without_proof_of_death(form, state_machine):
     if form.validate_on_submit():
@@ -355,8 +379,10 @@ def are_you_sure_you_want_to_proceed_without_proof_of_death(form, state_machine)
 
 
 @bp.route("/we-do-not-have-records-for-people-born-after/", methods=["GET", "POST"])
-@with_route_for_back_link_saved_to_session(
-    route=MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER.value
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL: MultiPageFormRoutes.WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER,
+    }
 )
 @with_state_machine
 @with_form_prefilled_from_session(ExitThisForm)
@@ -386,11 +412,16 @@ def service_person_details(form, state_machine):
         "main/service-person-details.html",
         form=form,
         content=load_content(),
-        route_for_back_link=session.get("route_for_back_link", False),
+        back_link_route=get_dynamic_back_link_route(key=request.endpoint),
     )
 
 
 @bp.route("/have-you-previously-made-a-request/", methods=["GET", "POST"])
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE: MultiPageFormRoutes.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST,
+    }
+)
 @with_form_prefilled_from_session(HaveYouPreviouslyMadeARequest)
 @with_state_machine
 def have_you_previously_made_a_request(form, state_machine):
@@ -407,6 +438,12 @@ def have_you_previously_made_a_request(form, state_machine):
 
 
 @bp.route("/your-contact-details/", methods=["GET", "POST"])
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.YOUR_ORDER_SUMMARY: MultiPageFormRoutes.YOUR_CONTACT_DETAILS,
+        MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE: MultiPageFormRoutes.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST,
+    }
+)
 @with_form_prefilled_from_session(YourContactDetails)
 @with_state_machine
 def your_contact_details(form, state_machine):
@@ -419,24 +456,31 @@ def your_contact_details(form, state_machine):
     )
 
 
-@bp.route("/do-you-have-a-proof-of-death/", methods=["GET", "POST"])
-@with_form_prefilled_from_session(DoYouHaveAProofOfDeath)
+@bp.route("/provide-a-proof-of-death/", methods=["GET", "POST"])
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH: MultiPageFormRoutes.PROVIDE_A_PROOF_OF_DEATH,
+    }
+)
+@with_form_prefilled_from_session(ProvideAProofOfDeath)
 @with_state_machine
-def do_you_have_a_proof_of_death(form, state_machine):
+def provide_a_proof_of_death(form, state_machine):
     if form.validate_on_submit():
         save_submitted_form_fields_to_session(form)
-        state_machine.continue_from_do_you_have_a_proof_of_death_form(form)
+        state_machine.continue_from_provide_a_proof_of_death_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/do-you-have-a-proof-of-death.html",
+        "main/provide-a-proof-of-death.html",
         form=form,
         content=load_content(),
     )
 
 
 @bp.route("/what-is-your-address/", methods=["GET", "POST"])
-@with_route_for_back_link_saved_to_session(
-    route=MultiPageFormRoutes.WHAT_IS_YOUR_ADDRESS.value
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.YOUR_ORDER_SUMMARY: MultiPageFormRoutes.WHAT_IS_YOUR_ADDRESS,
+    }
 )
 @with_form_prefilled_from_session(WhatIsYourAddress)
 @with_state_machine
@@ -464,40 +508,36 @@ def choose_your_order_type(state_machine):
         "main/choose-your-order-type.html",
         form=form,
         content=load_content(),
-        route_for_back_link=session.get("route_for_back_link", False),
+        back_link_route=get_dynamic_back_link_route(key=request.endpoint),
     )
 
 
 @bp.route("/upload-a-proof-of-death/", methods=["GET", "POST"])
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.SERVICE_PERSON_DETAILS: MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH,
+    }
+)
 @with_form_prefilled_from_session(UploadAProofOfDeath)
 @with_state_machine
 def upload_a_proof_of_death(form, state_machine):
 
-    valid_submission = form.validate_on_submit()
-
-    correct_back_link = get_back_link_route(
-        current_route=MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH.value,
-        valid_submission=valid_submission,
-        back_link_in_session=session.get("route_for_back_link", False),
-    )
-
-    if correct_back_link:
-        session["route_for_back_link"] = correct_back_link
-
-    if valid_submission:
+    if form.validate_on_submit():
         state_machine.continue_from_upload_a_proof_of_death_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/upload-a-proof-of-death.html",
         form=form,
         content=load_content(),
-        route_for_back_link=session.get("route_for_back_link", False),
+        back_link_route=get_dynamic_back_link_route(key=request.endpoint),
     )
 
 
 @bp.route("/your-order-summary/", methods=["GET", "POST"])
-@with_route_for_back_link_saved_to_session(
-    route=MultiPageFormRoutes.YOUR_ORDER_SUMMARY.value
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE: MultiPageFormRoutes.YOUR_ORDER_SUMMARY,
+    }
 )
 @with_form_prefilled_from_session(YourOrderSummary)
 @with_state_machine
@@ -515,8 +555,8 @@ def your_order_summary(form, state_machine):
         content=load_content(),
         form=form,
         form_data=form_data,
-        route_for_back_link=session.get("route_for_back_link", False),
         order_summary_data=order_summary_data,
+        back_link_route=get_dynamic_back_link_route(key=request.endpoint),
     )
 
 

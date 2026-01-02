@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {%- set pageTitle = content.app.title -%}
 
@@ -12,13 +12,17 @@
   <div class="tna-section tna-!--padding-top-s">
     <div class="tna-container">
       <div
-        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny tna-!--padding-top-m">
         {{ tnaPanel({
           "title": content.pages.request_submitted.heading,
           "body": panel_body,
           "headingLevel": 1
         }) }}
+        <h2 class="tna-heading-m">{{ content.pages.request_submitted.what_happens_next.heading }}</h2>
+        {% for paragraph in content.pages.request_submitted.what_happens_next.paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
       </div>
     </div>
   </div>
-{% endblock %}
+{% endblock content %}

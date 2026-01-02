@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{%- set pageTitle = content.app.title -%}
+
+{% block beforeContent %}
+  {{ backLink(url_for('main.is_service_person_alive')) }}
+{% endblock beforeContent %}
+
+{% block content %}
+  <div class="tna-section tna-!--padding-top-s">
+    <div class="tna-container">
+      <div
+        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+        <h1
+          class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.must_submit_subject_access_request.heading }}</h1>
+        {% for paragraph in content.pages.must_submit_subject_access_request.paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+        <form action="{{ url_for('main.must_submit_subject_access_request') }}" method="post" novalidate>
+          {{ form.csrf_token }}
+          <div class="tna-button-group ">
+            {{ form.submit(params={'classes': 'tna-button--plain'}) }}
+            <a href="{{ subject_access_request_link }}" target="_blank" rel="noreferrer noopener"
+               class="tna-button tna-button--accent">
+              {{ content.pages.must_submit_subject_access_request.call_to_action }}
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

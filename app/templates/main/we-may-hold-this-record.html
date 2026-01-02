@@ -1,17 +1,17 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {%- set pageTitle = content.app.title -%}
 
 {% block beforeContent %}
   {{ backLink(url_for('main.were_they_a_commissioned_officer')) }}
-{% endblock %}
+{% endblock beforeContent %}
 
 {% block content %}
   <div class="tna-section tna-!--padding-top-s" data-template-id="we-may-hold-this-record--generic">
     <div class="tna-container">
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
-        <h1 class="tna-heading-xl">{{ content.pages.we_may_hold_this_record.heading }}</h1>
+        <h1 class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.we_may_hold_this_record.heading }}</h1>
         {% for paragraph in content.pages.we_may_hold_this_record.paragraphs %}
           <p>{{ paragraph | parse_markdown_links | safe }}</p>
         {% endfor %}
@@ -24,4 +24,4 @@
       </div>
     </div>
   </div>
-{% endblock %}
+{% endblock content %}

@@ -5,7 +5,10 @@ pages:
     heading: Request a military service record
     contents:
       paragraphs:
-        - Use this service to make a request to the National Archives to search for a military service record for someone who served in the British Armed Forces after 1918 and was born before 1940.
+        - |
+          Use this service to make a request to the National Archives to search for a 
+          military service record for someone who served in the British Armed Forces 
+          after 1918 and was born before 1940.
         - These records predominantly cover the period of the Second World War.
     ways_to_request_a_record:
       heading: Ways to request a record
@@ -17,7 +20,7 @@ pages:
             - |
               Standard provides a subset of documents in the record. It will include information that 
               would be of most interest to the families of service person, such as details provided 
-              when they enlisted, records of service and testimonials
+              when they enlisted, records of service and testimonials.
         - title: Full record check
           paragraphs:
             - |
@@ -59,7 +62,6 @@ pages:
       sent_to_you: The reviewed record will be emailed to you
   before_you_start:
     heading: Before you start
-    exit_this_form: Exit this form
     paragraphs:
       - |
         To help our staff search for the record, you will need to provide 
@@ -81,9 +83,9 @@ pages:
       before_first_list:
         paragraphs:
           - |
-            If the person whose record you are looking for was born after 1909 and is deceased, 
-            we require a digital copy of a proof of death. This is to protect any personal data 
-            in the record that might relate to a living person.
+            If the person whose record you are looking for was born after [LATEST_BIRTH_YEAR_FOR_OPEN_RECORDS] 
+            and is deceased, we require a digital copy of a proof of death. This is to protect 
+            any personal data in the record that might relate to a living person.
           - "You'll need to submit one of the following forms of evidence:"
       before_second_list:
         paragraphs:
@@ -264,10 +266,12 @@ pages:
     heading: Tell us as much as you know about the service person
     paragraphs:
       - Answer as many questions on this page as you can. This will help our staff find the record.
-  do_you_have_a_proof_of_death:
+  provide_a_proof_of_death:
     heading: Provide a proof of death
     paragraphs:
-      - As you are requesting a record for someone born after 1909, you will need to provide a digital copy of a proof of death.
+      - |
+        As you are requesting a record for someone born after [LATEST_BIRTH_YEAR_FOR_OPEN_RECORDS], 
+        you will need to provide a digital copy of a proof of death.
       - >
         You'll need to submit one of the following forms of evidence:
     list_items:
@@ -362,6 +366,10 @@ pages:
     paragraphs:
       - Your request has been received and is being processed.
       - Your reference number is [reference_number]
+    what_happens_next:
+      heading: What happens next
+      paragraphs:
+        - We will be in touch with more information about your request.
 forms:
   fields:
     request_a_military_service_record:
@@ -408,6 +416,7 @@ forms:
         required: Enter the service person's date of birth
         past_date: The date of birth must be in the past
         born_too_early: Date of birth must be after 31 December 1799. Records prior to this date are not contained in this collection.
+        invalid_date: Date of birth must be a real date
       call_to_action: Continue
     place_of_birth:
       label: Place of birth (optional)
@@ -427,7 +436,7 @@ forms:
         "no": No, I would like to upload a proof of death
       label: Please confirm your selection
       messages:
-        required: You must confirm your selection to proceed
+        required: Confirm if you want to continue without providing a proof of death
       call_to_action: Continue
     upload_a_proof_of_death:
       label: Upload a file
@@ -456,7 +465,7 @@ forms:
     have_you_previously_made_a_request:
       label: Select one option
       messages:
-        required: Please select an option
+        required: Tell us if you have made a request for this record before
         reference_number_required: Enter the reference number for your previous request
       options:
         "yes_mod": Yes, to the Ministry of Defence
@@ -481,9 +490,9 @@ forms:
       label: Email
       hint: Where we will contact you about your request
       messages:
-        required: Enter an email address in the correct format, like name@example.com. If you do not have an email address, please select 'I do not have an email address' below
+        required: Enter an email address in the correct format like name@example.com, or select 'I do not have an email address'
         address_format: Enter an email address in the correct format, like name@example.com
-        must_be_empty_if_no_email: You have indicated that you do not have an email address. Please leave this field empty
+        must_be_empty_if_no_email: Email must be blank if you have selected 'I do not have an email address'
     requester_address_line_1:
       label: Address line 1
       messages:
