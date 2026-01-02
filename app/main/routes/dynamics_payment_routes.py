@@ -4,11 +4,11 @@ from datetime import datetime
 from app.lib.aws import send_email
 from app.lib.content import load_content
 from app.lib.db import (
-    db,
-    SENT_STATUS,
     PAID_STATUS,
+    SENT_STATUS,
     add_dynamics_payment,
     add_gov_uk_dynamics_payment,
+    db,
     delete_dynamics_payment,
     get_dynamics_payment,
 )
@@ -67,7 +67,7 @@ def make_payment(id):
 
     if payment is None:
         return "Payment not found"
-    
+
     if payment.status == PAID_STATUS:
         return render_template("errors/payment_already_processed.html"), 400
 
@@ -84,29 +84,36 @@ def make_payment(id):
         content=content,
     )
 
-def _validate_and_convert_amount(amount_value: float | int | str, field_name: str) -> tuple:
+
+def _validate_and_convert_amount(
+    amount_value: float | int | str, field_name: str
+) -> tuple:
     """
     Validate and convert an amount to pence.
-    
+
     Args:
         amount_value: The amount value to validate (can be float, int, or string)
         field_name: The name of the field for error messages
-        
+
     Returns:
         tuple: (converted_amount_in_pence, error_response) where error_response is None if valid
     """
     try:
         amount = float(amount_value)
         if round(amount, 2) != amount:
-            return None, ({"error": f"{field_name} cannot have more than 2 decimal places"}, 400)
-        
+            return None, (
+                {"error": f"{field_name} cannot have more than 2 decimal places"},
+                400,
+            )
+
         amount_in_pence = int(amount * 100)  # Convert to pence
         if amount_in_pence <= 0:
             return None, ({"error": f"{field_name} must be greater than zero"}, 400)
-        
+
         return amount_in_pence, None
     except (ValueError, TypeError):
         return None, ({"error": f"Invalid {field_name} format"}, 400)
+
 
 @bp.route("/create-payment/", methods=["POST"])
 def create_payment_endpoint():
@@ -130,20 +137,22 @@ def create_payment_endpoint():
         return {"error": f"Missing required fields: {', '.join(missing)}"}, 400
 
     net_amount, error = _validate_and_convert_amount(data["net_amount"], "net_amount")
-    
+
     if error:
         return error
-    
+
     data["net_amount"] = net_amount
-    
+
     if "delivery_amount" in data:
-        delivery_amount, error = _validate_and_convert_amount(data["delivery_amount"], "delivery_amount")
+        delivery_amount, error = _validate_and_convert_amount(
+            data["delivery_amount"], "delivery_amount"
+        )
 
         if error:
             return error
-        
+
         data["delivery_amount"] = delivery_amount
-    
+
     # Exclude any extra fields to avoid unexpected errors
     data = {
         "case_number": data["case_number"],

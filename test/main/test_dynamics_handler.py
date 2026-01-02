@@ -1,8 +1,9 @@
 from datetime import datetime
 
 import pytest
-from app import create_app
 from app.lib.dynamics_handler import subject_status
+
+from app import create_app
 
 
 class DummyRecord:

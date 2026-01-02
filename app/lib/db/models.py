@@ -1,6 +1,7 @@
 import uuid
 
 from flask_sqlalchemy import SQLAlchemy
+
 from .constants import NEW_STATUS
 
 db = SQLAlchemy()

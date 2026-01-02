@@ -5,9 +5,9 @@ from app.lib.db.models import (
     ServiceRecordRequest,
     db,
 )
+from app.lib.price_calculations import get_delivery_type
 from flask import current_app
 
-from app.lib.price_calculations import get_delivery_type
 
 def hash_check(record_hash: str) -> ServiceRecordRequest | None:
     """
@@ -28,6 +28,7 @@ def hash_check(record_hash: str) -> ServiceRecordRequest | None:
     except Exception as e:
         current_app.logger.error(f"Error checking record hash: {e}")
         return None
+
 
 def get_service_record_request(id: str = None) -> ServiceRecordRequest | None:
     """
@@ -129,13 +130,13 @@ def get_gov_uk_dynamics_payment(id: str) -> GOVUKDynamicsPayment | None:
 def transform_form_data_to_record(form_data: dict) -> dict:
     """
     Transform form data into ServiceRecordRequest format.
-    
+
     Filters fields to only include those that exist on ServiceRecordRequest model,
     and normalizes certain field values for database storage.
-    
+
     Args:
         form_data: Dictionary of form field values.
-        
+
     Returns:
         dict: Transformed data ready for ServiceRecordRequest creation.
     """
@@ -151,5 +152,5 @@ def transform_form_data_to_record(form_data: dict) -> dict:
     if service_branch := form_data.get("service_branch"):
         if service_branch in ServiceBranches.__members__:
             transformed_data["service_branch"] = ServiceBranches[service_branch].value
-            
+
     return transformed_data

@@ -1,4 +1,4 @@
-from app.constants import MultiPageFormRoutes, BoundaryYears
+from app.constants import BoundaryYears, MultiPageFormRoutes
 from app.lib.aws import upload_proof_of_death
 from flask import current_app
 from statemachine import State, StateMachine

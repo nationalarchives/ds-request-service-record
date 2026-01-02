@@ -40,7 +40,7 @@ def send_to_gov_uk_pay():
     if not form_data:
         current_app.logger.warning("No form data in session")
         return redirect(url_for("main.start"))
-    
+
     transformed_data = transform_form_data_to_record(form_data)
 
     try:
@@ -49,6 +49,7 @@ def send_to_gov_uk_pay():
     except Exception as e:
         current_app.logger.error(f"Unexpected error in payment creation: {e}")
         return redirect(url_for("main.payment_link_creation_failed"))
+
 
 def _create_new_payment_or_redirect(form_data: dict):
 
@@ -72,7 +73,7 @@ def _create_new_payment(form_data: dict, record_hash: str) -> str:
     unique_id = str(uuid.uuid4())
 
     amount = calculate_amount_based_on_form_data(form_data)
-    
+
     if amount <= 0:
         raise ValueError("Calculated amount must be greater than zero")
 
@@ -84,7 +85,10 @@ def _create_new_payment(form_data: dict, record_hash: str) -> str:
         reference=reference,
         email=form_data.get("requester_email"),
         return_url=url_for(
-            "main.handle_gov_uk_pay_response", payment_type="service_record", id=unique_id, _external=True
+            "main.handle_gov_uk_pay_response",
+            payment_type="service_record",
+            id=unique_id,
+            _external=True,
         ),
     )
 
@@ -136,6 +140,7 @@ def _store_payment_record(
     current_app.logger.info(
         f"Created payment record: {unique_id} with payment ID: {payment_id}"
     )
+
 
 def _handle_existing_payment(existing_record):
     """Handle redirection for existing payment records."""

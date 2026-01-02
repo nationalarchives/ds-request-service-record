@@ -1,14 +1,12 @@
 from datetime import datetime
-from enum import Enum
 
 import requests
 from app.lib.db import (
-    db,
     NEW_STATUS,
     PAID_STATUS,
     SENT_STATUS,
+    db,
     get_dynamics_payment,
-    get_gov_uk_dynamics_payment,
     get_service_record_request,
 )
 from app.lib.dynamics_handler import (

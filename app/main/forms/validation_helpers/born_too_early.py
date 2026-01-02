@@ -1,7 +1,7 @@
 import datetime
 
-from wtforms.validators import ValidationError
 from app.constants import BoundaryYears
+from wtforms.validators import ValidationError
 
 
 class BornTooEarly:
