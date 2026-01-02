@@ -6,11 +6,18 @@ import {
   continueFromBeforeYouStart,
   clickExitThisForm,
 } from "../lib/step-functions";
+import { testLastBirthYearForOpenRecords } from "../lib/test-last-birth-year-for-open-records";
 
 test.describe("the 'Before you start' form", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START);
     await page.goto(Paths.BEFORE_YOU_START);
+  });
+
+  test("has the correct value shown for last birth year for open records", async ({
+    page,
+  }) => {
+    await testLastBirthYearForOpenRecords(page);
   });
 
   test("shows an error when the user tries to proceed without confirming they have the mandatory information", async ({

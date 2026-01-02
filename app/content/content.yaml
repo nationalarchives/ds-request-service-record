@@ -5,7 +5,10 @@ pages:
     heading: Request a military service record
     contents:
       paragraphs:
-        - Use this service to make a request to the National Archives to search for a military service record for someone who served in the British Armed Forces after 1918 and was born before 1940.
+        - |
+          Use this service to make a request to the National Archives to search for a 
+          military service record for someone who served in the British Armed Forces 
+          after 1918 and was born before 1940.
         - These records predominantly cover the period of the Second World War.
     ways_to_request_a_record:
       heading: Ways to request a record
@@ -81,9 +84,9 @@ pages:
       before_first_list:
         paragraphs:
           - |
-            If the person whose record you are looking for was born after 1909 and is deceased, 
-            we require a digital copy of a proof of death. This is to protect any personal data 
-            in the record that might relate to a living person.
+            If the person whose record you are looking for was born after [LATEST_BIRTH_YEAR_FOR_OPEN_RECORDS] 
+            and is deceased, we require a digital copy of a proof of death. This is to protect 
+            any personal data in the record that might relate to a living person.
           - "You'll need to submit one of the following forms of evidence:"
       before_second_list:
         paragraphs:
@@ -267,7 +270,9 @@ pages:
   provide_a_proof_of_death:
     heading: Provide a proof of death
     paragraphs:
-      - As you are requesting a record for someone born after 1909, you will need to provide a digital copy of a proof of death.
+      - |
+        As you are requesting a record for someone born after [LATEST_BIRTH_YEAR_FOR_OPEN_RECORDS], 
+        you will need to provide a digital copy of a proof of death.
       - >
         You'll need to submit one of the following forms of evidence:
     list_items:
