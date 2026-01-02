@@ -1,7 +1,7 @@
 import datetime
 
-from wtforms.validators import ValidationError
 from app.lib.boundary_years import BoundaryYears
+from wtforms.validators import ValidationError
 
 
 class BornTooEarly:
@@ -34,9 +34,9 @@ class BornTooEarly:
                 except Exception:
                     raise ValueError()
             if field_date < datetime.date(
-                    BoundaryYears.EARLIEST_SERVICE_PERSON_BIRTH_YEAR_FOR_THIS_SERVICE,
-                    1,
-                    1,
+                BoundaryYears.EARLIEST_SERVICE_PERSON_BIRTH_YEAR_FOR_THIS_SERVICE,
+                1,
+                1,
             ):
                 raise ValueError(message)
         except ValueError as exc:
