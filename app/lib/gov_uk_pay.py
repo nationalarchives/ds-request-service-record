@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import requests
+from app.lib.api import JSONAPIClient
 from app.lib.db.constants import (
     NEW_STATUS,
     PAID_STATUS,
@@ -22,6 +23,32 @@ SUCCESSFUL_PAYMENT_STATUSES: set[str] = {"success"}
 UNFINISHED_PAYMENT_STATUSES: set[str] = {"created", "started", "submitted"}
 
 FAILED_PAYMENT_STATUSES: set[str] = {"failed", "cancelled", "error"}
+
+
+class GOVUKPayAPIClient(JSONAPIClient):
+    data = None
+
+    def __init__(self):
+        super().__init__(
+            api_url=current_app.config["GOV_UK_PAY_API_URL"],
+            headers={
+                "Authorization": f"Bearer {current_app.config['GOV_UK_PAY_API_KEY']}",
+                "Content-Type": "application/json",
+            },
+        )
+
+    def get_payment(self, payment_id: str) -> dict:
+        self.data = self.get(path=f"/{payment_id}")
+        return self.data
+
+    def get_payment_status(self) -> str | None:
+        if self.data is None:
+            return None
+        return self.data.get("state", {}).get("status")
+
+    def is_payment_successful(self) -> bool:
+        status = self.get_payment_status()
+        return status in SUCCESSFUL_PAYMENT_STATUSES
 
 
 def get_payment_data(payment_id: str) -> dict | None:
