@@ -11,4 +11,5 @@ __pycache__
 /app/static/*.min.js.map
 !.gitkeep
 test-results
+test-results.json
 .env
