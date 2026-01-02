@@ -76,6 +76,7 @@ class YourContactDetails(FlaskForm):
         description=get_field_content(content, "does_not_have_email", "description"),
         widget=TnaCheckboxWidget(),
         validators=[],
+        render_kw={"label": ""},
     )
 
     submit = SubmitField("Continue", widget=TnaSubmitWidget())

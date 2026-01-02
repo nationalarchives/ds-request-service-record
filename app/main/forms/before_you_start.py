@@ -24,6 +24,7 @@ class BeforeYouStart(FlaskForm):
                 ]
             )
         ],
+        render_kw={"label": ""},
     )
 
     submit = SubmitField(

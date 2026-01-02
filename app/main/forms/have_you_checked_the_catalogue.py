@@ -25,6 +25,7 @@ class HaveYouCheckedTheCatalogue(FlaskForm):
             )
         ],
         widget=TnaRadiosWidget(),
+        render_kw={"label": ""},
     )
 
     submit = SubmitField(
