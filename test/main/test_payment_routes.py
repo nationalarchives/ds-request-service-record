@@ -22,9 +22,9 @@ def client(app):
     return app.test_client()
 
 
-@patch("app.main.routes.payment_routes.db")
-@patch("app.main.routes.payment_routes.send_email")
-@patch("app.main.routes.payment_routes.add_dynamics_payment")
+@patch("app.main.routes.dynamics_payment_routes.db")
+@patch("app.main.routes.dynamics_payment_routes.send_email")
+@patch("app.main.routes.dynamics_payment_routes.add_dynamics_payment")
 def test_payment_creation_endpoint(mock_add_payment, mock_send_email, mock_db, client):
     # Mock the payment creation to avoid real DB usage
     mock_add_payment.return_value = DummyPayment()
@@ -51,7 +51,7 @@ def test_payment_creation_endpoint(mock_add_payment, mock_send_email, mock_db, c
     assert "TEST-ID" in data["message"]
 
 
-@patch("app.main.routes.payment_routes.get_dynamics_payment")
+@patch("app.main.routes.dynamics_payment_routes.get_dynamics_payment")
 def test_make_payment_page_renders(mock_get_payment, client):
     dummy = DummyPayment()
     dummy.case_number = "CAS123"

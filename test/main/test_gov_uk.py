@@ -2,8 +2,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from app.lib.gov_uk_pay import (
+    GOVUKPayAPIClient,
     create_payment,
-    validate_payment,
 )
 
 from app import create_app
@@ -43,19 +43,22 @@ def test_create_payment_failure(mock_post, test_app):
         assert result is None
 
 
-def test_validate_payment_success(test_app):
+def test_govuk_pay_client_payment_success(test_app):
     with test_app.app_context():
-        data = {"state": {"status": "success"}}
-        assert validate_payment(data) is True
+        client = GOVUKPayAPIClient()
+        client.data = {"state": {"status": "success"}}
+        assert client.is_payment_successful() is True
 
 
-def test_validate_payment_failed(test_app):
+def test_govuk_pay_client_payment_failed(test_app):
     with test_app.app_context():
-        data = {"state": {"status": "failed"}}
-        assert validate_payment(data) is False
+        client = GOVUKPayAPIClient()
+        client.data = {"state": {"status": "failed"}}
+        assert client.is_payment_successful() is False
 
 
-def test_validate_payment_status_none(test_app):
+def test_govuk_pay_client_payment_status_none(test_app):
     with test_app.app_context():
-        data = {"state": {"status": None}}
-        assert validate_payment(data) is False
+        client = GOVUKPayAPIClient()
+        client.data = {"state": {"status": None}}
+        assert client.is_payment_successful() is False

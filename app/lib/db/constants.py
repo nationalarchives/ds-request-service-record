@@ -1,0 +1,3 @@
+SENT_STATUS = "S"
+NEW_STATUS = "N"
+PAID_STATUS = "P"

@@ -1,4 +1,4 @@
-from app.lib.models import db
+from app.lib.db.models import db
 from main import app
 
 if __name__ == "__main__":

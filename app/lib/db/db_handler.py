@@ -1,10 +1,11 @@
 from app.constants import ServiceBranches
-from app.lib.models import (
+from app.lib.db.models import (
     DynamicsPayment,
     GOVUKDynamicsPayment,
     ServiceRecordRequest,
     db,
 )
+from app.lib.price_calculations import get_delivery_type
 from flask import current_app
 
 
@@ -29,42 +30,25 @@ def hash_check(record_hash: str) -> ServiceRecordRequest | None:
         return None
 
 
-def get_service_record_request(
-    *, payment_id: str | None = None, record_id: str | None = None
-) -> ServiceRecordRequest | None:
+def get_service_record_request(id: str = None) -> ServiceRecordRequest | None:
     """
-    Get a ServiceRecordRequest item by payment_id or record_id.
-    Must provide either a payment_id OR a record_id.
+    Get a ServiceRecordRequest item by its ID.
     """
-    if (payment_id is None and record_id is None) or (
-        payment_id is not None and record_id is not None
-    ):
-        raise ValueError("Invalid parameters: provide either payment_id or record_id.")
-
     try:
-        if record_id is not None:
-            record = db.session.get(ServiceRecordRequest, record_id)
-        else:
-            record = (
-                db.session.query(ServiceRecordRequest)
-                .filter_by(payment_id=payment_id)
-                .first()
-            )
+        record = db.session.get(ServiceRecordRequest, id)
     except Exception as e:
         current_app.logger.error(f"Error fetching service record request: {e}")
         return None
 
     if not record:
-        current_app.logger.error(
-            f"Service record not found for: {payment_id or record_id}"
-        )
+        current_app.logger.error(f"Service record not found for ID: {id}")
 
     return record
 
 
-def get_payment_id_from_record_id(record_id: str) -> str | None:
-    record = get_service_record_request(record_id=record_id)
-    return record.payment_id if record else None
+def get_gov_uk_payment_id_from_record_id(id: str) -> str | None:
+    record = get_service_record_request(id=id)
+    return record.gov_uk_payment_id if record else None
 
 
 def add_service_record_request(data: dict) -> ServiceRecordRequest | None:
@@ -79,13 +63,15 @@ def add_service_record_request(data: dict) -> ServiceRecordRequest | None:
     return record
 
 
-def delete_service_record_request(record: ServiceRecordRequest) -> None:
+def delete_service_record_request(record: ServiceRecordRequest) -> bool:
     try:
         db.session.delete(record)
         db.session.commit()
+        return True
     except Exception as e:
         current_app.logger.error(f"Error deleting service record request: {e}")
         db.session.rollback()
+        return False
 
 
 def get_dynamics_payment(id: str) -> DynamicsPayment | None:
@@ -107,7 +93,6 @@ def add_dynamics_payment(data: dict) -> DynamicsPayment | None:
     except Exception as e:
         current_app.logger.error(f"Error adding dynamics payment: {e}")
         db.session.rollback()
-
     return payment
 
 
@@ -120,7 +105,7 @@ def delete_dynamics_payment(record: DynamicsPayment) -> None:
         db.session.rollback()
 
 
-def add_gov_uk_dynamics_payment(data: dict) -> None:
+def add_gov_uk_dynamics_payment(data: dict) -> GOVUKDynamicsPayment | None:
     try:
         payment = GOVUKDynamicsPayment(**data)
         db.session.add(payment)
@@ -128,6 +113,7 @@ def add_gov_uk_dynamics_payment(data: dict) -> None:
     except Exception as e:
         current_app.logger.error(f"Error adding GOV.UK dynamics payment: {e}")
         db.session.rollback()
+    return payment
 
 
 def get_gov_uk_dynamics_payment(id: str) -> GOVUKDynamicsPayment | None:
@@ -142,28 +128,29 @@ def get_gov_uk_dynamics_payment(id: str) -> GOVUKDynamicsPayment | None:
 
 
 def transform_form_data_to_record(form_data: dict) -> dict:
+    """
+    Transform form data into ServiceRecordRequest format.
+
+    Filters fields to only include those that exist on ServiceRecordRequest model,
+    and normalizes certain field values for database storage.
+
+    Args:
+        form_data: Dictionary of form field values.
+
+    Returns:
+        dict: Transformed data ready for ServiceRecordRequest creation.
+    """
+    # Filter to only valid ServiceRecordRequest fields
     transformed_data = {
         field: value
         for field, value in form_data.items()
         if hasattr(ServiceRecordRequest, field)
     }
 
-    if form_data.get("processing_option") == "standard":
-        delivery_type = form_data.get("choose_your_order_type_standard_option")
-        if delivery_type == "printed":
-            delivery_type = "PrintedTracked"
-        else:
-            delivery_type = "Digital"
-        transformed_data["delivery_type"] = delivery_type
-    elif form_data.get("processing_option") == "full":
-        delivery_type = form_data.get("choose_your_order_type_full_option")
-        if delivery_type == "printed":
-            delivery_type = "PrintedTracked"
-        else:
-            delivery_type = "Digital"
-        transformed_data["delivery_type"] = delivery_type
+    transformed_data["delivery_type"] = get_delivery_type(form_data)
 
     if service_branch := form_data.get("service_branch"):
         if service_branch in ServiceBranches.__members__:
             transformed_data["service_branch"] = ServiceBranches[service_branch].value
+
     return transformed_data
