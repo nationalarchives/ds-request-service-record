@@ -1,11 +1,11 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% from "components/warning/macro.html" import tnaWarning %}
 
 {%- set pageTitle = content.app.title -%}
 
 {% block beforeContent %}
   {{ backLink(url_for('main.provide_a_proof_of_death')) }}
-{% endblock %}
+{% endblock beforeContent %}
 
 {% block content %}
   <div class="tna-section tna-!--padding-top-s">
@@ -32,5 +32,4 @@
       </div>
     </div>
   </div>
-
-{% endblock %}
+{% endblock content %}

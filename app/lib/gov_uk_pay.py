@@ -1,5 +1,4 @@
 from datetime import datetime
-from enum import Enum
 
 import requests
 from app.lib.db_handler import (

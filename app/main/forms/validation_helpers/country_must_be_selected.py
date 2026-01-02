@@ -1,5 +1,5 @@
+from app.lib.content import get_field_content, load_content
 from wtforms.validators import ValidationError
-from app.lib.content import load_content, get_field_content
 
 
 def country_must_be_selected(message=None):

@@ -1,10 +1,10 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {%- set pageTitle = content.app.title -%}
 
 {% block beforeContent %}
   {{ backLink(url_for(back_link_route)) }}
-{% endblock %}
+{% endblock beforeContent %}
 
 {% block content %}
   <div class="tna-section tna-!--padding-top-s">
@@ -17,10 +17,10 @@
             class="fa-solid fa-file"></i></span><span>{{ content.pages.your_order_summary.order_type_term }}</span></dt>
           <dd>
             {% if order_summary_data.processing_option == "standard" %}
-              <span></span><span
+              <span>&nbsp;</span><span
               id="processing-option">{{ content.pages.your_order_summary.processing_option_description_standard }}</span>
             {% elif order_summary_data.processing_option == "full" %}
-              <span></span><span
+              <span>&nbsp;</span><span
               id="processing-option">{{ content.pages.your_order_summary.processing_option_description_full }}</span>
             {% endif %}
           </dd>
@@ -28,7 +28,7 @@
             class="fa-solid fa-sterling-sign"></i></span><span>{{ content.pages.your_order_summary.price_term }}</span>
           </dt>
           <dd>
-            <span></span><span id="price">£{{ order_summary_data.amount_pence / 100 }}
+            <span>&nbsp;</span><span id="price">£{{ order_summary_data.amount_pence / 100 }}
             {% if order_summary_data.delivery_option == "PrintedTracked" %}
               plus £1.04 per page copying fee
             {% endif %}
@@ -38,9 +38,9 @@
             class="fa-solid fa-envelope"></i></span><span>{{ content.pages.your_order_summary.format_term }}</span></dt>
           <dd>
             {% if order_summary_data.delivery_option == "PrintedTracked" %}
-              <span></span><span>{{ content.pages.your_order_summary.format_description_printed }}</span>
+              <span>&nbsp;</span><span>{{ content.pages.your_order_summary.format_description_printed }}</span>
             {% elif order_summary_data.delivery_option == "Digital" %}
-              <span></span><span>{{ content.pages.your_order_summary.format_description_digital }}</span>
+              <span>&nbsp;</span><span>{{ content.pages.your_order_summary.format_description_digital }}</span>
             {% endif %}
           </dd>
         </dl>
@@ -59,4 +59,4 @@
       </div>
     </div>
   </div>
-{% endblock %}
+{% endblock content %}

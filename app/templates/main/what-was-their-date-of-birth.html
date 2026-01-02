@@ -1,10 +1,10 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {%- set pageTitle = content.app.title -%}
 
 {% block beforeContent %}
   {{ backLink(url_for(back_link_route)) }}
-{% endblock %}
+{% endblock beforeContent %}
 
 {% block content %}
   <div class="tna-section tna-!--padding-top-s">
@@ -24,4 +24,4 @@
       </div>
     </div>
   </div>
-{% endblock %}
+{% endblock content %}

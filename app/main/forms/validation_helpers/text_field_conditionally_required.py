@@ -1,4 +1,4 @@
-from wtforms.validators import StopValidation, ValidationError
+from wtforms.validators import ValidationError
 
 
 def text_field_required_unless_radio_has_specific_selection(

@@ -1,5 +1,4 @@
 from app.constants import MultiPageFormRoutes
-
 from flask import session
 
 

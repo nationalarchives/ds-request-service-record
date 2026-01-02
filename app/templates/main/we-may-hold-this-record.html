@@ -1,10 +1,10 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {%- set pageTitle = content.app.title -%}
 
 {% block beforeContent %}
   {{ backLink(url_for('main.were_they_a_commissioned_officer')) }}
-{% endblock %}
+{% endblock beforeContent %}
 
 {% block content %}
   <div class="tna-section tna-!--padding-top-s" data-template-id="we-may-hold-this-record--generic">
@@ -24,4 +24,4 @@
       </div>
     </div>
   </div>
-{% endblock %}
+{% endblock content %}

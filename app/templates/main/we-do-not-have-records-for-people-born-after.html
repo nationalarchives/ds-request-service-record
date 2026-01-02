@@ -1,10 +1,10 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {%- set pageTitle = content.app.title -%}
 
 {% block beforeContent %}
   {{ backLink(url_for('main.what_was_their_date_of_birth')) }}
-{% endblock %}
+{% endblock beforeContent %}
 
 {% block content %}
   <div class="tna-section tna-!--padding-top-s">
@@ -29,4 +29,4 @@
       </div>
     </div>
   </div>
-{% endblock %}
+{% endblock content %}

@@ -1,7 +1,8 @@
 from functools import lru_cache
+
 import requests
-from flask import current_app
 from app.constants import FALLBACK_COUNTRY_CHOICES
+from flask import current_app
 
 
 @lru_cache(maxsize=1)

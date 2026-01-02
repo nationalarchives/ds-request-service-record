@@ -1,20 +1,19 @@
 from app.lib.content import get_field_content, load_content
-from flask_wtf import FlaskForm
-from tna_frontend_jinja.wtforms import (
-    TnaSubmitWidget,
-    TnaTextInputWidget,
-    TnaRadiosWidget,
-)
-from wtforms import (
-    StringField,
-    SubmitField,
-    RadioField,
-)
-from wtforms.validators import InputRequired
-
 from app.main.forms.validation_helpers.text_field_conditionally_required import (
     text_field_required_unless_radio_has_specific_selection,
 )
+from flask_wtf import FlaskForm
+from tna_frontend_jinja.wtforms import (
+    TnaRadiosWidget,
+    TnaSubmitWidget,
+    TnaTextInputWidget,
+)
+from wtforms import (
+    RadioField,
+    StringField,
+    SubmitField,
+)
+from wtforms.validators import InputRequired
 
 
 class HaveYouPreviouslyMadeARequest(FlaskForm):

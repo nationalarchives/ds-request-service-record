@@ -1,10 +1,10 @@
 # python
 import pytest
-from flask import Flask, session
+from app.constants import MultiPageFormRoutes
 from app.lib.decorators.update_dynamic_back_link_mapping import (
     update_dynamic_back_link_mapping,
 )
-from app.constants import MultiPageFormRoutes
+from flask import Flask, session
 
 
 @pytest.fixture
@@ -21,6 +21,7 @@ class TestUpdateDynamicBackLinkMapping:
     def test_adds_mapping_to_empty_session(self, flask_app):
         """Should create new dynamic_back_links when session is empty."""
         with flask_app.test_request_context():
+
             @update_dynamic_back_link_mapping(
                 mappings={
                     MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value: MultiPageFormRoutes.BEFORE_YOU_START.value
@@ -81,6 +82,7 @@ class TestUpdateDynamicBackLinkMapping:
     def test_passes_arguments_to_view(self, flask_app):
         """Should pass all arguments through to decorated view."""
         with flask_app.test_request_context():
+
             @update_dynamic_back_link_mapping(mappings={"test": "/test"})
             def view(*args, **kwargs):
                 return {"args": args, "kwargs": kwargs}
@@ -92,6 +94,7 @@ class TestUpdateDynamicBackLinkMapping:
     def test_propagates_exceptions(self, flask_app):
         """Should propagate exceptions from decorated view."""
         with flask_app.test_request_context():
+
             @update_dynamic_back_link_mapping(mappings={"test": "/test"})
             def view():
                 raise ValueError("Test error")
@@ -123,6 +126,7 @@ class TestUpdateDynamicBackLinkMapping:
     def test_adds_multiple_mappings(self, flask_app):
         """Should add multiple key/value pairs at once."""
         with flask_app.test_request_context():
+
             @update_dynamic_back_link_mapping(
                 mappings={
                     "a": "/a",

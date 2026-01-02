@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
 import pytest
+
 from app import create_app
 
 

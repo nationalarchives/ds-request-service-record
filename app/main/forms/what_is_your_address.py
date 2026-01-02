@@ -1,5 +1,5 @@
-from app.lib.get_country_choices import get_country_choices
 from app.lib.content import get_field_content, load_content
+from app.lib.get_country_choices import get_country_choices
 from app.main.forms.validation_helpers.country_must_be_selected import (
     country_must_be_selected,
 )
