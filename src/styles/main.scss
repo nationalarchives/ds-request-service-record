@@ -3,7 +3,7 @@
 @use "@nationalarchives/frontend/nationalarchives/tools/a11y";
 
 .form-separator {
-  border-block-end: 3px solid black;
+  @include colour.thick-keyline-dark(bottom);
 
   padding-bottom: 3rem;
 }
