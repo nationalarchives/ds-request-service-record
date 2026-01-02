@@ -4,7 +4,6 @@ import {
   clickBackLink,
   checkExternalLink,
   continueFromBeforeYouStart,
-  clickExitThisForm,
 } from "../lib/step-functions";
 import { testLastBirthYearForOpenRecords } from "../lib/test-last-birth-year-for-open-records";
 
@@ -60,25 +59,6 @@ test.describe("the 'Before you start' form", () => {
         "Our privacy notice (opens in new tab)",
         "https://www.nationalarchives.gov.uk/legal/privacy-policy/",
       );
-    });
-  });
-
-  test.describe("the 'Exit this form' link", () => {
-    test("works as expected", async ({ page }) => {
-      await clickExitThisForm(page, "link");
-    });
-    test("having reached 'Are you sure you want to cancel?', clicking 'Back' brings the user back", async ({
-      page,
-    }) => {
-      await clickExitThisForm(page, "link");
-      await clickBackLink(page, Paths.BEFORE_YOU_START);
-    });
-    test("having reached 'Are you sure you want to cancel?', clicking 'No' brings the user back", async ({
-      page,
-    }) => {
-      await clickExitThisForm(page, "link");
-      await page.locator("#cancel-request a").click();
-      await expect(page).toHaveURL(Paths.BEFORE_YOU_START);
     });
   });
 });

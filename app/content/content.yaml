@@ -62,7 +62,6 @@ pages:
       sent_to_you: The reviewed record will be emailed to you
   before_you_start:
     heading: Before you start
-    exit_this_form: Exit this form
     paragraphs:
       - |
         To help our staff search for the record, you will need to provide 
