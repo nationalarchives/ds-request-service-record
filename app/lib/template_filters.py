@@ -1,6 +1,8 @@
 import re
+from datetime import datetime
 
 from app.constants import ExternalLinks
+from app.lib.boundary_years import BoundaryYears
 
 
 def slugify(s):
@@ -39,3 +41,17 @@ def parse_bold_text(s):
         return f"<strong>{text}</strong>"
 
     return pattern.sub(replacer, s)
+
+
+def parse_last_birth_year_for_open_records(s):
+    if not s:
+        return s
+
+    year = BoundaryYears.last_birth_year_for_record_to_be_open(datetime.now().year)
+
+    span = f"<span data-last-birth-year-for-open-records='{year}'>{year}</span>"
+
+    return s.replace(
+        "[LATEST_BIRTH_YEAR_FOR_OPEN_RECORDS]",
+        span,
+    )

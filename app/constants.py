@@ -86,12 +86,6 @@ class ExternalLinks:
     FOI_REQUEST_GUIDANCE = "https://www.gov.uk/make-a-freedom-of-information-request"
 
 
-class BoundaryYears(Enum):
-    EARLIEST_BIRTH_YEAR = 1800
-    YEAR_FROM_WHICH_PROOF_OF_DEATH_IS_REQUIRED = 1910
-    LATEST_BIRTH_YEAR = 1939
-
-
 FALLBACK_COUNTRY_CHOICES = [
     "United Kingdom",
     "Afghanistan",

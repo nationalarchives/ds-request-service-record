@@ -1,4 +1,7 @@
-from app.constants import BoundaryYears, MultiPageFormRoutes
+from datetime import datetime
+
+from app.constants import MultiPageFormRoutes
+from app.lib.boundary_years import BoundaryYears
 from app.lib.aws import upload_proof_of_death
 from flask import current_app
 from statemachine import State, StateMachine
@@ -191,36 +194,36 @@ class RoutingStateMachine(StateMachine):
     )
 
     continue_from_service_branch_form = (
-        initial.to(
-            were_they_a_commissioned_officer_form,
-            unless="is_royal_navy or likely_unfindable",
-        )
-        | initial.to(
-            we_do_not_have_royal_navy_service_records_form, cond="is_royal_navy"
-        )
-        | initial.to(
-            we_are_unlikely_to_locate_this_record_form, cond="likely_unfindable"
-        )
+            initial.to(
+                were_they_a_commissioned_officer_form,
+                unless="is_royal_navy or likely_unfindable",
+            )
+            | initial.to(
+        we_do_not_have_royal_navy_service_records_form, cond="is_royal_navy"
+    )
+            | initial.to(
+        we_are_unlikely_to_locate_this_record_form, cond="likely_unfindable"
+    )
     )
 
     continue_from_were_they_a_commissioned_officer_form = (
-        initial.to(we_may_hold_this_record_page, unless="was_officer")
-        | initial.to(
-            we_are_unlikely_to_hold_officer_records__raf_page,
-            cond="was_officer and service_branch_is_raf",
-        )
-        | initial.to(
-            we_are_unlikely_to_hold_officer_records__generic_page,
-            cond="was_officer and service_branch_is_other",
-        )
-        | initial.to(
-            we_are_unlikely_to_hold_officer_records__generic_page,
-            cond="was_officer and service_branch_is_unknown",
-        )
-        | initial.to(
-            we_are_unlikely_to_hold_officer_records__army_page,
-            cond="was_officer and service_branch_is_army",
-        )
+            initial.to(we_may_hold_this_record_page, unless="was_officer")
+            | initial.to(
+        we_are_unlikely_to_hold_officer_records__raf_page,
+        cond="was_officer and service_branch_is_raf",
+    )
+            | initial.to(
+        we_are_unlikely_to_hold_officer_records__generic_page,
+        cond="was_officer and service_branch_is_other",
+    )
+            | initial.to(
+        we_are_unlikely_to_hold_officer_records__generic_page,
+        cond="was_officer and service_branch_is_unknown",
+    )
+            | initial.to(
+        we_are_unlikely_to_hold_officer_records__army_page,
+        cond="was_officer and service_branch_is_army",
+    )
     )
 
     continue_from_we_do_not_have_royal_navy_service_records_form = initial.to(
@@ -240,16 +243,16 @@ class RoutingStateMachine(StateMachine):
     )
 
     continue_from_what_was_their_date_of_birth_form = (
-        initial.to(
-            service_person_details_form,
-            unless="born_too_late or birth_year_requires_proof_of_death",
-        )
-        | initial.to(
-            we_do_not_have_records_for_people_born_after_page, cond="born_too_late"
-        )
-        | initial.to(
-            provide_a_proof_of_death_form, cond="birth_year_requires_proof_of_death"
-        )
+            initial.to(
+                service_person_details_form,
+                unless="born_too_late or birth_year_requires_proof_of_death",
+            )
+            | initial.to(
+        we_do_not_have_records_for_people_born_after_page, cond="born_too_late"
+    )
+            | initial.to(
+        provide_a_proof_of_death_form, cond="birth_year_requires_proof_of_death"
+    )
     )
 
     continue_from_we_do_not_have_records_for_people_born_after_form = initial.to(
@@ -261,19 +264,19 @@ class RoutingStateMachine(StateMachine):
     ) | initial.to(are_you_sure_you_want_to_proceed_without_proof_of_death_form)
 
     continue_from_are_you_sure_you_want_to_proceed_without_proof_of_death_form = (
-        initial.to(
-            upload_a_proof_of_death_form,
-            unless="happy_to_proceed_without_proof_of_death",
-        )
-        | initial.to(service_person_details_form)
+            initial.to(
+                upload_a_proof_of_death_form,
+                unless="happy_to_proceed_without_proof_of_death",
+            )
+            | initial.to(service_person_details_form)
     )
 
     continue_from_upload_a_proof_of_death_form = (
-        initial.to(
-            service_person_details_form, cond="user_has_not_uploaded_proof_of_death"
-        )
-        | initial.to(service_person_details_form, cond="proof_of_death_uploaded_to_s3")
-        | initial.to(upload_a_proof_of_death_form)
+            initial.to(
+                service_person_details_form, cond="user_has_not_uploaded_proof_of_death"
+            )
+            | initial.to(service_person_details_form, cond="proof_of_death_uploaded_to_s3")
+            | initial.to(upload_a_proof_of_death_form)
     )
 
     continue_from_service_person_details_form = initial.to(
@@ -449,13 +452,16 @@ class RoutingStateMachine(StateMachine):
 
     def born_too_late(self, form):
         """Condition method to determine if the service person's date of birth is too late for TNA to have record."""
-        return form.date_of_birth.data.year > BoundaryYears.LATEST_BIRTH_YEAR.value
+        return (
+                form.date_of_birth.data.year
+                > BoundaryYears.LATEST_SERVICE_PERSON_BIRTH_YEAR_FOR_THIS_SERVICE
+        )
 
     def birth_year_requires_proof_of_death(self, form):
         """Condition method to determine if the service person's date of birth requires a proof of death."""
         return (
-            form.date_of_birth.data.year
-            > BoundaryYears.YEAR_FROM_WHICH_PROOF_OF_DEATH_IS_REQUIRED.value
+                form.date_of_birth.data.year
+                >= BoundaryYears.last_birth_year_for_record_to_be_open(datetime.now().year)
         )
 
     def does_not_have_email(self, form):
@@ -469,7 +475,7 @@ class RoutingStateMachine(StateMachine):
     def happy_to_proceed_without_proof_of_death(self, form):
         """Condition method to determine if the user is happy to proceed without a proof of death."""
         return (
-            form.are_you_sure_you_want_to_proceed_without_proof_of_death.data == "yes"
+                form.are_you_sure_you_want_to_proceed_without_proof_of_death.data == "yes"
         )
 
     def user_has_not_uploaded_proof_of_death(self, form):

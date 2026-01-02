@@ -4,11 +4,18 @@ import {
   clickBackLink,
   continueFromProvideAProofOfDeath,
 } from "../lib/step-functions";
+import { testLastBirthYearForOpenRecords } from "../lib/test-last-birth-year-for-open-records";
 
 test.describe("The 'Provide a proof of death?' form", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START);
     await page.goto(Paths.PROVIDE_A_PROOF_OF_DEATH);
+  });
+
+  test("has the correct value shown for last birth year for open records", async ({
+    page,
+  }) => {
+    await testLastBirthYearForOpenRecords(page);
   });
 
   test("clicking the 'Back' link takes the user to the 'What was their date of birth?' page", async ({
