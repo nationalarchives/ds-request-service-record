@@ -6,16 +6,16 @@
   "response": {
     "status": 200,
     "jsonBody": [
-      {"Description": "United Kingdom", "Code": "GB"},
-      {"Description": "United States", "Code": "US"},
-      {"Description": "Canada", "Code": "CA"},
-      {"Description": "Australia", "Code": "AU"},
-      {"Description": "France", "Code": "FR"},
-      {"Description": "Germany", "Code": "DE"},
-      {"Description": "Spain", "Code": "ES"},
-      {"Description": "Italy", "Code": "IT"},
-      {"Description": "Netherlands", "Code": "NL"},
-      {"Description": "Belgium", "Code": "BE"}
+      { "Description": "United Kingdom", "Code": "GB" },
+      { "Description": "United States", "Code": "US" },
+      { "Description": "Canada", "Code": "CA" },
+      { "Description": "Australia", "Code": "AU" },
+      { "Description": "France", "Code": "FR" },
+      { "Description": "Germany", "Code": "DE" },
+      { "Description": "Spain", "Code": "ES" },
+      { "Description": "Italy", "Code": "IT" },
+      { "Description": "Netherlands", "Code": "NL" },
+      { "Description": "Belgium", "Code": "BE" }
     ],
     "headers": {
       "Content-Type": "application/json"

@@ -50,6 +50,7 @@ class GOVUKPayAPIClient(JSONAPIClient):
         status = self.get_payment_status()
         return status in SUCCESSFUL_PAYMENT_STATUSES
 
+
 def create_payment(
     amount: int, description: str, reference: str, email: str | None, return_url: str
 ) -> dict | None:

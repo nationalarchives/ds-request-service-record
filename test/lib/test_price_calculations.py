@@ -1,11 +1,12 @@
 import pytest
-from app import create_app
 from app.lib.price_calculations import (
-    calculate_delivery_fee,
     calculate_amount_based_on_form_data,
-    prepare_order_summary_data,
+    calculate_delivery_fee,
     get_delivery_type,
+    prepare_order_summary_data,
 )
+
+from app import create_app
 
 
 @pytest.fixture
@@ -124,9 +125,9 @@ def test_prepare_order_summary_data(app_context):
         "processing_option": "standard",
         "does_not_have_email": False,
     }
-    
+
     summary = prepare_order_summary_data(form_data)
-    
+
     assert summary["processing_option"] == "standard"
     assert summary["delivery_type"] == "Digital"
     assert summary["amount_pence"] == 4225

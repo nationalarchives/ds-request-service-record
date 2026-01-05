@@ -128,8 +128,8 @@ class Test(Production):
     PREFERRED_URL_SCHEME: str = "http"
 
     COUNTRY_API_URL: str = (
-        os.environ.get("RECORD_COPYING_SERVICE_API_URL", "http://localhost:65519/") 
-    )+ "GetCountry"
+        os.environ.get("RECORD_COPYING_SERVICE_API_URL", "http://localhost:65519/")
+    ) + "GetCountry"
     DELIVERY_FEE_API_URL: str = (
-        os.environ.get("RECORD_COPYING_SERVICE_API_URL", "http://localhost:65519/") 
+        os.environ.get("RECORD_COPYING_SERVICE_API_URL", "http://localhost:65519/")
     ) + "GetDeliveryPrice"
