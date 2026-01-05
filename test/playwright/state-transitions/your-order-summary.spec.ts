@@ -16,7 +16,7 @@ test.describe("Routes to 'Your order summary'", () => {
   const providedByPostTests = [
     {
       buttonText: "standard",
-      price: "£51.66",
+      price: "£55.11",
       description: "Standard",
       personMakingRequest: {
         firstName: "Francis",
