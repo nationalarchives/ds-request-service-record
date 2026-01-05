@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPattern": "/GetDeliveryPrice",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$[?(@.Country == 'Australia')]"
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "body": "12.00",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

@@ -31,6 +31,22 @@ docker compose exec dev poetry run python -m pytest
 docker compose exec dev format
 ```
 
+### Run WireMock server for local development
+
+For local development, you can use a mock server instead of connecting to external APIs.
+
+The server will run on `http://localhost:65519` by default. Set this in your `.env`:
+
+```
+RECORD_COPYING_SERVICE_API_URL=http://localhost:65519/
+```
+
+You can also specify a custom port:
+
+```sh
+python wiremock_server.py --port 9000
+```
+
 ## Environment variables
 
 In addition to the [base Docker image variables](https://github.com/nationalarchives/docker/blob/main/docker/tna-python/README.md#environment-variables), this application has support for:

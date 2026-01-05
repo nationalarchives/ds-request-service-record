@@ -48,6 +48,13 @@ services:
     ports:
       - 65502:8080
 
+  mock-record-copying-service-api:
+    image: wiremock/wiremock:3.13.2
+    volumes:
+      - ./wiremock:/home/wiremock
+    ports:
+      - 65519:8080
+
   docs:
     image: squidfunk/mkdocs-material
     volumes:
