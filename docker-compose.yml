@@ -31,6 +31,7 @@ services:
     depends_on:
       - db
       - redis
+      - mock-record-copying-service-api
     healthcheck:
       start_period: 10s
       start_interval: 2s
@@ -47,6 +48,13 @@ services:
     restart: always
     ports:
       - 65502:8080
+
+  mock-record-copying-service-api:
+    image: wiremock/wiremock:3.13.2
+    volumes:
+      - ./wiremock:/home/wiremock
+    ports:
+      - 65519:8080
 
   docs:
     image: squidfunk/mkdocs-material

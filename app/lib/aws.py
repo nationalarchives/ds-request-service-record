@@ -77,19 +77,25 @@ def upload_file_to_s3(
     return filename_override  # TODO: Once we have a proper flow for handling failed uploads, we should return None here.
 
 
-def send_email(to: str, subject: str, body: str) -> None:
+def send_email(to: str, subject: str, body: str) -> bool:
     """
     Function to send an email using AWS SES.
+    Return True if email sent successfully, False otherwise.
     """
 
     session = get_boto3_session()
     ses = session.client("ses")
 
-    ses.send_email(
-        Source=current_app.config["EMAIL_FROM"],
-        Destination={"ToAddresses": [to]},
-        Message={
-            "Subject": {"Data": subject},
-            "Body": {"Text": {"Data": body}},
-        },
-    )
+    try:
+        ses.send_email(
+            Source=current_app.config["EMAIL_FROM"],
+            Destination={"ToAddresses": [to]},
+            Message={
+                "Subject": {"Data": subject},
+                "Body": {"Text": {"Data": body}},
+            },
+        )
+        return True
+    except Exception as e:
+        current_app.logger.error(f"Error sending email to {to}: {e}")
+        return False

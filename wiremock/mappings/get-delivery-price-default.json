@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPattern": "/GetDeliveryPrice"
+  },
+  "response": {
+    "status": 200,
+    "body": "9.00",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  },
+  "priority": 10
+}

@@ -2,7 +2,7 @@ from datetime import datetime
 
 import requests
 from app.lib.aws import send_email
-from app.lib.models import DynamicsPayment, ServiceRecordRequest
+from app.lib.db.models import DynamicsPayment, ServiceRecordRequest
 from flask import current_app
 
 DYNAMICS_REQUEST_FIELD_MAP = [
@@ -42,8 +42,8 @@ DYNAMICS_REQUEST_FIELD_MAP = [
 ]
 
 
-def send_request_to_dynamics(record: ServiceRecordRequest) -> None:
-    send_email(
+def send_request_to_dynamics(record: ServiceRecordRequest) -> bool:
+    return send_email(
         to=current_app.config["DYNAMICS_INBOX"],
         subject=subject_status(record),
         body=generate_tagged_request(record),

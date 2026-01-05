@@ -2,12 +2,12 @@
 # as these are currently using + dropping the local DB
 
 import pytest
-from app.lib.db_handler import (
+from app.lib.db.db_handler import (
     add_service_record_request,
     delete_service_record_request,
     get_service_record_request,
 )
-from app.lib.models import db
+from app.lib.db.models import db
 
 from app import create_app
 
@@ -33,9 +33,7 @@ def session(test_app):
 
 
 def test_add_service_record_request(session):
-    payment_id = "testpaymentid123"
-
-    add_service_record_request(
+    record = add_service_record_request(
         {
             "id": "testrecordid123",
             "forenames": "John",
@@ -47,38 +45,29 @@ def test_add_service_record_request(session):
             "requester_contact_preference": "email",
             "service_branch": "british_army",
             "record_hash": "dummyhashvalue",
-            "payment_id": payment_id,
+            "gov_uk_payment_id": "testpaymentid123",
         }
     )
-    result = get_service_record_request(payment_id=payment_id)
-    assert result is not None
-    assert result.forenames == "John"
-    assert result.requester_email == "john.doe@email.com"
+    assert record is not None
+    assert record.forenames == "John"
+    assert record.requester_email == "john.doe@email.com"
 
 
-def test_get_service_record_request_by_payment_id(session):
-    payment_id = "testpaymentid123"
+def test_get_service_record_request(session):
+    id = "testrecordid123"
 
-    result = get_service_record_request(payment_id=payment_id)
-    assert result is not None
-    assert result.forenames == "John"
-    assert result.requester_email == "john.doe@email.com"
-
-
-def test_get_service_record_request_by_record_id(session):
-    record_id = "testrecordid123"
-
-    result = get_service_record_request(record_id=record_id)
+    result = get_service_record_request(id=id)
     assert result is not None
     assert result.forenames == "John"
     assert result.requester_email == "john.doe@email.com"
 
 
 def test_delete_service_record_request(session):
-    payment_id = "anothertestpaymentid"
+    id = "anothertestid"
 
     add_service_record_request(
         {
+            "id": id,
             "forenames": "John",
             "last_name": "Doe",
             "requester_email": "john.doe@email.com",
@@ -88,12 +77,12 @@ def test_delete_service_record_request(session):
             "requester_contact_preference": "email",
             "service_branch": "british_army",
             "record_hash": "dummyhash",
-            "payment_id": payment_id,
+            "gov_uk_payment_id": "anothertestpaymentid",
         }
     )
-    record = get_service_record_request(payment_id=payment_id)
+    record = get_service_record_request(id=id)
     assert record is not None
 
     delete_service_record_request(record)
-    deleted = get_service_record_request(payment_id=payment_id)
+    deleted = get_service_record_request(id=id)
     assert deleted is None
