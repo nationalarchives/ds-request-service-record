@@ -69,7 +69,10 @@ def prepare_order_summary_data(form_data: dict) -> dict:
 
 
 def get_delivery_type(form_data: dict) -> str:
-    delivery_type = (
-        "PrintedTracked" if form_data.get("does_not_have_email") else "Digital"
-    )
+    delivery_type = form_data.get("delivery_type")
+    if not delivery_type:
+        delivery_type = (
+            "PrintedTracked" if form_data.get("does_not_have_email") else "Digital"
+        )
+
     return delivery_type

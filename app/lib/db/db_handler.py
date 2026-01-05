@@ -58,6 +58,7 @@ def add_service_record_request(data: dict) -> ServiceRecordRequest | None:
         db.session.add(record)
         db.session.commit()
     except Exception as e:
+        record = None
         current_app.logger.error(f"Error adding service record request: {e}")
         db.session.rollback()
     return record
@@ -91,6 +92,7 @@ def add_dynamics_payment(data: dict) -> DynamicsPayment | None:
         db.session.add(payment)
         db.session.commit()
     except Exception as e:
+        payment = None
         current_app.logger.error(f"Error adding dynamics payment: {e}")
         db.session.rollback()
     return payment
@@ -111,6 +113,7 @@ def add_gov_uk_dynamics_payment(data: dict) -> GOVUKDynamicsPayment | None:
         db.session.add(payment)
         db.session.commit()
     except Exception as e:
+        payment = None
         current_app.logger.error(f"Error adding GOV.UK dynamics payment: {e}")
         db.session.rollback()
     return payment
