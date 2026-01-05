@@ -31,7 +31,7 @@ def calculate_delivery_fee(country: str) -> int:
 
     response_data = response.json()
 
-    return int(response_data) * 100  # Convert pounds to pence
+    return int(float(response_data) * 100)  # Convert pounds to pence
 
 
 def calculate_amount_based_on_form_data(form_data: dict) -> int:

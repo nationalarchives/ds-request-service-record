@@ -63,7 +63,7 @@ def test_calculate_amount_standard_digital(app_context):
         "does_not_have_email": False,
     }
     amount = calculate_amount_based_on_form_data(form_data)
-    assert amount == 4225  # £30 in pence
+    assert amount == 4225
 
 
 def test_calculate_amount_full_digital(app_context):
@@ -73,7 +73,7 @@ def test_calculate_amount_full_digital(app_context):
         "does_not_have_email": False,
     }
     amount = calculate_amount_based_on_form_data(form_data)
-    assert amount == 4887  # £65 in pence
+    assert amount == 4887
 
 
 def test_calculate_amount_standard_printed_with_delivery(app_context):
@@ -84,8 +84,7 @@ def test_calculate_amount_standard_printed_with_delivery(app_context):
         "requester_country": "United Kingdom",
     }
     amount = calculate_amount_based_on_form_data(form_data)
-    # £30 + £4.50 delivery = £34.50 = 3450 pence
-    assert amount == 3450
+    assert amount == 5166
 
 
 def test_calculate_amount_full_printed(app_context):

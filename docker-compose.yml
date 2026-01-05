@@ -20,6 +20,7 @@ services:
       - CACHE_TYPE=RedisCache
       - CACHE_REDIS_URL=redis://redis:6379/1
       - GA4_ID=GTM-T8DSWV
+      - RECORD_COPYING_SERVICE_API_URL=http://mock-record-copying-service-api:8080/
     env_file:
       - path: .env
         required: false
@@ -31,6 +32,7 @@ services:
     depends_on:
       - db
       - redis
+      - mock-record-copying-service-api
     healthcheck:
       start_period: 10s
       start_interval: 2s
