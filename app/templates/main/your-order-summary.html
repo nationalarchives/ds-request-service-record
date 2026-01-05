@@ -40,9 +40,9 @@
           <dt><span><i
             class="fa-solid fa-envelope"></i></span><span>{{ content.pages.your_order_summary.format_term }}</span></dt>
           <dd>
-            {% if order_summary_data.delivery_option == "PrintedTracked" %}
+            {% if order_summary_data.delivery_type == "PrintedTracked" %}
               <span>&nbsp;</span><span>{{ content.pages.your_order_summary.format_description_printed }}</span>
-            {% elif order_summary_data.delivery_option == "Digital" %}
+            {% elif order_summary_data.delivery_type == "Digital" %}
               <span>&nbsp;</span><span>{{ content.pages.your_order_summary.format_description_digital }}</span>
             {% endif %}
           </dd>

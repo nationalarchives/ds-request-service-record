@@ -1,16 +1,21 @@
 from datetime import datetime
 
 import requests
-from app.lib.db_handler import (
+from app.lib.api import JSONAPIClient
+from app.lib.db.constants import (
+    NEW_STATUS,
+    PAID_STATUS,
+    SENT_STATUS,
+)
+from app.lib.db.db_handler import (
     get_dynamics_payment,
-    get_gov_uk_dynamics_payment,
     get_service_record_request,
 )
+from app.lib.db.models import db
 from app.lib.dynamics_handler import (
     send_payment_to_mod_copying_app,
     send_request_to_dynamics,
 )
-from app.lib.models import db
 from flask import current_app
 
 SUCCESSFUL_PAYMENT_STATUSES: set[str] = {"success"}
@@ -20,31 +25,30 @@ UNFINISHED_PAYMENT_STATUSES: set[str] = {"created", "started", "submitted"}
 FAILED_PAYMENT_STATUSES: set[str] = {"failed", "cancelled", "error"}
 
 
-def get_payment_data(payment_id: str) -> dict | None:
-    headers = {
-        "Authorization": f"Bearer {current_app.config["GOV_UK_PAY_API_KEY"]}",
-        "Content-Type": "application/json",
-    }
+class GOVUKPayAPIClient(JSONAPIClient):
+    data = None
 
-    response = requests.get(
-        f"{current_app.config["GOV_UK_PAY_API_URL"]}/{payment_id}", headers=headers
-    )
+    def __init__(self):
+        super().__init__(
+            api_url=current_app.config["GOV_UK_PAY_API_URL"],
+            headers={
+                "Authorization": f"Bearer {current_app.config['GOV_UK_PAY_API_KEY']}",
+                "Content-Type": "application/json",
+            },
+        )
 
-    try:
-        response.raise_for_status()
-    except Exception as e:
-        current_app.logger.error(f"Error fetching payment data: {e}")
-        return None
+    def get_payment(self, payment_id: str) -> dict:
+        self.data = self.get(path=f"/{payment_id}")
+        return self.data
 
-    return response.json()
+    def get_payment_status(self) -> str | None:
+        if self.data is None:
+            return None
+        return self.data.get("state", {}).get("status")
 
-
-def get_payment_status(data: dict) -> str:
-    return data.get("state", {}).get("status")
-
-
-def validate_payment(data: dict) -> bool:
-    return get_payment_status(data) == "success"
+    def is_payment_successful(self) -> bool:
+        status = self.get_payment_status()
+        return status in SUCCESSFUL_PAYMENT_STATUSES
 
 
 def create_payment(
@@ -78,13 +82,13 @@ def create_payment(
     return response.json()
 
 
-def process_valid_request(payment_id: str, payment_data: dict) -> None:
-    record = get_service_record_request(payment_id=payment_id)
+def process_valid_request(id: str, payment_data: dict) -> None:
+    record = get_service_record_request(id=id)
 
     if record is None:
-        raise ValueError(f"Service record not found for payment ID: {payment_id}")
+        raise ValueError(f"Service record not found for payment ID: {id}")
 
-    if record.status == "N":
+    if record.status == NEW_STATUS:
         record.provider_id = payment_data.get("provider_id", None)
         record.amount_received = (
             f"{payment_data.get('amount') / 100:.2f}"
@@ -93,28 +97,24 @@ def process_valid_request(payment_id: str, payment_data: dict) -> None:
         )
         record.payment_reference = payment_data.get("reference", "")
         record.payment_date = datetime.now().strftime("%d %B %Y")
-        record.status = "P"
+        record.status = PAID_STATUS
         db.session.commit()
 
-    if record.status == "P":
-        send_request_to_dynamics(record)
-        record.status = "S"
-        db.session.commit()
-
-        # Don't delete for now
-        # delete_service_record_request(record)
+    if record.status == PAID_STATUS:
+        if send_request_to_dynamics(record):
+            record.status = SENT_STATUS
+            db.session.commit()
 
 
 def process_valid_payment(id: str, *, provider_id: str, payment_date: str) -> None:
-    payment = get_gov_uk_dynamics_payment(id)
+    payment = get_dynamics_payment(id)
 
     if payment is None:
-        raise ValueError(f"Payment not found for GOV.UK payment ID: {id}")
+        raise ValueError(f"Payment not found for payment ID: {id}")
 
-    dynamics_payment = get_dynamics_payment(payment.dynamics_payment_id)
-    dynamics_payment.status = "P"
-    dynamics_payment.provider_id = provider_id
-    dynamics_payment.payment_date = datetime.strptime(payment_date, "%Y-%m-%d")
+    payment.status = PAID_STATUS
+    payment.provider_id = provider_id
+    payment.payment_date = datetime.strptime(payment_date, "%Y-%m-%d")
     db.session.commit()
 
-    send_payment_to_mod_copying_app(dynamics_payment)
+    send_payment_to_mod_copying_app(payment)

@@ -30,24 +30,20 @@ def calculate_delivery_fee(country: str) -> int:
         raise ValueError("Could not retrieve delivery fee")
 
     response_data = response.json()
-
-    return int(response_data) * 100  # Convert pounds to pence
+    return round(float(response_data) * 100)  # Convert pounds to pence
 
 
 def calculate_amount_based_on_form_data(form_data: dict) -> int:
-    delivery_option = get_delivery_option(form_data)
+    delivery_type = get_delivery_type(form_data)
     processing_option = form_data.get("processing_option", "standard")
     amount = 0
 
     if processing_option not in OPTION_MAP:
         raise ValueError("Invalid processing option")
 
-    amount = OPTION_MAP[processing_option].get(delivery_option)
+    amount = OPTION_MAP[processing_option].get(delivery_type)
 
-    if (
-        processing_option == "standard"
-        and form_data.get("choose_your_order_type_standard_option") == "printed"
-    ):
+    if processing_option == "standard" and delivery_type == "PrintedTracked":
         if country := form_data.get("requester_country"):
             amount += calculate_delivery_fee(country)
         else:
@@ -61,19 +57,22 @@ def calculate_amount_based_on_form_data(form_data: dict) -> int:
 
 def prepare_order_summary_data(form_data: dict) -> dict:
     processing_option = form_data.get("processing_option", "standard")
-    delivery_option = get_delivery_option(form_data)
+    delivery_type = get_delivery_type(form_data)
 
     order_summary_data = {
         "processing_option": processing_option,
-        "delivery_option": delivery_option,
+        "delivery_type": delivery_type,
         "amount_pence": calculate_amount_based_on_form_data(form_data),
     }
 
     return order_summary_data
 
 
-def get_delivery_option(form_data: dict) -> str:
-    delivery_option = (
-        "PrintedTracked" if form_data.get("does_not_have_email") else "Digital"
-    )
-    return delivery_option
+def get_delivery_type(form_data: dict) -> str:
+    delivery_type = form_data.get("delivery_type")
+    if not delivery_type:
+        delivery_type = (
+            "PrintedTracked" if form_data.get("does_not_have_email") else "Digital"
+        )
+
+    return delivery_type
