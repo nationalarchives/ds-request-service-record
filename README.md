@@ -22,29 +22,23 @@ docker compose exec app cp -r /app/node_modules/@nationalarchives/frontend/natio
 ### Run tests
 
 ```sh
-docker compose exec dev poetry run python -m pytest
+docker compose exec app poetry run python -m pytest
 ```
 
 ### Format and lint code
 
 ```sh
-docker compose exec dev format
+docker compose exec app format
 ```
 
 ### Run WireMock server for local development
 
 For local development, you can use a mock server instead of connecting to external APIs.
 
-The server will run on `http://localhost:65519` by default. Set this in your `.env`:
+The server will run on `http://localhost:65519` and is visible to your app on `http://mock-record-copying-service-api:8080/`. Set this in your `.env`:
 
 ```
-RECORD_COPYING_SERVICE_API_URL=http://localhost:65519/
-```
-
-You can also specify a custom port:
-
-```sh
-python wiremock_server.py --port 9000
+RECORD_COPYING_SERVICE_API_URL=http://mock-record-copying-service-api:8080/
 ```
 
 ## Environment variables
@@ -86,5 +80,7 @@ In addition to the [base Docker image variables](https://github.com/nationalarch
 | `EMAIL_FROM`                     | The address which SES will send emails from                                 | _none_                                                    |
 | `DYNAMICS_INBOX`                 | The address which SES will send Dynamics emails to                          | _none_                                                    |
 | `RECORD_COPYING_SERVICE_API_URL` | The URL of the Record Copying Service API                                   |                                                           |
+| `MOD_COPYING_API_URL` | The URL of the MOD Record Copying Service API, which receives notification of the second payment                                   |                                                           |
+ 
 
 [^1] [Debugging in Flask](https://flask.palletsprojects.com/en/2.3.x/debugging/)
