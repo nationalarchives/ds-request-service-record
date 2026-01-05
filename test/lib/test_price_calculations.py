@@ -26,22 +26,22 @@ def app_context(app):
 def test_calculate_delivery_fee_uk(app_context):
     """Test delivery fee calculation for UK."""
     fee = calculate_delivery_fee("United Kingdom")
-    # WireMock returns £4.50 = 450 pence
-    assert fee == 450
+    # WireMock returns £7.95 = 795 pence
+    assert fee == 795
 
 
 def test_calculate_delivery_fee_us(app_context):
     """Test delivery fee calculation for US."""
     fee = calculate_delivery_fee("United States")
-    # WireMock returns £11.00 = 1100 pence
-    assert fee == 1100
+    # WireMock returns £20.31 = 2031 pence
+    assert fee == 2031
 
 
 def test_calculate_delivery_fee_other_country(app_context):
     """Test delivery fee calculation for other countries."""
     fee = calculate_delivery_fee("France")
-    # WireMock returns £8.50 = 850 pence
-    assert fee == 850
+    # WireMock returns £12.61 = 1261 pence
+    assert fee == 1261
 
 
 def test_get_delivery_type_digital():
@@ -84,7 +84,7 @@ def test_calculate_amount_standard_printed_with_delivery(app_context):
         "requester_country": "United Kingdom",
     }
     amount = calculate_amount_based_on_form_data(form_data)
-    assert amount == 5166
+    assert amount == 5511
 
 
 def test_calculate_amount_full_printed(app_context):
