@@ -21,6 +21,7 @@ class WereTheyACommissionedOfficer(FlaskForm):
             )
         ],
         widget=TnaRadiosWidget(),
+        render_kw={"label": ""},
     )
 
     submit = SubmitField("Continue", widget=TnaSubmitWidget())

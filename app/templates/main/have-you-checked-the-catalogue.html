@@ -17,7 +17,7 @@
         <h1 class="tna-heading-xl">{{ content.pages.have_you_checked_the_catalogue.heading }}</h1>
         <p>{{ content.pages.have_you_checked_the_catalogue.paragraph }}</p>
 
-        <form action="{{ url_for('main.have_you_checked_the_catalogue') }}" class="hide-legend" method="post" novalidate>
+        <form action="{{ url_for('main.have_you_checked_the_catalogue') }}" method="post" novalidate>
           {{ form.csrf_token }}
           {{ form.have_you_checked_the_catalogue() }}
           <div class="tna-button-group">

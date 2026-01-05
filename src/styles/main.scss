@@ -2,15 +2,8 @@
 @use "@nationalarchives/frontend/nationalarchives/tools/colour";
 @use "@nationalarchives/frontend/nationalarchives/tools/a11y";
 
-.hide-legend {
-  .tna-fieldset__heading,
-  .tna-form-item__label {
-    @include a11y.visually-hidden;
-  }
-}
-
 .form-separator {
-  border-block-end: 3px solid black;
+  @include colour.thick-keyline-dark(bottom);
 
   padding-bottom: 3rem;
 }

@@ -26,7 +26,7 @@ from app.lib.template_filters import parse_markdown_links
         # ExternalLinks key resolution
         (
             "Try [Ancestry](ANCESTRY_SEARCH) before continuing",
-            'Try <a href="https://www.ancestry.co.uk/search/" target="_blank" rel="noreferrer noopener">Ancestry</a> before continuing',
+            'Try <a href="https://www.ancestry.co.uk/search/categories/mil_draft/" target="_blank" rel="noreferrer noopener">Ancestry</a> before continuing',
         ),
         # Mixed external key and plain URL
         (
