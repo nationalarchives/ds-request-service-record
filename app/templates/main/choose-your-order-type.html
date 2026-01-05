@@ -81,8 +81,7 @@
             </td>
           </tr>
         </table>
-        <form action="{{ url_for('main.choose_your_order_type') }}" method="post" novalidate
-              class="form-separator">
+        <form action="{{ url_for('main.choose_your_order_type') }}" method="post" novalidate>
           {{ form.csrf_token(id='full-check-option') }}
           {{ form.processing_option(value='full', id='processing_option_full_record_check') }}
           <div class="tna-button-group">
