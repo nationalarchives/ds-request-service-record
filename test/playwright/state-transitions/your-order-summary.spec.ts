@@ -50,9 +50,6 @@ test.describe("Routes to 'Your order summary'", () => {
         new RegExp(description),
       );
       await expect(page.locator("#price")).toHaveText(new RegExp(price));
-      await expect(page.locator("#price")).toHaveText(
-        /plus £1.89 per page copying fee/,
-      );
       await clickBackLink(page, Paths.WHAT_IS_YOUR_ADDRESS);
     });
 

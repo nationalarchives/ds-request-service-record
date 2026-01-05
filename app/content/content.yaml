@@ -41,7 +41,7 @@ pages:
         - option: Standard
           fee: £42.25
         - option: Full sensitivity check
-          fee: £48.87 plus £1.89 per page copying fee
+          fee: £48.87 plus £1.04 per page copying fee
     delivery_method: |
       Records are delivered digitally via email. However, you can request a physical copy by post for an additional cost.
   how_we_process_requests:
@@ -346,7 +346,7 @@ pages:
           payments_paragraph: "There are two payments:"
           list_items:
             - An initial £48.87, which covers the record search and a check of the pages
-            - Plus, £1.89 per page found, for example 20 pages will cost £37.80
+            - Plus, £1.04 per page found, for example 20 pages will cost £20.80
         delivery_header: When you will get the record
         delivery_data: Unknown, we aim to confirm if we hold the record within 30 days.
         refunds_header: Refunds
@@ -358,6 +358,9 @@ pages:
     format_term: Format
     format_description_printed: Printed only (Received by tracked post)
     format_description_digital: Digital only (Received by email)
+    per_page_copying_fee:
+      full_record_check_printed: plus £1.89 per page copying fee
+      full_record_check_digital: plus £1.04 per page copying fee
     processing_option_description_standard: Standard
     processing_option_description_full: Full record check
     change_order_type: Change order
