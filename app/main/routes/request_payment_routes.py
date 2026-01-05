@@ -11,6 +11,7 @@ from app.lib.db.db_handler import (
     hash_check,
     transform_form_data_to_record,
 )
+from app.lib.db.models import ServiceRecordRequest
 from app.lib.decorators.state_machine_decorator import with_state_machine
 from app.lib.gov_uk_pay import (
     FAILED_PAYMENT_STATUSES,
@@ -100,7 +101,10 @@ def _create_new_payment(form_data: dict, record_hash: str) -> str:
     if not payment_url or not payment_id:
         raise ValueError("Invalid payment response from GOV.UK Pay")
 
-    _store_payment_record(form_data, record_hash, unique_id, payment_id)
+    record = _store_payment_record(form_data, record_hash, unique_id, payment_id)
+
+    if not record:
+        return url_for("main.payment_link_creation_failed")
 
     return payment_url
 
@@ -120,7 +124,7 @@ def _generate_reference() -> str:
 
 def _store_payment_record(
     form_data: dict, record_hash: str, unique_id: str, payment_id: str
-):
+) -> ServiceRecordRequest | None:
     """Store payment record in database with transaction safety."""
 
     data = {
@@ -139,6 +143,8 @@ def _store_payment_record(
     current_app.logger.info(
         f"Created payment record: {unique_id} with payment ID: {payment_id}"
     )
+
+    return record
 
 
 def _handle_existing_payment(existing_record):
