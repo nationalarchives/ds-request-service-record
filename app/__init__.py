@@ -11,6 +11,7 @@ from app.lib.template_filters import (
     parse_last_birth_year_for_open_records,
     parse_markdown_links,
     slugify,
+    format_delivery_price,
 )
 from flask import Flask
 from flask_session import Session
@@ -115,6 +116,7 @@ def create_app(config_class):
     app.add_template_filter(parse_markdown_links)
     app.add_template_filter(parse_bold_text)
     app.add_template_filter(parse_last_birth_year_for_open_records)
+    app.add_template_filter(format_delivery_price)
 
     @app.context_processor
     def context_processor():

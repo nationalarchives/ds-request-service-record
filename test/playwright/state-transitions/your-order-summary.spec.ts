@@ -16,7 +16,8 @@ test.describe("Routes to 'Your order summary'", () => {
   const providedByPostTests = [
     {
       buttonText: "standard",
-      price: "£55.11",
+      orderTypePrice: "£47.16",
+      deliveryFee: "£7.95",
       description: "Standard",
       personMakingRequest: {
         firstName: "Francis",
@@ -25,7 +26,7 @@ test.describe("Routes to 'Your order summary'", () => {
     },
     {
       buttonText: "full",
-      price: "£48.87",
+      orderTypePrice: "£48.87",
       description: "Full record check",
       personMakingRequest: {
         firstName: "Francis",
@@ -36,7 +37,8 @@ test.describe("Routes to 'Your order summary'", () => {
 
   for (const {
     buttonText,
-    price,
+    orderTypePrice,
+    deliveryFee,
     description,
     personMakingRequest,
   } of providedByPostTests) {
@@ -49,7 +51,14 @@ test.describe("Routes to 'Your order summary'", () => {
       await expect(page.locator("#processing-option")).toHaveText(
         new RegExp(description),
       );
-      await expect(page.locator("#price")).toHaveText(new RegExp(price));
+      await expect(page.locator("[data-price]")).toHaveText(
+        new RegExp(orderTypePrice),
+      );
+      if (deliveryFee) {
+        await expect(page.locator("[data-delivery-price]")).toHaveText(
+          new RegExp(deliveryFee),
+        );
+      }
       await clickBackLink(page, Paths.WHAT_IS_YOUR_ADDRESS);
     });
 
@@ -67,7 +76,7 @@ test.describe("Routes to 'Your order summary'", () => {
   const providedByEmailTests = [
     {
       buttonText: "Choose standard",
-      price: "£42.25",
+      orderTypePrice: "£42.25",
       description: "Standard",
       personMakingRequest: {
         firstName: "Francis",
@@ -77,7 +86,7 @@ test.describe("Routes to 'Your order summary'", () => {
     },
     {
       buttonText: "Choose full record check",
-      price: "£48.87",
+      orderTypePrice: "£48.87",
       description: "Full record check",
       personMakingRequest: {
         firstName: "Francis",
@@ -89,7 +98,7 @@ test.describe("Routes to 'Your order summary'", () => {
 
   for (const {
     buttonText,
-    price,
+    orderTypePrice,
     description,
     personMakingRequest,
   } of providedByEmailTests) {
@@ -101,7 +110,9 @@ test.describe("Routes to 'Your order summary'", () => {
       await expect(page.locator("#processing-option")).toHaveText(
         new RegExp(description),
       );
-      await expect(page.locator("#price")).toHaveText(new RegExp(price));
+      await expect(page.locator("[data-price]")).toHaveText(
+        new RegExp(orderTypePrice),
+      );
       await clickBackLink(page, Paths.YOUR_CONTACT_DETAILS);
     });
 

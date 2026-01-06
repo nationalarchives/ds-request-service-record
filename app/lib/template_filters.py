@@ -55,3 +55,11 @@ def parse_last_birth_year_for_open_records(s):
         "[LATEST_BIRTH_YEAR_FOR_OPEN_RECORDS]",
         span,
     )
+
+
+def format_delivery_price(s, price):
+    if s is None:
+        return s
+    return s.replace(
+        "[DELIVERY_PRICE]", f"<span data-delivery-price='{price}'>£{price}</span>"
+    )

@@ -361,6 +361,7 @@ pages:
     per_page_copying_fee:
       full_record_check_printed: plus £1.89 per page copying fee
       full_record_check_digital: plus £1.04 per page copying fee
+    plus_postage_and_packaging: plus [DELIVERY_PRICE] for postage and packaging
     processing_option_description_standard: Standard
     processing_option_description_full: Full record check
     change_order_type: Change order
