@@ -86,7 +86,9 @@ test.describe("End-to-end journey", () => {
       await expect(page.locator("#processing-option")).toHaveText(
         new RegExp("Standard"),
       );
-      await expect(page.locator("#price")).toHaveText(new RegExp("£42.25"));
+      await expect(page.locator("[data-price]")).toHaveText(
+        new RegExp("£42.25"),
+      );
       // And now we go back up the journey to check all the back links work as expected
       await clickBackLink(page, Paths.YOUR_CONTACT_DETAILS);
       await clickBackLink(page, Paths.CHOOSE_YOUR_ORDER_TYPE);
