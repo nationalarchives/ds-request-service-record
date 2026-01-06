@@ -33,15 +33,22 @@ def calculate_delivery_fee(country: str) -> int:
     return round(float(response_data) * 100)  # Convert pounds to pence
 
 
-def calculate_amount_based_on_form_data(form_data: dict) -> int:
-    delivery_type = get_delivery_type(form_data)
-    processing_option = form_data.get("processing_option", "standard")
-    amount = 0
-
+def calculate_base_fee(processing_option: str, delivery_type: str) -> int:
     if processing_option not in OPTION_MAP:
         raise ValueError("Invalid processing option")
 
     amount = OPTION_MAP[processing_option].get(delivery_type)
+
+    if amount is None:
+        raise ValueError("Invalid delivery type")
+
+    return amount
+
+
+def calculate_amount_based_on_form_data(form_data: dict) -> int:
+    delivery_type = get_delivery_type(form_data)
+    processing_option = form_data.get("processing_option", "standard")
+    amount = calculate_base_fee(processing_option, delivery_type)
 
     if processing_option == "standard" and delivery_type == "PrintedTracked":
         if country := form_data.get("requester_country"):
@@ -50,7 +57,7 @@ def calculate_amount_based_on_form_data(form_data: dict) -> int:
             raise ValueError("Country is required for printed delivery")
 
     if amount is None:
-        raise ValueError("Invalid processing option")
+        raise ValueError("Could not calculate amount")
 
     return amount
 
@@ -62,7 +69,12 @@ def prepare_order_summary_data(form_data: dict) -> dict:
     order_summary_data = {
         "processing_option": processing_option,
         "delivery_type": delivery_type,
-        "amount_pence": calculate_amount_based_on_form_data(form_data),
+        "amount_pence": calculate_base_fee(processing_option, delivery_type),
+        "delivery_fee_pence": (
+            calculate_delivery_fee(form_data.get("requester_country"))
+            if processing_option == "standard" and delivery_type == "PrintedTracked"
+            else 0
+        ),
     }
 
     return order_summary_data

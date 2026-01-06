@@ -130,3 +130,4 @@ def test_prepare_order_summary_data(app_context):
     assert summary["processing_option"] == "standard"
     assert summary["delivery_type"] == "Digital"
     assert summary["amount_pence"] == 4225
+    assert summary["delivery_fee_pence"] == 0
