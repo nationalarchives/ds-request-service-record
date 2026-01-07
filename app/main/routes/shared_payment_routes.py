@@ -99,7 +99,7 @@ def payment_incomplete():
     return render_template("main/payment/payment-incomplete.html", content=content)
 
 
-@bp.route("/payment-link-creation_failed/")
+@bp.route("/payment-link-creation-failed/")
 def payment_link_creation_failed():
     content = load_content()
     return render_template(
