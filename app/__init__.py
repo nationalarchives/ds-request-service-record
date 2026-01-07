@@ -7,11 +7,11 @@ from app.lib.db.models import db
 from app.lib.requires_session_key import requires_session_key
 from app.lib.talisman import talisman
 from app.lib.template_filters import (
+    format_delivery_price,
     parse_bold_text,
     parse_last_birth_year_for_open_records,
     parse_markdown_links,
     slugify,
-    format_delivery_price,
 )
 from flask import Flask
 from flask_session import Session

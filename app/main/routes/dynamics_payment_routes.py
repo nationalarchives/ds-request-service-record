@@ -109,8 +109,10 @@ def _validate_and_convert_amount(
             )
 
         amount_in_pence = int(amount * 100)  # Convert to pence
-        if amount_in_pence <= 0:
+        if field_name == "net_amount" and amount_in_pence <= 0:
             return None, ({"error": f"{field_name} must be greater than zero"}, 400)
+        elif field_name == "delivery_amount" and amount_in_pence < 0:
+            return None, ({"error": f"{field_name} must be zero or greater"}, 400)
 
         return amount_in_pence, None
     except (ValueError, TypeError):
