@@ -26,6 +26,11 @@ def get_country_choices():
         if countries_data:
             country_names = [country["Description"] for country in countries_data]
             sorted_countries = sorted(country_names)
+
+            if "United Kingdom" in sorted_countries:
+                sorted_countries.remove("United Kingdom")
+                sorted_countries.insert(0, "United Kingdom")
+
             cache.set(CACHE_KEY, sorted_countries, timeout=CACHE_TIMEOUT)
             return sorted_countries
     except Exception:
