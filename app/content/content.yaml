@@ -40,7 +40,7 @@ pages:
       rows:
         - option: Standard
           fee: £42.25
-        - option: Full sensitivity check
+        - option: Full record check
           fee: £48.87 plus £1.04 per page copying fee
     delivery_method: |
       Records are delivered digitally via email. However, you can request a physical copy by post for an additional cost.
@@ -89,7 +89,7 @@ pages:
           - "You'll need to submit one of the following forms of evidence:"
       before_second_list:
         paragraphs:
-          - "Suitable forms of evidence include:"
+          - "The copy of proof of death must be:"
       first_list:
         - |
           [Copies of death certificates (opens in new tab)](COPIES_OF_DEATH_CERTIFICATES)
