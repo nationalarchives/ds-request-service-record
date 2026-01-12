@@ -524,6 +524,7 @@ def upload_a_proof_of_death(form, state_machine):
 
     if form.validate_on_submit():
         state_machine.continue_from_upload_a_proof_of_death_form(form)
+        save_submitted_form_fields_to_session(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/upload-a-proof-of-death.html",
