@@ -11,7 +11,7 @@ def wiremock_url():
     Uses the Docker Compose service when running in CI/test environment,
     or can be overridden with WIREMOCK_URL environment variable.
     """
-    return os.environ.get("WIREMOCK_URL", "http://localhost:65519/")
+    return os.environ.get("WIREMOCK_URL", "http://localhost:65498/")
 
 
 class WireMockServer:

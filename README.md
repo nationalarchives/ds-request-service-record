@@ -35,7 +35,7 @@ docker compose exec app format
 
 For local development, you can use a mock server instead of connecting to external APIs.
 
-The server will run on `http://localhost:65519` and is visible to your app on `http://mock-record-copying-service-api:8080/`. Set this in your `.env`:
+The server will run on `http://localhost:65498` and is visible to your app on `http://mock-record-copying-service-api:8080/`. Set this in your `.env`:
 
 ```
 RECORD_COPYING_SERVICE_API_URL=http://mock-record-copying-service-api:8080/

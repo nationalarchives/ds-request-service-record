@@ -53,7 +53,7 @@ services:
     volumes:
       - ./wiremock:/home/wiremock
     ports:
-      - 65519:8080
+      - 65498:8080
 
   docs:
     image: squidfunk/mkdocs-material
