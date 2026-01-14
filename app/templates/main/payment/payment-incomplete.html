@@ -10,6 +10,10 @@
         {% for paragraph in content.pages.payment_incomplete.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
+        
+        <form method="get" action="{{ back_url }}">
+          <button type="submit" class="tna-button">Return to payment</button>
+        </form>
       </div>
     </div>
   </div>
