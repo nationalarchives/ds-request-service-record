@@ -75,7 +75,18 @@ def handle_gov_uk_pay_response(payment_type, id):
         return "Some sort of error"  # TODO: We need to make a proper error page for this to show we couldn't connect to GOV.UK Pay API - maybe provide the GOV.UK Pay ID and to contact webmaster?
 
     if not client.is_payment_successful():
-        return redirect(url_for("main.payment_incomplete"))
+        if payment_type == "dynamics":
+            return redirect(
+                url_for(
+                    "main.payment_incomplete",
+                    payment_type=payment_type,
+                    id=payment.dynamics_payment_id,
+                )
+            )
+        else:
+            return redirect(
+                url_for("main.payment_incomplete", payment_type=payment_type)
+            )
 
     if payment_type == "dynamics":
         _process_dynamics_payment(payment, client, payment.gov_uk_payment_id)
@@ -93,10 +104,20 @@ def confirm_payment_received():
     )
 
 
-@bp.route("/payment-incomplete/")
-def payment_incomplete():
+@bp.route("/payment-incomplete/<payment_type>/")
+@bp.route("/payment-incomplete/<payment_type>/<id>/")
+def payment_incomplete(payment_type, id=None):
     content = load_content()
-    return render_template("main/payment/payment-incomplete.html", content=content)
+
+    # Determine the back URL based on payment type
+    if payment_type == "service_record":
+        back_url = url_for("main.your_order_summary")
+    else:  # dynamics
+        back_url = url_for("main.make_payment", id=id)
+
+    return render_template(
+        "main/payment/payment-incomplete.html", content=content, back_url=back_url
+    )
 
 
 @bp.route("/payment-link-creation-failed/")
