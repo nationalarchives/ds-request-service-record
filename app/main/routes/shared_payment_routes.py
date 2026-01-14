@@ -109,11 +109,14 @@ def confirm_payment_received():
 def payment_incomplete(payment_type, id=None):
     content = load_content()
 
-    # Determine the back URL based on payment type
     if payment_type == "service_record":
         back_url = url_for("main.your_order_summary")
-    else:  # dynamics
+    elif payment_type == "dynamics" and id is not None:
         back_url = url_for("main.make_payment", id=id)
+    else:
+        back_url = url_for(
+            "main.start"
+        )  # How do we want to handle anyone coming here incorrectly?
 
     return render_template(
         "main/payment/payment-incomplete.html", content=content, back_url=back_url
