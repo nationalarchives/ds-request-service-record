@@ -13,7 +13,7 @@ from app.lib.db.db_handler import (
     delete_dynamics_payment,
     get_dynamics_payment,
 )
-from app.lib.db.models import db
+from app.lib.db.models import DynamicsPayment, db
 from app.lib.gov_uk_pay import (
     create_payment,
 )
@@ -169,6 +169,18 @@ def create_payment_endpoint():
         "delivery_amount": data.get("delivery_amount", 0),
         "details": data.get("details", ""),
     }
+
+    # Check if payment with this reference already exists
+    existing_payment = (
+        db.session.query(DynamicsPayment)
+        .filter_by(reference=data["reference"])
+        .first()
+    )
+
+    if existing_payment:
+        return {
+            "error": f"A payment request for this reference ({data['reference']}) already exists"
+        }, 500
 
     payment = add_dynamics_payment(data)
 
