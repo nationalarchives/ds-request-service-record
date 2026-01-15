@@ -42,6 +42,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
   adminer:
     image: adminer
@@ -69,3 +71,4 @@ services:
 
 volumes:
   redis:
+  pgdata:
