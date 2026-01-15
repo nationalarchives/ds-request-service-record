@@ -29,6 +29,8 @@ def test_payment_creation_endpoint(mock_add_payment, mock_send_email, mock_db, c
     # Mock the payment creation to avoid real DB usage
     mock_add_payment.return_value = DummyPayment()
     mock_db.session.commit.return_value = None
+    # Mock the query to check for existing payment - should return None for new payment
+    mock_db.session.query.return_value.filter_by.return_value.first.return_value = None
     mock_send_email.return_value = True
 
     rv = client.post(
@@ -37,14 +39,14 @@ def test_payment_creation_endpoint(mock_add_payment, mock_send_email, mock_db, c
             "case_number": "CAS123",
             "net_amount": 75.00,
             "delivery_amount": 36.66,
-            "reference": "PAY-0125-33-123/4325",
+            "reference": "PAY-0125-33-123",
             "payee_email": "john.doe@gmail.com",
             "first_name": "John",
             "last_name": "Doe",
             "details": "Order of 100x A4 pages",
         },
     )
-
+    print(rv.data)
     assert rv.status_code == 201
     data = rv.get_json()
     assert "message" in data
@@ -55,7 +57,7 @@ def test_payment_creation_endpoint(mock_add_payment, mock_send_email, mock_db, c
 def test_make_payment_page_renders(mock_get_payment, client):
     dummy = DummyPayment()
     dummy.case_number = "CAS123"
-    dummy.reference = "PAY-0125-33-123/4325"
+    dummy.reference = "PAY-0125-33-12345"
     dummy.net_amount = 7500
     dummy.delivery_amount = 3665
     dummy.total_amount = 11165
