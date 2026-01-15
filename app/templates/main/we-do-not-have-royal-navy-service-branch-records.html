@@ -14,7 +14,7 @@
         <h1
           class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.we_do_not_have_royal_navy_service_records.heading }}</h1>
         {% for paragraph in content.pages.we_do_not_have_royal_navy_service_records.paragraphs %}
-          <p>{{ paragraph | safe }}</p>
+          <p>{{ paragraph }}</p>
         {% endfor %}
         <form action="{{ url_for('main.we_do_not_have_royal_navy_service_records') }}" method="post" novalidate>
           {{ form.csrf_token }}

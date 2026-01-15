@@ -7,40 +7,43 @@
 {% endblock beforeContent %}
 
 {% block content %}
-  <div class="tna-section tna-!--padding-top-s">
-    <div class="tna-container">
-      <div
-        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
-        {% if form.errors %}
-          {{ tnaErrorSummary(wtforms_errors(form)) }}
-        {% endif %}
-        <h1 class="tna-heading-xl tna-!--margin-top-l">{{ content.pages.were_they_a_commissioned_officer.heading }}</h1>
-        {% for paragraph in content.pages.were_they_a_commissioned_officer.paragraphs %}
-          <p>{{ paragraph }}</p>
-        {% endfor %}
+<div class="tna-section tna-!--padding-top-s">
+  <div class="tna-container">
+    <div
+      class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+      {% if form.errors %}
+        {{ tnaErrorSummary(wtforms_errors(form)) }}
+      {% endif %}
+      <h1 class="tna-heading-xl tna-!--margin-top-l">{{ content.pages.were_they_a_commissioned_officer.heading }}</h1>
+      {% for paragraph in content.pages.were_they_a_commissioned_officer.paragraphs %}
+        <p>{{ paragraph }}</p>
+      {% endfor %}
 
-        {% set ranks_list %}
+      {% set ranks_list %}
+      {% for branch in content.pages.were_they_a_commissioned_officer.branches %}
+        <p>{{ branch.intro_text }}</p>
         <ul class="tna-ul">
-          {% for rank in content.pages.were_they_a_commissioned_officer.ranks %}
+          {% for rank in branch.ranks %}
             <li>{{ rank }}</li>
           {% endfor %}
         </ul>
-        {% endset %}
+      {% endfor %}
+      {% endset %}
 
-        {{ tnaDetails({
+      {{ tnaDetails({
           "title": content.pages.were_they_a_commissioned_officer.summary,
           "body": ranks_list | safe
         }) }}
 
-        <form action="{{ url_for('main.were_they_a_commissioned_officer') }}" method="post" novalidate>
-          {{ form.csrf_token }}
-          {{ form.service_branch() }}
-          {{ form.were_they_a_commissioned_officer() }}
-          <div class="tna-button-group">
-            {{ form.submit(params={'classes':'tna-button--accent'}) }}
-          </div>
-        </form>
-      </div>
+      <form action="{{ url_for('main.were_they_a_commissioned_officer') }}" method="post" novalidate>
+        {{ form.csrf_token }}
+        {{ form.service_branch() }}
+        {{ form.were_they_a_commissioned_officer() }}
+        <div class="tna-button-group">
+          {{ form.submit(params={'classes':'tna-button--accent'}) }}
+        </div>
+      </form>
     </div>
   </div>
+</div>
 {% endblock content %}

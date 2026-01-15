@@ -1,36 +1,28 @@
 {% extends "base.html" %}
-
 {%- set pageTitle = content.app.title -%}
-
 {% block beforeContent %}
-  {{ backLink(url_for('main.your_contact_details')) }}
+    {{ backLink(url_for('main.your_contact_details') ) }}
 {% endblock beforeContent %}
-
 {% block content %}
-  <div class="tna-section tna-!--padding-top-s">
-    <div class="tna-container">
-      <div
-        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
-        <h1 class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.what_is_your_address.heading }}</h1>
-        {% if form.errors %}
-          {{ tnaErrorSummary(wtforms_errors(form)) }}
-        {% endif %}
-        {% for paragraph in content.pages.what_is_your_address.paragraphs %}
-          <p>{{ paragraph }}</p>
-        {% endfor %}
-        <form action="{{ url_for('main.what_is_your_address') }}" method="post" novalidate>
-          {{ form.csrf_token }}
-          {{ form.requester_address1(params={'headingLevel':2, 'size':'m', 'autocomplete':'address-line1'}) }}
-          {{ form.requester_address2(params={'headingLevel':2, 'size':'m', 'autocomplete':'address-line2'}) }}
-          {{ form.requester_town_city(params={'headingLevel':2, 'size':'m', 'autocomplete':'address-level1'}) }}
-          {{ form.requester_county(params={'headingLevel':2, 'size':'m'}) }}
-          {{ form.requester_postcode(params={'headingLevel':2, 'size':'m', 'autocomplete':'postal-code'}) }}
-          {{ form.requester_country(params={'headingLevel':2, 'size':'m', 'autocomplete':'country'}) }}
-          <div class="tna-button-group">
-            {{ form.submit(params={'classes':'tna-button--accent'}) }}
-          </div>
-        </form>
-      </div>
+    <div class="tna-section tna-!--padding-top-s">
+        <div class="tna-container">
+            <div class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+                <h1 class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.what_is_your_address.heading }}</h1>
+                {% if form.errors %}{{ tnaErrorSummary(wtforms_errors(form) ) }}{% endif %}
+                {% for paragraph in content.pages.what_is_your_address.paragraphs %}<p>{{ paragraph }}</p>{% endfor %}
+                <form action="{{ url_for("main.what_is_your_address") }}"
+                      method="post"
+                      novalidate>
+                    {{ form.csrf_token }}
+                    {{ form.requester_address1(params={'headingLevel':2, 'size':'m', 'autocomplete':'address-line1'}) }}
+                    {{ form.requester_address2(params={'headingLevel':2, 'size':'m', 'autocomplete':'address-line2'}) }}
+                    {{ form.requester_town_city(params={'headingLevel':2, 'size':'m', 'autocomplete':'address-level1'}) }}
+                    {{ form.requester_county(params={'headingLevel':2, 'size':'m'}) }}
+                    {{ form.requester_postcode(params={'headingLevel':2, 'size':'m', 'autocomplete':'postal-code'}) }}
+                    {{ form.requester_country(params={'headingLevel':2, 'size':'m', 'autocomplete':'country'}) }}
+                    <div class="tna-button-group">{{ form.submit(params={'classes':'tna-button--accent'}) }}</div>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 {% endblock content %}

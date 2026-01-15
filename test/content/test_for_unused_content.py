@@ -13,6 +13,7 @@ class TestForUnusedContent(unittest.TestCase):
         re.compile(r"\.table_rows"),
         re.compile(r"\.fields"),
         re.compile(r"\.options"),
+        re.compile(r"\.branches"),
     ]
 
     @classmethod

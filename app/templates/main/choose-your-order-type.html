@@ -57,13 +57,10 @@
             <th
               class="tna-table__header">{{ content.pages.choose_your_order_type.full_record_check.table.costs_header }}</th>
             <td class="tna-table__cell">
-              <p
-                class="tna-!--margin-bottom-s">{{ content.pages.choose_your_order_type.full_record_check.table.costs_data.payments_paragraph }}</p>
-              <ul class="tna-ul--no-list-style tna-ul--spaced">
-                {% for item in content.pages.choose_your_order_type.full_record_check.table.costs_data.list_items %}
-                  <li>{{ item }}</li>
-                {% endfor %}
-              </ul>
+              {% for paragraph in content.pages.choose_your_order_type.full_record_check.table.costs_data.paragraphs %}
+                <p
+                  class="tna-!--margin-bottom-s">{{ paragraph }}</p>
+              {% endfor %}
             </td>
           </tr>
           <tr class="tna-table__row">

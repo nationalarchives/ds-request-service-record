@@ -46,6 +46,7 @@
             <span>{{ content.pages.how_we_process_requests.steps.sent_to_you }}</span>
           </li>
         </ol>
+        <p>{{ content.pages.how_we_process_requests.foi_information | parse_markdown_links | safe }}</p>
         <form action="{{ url_for('main.how_we_process_requests') }}" method="post" novalidate>
           {{ form.csrf_token }}
           <div class="tna-button-group">

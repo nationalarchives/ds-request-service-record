@@ -28,9 +28,6 @@
             <li>{{ item }}</li>
           {% endfor %}
         </ul>
-        {% for paragraph in content.pages.before_you_start.mandatory_information.after_list.paragraphs %}
-          <p>{{ paragraph }}</p>
-        {% endfor %}
         <h2 class="tna-heading-m">{{ content.pages.before_you_start.proof_of_death_requirement.heading }}</h2>
         {% for paragraph in content.pages.before_you_start.proof_of_death_requirement.before_first_list.paragraphs %}
           <p>{{ paragraph | parse_last_birth_year_for_open_records | safe }}</p>

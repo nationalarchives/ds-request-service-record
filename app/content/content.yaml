@@ -6,9 +6,9 @@ pages:
     contents:
       paragraphs:
         - |
-          Use this service to make a request to the National Archives to search for a 
+          Use this service to make a request to The National Archives to search for a 
           military service record for someone who served in the British Armed Forces 
-          after 1918 and was born before 1940.
+          after 1918 and who was born before 1940.
         - These records predominantly cover the period of the Second World War.
     ways_to_request_a_record:
       heading: Ways to request a record
@@ -18,20 +18,23 @@ pages:
           paragraphs:
             - For most applicants a standard request will provide the information they are looking for.
             - |
-              Standard provides a subset of documents in the record. It will include information that 
-              would be of most interest to the families of service person, such as details provided 
-              when they enlisted, records of service and testimonials.
+              Standard provides a subset of documents from the record. This may include details
+              provided when they enlisted, records of service and testimonials.
+            - Standard is not available for Commissioned Officer record requests.
         - title: Full record check
           paragraphs:
             - |
               Documents not provided in our standard subset will, in most cases, contain sensitive 
-              information and will be closed by default. However, we can complete a sensitivity 
+              information and will be closed to the public. However, we can complete a sensitivity 
               check of the record to assess what can be released. In some cases, we will not be able 
-              to supply the record at all, or large parts of it will be redacted.
+              to supply the record, or large parts of it will be redacted.
     fees:
       heading: Fees
       paragraphs:
-        - We charge a fee to recover the administrative costs of answering your request.
+        - |
+          We charge a fee to recover costs of providing the service. The 
+          [prices we charge (opens in new tab)](OUR_FEES) are set out by 
+          the Fees Regulations under the Public Records Act (1958).
         - The fee will depend on the service you select. You can pay with a debit or credit card.
     table:
       headers:
@@ -41,43 +44,45 @@ pages:
         - option: Standard
           fee: £42.25
         - option: Full record check
-          fee: £48.87 plus £1.04 per page copying fee
+          fee: £48.87 plus £1.04 per page copying fee. For example, 20 pages will cost an additional £20.80.
     delivery_method: |
-      Records are delivered digitally via email. However, you can request a physical copy by post for an additional cost.
+      Records are delivered as PDF colour scans digitally via email. We can post the record instead for an 
+      extra fee, but it will take longer to handle.
   how_we_process_requests:
     heading: How we process requests
     paragraphs:
       - |
-        We are currently in the process of receiving ten million paper records over a five-year period 
-        from the Ministry of Defence. The information you provide allows our advisors to check if we 
-        have received the paper record, and if we do have it, find the record in our repositories and 
-        scan it for you.
+        We are currently in the process of receiving 10 million paper records over a five-year period 
+        from the Ministry of Defence, due to be completed in 2027. The information you provide allows 
+        our advisors to check if we have received the paper record, and if we do have it, find the 
+        record in our collection and scan it for you.
     sub_heading: "Once you have submitted your request:"
     steps:
       advisor_check: An advisor will check our systems for a matching service record
-      box_retrieved: If there is a match, the box with the record will be received
-      transported_to_us: If offsite, this box will be transported by van to us
+      box_retrieved: If there is a match, the box with the record will be retrieved
+      transported_to_us: If offsite, this box will be transported to us
       scanned: Upon arrival the record will be scanned
       sensitivity_review: The scanned file will be sensitivity reviewed and redacted by a case officer
       sent_to_you: The reviewed record will be emailed to you
+    foi_information: |
+      By completing this form you are requesting information from a UK public authority, The National Archives. We are 
+      therefore required to treat it as a Freedom of Information (FOI) request. [You can find out more about FOI on 
+      GOV.UK (opens in new tab)](FOI_REQUEST_GUIDANCE).
   before_you_start:
     heading: Before you start
     paragraphs:
       - |
         To help our staff search for the record, you will need to provide 
-        information on the individual you are looking for.
+        information on the person you are looking for.
     mandatory_information:
-      heading: Mandatory information that you will need
+      heading: Mandatory information
       before_list:
         paragraphs:
           - "You will need to provide:"
       list_items:
-        - The service person's first name and surname
+        - The service person's forenames and last names
         - Their full date of birth
         - Your contact details so we can answer your request
-      after_list:
-        paragraphs:
-          - If the information above is not provided, we will be unable to process your request.
     proof_of_death_requirement:
       heading: Proof of death
       before_first_list:
@@ -86,20 +91,22 @@ pages:
             If the person whose record you are looking for was born after [LATEST_BIRTH_YEAR_FOR_OPEN_RECORDS] 
             and is deceased, we require a digital copy of a proof of death. This is to protect 
             any personal data in the record that might relate to a living person.
-          - "You'll need to submit one of the following forms of evidence:"
+          - "You will need to submit one of the following forms of evidence:"
       before_second_list:
         paragraphs:
           - "The copy of proof of death must be:"
       first_list:
         - |
-          [Copies of death certificates (opens in new tab)](COPIES_OF_DEATH_CERTIFICATES)
-        - Published obituaries (detailing publication source, name of deceased, and date of birth and death)
+          [A copy of a death certificate (opens in new tab)](COPIES_OF_DEATH_CERTIFICATES)
+        - A published obituary (detailing publication source, name of deceased, and date of birth and death)
         - |
-          [Commonwealth War Graves’ (CWG) war dead records (opens in new tab)](CWGC_WAR_DEAD_RECORDS)
+          [A Commonwealth War Graves Commission (CWGC) war dead record (opens in new tab)](CWGC_WAR_DEAD_RECORDS)
+        - |
+          [Grant of probate (opens in new tab)](PROBATE_SEARCH)
       second_list:
         - In a JPG, GIF or PNG format
         - No more than 5MB in size
-        - Clearly show all the information so our staff can read it
+        - Clearly showing all the information so our staff can read it
       after_second_list:
         paragraph: |
           If you do not submit a proof of death when required, it is 
@@ -110,15 +117,14 @@ pages:
         - "To help us further, we also ask that you provide:"
       list_items:
         - The service person's service number
-        - The military branch that they served in
-        - If they were a commissioned officer
-        - Anything else you might know about them that you think might help our search
-
+        - Military branch in which they served
+        - If they were a Commissioned Officer
+        - Anything else you might know about them that you think could help our search
     about_the_online_form:
       heading: About the online form
       paragraphs:
         - |
-          The application cannot be saved part way through. 
+          The form cannot be saved part way through. 
           Please make sure you are ready to submit your request in one session.
         - |
           We will only use the data you provide to answer your request. 
@@ -128,9 +134,14 @@ pages:
     heading: You may want to check Ancestry
     paragraphs:
       - |
-        Our partner, Ancestry, hold a portion of digitised records and your record may 
-        be available to order from them. Please visit their site and check for the 
-        record before proceeding.
+        We are working with the genealogy company Ancestry to digitise elements of the first three million Ministry 
+        of Defence service records that have been transferred to us. This is a cost-effective way to help provide 
+        greater and faster access to part of the collection.
+      - |
+        Before submitting a request to us, we recommend you check Ancestry first as some of the records are already 
+        available there. It is free to search for a record on their website. To view the digitised images, you will 
+        need an Ancestry subscription or can use their pay-per-view service. Alternatively, you can access Ancestry 
+        for free onsite at The National Archives.
       - |
         [Search Ancestry (opens in new tab)](ANCESTRY_SEARCH)
       - If you have already checked, or do not wish to check Ancestry, please continue your request.
@@ -145,29 +156,39 @@ pages:
       - No information has been submitted to us. To send a new request for a military service record, please start a new request form.
     start_new_request: Start a new request
   were_they_a_commissioned_officer:
-    heading: Were they a commissioned officer?
+    heading: Were they a Commissioned Officer?
     paragraphs:
       - |
-        Service records are often categorised as either 'Commissioned Officers' or 'Other Ranks'. 
-        Information on whether the service person was a Commissioned Officer will help confirm if 
-        the service record has been transferred to The National Archives or is still with the Ministry 
-        of Defence.
-    summary: What are the commissioned officer ranks?
-    ranks:
-      - Second Lieutenant
-      - Lieutenant
-      - Captain
-      - Major
-      - Lieutenant Colonel
-      - Colonel
-      - Brigadier
-      - Major General
-      - Lieutenant General
-      - General
-      - Field Marshal
+        Service records are often categorised as either Commissioned Officers or Other Ranks.
+        A Commissioned Officer is someone who holds a formal position to command a military unit.
+      - |
+        This information will tell us if the service record has been transferred to us or is still with the 
+        Ministry of Defence.
+    summary: What are the Commissioned Officer ranks?
+    branches:
+      - intro_text: "British Army Commissioned Officer ranks include:"
+        ranks:
+          - Second Lieutenant
+          - Lieutenant
+          - Captain
+          - Major
+          - Lieutenant Colonel
+          - Colonel
+          - Brigadier
+          - Major General
+          - Lieutenant General
+          - General
+          - Field Marshal
+      - intro_text: "Royal Air Force Commissioned Officer ranks include:"
+        ranks:
+          - Flying Officer
+          - Flight Lieutenant
+          - Squadron Leader
+          - Wing Commander
+          - Group Captain
   have_you_previously_made_a_request:
     heading: Have you previously made a request for this record?
-    prompt_to_provide_reference_number: If you selected yes, please provide the reference number for your previous request.
+    prompt_to_provide_reference_number: If you select yes, please provide the reference number for your previous request.
   must_submit_subject_access_request:
     heading: Submit a data access request
     paragraphs:
@@ -181,40 +202,35 @@ pages:
     paragraphs:
       - |
         The Royal Navy service personnel records will not be transferred to us until after April 
-        2026. Please use the <strong>Ministry of Defence service</strong> to request access to Royal Navy records.
+        2026. Please use the Ministry of Defence service to request access to Royal Navy records.
     call_to_action: Request from the Ministry of Defence
   we_are_unlikely_to_hold_officer_records__generic:
-    heading: We are unlikely to hold this record
+    heading: We are unlikely to hold this record yet
     paragraphs:
       - |
-        The majority of the service personnel records for Commissioned Officers have not yet been 
-        transferred to The National Archives. Please use the Ministry of Defence service to request 
-        access to the Officer records.
+        Commissioned Officer records are currently being transferred to us. We may not hold the record you are looking for yet.
+      - |
+        If you have not done so already, we recommend you check with the Ministry of Defence first.
     call_to_action: Request from the Ministry of Defence
   we_are_unlikely_to_hold_officer_records__raf:
-    heading: We are unlikely to hold this record
+    heading: We are unlikely to hold this record yet
     paragraphs:
       - |
-        The majority of the service personnel records for Commissioned Officers have not 
-        yet been transferred to The National Archives. Please use the Ministry of Defence 
-        service to request access to the Officer records.
+        Royal Air Force Commissioned Officer records are currently being transferred to us. We may not hold the record you are looking for yet.
       - |
-        The following records will be the only records for Officers transferred to us before 
-        April 2026. Please only proceed with you request if the record of interest features 
-        in the list.
-    list:
-      - Royal Air Force
+        If you have not done so already, we recommend you check with the Ministry of Defence first.
+      - |
+        We anticipate holding most Royal Air Force Commissioned Officer records by February 2027.
     call_to_action: Request from the Ministry of Defence
   we_are_unlikely_to_hold_officer_records__army:
-    heading: We are unlikely to hold this record
+    heading: We are unlikely to hold this record yet
     paragraphs:
       - |
-        The majority of the service personnel records for Commissioned Officers have not yet been 
-        transferred to The National Archives. Please use the Ministry of Defence service to request 
-        access to the Officer records.
+        British Army Commissioned Officer records are currently being transferred to us. We may not hold the record you are looking for yet.
       - |
-        The following records will be the only records for Officers transferred to us before April 2026. 
-        Please only proceed with you request if the record of interest features in the list.
+        We anticipate holding most Army Commissioned Officer records by December 2026.
+      - |
+        We recommend you check with the Ministry of Defence first, unless the record is contained in list the below:
     list:
       - Grenadier Guards
       - Welsh Guards
@@ -228,16 +244,16 @@ pages:
     heading: We are unlikely to be able to locate this record
     paragraphs:
       - |
-        Due to the high volume of Home Guard records, with over 4 million transferred 
+        Due to the high volume of Home Guard records, with over four million transferred 
         to The National Archives, and the storage method used for these records, it 
         is unlikely that we will be able to locate the record of interest within a 
         reasonable timeframe.
       - |
         Records relating to the Durham Home Guard are currently available in our catalogue.
       - |
-        The remaining Home Guard records will be made available via our partner, 
+        The remaining Home Guard records will be made available via the genealogy company
         Ancestry. We expect all Home Guard records that have been transferred will 
-        be available via Ancestry by September 2027.
+        be available on Ancestry by September 2027.
       - |
         Please only proceed if you are unable to wait until September 2027 by requesting 
         a paid search. You will then receive a quotation based on the estimated amount 
@@ -246,12 +262,7 @@ pages:
   we_may_hold_this_record:
     heading: We may hold this record
     paragraphs:
-      - Based on the information you’ve given, we may hold this record.
-      - |
-        By completing this form you are requesting information from a UK public authority, 
-        The National Archives. We are therefore required to treat it as a Freedom of 
-        Information (FOI) request. 
-        [You can find out more about FOI on GOV.UK (opens in new tab)](FOI_REQUEST_GUIDANCE).
+      - Based on the information you have given, we may hold this record.
   upload_a_proof_of_death:
     heading: Upload a proof of death
     paragraphs:
@@ -260,7 +271,7 @@ pages:
     list_items:
       - In a JPG, GIF or PNG format
       - No more than 5MB in size
-      - Clearly show all the information so our staff can read it
+      - Clearly showing all the information so our staff can read it
     if_unable_to_upload: If you are unable to upload your file, you can send it to us by replying directly to the email you will receive on completion of this form.
   service_person_details:
     heading: Tell us as much as you know about the service person
@@ -273,16 +284,20 @@ pages:
         As you are requesting a record for someone born after [LATEST_BIRTH_YEAR_FOR_OPEN_RECORDS], 
         you will need to provide a digital copy of a proof of death.
       - >
-        You'll need to submit one of the following forms of evidence:
+        You will need to submit one of the following forms of evidence:
     list_items:
-      - "[copies of death certificates (opens in new tab)](COPIES_OF_DEATH_CERTIFICATES)"
-      - published obituaries (detailing publication source, name of deceased, and date of birth and death)
-      - "[Commonwealth War Graves’ (CWG) war dead records (opens in new tab)](CWGC_WAR_DEAD_RECORDS)"
+      - |
+        [A copy of a death certificate (opens in new tab)](COPIES_OF_DEATH_CERTIFICATES)
+      - A published obituary (detailing publication source, name of deceased, and date of birth and death)
+      - |
+        [A Commonwealth War Graves Commission (CWGC) war dead record (opens in new tab)](CWGC_WAR_DEAD_RECORDS)
+      - |
+        [Grant of probate (opens in new tab)](PROBATE_SEARCH)
     copy_requirements: "The copy of proof of death must be:"
     copy_requirements_list:
       - In a JPG, GIF or PNG format
       - No more than 5MB in size
-      - Clearly show all the information so our staff can read it
+      - Clearly showing all the information so our staff can read it
     warning: If you do not submit a proof of death when required, it is unlikely that we will be able to provide the record.
   are_you_sure_you_want_to_proceed_without_proof_of_death:
     heading: Are you sure you want to proceed without a proof of death?
@@ -302,65 +317,65 @@ pages:
   what_is_your_address:
     heading: What is your address?
     paragraphs:
-      - You have not provided an email address. Please provide a postal address so we can contact you about your request.
+      - You have not provided an email address. Please provide a postal address so we can contact you about your request and, if we have the record, send it to you. There will be an extra fee for printed copies.
   choose_your_order_type:
     heading: Choose your order type
     paragraphs:
       - >
         There are two ways to request a record from us: **Standard**, or **Full record check**.
-      - For most applicants, Standard will provide the information they are looking for.
-      - We charge a fee for to recover the administrative costs. You’ll need a debit or credit card to pay.
       - |
-        We deliver records as high-resolution PDF colour scans by email with a download link. If you do not 
-        have an email address, we can post them to you for an extra fee, but postal requests will take longer to handle.
+        We will send you a digital colour scan of the record by email. 
+        You can request a printed copy by post for an extra cost.
     standard:
       heading: Standard
       sub_heading: (Recommended)
       paragraphs:
         - |
-          Standard provides a subset of documents in the record. It will include information that would be of most 
-          interest to the families of service person, such as details provided when they enlisted, 
-          records of service and testimonials.
-        - We charge a single fee for Standard, which covers all administrative costs and the delivery of the record.
+          For most applicants a standard request will provide the information they are looking for.
+        - |
+          Standard provides a subset of documents from the record. This may include details provided
+          when they enlisted, records of service and testimonials.
+        - |
+          Standard is not available for Commissioned Officer record requests.
+        - We charge a single fee for Standard of £42.25, which covers the search (£38.95) and record copying fees (£3.30).
       table_rows:
         - header: What it costs
           data: £42.25
         - header: When you will get the record
           data: Within 20 to 30 working days
         - header: Refunds
-          data: We will refund a £3.30 record copying fee if we do not hold the record. <br><br>No other refunds are available.
+          data: We will refund the record copying fee (£3.30) if we do not hold the record. <br><br>The search fee is not refundable.
     full_record_check:
       heading: Full record check
       paragraphs:
         - |
           Documents not provided in Standard will, in most cases, contain sensitive information and will be closed 
-          by default. However, we can complete a review of the record to assess what can be released.
-        - In some cases, we will not be able to supply the entire record at all, or large parts of it will be redacted.
+          to the public. However, we can complete a review of the record to assess what can be released.
+        - In some cases, we will not be able to supply the entire record, or large parts of it will be redacted.
         - |
           We charge two fees for a Full record check. The first covers the search for the record and a page check. 
-          If found, there is a second fee to copy the record, which is priced per page. 
-          We will quote you for the second payment via email.
+          We will then email you a quote for the second payment to copy the parts of the record that can be 
+          released.
       table:
         costs_header: What it costs
         costs_data:
-          payments_paragraph: "There are two payments:"
-          list_items:
-            - An initial £48.87, which covers the record search and a check of the pages
-            - Plus, £1.04 per page found, for example 20 pages will cost £20.80
+          paragraphs:
+            - An upfront payment of £48.87, which covers the search (£38.95) and the page check (£9.92).
+            - A second payment of £1.04 per page. For example, 20 pages will cost an additional £20.80.
         delivery_header: When you will get the record
-        delivery_data: Unknown, we aim to confirm if we hold the record within 30 days.
+        delivery_data: We aim to confirm if we hold the record within 30 working days. The record will be released once we have received the second payment.
         refunds_header: Refunds
-        refunds_data: We will refund a £9.92 page check fee if we do not hold the record. <br><br>No other refunds are available.
+        refunds_data: We will refund the page check fee (£9.92) if we do not hold the record. <br><br>The search fee is not refundable.
   your_order_summary:
     heading: Your order summary
     order_type_term: Order type
     price_term: Price
     format_term: Format
-    format_description_printed: Printed only (Received by tracked post)
-    format_description_digital: Digital only (Received by email)
+    format_description_printed: Printed colour copies of the record (received by tracked post)
+    format_description_digital: Digital colour scan of the record (received by email)
     per_page_copying_fee:
-      full_record_check_printed: plus £1.89 per page copying fee
-      full_record_check_digital: plus £1.04 per page copying fee
+      full_record_check_printed: Please note there will be a second payment to copy the record, priced £1.89 per printed page plus postage and packaging.
+      full_record_check_digital: Please note there will be a second payment to copy the record, priced £1.04 per page.
     plus_postage_and_packaging: plus [DELIVERY_PRICE] for postage and packaging
     processing_option_description_standard: Standard
     processing_option_description_full: Full record check
@@ -368,12 +383,14 @@ pages:
   request_submitted:
     heading: Request submitted
     paragraphs:
-      - Your request has been received and is being processed.
-      - Your reference number is [reference_number]
+      - We will send you a confirmation email, or a letter if you selected to be contacted by post.
     what_happens_next:
       heading: What happens next
       paragraphs:
-        - We will be in touch with more information about your request.
+        - We have sent your request to a member of our team. They will use the information provided to search for the record you are requesting.
+        - We will contact you with the result of the search, or to ask for more information, within 30 working days.
+        - Get in touch with us by replying to your confirmation email, or visit our Contact us page.
+        - What did you think of this form
 forms:
   fields:
     request_a_military_service_record:
@@ -383,9 +400,9 @@ forms:
     before_you_start:
       call_to_action: Start now
     ready_to_continue:
-      label: I confirm I have all the mandatory information
+      label: I confirm I can provide the mandatory information
       messages:
-        required: You must confirm you have the mandatory information before starting
+        required: You must confirm you can provide the mandatory information
     are_you_sure_you_want_to_cancel:
       call_to_action: "Yes"
     you_may_want_to_check_ancestry:
@@ -397,16 +414,16 @@ forms:
       messages:
         required: Tell us if the service person is alive
     were_they_a_commissioned_officer:
-      label: Were they a commissioned officer?
+      label: Were they a Commissioned Officer?
       messages:
-        required: Tell us if the service person was a commissioned officer
+        required: Tell us if the service person was a Commissioned Officer
       call_to_action: Continue
     we_may_hold_this_record:
       call_to_action: Continue
     forenames:
-      label: First name
+      label: Forenames
       messages:
-        required: Enter first name
+        required: Enter forenames
     last_name:
       label: Last name
       messages:
@@ -492,7 +509,7 @@ forms:
       description: I do not have an email address
     requester_email:
       label: Email
-      hint: Where we will contact you about your request
+      hint: Where we will contact you and send the record
       messages:
         required: Enter an email address in the correct format like name@example.com, or select 'I do not have an email address'
         address_format: Enter an email address in the correct format, like name@example.com
@@ -523,9 +540,9 @@ forms:
     choose_your_order_type:
       label: Please choose a format
       standard:
-        call_to_action: Choose standard
+        call_to_action: Choose Standard
       full_check:
-        call_to_action: Choose full record check
+        call_to_action: Choose Full record check
     we_are_unlikely_to_hold_this_record:
       call_to_action: Continue this request
     your_order_summary:

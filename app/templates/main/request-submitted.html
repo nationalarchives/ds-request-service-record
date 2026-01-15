@@ -2,12 +2,6 @@
 
 {%- set pageTitle = content.app.title -%}
 
-{% set reference_number_html = '<strong id="reference-number">' ~ reference_number ~ '</strong>' if reference_number else '' %}
-
-{%- set panel_body = '<p>' ~ (content.pages.request_submitted.paragraphs
-  | map('replace', '[reference_number]', reference_number_html)
-  | join('</p><p>')) ~ '</p>' -%}
-
 {% block content %}
   <div class="tna-section tna-!--padding-top-s">
     <div class="tna-container">
@@ -15,9 +9,12 @@
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny tna-!--padding-top-m">
         {{ tnaPanel({
           "title": content.pages.request_submitted.heading,
-          "body": panel_body,
+          "body": "",
           "headingLevel": 1
         }) }}
+        {% for paragraph in content.pages.request_submitted.paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
         <h2 class="tna-heading-m">{{ content.pages.request_submitted.what_happens_next.heading }}</h2>
         {% for paragraph in content.pages.request_submitted.what_happens_next.paragraphs %}
           <p>{{ paragraph }}</p>

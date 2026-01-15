@@ -28,7 +28,7 @@ export async function continueFromBeforeYouStart(
   if (confirmsMandatoryInformation) {
     await page
       .getByRole("checkbox", {
-        name: /I confirm I have all the mandatory information/i,
+        name: /I confirm I can provide the mandatory information/i,
       })
       .check();
   }
@@ -38,7 +38,7 @@ export async function continueFromBeforeYouStart(
   } else {
     await expect(page).toHaveURL(Paths.BEFORE_YOU_START);
     await expect(page.locator(".tna-error-summary__list")).toHaveText(
-      /You must confirm you have the mandatory information before starting/,
+      /You must confirm you can provide the mandatory information/,
     );
   }
 }
@@ -158,7 +158,7 @@ export async function continueFromWereTheyACommissionedOfficer(
 ) {
   await expect(page).toHaveURL(Paths.WERE_THEY_A_COMMISSIONED_OFFICER);
   await expect(page.locator("h1")).toHaveText(
-    /Were they a commissioned officer/,
+    /Were they a Commissioned Officer/,
   );
   if (answerLabel) {
     await page.getByRole("radio", { name: answerLabel, exact: true }).check();
@@ -172,7 +172,7 @@ export async function continueFromWereTheyACommissionedOfficer(
   } else {
     await page.getByRole("button", { name: /Continue/i }).click();
     await expect(page.locator(".tna-fieldset__error")).toHaveText(
-      /Tell us if the service person was a commissioned officer/,
+      /Tell us if the service person was a Commissioned Officer/,
     );
   }
 }
@@ -323,7 +323,7 @@ export async function continueFromServicePersonDetails(
     /Tell us as much as you know about the service person/,
   );
   if (firstName) {
-    await page.getByLabel("First name").fill(firstName);
+    await page.getByLabel("Forenames").fill(firstName);
   }
   if (lastName) {
     await page.getByLabel("Last name", { exact: true }).fill(lastName);
@@ -451,6 +451,6 @@ export async function clickContinueThisRequestForm(page, element) {
 }
 
 export async function clickBackLink(page, expectedPath) {
-  await page.getByRole("link", { name: "Back" }).click();
+  await page.getByRole("link", { name: "Back", exact: true }).click();
   await expect(page).toHaveURL(expectedPath);
 }
