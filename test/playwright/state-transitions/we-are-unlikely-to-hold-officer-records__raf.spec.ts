@@ -29,16 +29,6 @@ test.describe("The variant of 'We are unlikely to hold this record' for Army Off
     );
   });
 
-  test("presents the correct exceptions to the rule", async ({ page }) => {
-    const exceptions = [/Royal Air Force/];
-    const exceptionsList = page.locator("#exceptions-list");
-    await Promise.all(
-      exceptions.map((exception) =>
-        expect(exceptionsList).toContainText(exception),
-      ),
-    );
-  });
-
   test.describe("when interacted with", () => {
     test('clicking "Back" takes the user back to the "Were they a commissioned officer?" page', async ({
       page,

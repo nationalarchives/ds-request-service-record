@@ -68,7 +68,7 @@ class ServicePersonDetails(FlaskForm):
 
     died_in_service = RadioField(
         get_field_content(content, "died_in_service", "label"),
-        choices=[("yes", "Yes"), ("no", "No"), ("dont_know", "Don't know")],
+        choices=[("yes", "Yes"), ("no", "No"), ("dont_know", "I do not know")],
         validators=[],
         widget=TnaRadiosWidget(),
         validate_choice=False,

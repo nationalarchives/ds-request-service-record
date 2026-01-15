@@ -83,7 +83,10 @@ class ExternalLinks:
     CWGC_WAR_DEAD_RECORDS = "https://www.cwgc.org/find-records/find-war-dead/"
     PRIVACY_NOTICE = "https://www.nationalarchives.gov.uk/legal/privacy-policy/"
     ANCESTRY_SEARCH = "https://www.ancestry.co.uk/search/categories/mil_draft/"
+    PROBATE_SEARCH = "https://probatesearch.service.gov.uk/"
+    OUR_FEES = "https://www.nationalarchives.gov.uk/legal/our-fees/"
     FOI_REQUEST_GUIDANCE = "https://www.gov.uk/make-a-freedom-of-information-request"
+    USER_FEEDBACK_SURVEY = "https://www.smartsurvey.co.uk/s/46WXIN/"
 
 
 FALLBACK_COUNTRY_CHOICES = [

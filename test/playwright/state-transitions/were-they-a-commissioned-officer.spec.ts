@@ -140,7 +140,7 @@ test.describe("combinations of 'Which military branch' and 'Were they an officer
       await page.goto(Paths.WERE_THEY_A_COMMISSIONED_OFFICER);
       await page.getByRole("button", { name: /Continue/i }).click();
       await expect(page.locator(".tna-fieldset__error")).toHaveText(
-        /Tell us if the service person was a commissioned officer/,
+        /Tell us if the service person was a Commissioned Officer/,
       );
     });
   });

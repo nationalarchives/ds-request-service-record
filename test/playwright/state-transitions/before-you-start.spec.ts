@@ -40,16 +40,24 @@ test.describe("the 'Before you start' form", () => {
     test("the 'Copies of death certificates' link", async ({ page }) => {
       await checkExternalLink(
         page,
-        "Copies of death certificates (opens in new tab)",
+        "A copy of a death certificate (opens in new tab)",
         "https://www.gov.uk/order-copy-birth-death-marriage-certificate",
       );
     });
 
-    test("the 'Commonwealth War Graves’' link", async ({ page }) => {
+    test("the 'Commonwealth War Graves' link", async ({ page }) => {
       await checkExternalLink(
         page,
-        "Commonwealth War Graves’ (CWG) war dead records (opens in new tab)",
+        "A Commonwealth War Graves Commission (CWGC) war dead record (opens in new tab)",
         "https://www.cwgc.org/find-records/find-war-dead/",
+      );
+    });
+
+    test("the 'Grant of probate' link", async ({ page }) => {
+      await checkExternalLink(
+        page,
+        "Grant of probate (opens in new tab)",
+        "https://probatesearch.service.gov.uk/",
       );
     });
 

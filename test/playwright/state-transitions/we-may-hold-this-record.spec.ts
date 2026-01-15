@@ -16,14 +16,6 @@ test.describe("the 'We may hold this record' form", () => {
     await continueFromWeMayHoldThisRecord(page);
   });
 
-  test("the FOI link is configured correctly", async ({ page }) => {
-    await checkExternalLink(
-      page,
-      "You can find out more about FOI on GOV.UK (opens in new tab)",
-      "https://www.gov.uk/make-a-freedom-of-information-request",
-    );
-  });
-
   test.describe("when interacted with", () => {
     test("clicking 'Back' takes the user to 'Were they a commissioned officer?' page", async ({
       page,
