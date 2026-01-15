@@ -172,9 +172,7 @@ def create_payment_endpoint():
 
     # Check if payment with this reference already exists
     existing_payment = (
-        db.session.query(DynamicsPayment)
-        .filter_by(reference=data["reference"])
-        .first()
+        db.session.query(DynamicsPayment).filter_by(reference=data["reference"]).first()
     )
 
     if existing_payment:
