@@ -17,7 +17,7 @@
         {% endfor %}
         <h2 class="tna-heading-m">{{ content.pages.request_submitted.what_happens_next.heading }}</h2>
         {% for paragraph in content.pages.request_submitted.what_happens_next.paragraphs %}
-          <p>{{ paragraph }}</p>
+          <p>{{ paragraph | parse_markdown_links | safe }}</p>
         {% endfor %}
       </div>
     </div>
