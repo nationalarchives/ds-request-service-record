@@ -274,11 +274,13 @@ export async function continueFromUploadAProofOfDeath(
   await expect(page).toHaveURL(Paths.UPLOAD_A_PROOF_OF_DEATH);
   await expect(page.locator("h1")).toHaveText(/Upload a proof of death/);
   const fileBuffer = Buffer.alloc(fileSizeInBytes);
-  await page.getByLabel("Upload a file").setInputFiles({
-    name: `proof-of-death.${fileExtension}`,
-    mimeType: "application/octet-stream",
-    buffer: fileBuffer,
-  });
+  if (fileExtension && fileSizeInBytes) {
+    await page.getByLabel("Upload a file").setInputFiles({
+      name: `proof-of-death.${fileExtension}`,
+      mimeType: "application/octet-stream",
+      buffer: fileBuffer,
+    });
+  }
   await page.getByRole("button", { name: /Continue/i }).click();
   if (shouldValidate) {
     await page.getByRole("button", { name: /Continue/i }).click();
