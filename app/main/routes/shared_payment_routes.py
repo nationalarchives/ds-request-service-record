@@ -82,7 +82,7 @@ def handle_gov_uk_pay_response(payment_type, id):
         return redirect(url_for("main.confirm_payment_received"))
     else:
         _process_service_record_payment(payment, client, payment.gov_uk_payment_id)
-        return redirect(url_for("main.request_submitted"))
+        return redirect(url_for("main.request_submitted", id=payment.id))
 
 
 @bp.route("/confirm-payment-received/")

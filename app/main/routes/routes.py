@@ -1,5 +1,7 @@
 from app.constants import ExternalLinks, MultiPageFormRoutes
 from app.lib.content import load_content
+from app.lib.db.constants import PAID_STATUS, SENT_STATUS
+from app.lib.db.db_handler import get_service_record_request
 from app.lib.decorators.state_machine_decorator import with_state_machine
 from app.lib.decorators.update_dynamic_back_link_mapping import (
     update_dynamic_back_link_mapping,
@@ -561,10 +563,23 @@ def your_order_summary(form, state_machine):
     )
 
 
-@bp.route("/request-submitted/", methods=["GET"])
-def request_submitted():
+@bp.route("/request-submitted/<id>", methods=["GET"])
+def request_submitted(id):
+    if not id:
+        return redirect(url_for("main.start"))
+    
+    record = get_service_record_request(id)
+
+    if not record:
+        return redirect(url_for("main.start"))
+    
+    if not (record.status != PAID_STATUS or record.status != SENT_STATUS):
+        return redirect(url_for("main.start"))
+    
+    reference_number = record.payment_reference
+
     return render_template(
         "main/request-submitted.html",
-        reference_number="123456",
+        reference_number=reference_number,
         content=load_content(),
     )
