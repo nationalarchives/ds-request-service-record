@@ -567,15 +567,15 @@ def your_order_summary(form, state_machine):
 def request_submitted(id):
     if not id:
         return redirect(url_for("main.start"))
-    
+
     record = get_service_record_request(id)
 
     if not record:
         return redirect(url_for("main.start"))
-    
+
     if not (record.status != PAID_STATUS or record.status != SENT_STATUS):
         return redirect(url_for("main.start"))
-    
+
     reference_number = record.payment_reference
 
     return render_template(
