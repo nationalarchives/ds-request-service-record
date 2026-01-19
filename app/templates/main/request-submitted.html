@@ -9,7 +9,7 @@
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny tna-!--padding-top-m">
         {{ tnaPanel({
           "title": content.pages.request_submitted.heading,
-          "body": "",
+          "body": "Payment reference: " + reference_number,
           "headingLevel": 1
         }) }}
         {% for paragraph in content.pages.request_submitted.paragraphs %}
