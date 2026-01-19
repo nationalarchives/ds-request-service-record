@@ -389,7 +389,7 @@ pages:
       paragraphs:
         - We have sent your request to a member of our team. They will use the information provided to search for the record you are requesting.
         - We will contact you with the result of the search, or to ask for more information, within 30 working days.
-        - Get in touch with us by replying to your confirmation email, or visit our Contact us page.<br><br>[ What did you think of this form ](USER_FEEDBACK_SURVEY)
+        - Get in touch with us by replying to your confirmation email, or visit our Contact us page.<br><br>[ What did you think of this form? ](USER_FEEDBACK_SURVEY)
 forms:
   fields:
     request_a_military_service_record:
