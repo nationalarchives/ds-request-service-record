@@ -16,7 +16,7 @@ test.describe("choose your order type", () => {
     test("the 'What did you think of this form' link", async ({ page }) => {
       await checkExternalLink(
         page,
-        "What did you think of this form",
+        "What did you think of this form?",
         "https://www.smartsurvey.co.uk/s/46WXIN/",
       );
     });
