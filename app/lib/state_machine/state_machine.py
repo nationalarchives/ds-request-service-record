@@ -299,6 +299,8 @@ class RoutingStateMachine(StateMachine):
 
     continue_on_return_from_gov_uk_redirect = initial.to(request_submitted_page)
 
+    continue_from_payment_incomplete_page = initial.to(your_order_summary_form)
+
     def entering_how_we_process_requests_form(self):
         self.route_for_current_state = MultiPageFormRoutes.HOW_WE_PROCESS_REQUESTS.value
 
