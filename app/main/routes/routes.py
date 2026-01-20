@@ -563,8 +563,9 @@ def your_order_summary(form, state_machine):
     )
 
 
+@bp.route("/request-submitted/", methods=["GET"])
 @bp.route("/request-submitted/<id>", methods=["GET"])
-def request_submitted(id):
+def request_submitted(id: str = None):
 
     reference_number = None
 
