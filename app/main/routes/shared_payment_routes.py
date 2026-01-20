@@ -3,6 +3,10 @@ from app.lib.db.db_handler import (
     get_gov_uk_dynamics_payment,
     get_service_record_request,
 )
+from app.lib.decorators.state_machine_decorator import with_state_machine
+from app.lib.decorators.with_form_prefilled_from_session import (
+    with_form_prefilled_from_session,
+)
 from app.lib.gov_uk_pay import (
     GOVUKPayAPIClient,
     process_valid_payment,
@@ -10,6 +14,8 @@ from app.lib.gov_uk_pay import (
 )
 from app.main import bp
 from flask import abort, current_app, redirect, render_template, url_for
+
+from app.main.forms.payment_incomplete import PaymentIncomplete
 
 
 def _fetch_payment_by_type(payment_type, id):
@@ -93,10 +99,17 @@ def confirm_payment_received():
     )
 
 
-@bp.route("/payment-incomplete/")
-def payment_incomplete():
+@bp.route("/payment-incomplete/", methods=["GET", "POST"])
+@with_state_machine
+@with_form_prefilled_from_session(PaymentIncomplete)
+def payment_incomplete(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_payment_incomplete_page()
+        return redirect(url_for(state_machine.route_for_current_state))
     content = load_content()
-    return render_template("main/payment/payment-incomplete.html", content=content)
+    return render_template(
+        "main/payment/payment-incomplete.html", content=content, form=form
+    )
 
 
 @bp.route("/payment-link-creation-failed/")

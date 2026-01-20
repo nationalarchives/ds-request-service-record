@@ -311,7 +311,8 @@ pages:
   payment_incomplete:
     heading: Payment incomplete
     paragraphs:
-      - Your payment was not completed successfully.
+      - Your payment at GOV.UK Pay was not completed successfully.
+      - We will now take you back to the order summary page where you can try to make the payment again.
   your_contact_details:
     heading: Your contact details
   what_is_your_address:
@@ -546,3 +547,5 @@ forms:
       call_to_action: Continue this request
     your_order_summary:
       call_to_action: Pay now
+    payment_incomplete:
+      call_to_action: Return to order summary
