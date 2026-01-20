@@ -71,7 +71,7 @@ def _create_new_payment(form_data: dict, record_hash: str) -> str:
     """Create new payment and return payment URL."""
     content = load_content()
     unique_id = str(uuid.uuid4())
-    
+
     try:
         amount = calculate_amount_based_on_form_data(form_data)
     except Exception as e:

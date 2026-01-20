@@ -26,7 +26,7 @@ def calculate_delivery_fee(country: str) -> int:
 
         response.raise_for_status()
         response_data = response.json()
-        
+
         # Convert pounds to pence
         return round(float(response_data) * 100)
     except requests.RequestException as e:
@@ -79,18 +79,23 @@ def calculate_amount_based_on_form_data(form_data: dict) -> int:
 def prepare_order_summary_data(form_data: dict) -> dict:
     processing_option = form_data.get("processing_option", "standard")
     delivery_type = get_delivery_type(form_data)
-    
+
     try:
         base_fee = calculate_base_fee(processing_option, delivery_type)
     except ValueError as e:
         current_app.logger.error(f"Error in base fee calculation: {e}")
         return None
-    
+
     try:
-        delivery_fee_pence = calculate_delivery_fee(form_data.get("requester_country")) if processing_option == "standard" and delivery_type == "PrintedTracked" else 0
+        delivery_fee_pence = (
+            calculate_delivery_fee(form_data.get("requester_country"))
+            if processing_option == "standard" and delivery_type == "PrintedTracked"
+            else 0
+        )
     except Exception as e:
+        current_app.logger.error(f"Error in delivery fee calculation: {e}")
         return None
-    
+
     order_summary_data = {
         "processing_option": processing_option,
         "delivery_type": delivery_type,

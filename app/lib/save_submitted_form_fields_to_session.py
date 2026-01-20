@@ -1,7 +1,7 @@
 import datetime
 
-from werkzeug.datastructures import FileStorage
 from flask import session as flask_session
+from werkzeug.datastructures import FileStorage
 
 
 def save_submitted_form_fields_to_session(

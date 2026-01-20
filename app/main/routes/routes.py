@@ -552,7 +552,9 @@ def your_order_summary(form, state_machine):
     order_summary_data = prepare_order_summary_data(form_data)
 
     if not order_summary_data:
-        return redirect(url_for("main.start")) # TODO: What should the user see if order summary fails?
+        return redirect(
+            url_for("main.start")
+        )  # TODO: What should the user see if order summary fails?
 
     return render_template(
         "main/your-order-summary.html",
