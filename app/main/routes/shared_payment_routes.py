@@ -13,9 +13,8 @@ from app.lib.gov_uk_pay import (
     process_valid_request,
 )
 from app.main import bp
-from flask import abort, current_app, redirect, render_template, url_for
-
 from app.main.forms.payment_incomplete import PaymentIncomplete
+from flask import abort, current_app, redirect, render_template, url_for
 
 
 def _fetch_payment_by_type(payment_type, id):

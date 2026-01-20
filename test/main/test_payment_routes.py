@@ -1,4 +1,4 @@
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -10,6 +10,7 @@ class DummyPayment:
         self.id = "TEST-ID"
         self.status = "N"
         self.payee_email = "john.doe@nationalarchives.gov.uk"
+        self.gov_uk_payment_id = "GOV-UK-PAY-ID"
 
 
 @pytest.fixture(scope="module")
@@ -71,3 +72,56 @@ def test_make_payment_page_renders(mock_get_payment, client):
     # Updated assertion to match current rendered heading
     assert dummy.case_number in rv.text
     assert dummy.reference in rv.text
+
+
+@patch("app.main.routes.shared_payment_routes._fetch_payment_by_type")
+def test_handle_gov_uk_pay_response_invalid_payment_type(mock_fetch, client):
+    """Test that 400 is returned for invalid payment type."""
+    with client.session_transaction() as sess:
+        sess["entered_through_index_page"] = True
+
+    rv = client.get(
+        "/request-a-military-service-record/handle-gov-uk-pay-response/invalid_type/123/"
+    )
+    assert rv.status_code == 400
+    mock_fetch.assert_not_called()
+
+
+@patch("app.main.routes.shared_payment_routes._fetch_payment_by_type")
+def test_handle_gov_uk_pay_response_payment_not_found(mock_fetch, client):
+    """Test that 404 is returned when payment record is not found."""
+    with client.session_transaction() as sess:
+        sess["entered_through_index_page"] = True
+
+    mock_fetch.return_value = None
+
+    rv = client.get(
+        "/request-a-military-service-record/handle-gov-uk-pay-response/dynamics/123/"
+    )
+    assert rv.status_code == 404
+    mock_fetch.assert_called_once_with("dynamics", "123")
+
+
+@patch("app.main.routes.shared_payment_routes._get_gov_uk_payment_data")
+@patch("app.main.routes.shared_payment_routes._fetch_payment_by_type")
+def test_handle_gov_uk_pay_response_gov_uk_pay_api_failure(
+    mock_fetch, mock_get_payment_data, client
+):
+    """Test that 502 is returned when GOV.UK Pay API fails to return data."""
+    with client.session_transaction() as sess:
+        sess["entered_through_index_page"] = True
+
+    dummy_payment = DummyPayment()
+    mock_fetch.return_value = dummy_payment
+
+    # Mock client with no data (API failure)
+    mock_client = MagicMock()
+    mock_client.data = None
+    mock_get_payment_data.return_value = mock_client
+
+    rv = client.get(
+        "/request-a-military-service-record/handle-gov-uk-pay-response/service_record/123/"
+    )
+    assert rv.status_code == 502
+    mock_fetch.assert_called_once_with("service_record", "123")
+    mock_get_payment_data.assert_called_once_with("GOV-UK-PAY-ID")
