@@ -9,7 +9,7 @@ from app.lib.gov_uk_pay import (
     process_valid_request,
 )
 from app.main import bp
-from flask import current_app, redirect, render_template, url_for
+from flask import abort, current_app, redirect, render_template, url_for
 
 
 def _fetch_payment_by_type(payment_type, id):
@@ -64,15 +64,15 @@ def _process_service_record_payment(payment, client, gov_uk_payment_id):
 @bp.route("/handle-gov-uk-pay-response/<payment_type>/<id>/")
 def handle_gov_uk_pay_response(payment_type, id):
     if not id or payment_type not in ["dynamics", "service_record"]:
-        return "Shouldn't be here"
+        abort(400, description="Invalid payment type or ID")
 
     payment = _fetch_payment_by_type(payment_type, id)
     if payment is None:
-        return "Shouldn't be here"
+        abort(404, description="Payment record not found")
 
     client = _get_gov_uk_payment_data(payment.gov_uk_payment_id)
     if client.data is None:
-        return "Some sort of error"  # TODO: We need to make a proper error page for this to show we couldn't connect to GOV.UK Pay API - maybe provide the GOV.UK Pay ID and to contact webmaster?
+        abort(502, description="Unable to retrieve payment data ")
 
     if not client.is_payment_successful():
         return redirect(url_for("main.payment_incomplete"))
