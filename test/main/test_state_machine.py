@@ -525,5 +525,12 @@ def test_continue_from_gov_uk_pay():
     assert sm.route_for_current_state == MultiPageFormRoutes.REQUEST_SUBMITTED.value
 
 
+def test_continue_from_payment_incomplete_page():
+    sm = RoutingStateMachine()
+    sm.continue_from_payment_incomplete_page()
+    assert sm.current_state.id == "your_order_summary_form"
+    assert sm.route_for_current_state == MultiPageFormRoutes.YOUR_ORDER_SUMMARY.value
+
+
 def make_form(**fields):
     return SimpleNamespace(**{k: SimpleNamespace(data=v) for k, v in fields.items()})
