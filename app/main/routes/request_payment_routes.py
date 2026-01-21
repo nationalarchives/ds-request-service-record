@@ -163,7 +163,7 @@ def _handle_existing_payment(existing_record):
     payment_status = client.get_payment_status()
 
     if payment_status in SUCCESSFUL_PAYMENT_STATUSES:
-        return redirect(url_for("main.confirm_payment_received"))
+        return redirect(url_for("main.request_submitted", id=existing_record.id))
     elif payment_status in UNFINISHED_PAYMENT_STATUSES:
         return redirect(
             f"https://card.payments.service.gov.uk/card_details/{payment_id}"
