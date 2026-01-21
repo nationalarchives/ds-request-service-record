@@ -1,4 +1,7 @@
+from unittest.mock import patch
+
 import pytest
+import requests
 from app.lib.price_calculations import (
     calculate_amount_based_on_form_data,
     calculate_delivery_fee,
@@ -118,8 +121,8 @@ def test_calculate_amount_printed_without_country(app_context):
         calculate_amount_based_on_form_data(form_data)
 
 
-def test_prepare_order_summary_data(app_context):
-    """Test order summary data preparation."""
+def test_prepare_order_summary_data_standard_digital(app_context):
+    """Test order summary data preparation for standard digital delivery."""
     form_data = {
         "processing_option": "standard",
         "does_not_have_email": False,
@@ -131,3 +134,91 @@ def test_prepare_order_summary_data(app_context):
     assert summary["delivery_type"] == "Digital"
     assert summary["amount_pence"] == 4225
     assert summary["delivery_fee_pence"] == 0
+
+
+def test_prepare_order_summary_data_printed_tracked(app_context):
+    """Test order summary data preparation for printed delivery."""
+    form_data = {
+        "processing_option": "standard",
+        "does_not_have_email": True,
+        "requester_country": "United Kingdom",
+    }
+
+    summary = prepare_order_summary_data(form_data)
+
+    assert summary["processing_option"] == "standard"
+    assert summary["delivery_type"] == "PrintedTracked"
+    assert summary["amount_pence"] == 4716
+    assert summary["delivery_fee_pence"] == 795
+
+
+def test_calculate_delivery_fee_api_error(app_context):
+    """Test delivery fee calculation when API returns an error."""
+    with patch("app.lib.price_calculations.requests.post") as mock_post:
+        mock_post.return_value.raise_for_status.side_effect = (
+            requests.exceptions.HTTPError("500 Server Error")
+        )
+
+        with pytest.raises(requests.exceptions.HTTPError):
+            calculate_delivery_fee("United Kingdom")
+
+
+def test_calculate_delivery_fee_api_timeout(app_context):
+    """Test delivery fee calculation when API times out."""
+    with patch("app.lib.price_calculations.requests.post") as mock_post:
+        mock_post.side_effect = requests.exceptions.Timeout("Request timed out")
+
+        with pytest.raises(requests.exceptions.Timeout):
+            calculate_delivery_fee("United Kingdom")
+
+
+def test_calculate_delivery_fee_api_connection_error(app_context):
+    """Test delivery fee calculation when API is unreachable."""
+    with patch("app.lib.price_calculations.requests.post") as mock_post:
+        mock_post.side_effect = requests.exceptions.ConnectionError("Failed to connect")
+
+        with pytest.raises(requests.exceptions.ConnectionError):
+            calculate_delivery_fee("United Kingdom")
+
+
+def test_calculate_delivery_fee_invalid_json_response(app_context):
+    """Test delivery fee calculation when API returns invalid JSON."""
+    with patch("app.lib.price_calculations.requests.post") as mock_post:
+        mock_response = mock_post.return_value
+        mock_response.raise_for_status.return_value = None
+        mock_response.json.side_effect = ValueError("Invalid JSON")
+
+        with pytest.raises(ValueError):
+            calculate_delivery_fee("United Kingdom")
+
+
+def test_calculate_amount_when_delivery_fee_api_fails(app_context):
+    """Test amount calculation when delivery fee API fails for printed delivery."""
+    form_data = {
+        "processing_option": "standard",
+        "does_not_have_email": True,
+        "requester_country": "United Kingdom",
+    }
+
+    with patch("app.lib.price_calculations.requests.post") as mock_post:
+        mock_post.side_effect = requests.exceptions.HTTPError("500 Server Error")
+
+        with pytest.raises(requests.exceptions.HTTPError):
+            calculate_amount_based_on_form_data(form_data)
+
+
+def test_prepare_order_summary_data_when_api_fails(app_context):
+    """Test order summary preparation when delivery fee API fails."""
+    form_data = {
+        "processing_option": "standard",
+        "does_not_have_email": True,
+        "requester_country": "United Kingdom",
+    }
+
+    with patch("app.lib.price_calculations.requests.post") as mock_post:
+        mock_post.side_effect = requests.exceptions.HTTPError("500 Server Error")
+
+        result = prepare_order_summary_data(form_data)
+
+        # Should return None when API fails
+        assert result is None

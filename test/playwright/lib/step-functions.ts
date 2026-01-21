@@ -436,6 +436,13 @@ export async function continueFromYourPostalAddress(page) {
   await expect(page).toHaveURL(Paths.YOUR_ORDER_SUMMARY);
 }
 
+export async function continueFromPaymentIncomplete(page) {
+  await expect(page).toHaveURL(Paths.PAYMENT_INCOMPLETE);
+  await expect(page.locator("h1")).toHaveText(/Payment incomplete/);
+  await page.getByRole("button", { name: "Return to order summary" }).click();
+  await expect(page).toHaveURL(Paths.YOUR_ORDER_SUMMARY);
+}
+
 export async function checkExternalLink(page, linkText, expectedHref) {
   const link = page.getByRole("link", { name: linkText });
   await expect(link).toHaveAttribute("href", expectedHref);
