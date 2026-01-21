@@ -72,10 +72,15 @@ def _create_new_payment(form_data: dict, record_hash: str) -> str:
     content = load_content()
     unique_id = str(uuid.uuid4())
 
-    amount = calculate_amount_based_on_form_data(form_data)
+    try:
+        amount = calculate_amount_based_on_form_data(form_data)
+    except Exception as e:
+        current_app.logger.error(f"Error calculating amount: {e}")
+        return url_for("main.payment_link_creation_failed")
 
     if amount <= 0:
-        raise ValueError("Calculated amount must be greater than zero")
+        current_app.logger.error("Amount calculation returned non-positive value")
+        return url_for("main.payment_link_creation_failed")
 
     reference = _generate_reference()
 
@@ -93,17 +98,20 @@ def _create_new_payment(form_data: dict, record_hash: str) -> str:
     )
 
     if not response:
-        raise ValueError("Failed to create payment with GOV.UK Pay")
+        current_app.logger.error("GOV.UK Pay failed to respond/create payment")
+        return url_for("main.payment_link_creation_failed")
 
     payment_url = response.get("_links", {}).get("next_url", {}).get("href")
     payment_id = response.get("payment_id")
 
     if not payment_url or not payment_id:
-        raise ValueError("Invalid payment response from GOV.UK Pay")
+        current_app.logger.error("Invalid payment response from GOV.UK Pay")
+        return url_for("main.payment_link_creation_failed")
 
     record = _store_payment_record(form_data, record_hash, unique_id, payment_id)
 
     if not record:
+        current_app.logger.error("Failed to store payment record in database")
         return url_for("main.payment_link_creation_failed")
 
     return payment_url
@@ -113,7 +121,7 @@ def _generate_reference() -> str:
     """
     Generate a unique payment reference using Unix timestamp, random letter, and suffix.
     Format: TNA<timestamp><letter><suffix>
-    Example: TNA1733756789X42
+    Example: TNA20260725X42
     """
     unix_timestamp = int(datetime.now().strftime("%Y%m%d"))
     random_letter = random.choice(string.ascii_uppercase)
