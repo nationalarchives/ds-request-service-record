@@ -5,6 +5,7 @@ from app.lib.cache import cache
 from app.lib.context_processor import cookie_preference, now_iso_8601
 from app.lib.db.models import db
 from app.lib.requires_session_key import requires_session_key
+from app.lib.schedule.scheduler import init_scheduler
 from app.lib.talisman import talisman
 from app.lib.template_filters import (
     format_delivery_price,
@@ -145,5 +146,8 @@ def create_app(config_class):
     app.register_blueprint(site_bp, url_prefix=service_url_prefix)
 
     db.init_app(app)
+
+    if not app.config.get("ENVIRONMENT_NAME") == "test":
+        init_scheduler(app)
 
     return app
