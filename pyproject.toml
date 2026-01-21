@@ -25,6 +25,7 @@ python-statemachine = "^2.5.0"
 boto3 = "~1.40"
 sentry-sdk = {extras = ["flask"], version = "^2.41.0"}
 markupsafe = "^3.0.3"
+apscheduler = "^3.11.2"
 
 [tool.poetry.group.dev]
 optional = true
