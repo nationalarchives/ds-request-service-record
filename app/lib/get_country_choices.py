@@ -4,15 +4,24 @@ from app.lib.cache import cache
 from flask import current_app
 
 CACHE_KEY = "country_choices"
-CACHE_TIMEOUT = 43200  # 12 hours
+CACHE_TIMEOUT = 43200  # 12 hours in seconds
 
 
 def get_country_choices():
-    """
-    Fetches country choices from the Record Copying Service API.
-    Caches the result in Redis to avoid repeated API calls.
-    Returns a list of country names sorted alphabetically.
-    If the API call fails, returns the default list stored in constants.py.
+    """Fetch country choices from the Record Copying Service API with caching.
+
+    Retrieves a list of countries from the external API and caches the result
+    for 12 hours to reduce API calls. Always places "United Kingdom" first in
+    the list for user convenience. Falls back to a static list if the API call
+    fails.
+
+    Returns:
+        list[str]: Sorted list of country names with UK first
+
+    Note:
+        The result is cached in Redis to avoid repeated API calls.
+        Cache is automatically refreshed after 12 hours or if the
+        cache is cleared.
     """
     cached_countries = cache.get(CACHE_KEY)
     if cached_countries is not None:

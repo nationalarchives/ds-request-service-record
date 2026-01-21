@@ -8,7 +8,17 @@ def save_submitted_form_fields_to_session(
     form,
     session_obj=None,
 ) -> None:
-    # I'm injecting a session object for easier testing. If nothing's passed, it falls back to Flask's session.
+    """Save form field data to the session for multi-step form persistence.
+
+    Extracts data from form fields (excluding CSRF token and submit button),
+    serializes complex types like FileStorage and datetime objects, and merges
+    with existing session data to maintain state across the multi-page form journey.
+
+    Args:
+        form: WTForms form instance with submitted data
+        session_obj: Optional session object for testing; defaults to Flask session
+    """
+    # Inject a session object for easier testing. If nothing's passed, it falls back to Flask's session.
     if session_obj is None:
         session_obj = flask_session
     data = {}
