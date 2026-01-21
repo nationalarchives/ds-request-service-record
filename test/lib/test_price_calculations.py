@@ -1,6 +1,7 @@
+from unittest.mock import patch
+
 import pytest
 import requests
-from unittest.mock import patch
 from app.lib.price_calculations import (
     calculate_amount_based_on_form_data,
     calculate_delivery_fee,
@@ -134,6 +135,7 @@ def test_prepare_order_summary_data_standard_digital(app_context):
     assert summary["amount_pence"] == 4225
     assert summary["delivery_fee_pence"] == 0
 
+
 def test_prepare_order_summary_data_printed_tracked(app_context):
     """Test order summary data preparation for printed delivery."""
     form_data = {
@@ -173,9 +175,7 @@ def test_calculate_delivery_fee_api_timeout(app_context):
 def test_calculate_delivery_fee_api_connection_error(app_context):
     """Test delivery fee calculation when API is unreachable."""
     with patch("app.lib.price_calculations.requests.post") as mock_post:
-        mock_post.side_effect = requests.exceptions.ConnectionError(
-            "Failed to connect"
-        )
+        mock_post.side_effect = requests.exceptions.ConnectionError("Failed to connect")
 
         with pytest.raises(requests.exceptions.ConnectionError):
             calculate_delivery_fee("United Kingdom")
