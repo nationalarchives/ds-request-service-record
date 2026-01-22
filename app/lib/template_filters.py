@@ -57,9 +57,30 @@ def parse_last_birth_year_for_open_records(s):
     )
 
 
-def format_delivery_price(s, price):
+def format_standard_printed_order_price(s, delivery_fee, order_type_fee):
     if s is None:
         return s
-    return s.replace(
-        "[DELIVERY_PRICE]", f"<span data-delivery-price='{price}'>£{price}</span>"
-    )
+
+    if delivery_fee is None:
+        raise TypeError("delivery_fee cannot be None")
+    if order_type_fee is None:
+        raise TypeError("order_type_fee cannot be None")
+
+    values = {
+        "DELIVERY_FEE": f"<span data-delivery-price>{convert_pence_to_pounds_string(delivery_fee)}</span>",
+        "ORDER_TYPE_FEE": f"<span data-order-type-price>{convert_pence_to_pounds_string(order_type_fee)}</span>",
+    }
+
+    pattern = re.compile(r"\[(DELIVERY_FEE|ORDER_TYPE_FEE)\]")
+
+    def replacer(m):
+        return values[m.group(1)]
+
+    return pattern.sub(replacer, s)
+
+
+def convert_pence_to_pounds_string(pence):
+    if pence is None:
+        return None
+    pounds = float(pence) / 100
+    return f"{pounds:.2f}"

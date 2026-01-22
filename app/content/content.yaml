@@ -377,7 +377,7 @@ pages:
     per_page_copying_fee:
       full_record_check_printed: Please note there will be a second payment to copy the record, priced £1.89 per printed page plus postage and packaging.
       full_record_check_digital: Please note there will be a second payment to copy the record, priced £1.04 per page.
-    plus_postage_and_packaging: plus [DELIVERY_PRICE] for postage and packaging
+    costs_standard_printed: This fee covers £[ORDER_TYPE_FEE] for printed colour copies and £[DELIVERY_FEE] for postage and packaging.
     processing_option_description_standard: Standard
     processing_option_description_full: Full record check
     change_order_type: Change order
