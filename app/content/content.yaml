@@ -383,6 +383,8 @@ pages:
     change_order_type: Change order
   request_submitted:
     heading: Request submitted
+    payment_reference_available: Your payment reference number is
+    payment_reference_not_available: Your payment reference number will be sent to you
     paragraphs:
       - We will send you a confirmation email, or a letter if you selected to be contacted by post.
     what_happens_next:
