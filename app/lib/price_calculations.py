@@ -1,5 +1,5 @@
 import requests
-from app.constants import OrderFeesPence
+from app.constants import OrderFeesPence, ORDER_TYPES
 from flask import current_app
 
 OPTION_MAP = {
@@ -96,11 +96,14 @@ def prepare_order_summary_data(form_data: dict) -> dict:
         current_app.logger.error(f"Error in delivery fee calculation: {e}")
         return None
 
+    order_type = ORDER_TYPES.get((processing_option, delivery_type))
+
     order_summary_data = {
         "processing_option": processing_option,
         "delivery_type": delivery_type,
         "amount_pence": base_fee,
         "delivery_fee_pence": delivery_fee_pence,
+        "order_type": order_type,
     }
 
     return order_summary_data

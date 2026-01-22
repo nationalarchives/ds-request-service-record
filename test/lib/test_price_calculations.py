@@ -134,9 +134,10 @@ def test_prepare_order_summary_data_standard_digital(app_context):
     assert summary["delivery_type"] == "Digital"
     assert summary["amount_pence"] == 4225
     assert summary["delivery_fee_pence"] == 0
+    assert summary["order_type"] == "standard_digital"
 
 
-def test_prepare_order_summary_data_printed_tracked(app_context):
+def test_prepare_order_summary_data_standard_printed(app_context):
     """Test order summary data preparation for printed delivery."""
     form_data = {
         "processing_option": "standard",
@@ -150,6 +151,40 @@ def test_prepare_order_summary_data_printed_tracked(app_context):
     assert summary["delivery_type"] == "PrintedTracked"
     assert summary["amount_pence"] == 4716
     assert summary["delivery_fee_pence"] == 795
+    assert summary["order_type"] == "standard_printed"
+
+
+def test_prepare_order_summary_data_full_record_check_printed(app_context):
+    """Test order summary data preparation for full record check printed delivery."""
+    form_data = {
+        "processing_option": "full",
+        "does_not_have_email": True,
+        "requester_country": "United Kingdom",
+    }
+
+    summary = prepare_order_summary_data(form_data)
+
+    assert summary["processing_option"] == "full"
+    assert summary["delivery_type"] == "PrintedTracked"
+    assert summary["amount_pence"] == 4887
+    assert summary["delivery_fee_pence"] == 0
+    assert summary["order_type"] == "full_record_check_printed"
+
+
+def test_prepare_order_summary_data_full_record_check_digital(app_context):
+    """Test order summary data preparation for full record check digital delivery."""
+    form_data = {
+        "processing_option": "full",
+        "does_not_have_email": False,
+    }
+
+    summary = prepare_order_summary_data(form_data)
+
+    assert summary["processing_option"] == "full"
+    assert summary["delivery_type"] == "Digital"
+    assert summary["amount_pence"] == 4887
+    assert summary["delivery_fee_pence"] == 0
+    assert summary["order_type"] == "full_record_check_digital"
 
 
 def test_calculate_delivery_fee_api_error(app_context):
