@@ -1,7 +1,10 @@
 {% extends "base.html" %}
-
 {%- set pageTitle = content.app.title -%}
-
+{% if reference_number %}
+  {% set panel_body = content.pages.request_submitted.payment_reference_available ~ ' <strong id="reference-number">' ~ reference_number ~ '</strong>' %}
+{% else %}
+  {% set panel_body = content.pages.request_submitted.payment_reference_not_available %}
+{% endif %}
 {% block content %}
   <div class="tna-section tna-!--padding-top-s">
     <div class="tna-container">
@@ -9,7 +12,7 @@
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny tna-!--padding-top-m">
         {{ tnaPanel({
           "title": content.pages.request_submitted.heading,
-          "body": "",
+          "body": panel_body,
           "headingLevel": 1
         }) }}
         {% for paragraph in content.pages.request_submitted.paragraphs %}
