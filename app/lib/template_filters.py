@@ -47,7 +47,7 @@ def parse_last_birth_year_for_open_records(s):
     if not s:
         return s
 
-    year = BoundaryYears.last_birth_year_for_record_to_be_open(datetime.now().year)
+    year = BoundaryYears.last_birth_year_for_open_records(datetime.now().year)
 
     span = f"<span data-last-birth-year-for-open-records='{year}'>{year}</span>"
 
