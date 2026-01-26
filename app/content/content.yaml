@@ -16,7 +16,7 @@ pages:
       options:
         - title: Standard
           paragraphs:
-            - For most applicants a standard request will provide the information they are looking for.
+            - For most applicants a Standard request will provide the information they are looking for.
             - |
               Standard provides a subset of documents from the record. This may include details
               provided when they enlisted, records of service and testimonials.
@@ -24,9 +24,9 @@ pages:
         - title: Full record check
           paragraphs:
             - |
-              Documents not provided in our standard subset will, in most cases, contain sensitive 
-              information and will be closed to the public. However, we can complete a sensitivity 
-              check of the record to assess what can be released. In some cases, we will not be able 
+              Documents not provided in Standard will, in most cases, contain sensitive information and will be closed 
+              to the public. However, we can complete a sensitivity check of the record to assess what can be released. 
+              In some cases, we will not be able 
               to supply the record, or large parts of it will be redacted.
     fees:
       heading: Fees
@@ -46,8 +46,8 @@ pages:
         - option: Full record check
           fee: £48.87 plus £1.04 per page copying fee. For example, 20 pages will cost an additional £20.80.
     delivery_method: |
-      Records are delivered as PDF colour scans digitally via email. We can post the record instead for an 
-      extra fee, but it will take longer to handle.
+      Records are delivered as PDF colour scans digitally via email. We can post a printed copy of the record instead 
+      for an extra fee, but it will take longer to handle.
   how_we_process_requests:
     heading: How we process requests
     paragraphs:
@@ -181,11 +181,17 @@ pages:
           - Field Marshal
       - intro_text: "Royal Air Force Commissioned Officer ranks include:"
         ranks:
+          - Pilot Officer
           - Flying Officer
           - Flight Lieutenant
           - Squadron Leader
           - Wing Commander
           - Group Captain
+          - Air Commodore
+          - Air Vice-Marshal
+          - Air Marshal
+          - Air Chief Marshal
+          - Marshal of the Royal Air Force
   have_you_previously_made_a_request:
     heading: Have you previously made a request for this record?
     prompt_to_provide_reference_number: If you select yes, please provide the reference number for your previous request.
@@ -332,7 +338,7 @@ pages:
       sub_heading: (Recommended)
       paragraphs:
         - |
-          For most applicants a standard request will provide the information they are looking for.
+          For most applicants a Standard request will provide the information they are looking for.
         - |
           Standard provides a subset of documents from the record. This may include details provided
           when they enlisted, records of service and testimonials.
@@ -350,8 +356,8 @@ pages:
       heading: Full record check
       paragraphs:
         - |
-          Documents not provided in Standard will, in most cases, contain sensitive information and will be closed 
-          to the public. However, we can complete a review of the record to assess what can be released.
+          Documents not provided in Standard will, in most cases, contain sensitive information and will be closed to 
+          the public. However, we can complete a sensitivity check of the record to assess what can be released.
         - In some cases, we will not be able to supply the entire record, or large parts of it will be redacted.
         - |
           We charge two fees for a Full record check. The first covers the search for the record and a page check. 
@@ -392,7 +398,7 @@ pages:
       paragraphs:
         - We have sent your request to a member of our team. They will use the information provided to search for the record you are requesting.
         - We will contact you with the result of the search, or to ask for more information, within 30 working days.
-        - Get in touch with us by replying to your confirmation email, or visit our Contact us page.<br><br>[ What did you think of this form? ](USER_FEEDBACK_SURVEY)
+        - Get in touch with us by replying to your confirmation email, or visit our Contact us page.<br><br>[ What did you think of this form? (opens in new tab) ](USER_FEEDBACK_SURVEY)
 forms:
   fields:
     request_a_military_service_record:
