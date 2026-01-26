@@ -88,7 +88,7 @@ pages:
       before_first_list:
         paragraphs:
           - |
-            If the person whose record you are looking for was born after [LATEST_BIRTH_YEAR_FOR_OPEN_RECORDS] 
+            If the person whose record you are looking for was born after 1 January [FIRST_BIRTH_YEAR_FOR_CLOSED_RECORDS] 
             and is deceased, we require a digital copy of a proof of death. This is to protect 
             any personal data in the record that might relate to a living person.
           - "You will need to submit one of the following forms of evidence:"
@@ -288,7 +288,7 @@ pages:
     heading: Provide a proof of death
     paragraphs:
       - |
-        As you are requesting a record for someone born after [LATEST_BIRTH_YEAR_FOR_OPEN_RECORDS], 
+        As you are requesting a record for someone born after 1 January [FIRST_BIRTH_YEAR_FOR_CLOSED_RECORDS], 
         you will need to provide a digital copy of a proof of death.
       - >
         You will need to submit one of the following forms of evidence:

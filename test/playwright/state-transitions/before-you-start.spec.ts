@@ -5,7 +5,7 @@ import {
   checkExternalLink,
   continueFromBeforeYouStart,
 } from "../lib/step-functions";
-import { testLastBirthYearForOpenRecords } from "../lib/test-last-birth-year-for-open-records";
+import { testfirstBirthYearForClosedRecords } from "../lib/test-first-birth-year-for-closed-records";
 
 test.describe("the 'Before you start' form", () => {
   test.beforeEach(async ({ page }) => {
@@ -16,7 +16,7 @@ test.describe("the 'Before you start' form", () => {
   test("has the correct value shown for last birth year for open records", async ({
     page,
   }) => {
-    await testLastBirthYearForOpenRecords(page);
+    await testfirstBirthYearForClosedRecords(page);
   });
 
   test("shows an error when the user tries to proceed without confirming they have the mandatory information", async ({

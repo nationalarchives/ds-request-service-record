@@ -44,16 +44,16 @@ def parse_bold_text(s):
     return pattern.sub(replacer, s)
 
 
-def parse_last_birth_year_for_open_records(s):
+def parse_first_birth_year_for_closed_records(s):
     if not s:
         return s
 
-    year = BoundaryYears.last_birth_year_for_open_records(datetime.now().year)
+    year = BoundaryYears.first_birth_year_for_closed_records(datetime.now().year)
 
     span = f"<span data-last-birth-year-for-open-records='{year}'>{year}</span>"
 
     return s.replace(
-        "[LATEST_BIRTH_YEAR_FOR_OPEN_RECORDS]",
+        "[FIRST_BIRTH_YEAR_FOR_CLOSED_RECORDS]",
         span,
     )
 
