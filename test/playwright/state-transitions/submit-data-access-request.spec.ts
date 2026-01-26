@@ -3,7 +3,7 @@ import { Paths } from "../lib/constants";
 import {
   checkExternalLink,
   clickBackLink,
-  clickExitThisForm,
+  clickCancelThisRequest,
   continueFromSubmitDataAccessRequest,
 } from "../lib/step-functions";
 
@@ -27,24 +27,24 @@ test.describe("the 'Submit a data access request' form", () => {
     );
   });
 
-  test.describe("'Exit this form' and 'Back' links", () => {
-    test("clicking the 'Exit this form' button takes the user to 'Are you sure you want to cancel?'", async ({
+  test.describe("'Cancel this request' and 'Back' links", () => {
+    test("clicking the 'Cancel this request' button takes the user to 'Are you sure you want to cancel?'", async ({
       page,
     }) => {
-      await clickExitThisForm(page, "button");
+      await clickCancelThisRequest(page, "button");
     });
 
     test("clicking the 'Back' link on 'Are you sure you want to cancel? page brings the user back'", async ({
       page,
     }) => {
-      await clickExitThisForm(page, "button");
+      await clickCancelThisRequest(page, "button");
       await clickBackLink(page, Paths.MUST_SUBMIT_SUBJECT_ACCESS);
     });
 
     test("clicking the 'No' link on 'Are you sure you want to cancel? page brings the user back'", async ({
       page,
     }) => {
-      await clickExitThisForm(page, "button");
+      await clickCancelThisRequest(page, "button");
       await page.locator("form#cancel-request a").click();
       await expect(page).toHaveURL(Paths.MUST_SUBMIT_SUBJECT_ACCESS);
     });

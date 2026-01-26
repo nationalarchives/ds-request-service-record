@@ -419,8 +419,8 @@ forms:
       call_to_action: "Yes"
     you_may_want_to_check_ancestry:
       call_to_action: Continue
-    submit_data_access_request:
-      call_to_action: Exit this form
+    cancel_this_request:
+      call_to_action: Cancel this request
     is_service_person_alive:
       label: Is the service person alive?
       messages:

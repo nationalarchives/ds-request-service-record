@@ -26,7 +26,7 @@ from app.main.forms.before_you_start import BeforeYouStart
 from app.main.forms.choose_your_order_type import (
     ChooseYourOrderType,
 )
-from app.main.forms.exit_this_form import ExitThisForm
+from app.main.forms.cancel_this_request import CancelThisRequest
 from app.main.forms.have_you_previously_made_a_request import (
     HaveYouPreviouslyMadeARequest,
 )
@@ -100,7 +100,6 @@ def before_you_start(form, state_machine):
 @with_state_machine
 @with_form_prefilled_from_session(AreYouSureYouWantToCancel)
 def are_you_sure_you_want_to_cancel(form, state_machine):
-
     if form.validate_on_submit():
         state_machine.continue_from_are_you_sure_you_want_to_cancel_form()
         return redirect(url_for(state_machine.route_for_current_state))
@@ -156,7 +155,7 @@ def is_service_person_alive(form, state_machine):
     }
 )
 @with_state_machine
-@with_form_prefilled_from_session(ExitThisForm)
+@with_form_prefilled_from_session(CancelThisRequest)
 def must_submit_subject_access_request(form, state_machine):
     if form.validate_on_submit():
         state_machine.continue_from_submit_subject_access_request_form(form)
@@ -212,7 +211,7 @@ def were_they_a_commissioned_officer(form, state_machine):
 
 
 @bp.route("/we-do-not-have-royal-navy-service-branch-records/", methods=["GET", "POST"])
-@with_form_prefilled_from_session(ExitThisForm)
+@with_form_prefilled_from_session(CancelThisRequest)
 @update_dynamic_back_link_mapping(
     mappings={
         MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL: MultiPageFormRoutes.WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS,
@@ -302,7 +301,7 @@ def we_are_unlikely_to_hold_officer_records__generic(form, state_machine):
     }
 )
 @with_state_machine
-@with_form_prefilled_from_session(ExitThisForm)
+@with_form_prefilled_from_session(CancelThisRequest)
 def we_are_unlikely_to_locate_this_record(form, state_machine):
     if form.validate_on_submit():
         state_machine.continue_from_we_are_unlikely_to_locate_this_record_form(form)
@@ -387,7 +386,7 @@ def are_you_sure_you_want_to_proceed_without_proof_of_death(form, state_machine)
     }
 )
 @with_state_machine
-@with_form_prefilled_from_session(ExitThisForm)
+@with_form_prefilled_from_session(CancelThisRequest)
 def we_do_not_have_records_for_people_born_after(form, state_machine):
     if form.validate_on_submit():
         state_machine.continue_from_we_do_not_have_records_for_people_born_after_form(
@@ -523,7 +522,6 @@ def choose_your_order_type(state_machine):
 @with_form_prefilled_from_session(UploadAProofOfDeath)
 @with_state_machine
 def upload_a_proof_of_death(form, state_machine):
-
     if form.validate_on_submit():
         state_machine.continue_from_upload_a_proof_of_death_form(form)
         save_submitted_form_fields_to_session(form)
@@ -545,7 +543,6 @@ def upload_a_proof_of_death(form, state_machine):
 @with_form_prefilled_from_session(YourOrderSummary)
 @with_state_machine
 def your_order_summary(form, state_machine):
-
     if form.validate_on_submit():
         state_machine.continue_from_your_order_summary_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
@@ -571,7 +568,6 @@ def your_order_summary(form, state_machine):
 @bp.route("/request-submitted/", methods=["GET"])
 @bp.route("/request-submitted/<id>", methods=["GET"])
 def request_submitted(id: str = None):
-
     reference_number = None
 
     # We are currently rendering the page without a payment reference if one
