@@ -41,6 +41,11 @@ DYNAMICS_REQUEST_FIELD_MAP = [
     ("provider_id", "provider_id"),
 ]
 
+class DynamicsClosureStatus:
+    FOIOP = "FOIOP"   # Open record - Over 115
+    FOICD = "FOICD"   # Closed record - Proof of Death provided
+    FOICDN = "FOICDN" # Closed record - No Proof of Death provided
+
 
 def send_request_to_dynamics(record: ServiceRecordRequest) -> bool:
     return send_email(
@@ -50,17 +55,32 @@ def send_request_to_dynamics(record: ServiceRecordRequest) -> bool:
     )
 
 
-def subject_status(record: ServiceRecordRequest) -> str:
-    dob = datetime.strptime(record.date_of_birth, "%d %B %Y")
+def closure_status_calculation(date_of_birth: str, has_proof_of_death: bool) -> str:
+    dob = datetime.strptime(date_of_birth, "%d %B %Y")
     age = datetime.now().year - dob.year
 
     if age >= 115:
-        closure_status = "FOIOP"
+        closure_status = DynamicsClosureStatus.FOIOP
     else:
-        if record.proof_of_death:
-            closure_status = "FOICD"
+        if has_proof_of_death:
+            closure_status = DynamicsClosureStatus.FOICD
         else:
-            closure_status = "FOICDN"
+            closure_status = DynamicsClosureStatus.FOICDN
+
+    return closure_status
+
+
+def has_proof_of_death(record: ServiceRecordRequest) -> bool:
+    if record.proof_of_death and record.proof_of_death != "EMPTY":
+        return True
+    return False
+
+
+def subject_status(record: ServiceRecordRequest) -> str:
+    closure_status = closure_status_calculation(
+        date_of_birth=record.date_of_birth,
+        has_proof_of_death=has_proof_of_death(record),
+    )
 
     option = "1" if record.processing_option == "standard" else "2"
     return f"? FOI DIRECT MOD {closure_status}{option}"
@@ -91,10 +111,22 @@ def send_payment_to_mod_copying_app(payment: DynamicsPayment) -> None:
 def _generate_tagged_data(mapping: list[tuple[str, str | None]], obj) -> str:
     chunks = []
     for tag, attr in mapping:
-        value = getattr(obj, attr) if attr else None
-        if value:
-            text = str(value)
-            chunks.append(f"<{tag}>{text}</{tag}>")
+        # If mandatory_upload_file_name is missing, insert the placeholder text
+        # Dynamics has this as a required field so we must provide something here
+        if tag != "mandatory_upload_file_name":
+            value = getattr(obj, attr) if attr else None
+            if value:
+                text = str(value)
+                chunks.append(f"<{tag}>{text}</{tag}>")
+        else:
+            if closure_status_calculation(obj.date_of_birth, has_proof_of_death(obj)) != DynamicsClosureStatus.FOIOP:
+                value = getattr(obj, attr) if attr else None
+                if value:
+                    text = str(value)
+                    if text != "EMPTY":
+                        chunks.append(f"<{tag}>{text}</{tag}>")
+            else:
+                chunks.append(f"<{tag}>Not applicable</{tag}>")
     return "\n".join(chunks)
 
 
