@@ -15,7 +15,7 @@ def slugify(s):
     return s
 
 
-def parse_markdown_links(s):
+def parse_markdown_links(s, new_tab=True):
     if not s:
         return s
     # Regex to match [text](url)
@@ -25,7 +25,8 @@ def parse_markdown_links(s):
         text = match.group(1)
         key = match.group(2).strip()
         url = getattr(ExternalLinks, key, key)
-        return f'<a href="{url}" target="_blank" rel="noreferrer noopener">{text}</a>'
+        attrs = ' target="_blank" rel="noreferrer noopener"' if new_tab else ""
+        return f'<a href="{url}"{attrs}>{text}</a>'
 
     return pattern.sub(replacer, s)
 
