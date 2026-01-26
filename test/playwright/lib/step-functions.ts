@@ -438,8 +438,12 @@ export async function continueFromYourPostalAddress(page) {
 
 export async function continueFromPaymentIncomplete(page) {
   await expect(page).toHaveURL(Paths.PAYMENT_INCOMPLETE);
-  await expect(page.locator("h1")).toHaveText(/Payment incomplete/);
-  await page.getByRole("button", { name: "Return to order summary" }).click();
+  await expect(page.locator("h1")).toHaveText(
+    /Sorry, there was a problem processing your payment/,
+  );
+  await page
+    .getByRole("button", { name: "Go back to try the payment again" })
+    .click();
   await expect(page).toHaveURL(Paths.YOUR_ORDER_SUMMARY);
 }
 

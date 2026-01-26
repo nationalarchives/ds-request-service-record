@@ -315,10 +315,13 @@ pages:
     paragraphs:
       - We are unable to create a payment link at this time.
   payment_incomplete:
-    heading: Payment incomplete
+    heading: Sorry, there was a problem processing your payment
     paragraphs:
-      - Your payment at GOV.UK Pay was not completed successfully.
-      - We will now take you back to the order summary page where you can try to make the payment again.
+      - "We were unable to process your payment. No money has been taken from your account. Try these suggestions:"
+    list_items:
+      - Try the payment again or try again later
+      - Check your payment details are correct
+      - Contact your bank for more details
   your_contact_details:
     heading: Your contact details
   what_is_your_address:
@@ -556,4 +559,4 @@ forms:
     your_order_summary:
       call_to_action: Pay now
     payment_incomplete:
-      call_to_action: Return to order summary
+      call_to_action: Go back to try the payment again
