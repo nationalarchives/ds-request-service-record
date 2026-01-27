@@ -13,7 +13,6 @@ from app.lib.template_filters import (
     parse_first_birth_year_for_closed_records,
     parse_markdown_links,
     slugify,
-    convert_pence_to_pounds_string,
     inject_unique_survey_link,
 )
 from flask import Flask
