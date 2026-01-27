@@ -35,7 +35,6 @@ class Production(Features):
     DEBUG: bool = False
 
     SENTRY_DSN: str = os.getenv("SENTRY_DSN", "")
-    SENTRY_JS_ID: str = os.getenv("SENTRY_JS_ID", "")
     SENTRY_SAMPLE_RATE: float = float(os.getenv("SENTRY_SAMPLE_RATE", "0.1"))
 
     COOKIE_DOMAIN: str = os.environ.get("COOKIE_DOMAIN", "")
