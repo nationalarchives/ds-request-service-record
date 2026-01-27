@@ -104,7 +104,7 @@ pages:
         - |
           [Grant of probate (opens in new tab)](PROBATE_SEARCH)
       second_list:
-        - In a JPG, GIF or PNG format
+        - In a JPG, JPEG, GIF or PNG format
         - No more than 5MB in size
         - Clearly showing all the information so our staff can read it
       after_second_list:
@@ -269,7 +269,7 @@ pages:
       - >
         The copy of proof of death must be:
     list_items:
-      - In a JPG, GIF or PNG format
+      - In a JPG, JPEG, GIF or PNG format
       - No more than 5MB in size
       - Clearly showing all the information so our staff can read it
     if_unable_to_upload: If you are unable to upload your file, you can send it to us by replying directly to the email you will receive on completion of this form.
@@ -295,7 +295,7 @@ pages:
         [Grant of probate (opens in new tab)](PROBATE_SEARCH)
     copy_requirements: "The copy of proof of death must be:"
     copy_requirements_list:
-      - In a JPG, GIF or PNG format
+      - In a JPG, JPEG, GIF or PNG format
       - No more than 5MB in size
       - Clearly showing all the information so our staff can read it
     warning: If you do not submit a proof of death when required, it is unlikely that we will be able to provide the record.
@@ -465,7 +465,7 @@ forms:
       label: Upload a file
       messages:
         file_size: The selected file must be smaller than 5MB
-        file_allowed: The selected file must be a JPG, GIF or PNG
+        file_allowed: The selected file must be a JPG, JPEG, GIF or PNG
       call_to_action: Continue
     service_number:
       label: Service number (optional)
