@@ -16,7 +16,7 @@
         {% endif %}
         <h1 class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.provide_a_proof_of_death.heading }}</h1>
         {% for paragraph in content.pages.provide_a_proof_of_death.paragraphs %}
-          <p>{{ paragraph | parse_last_birth_year_for_open_records | safe }}</p>
+          <p>{{ paragraph | parse_first_birth_year_for_closed_records | safe }}</p>
         {% endfor %}
         <ul class="tna-ul">
           {% for item in content.pages.provide_a_proof_of_death.list_items %}

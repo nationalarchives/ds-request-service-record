@@ -97,7 +97,7 @@ export async function continueFromYouHaveCancelledYourRequest(page) {
 export async function continueFromSubmitDataAccessRequest(page) {
   await expect(page).toHaveURL(Paths.MUST_SUBMIT_SUBJECT_ACCESS);
   await expect(page.locator("h1")).toHaveText(/Submit a data access request/);
-  await clickExitThisForm(page, "button");
+  await clickCancelThisRequest(page, "button");
 }
 
 export async function continueFromWhichMilitaryBranchDidThePersonServeIn(
@@ -128,7 +128,7 @@ export async function continueFromWhichMilitaryBranchDidThePersonServeIn(
 export async function continueFromWeDoNotHaveRoyalNavyServiceRecords(page) {
   await expect(page).toHaveURL(Paths.WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS);
   await expect(page.locator("h1")).toHaveText(/We do not hold this record/);
-  await clickExitThisForm(page, "button");
+  await clickCancelThisRequest(page, "button");
 }
 
 export async function continueFromWeAreUnlikelyToLocateThisRecord(page) {
@@ -136,7 +136,7 @@ export async function continueFromWeAreUnlikelyToLocateThisRecord(page) {
   await expect(page.locator("h1")).toHaveText(
     /We are unlikely to be able to locate this record/,
   );
-  await clickExitThisForm(page, "button");
+  await clickCancelThisRequest(page, "button");
 }
 
 export async function continueFromWeAreUnlikelyToHoldThisRecord(
@@ -215,7 +215,7 @@ export async function continueFromWeDoNotHaveRecordsForPeopleBornAfter(page) {
   await expect(page.locator("h1")).toHaveText(
     /We do not have records for people born after 1939/,
   );
-  await clickExitThisForm(page, "button");
+  await clickCancelThisRequest(page, "button");
 }
 
 export async function continueFromProvideAProofOfDeath(
@@ -438,8 +438,12 @@ export async function continueFromYourPostalAddress(page) {
 
 export async function continueFromPaymentIncomplete(page) {
   await expect(page).toHaveURL(Paths.PAYMENT_INCOMPLETE);
-  await expect(page.locator("h1")).toHaveText(/Payment incomplete/);
-  await page.getByRole("button", { name: "Return to order summary" }).click();
+  await expect(page.locator("h1")).toHaveText(
+    /Sorry, there was a problem processing your payment/,
+  );
+  await page
+    .getByRole("button", { name: "Go back to try the payment again" })
+    .click();
   await expect(page).toHaveURL(Paths.YOUR_ORDER_SUMMARY);
 }
 
@@ -449,8 +453,14 @@ export async function checkExternalLink(page, linkText, expectedHref) {
   await expect(link).toHaveAttribute("target", "_blank");
 }
 
-export async function clickExitThisForm(page, element) {
-  await page.getByRole(element, { name: "Exit this form" }).click();
+export async function checkInternalLink(page, linkText, expectedPath) {
+  const link = page.getByRole("link", { name: linkText });
+  await expect(link).not.toHaveAttribute("target", "_blank");
+  await expect(link).toHaveAttribute("href", expectedPath);
+}
+
+export async function clickCancelThisRequest(page, element) {
+  await page.getByRole(element, { name: "Cancel this request" }).click();
   await expect(page).toHaveURL(Paths.ARE_YOU_SURE_YOU_WANT_TO_CANCEL);
 }
 

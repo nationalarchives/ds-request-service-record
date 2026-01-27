@@ -11,7 +11,3 @@ class BoundaryYears:
         if current_year is None:
             current_year = datetime.now().year
         return current_year - cls.YEARS_A_RECORD_REMAINS_CLOSED
-
-    @classmethod
-    def last_birth_year_for_open_records(cls, current_year: int = None) -> int:
-        return cls.first_birth_year_for_closed_records(current_year) - 1

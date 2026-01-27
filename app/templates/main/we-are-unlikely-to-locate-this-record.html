@@ -14,7 +14,7 @@
         <h1
           class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.we_are_unlikely_to_locate_this_record.heading }}</h1>
         {% for paragraph in content.pages.we_are_unlikely_to_locate_this_record.paragraphs %}
-          <p>{{ paragraph }}</p>
+          <p>{{ paragraph | parse_markdown_links(new_tab=False) | safe }}</p>
         {% endfor %}
         <form action="{{ url_for('main.we_are_unlikely_to_locate_this_record') }}" method="post" novalidate>
           {{ form.csrf_token }}

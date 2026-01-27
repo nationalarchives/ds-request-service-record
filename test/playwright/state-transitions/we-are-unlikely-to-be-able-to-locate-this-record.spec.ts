@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 import { Paths } from "../lib/constants";
 import {
   checkExternalLink,
+  checkInternalLink,
   clickBackLink,
   continueFromWeAreUnlikelyToLocateThisRecord,
 } from "../lib/step-functions";
@@ -29,6 +30,18 @@ test.describe("the 'We are unlikely to be able to locate this record' form", () 
   }) => {
     await continueFromWeAreUnlikelyToLocateThisRecord(page);
     await clickBackLink(page, Paths.WE_ARE_UNLIKELY_TO_LOCATE_THIS_RECORD);
+  });
+
+  test.describe("inspecting the internal links", () => {
+    test("the 'Records relating to the Durham Home Guard' link", async ({
+      page,
+    }) => {
+      await checkInternalLink(
+        page,
+        "Records relating to the Durham Home Guard",
+        "https://discovery.nationalarchives.gov.uk/details/r/C12483430",
+      );
+    });
   });
 
   test.describe("inspecting the external link", () => {

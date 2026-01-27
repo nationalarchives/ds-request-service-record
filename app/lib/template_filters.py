@@ -1,5 +1,6 @@
 import re
 from datetime import datetime
+from urllib.parse import urlencode
 
 from app.constants import ExternalLinks
 from app.lib.boundary_years import BoundaryYears
@@ -15,7 +16,7 @@ def slugify(s):
     return s
 
 
-def parse_markdown_links(s):
+def parse_markdown_links(s, new_tab=True):
     if not s:
         return s
     # Regex to match [text](url)
@@ -25,9 +26,37 @@ def parse_markdown_links(s):
         text = match.group(1)
         key = match.group(2).strip()
         url = getattr(ExternalLinks, key, key)
-        return f'<a href="{url}" target="_blank" rel="noreferrer noopener">{text}</a>'
+        attrs = ' target="_blank" rel="noreferrer noopener"' if new_tab else ""
+        return f'<a href="{url}"{attrs}>{text}</a>'
 
     return pattern.sub(replacer, s)
+
+
+def inject_unique_survey_link(s, current_endpoint=None):
+    if not s:
+        return s
+
+    match = re.search(r"\[([^\]]+)\]\(([^)]+)\)", s)
+    if not match:
+        return s
+
+    link_text = match.group(1)
+    # We use the key from the Markdown to look up the property in ExternalLinks
+    key = match.group(2).strip()
+    link_url = getattr(ExternalLinks, key, key)
+
+    current_page = ""
+    if current_endpoint:
+        current_page = re.sub(r"[a-z]*\.", "", current_endpoint).strip()
+
+    query_string = urlencode({"current_page": current_page}) if current_page else ""
+    url = f"{link_url}?{query_string}" if query_string else link_url
+
+    replacement = (
+        f'<a href="{url}" target="_blank" rel="noreferrer noopener">{link_text}</a>'
+    )
+    # Replace only the first match. This function is not a general-purpose link parser
+    return re.sub(r"\[([^]]+)]\(([^)]+)\)", replacement, s, count=1)
 
 
 def parse_bold_text(s):
@@ -43,16 +72,16 @@ def parse_bold_text(s):
     return pattern.sub(replacer, s)
 
 
-def parse_last_birth_year_for_open_records(s):
+def parse_first_birth_year_for_closed_records(s):
     if not s:
         return s
 
-    year = BoundaryYears.last_birth_year_for_open_records(datetime.now().year)
+    year = BoundaryYears.first_birth_year_for_closed_records(datetime.now().year)
 
     span = f"<span data-last-birth-year-for-open-records='{year}'>{year}</span>"
 
     return s.replace(
-        "[LATEST_BIRTH_YEAR_FOR_OPEN_RECORDS]",
+        "[FIRST_BIRTH_YEAR_FOR_CLOSED_RECORDS]",
         span,
     )
 

@@ -8,10 +8,10 @@ from wtforms import (
 )
 
 
-class ExitThisForm(FlaskForm):
+class CancelThisRequest(FlaskForm):
     content = load_content()
 
     submit = SubmitField(
-        get_field_content(content, "submit_data_access_request", "call_to_action"),
+        get_field_content(content, "cancel_this_request", "call_to_action"),
         widget=TnaSubmitWidget(),
     )

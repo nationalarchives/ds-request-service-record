@@ -87,6 +87,9 @@ class ExternalLinks:
     OUR_FEES = "https://www.nationalarchives.gov.uk/legal/our-fees/"
     FOI_REQUEST_GUIDANCE = "https://www.gov.uk/make-a-freedom-of-information-request"
     USER_FEEDBACK_SURVEY = "https://www.smartsurvey.co.uk/s/46WXIN/"
+    DURHAM_HOME_GUARD_RECORDS = (
+        "https://discovery.nationalarchives.gov.uk/details/r/C12483430"
+    )
 
 
 FALLBACK_COUNTRY_CHOICES = [

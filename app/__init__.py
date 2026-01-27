@@ -10,9 +10,10 @@ from app.lib.template_filters import (
     convert_pence_to_pounds_string,
     format_standard_printed_order_price,
     parse_bold_text,
-    parse_last_birth_year_for_open_records,
+    parse_first_birth_year_for_closed_records,
     parse_markdown_links,
     slugify,
+    inject_unique_survey_link,
 )
 from flask import Flask
 from flask_session import Session
@@ -118,9 +119,10 @@ def create_app(config_class):
     app.add_template_filter(slugify)
     app.add_template_filter(parse_markdown_links)
     app.add_template_filter(parse_bold_text)
-    app.add_template_filter(parse_last_birth_year_for_open_records)
+    app.add_template_filter(parse_first_birth_year_for_closed_records)
     app.add_template_filter(format_standard_printed_order_price)
     app.add_template_filter(convert_pence_to_pounds_string)
+    app.add_template_filter(inject_unique_survey_link)
 
     @app.context_processor
     def context_processor():
