@@ -10,6 +10,11 @@
         {% for paragraph in content.pages.payment_incomplete.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
+        <ul class="tna-ul">
+          {% for item in content.pages.payment_incomplete.list_items %}
+            <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
         <form action="{{ url_for('main.payment_incomplete') }}" method="post" novalidate>
           {{ form.csrf_token }}
           <div class="tna-button-group">

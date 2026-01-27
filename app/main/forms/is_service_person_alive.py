@@ -24,6 +24,7 @@ class IsServicePersonAlive(FlaskForm):
                 )["required"]
             )
         ],
+        render_kw={"label": ""},
         widget=TnaRadiosWidget(),
     )
 

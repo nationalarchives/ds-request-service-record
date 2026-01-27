@@ -82,6 +82,7 @@ class Production(Features):
     MAX_UPLOAD_ATTEMPTS: int = int(os.environ.get("MAX_UPLOAD_ATTEMPTS", "3"))
 
     EMAIL_FROM: str = os.environ.get("EMAIL_FROM", "")
+    EMAIL_FROM_NAME: str = os.environ.get("EMAIL_FROM_NAME", "")
     DYNAMICS_INBOX: str = os.environ.get("DYNAMICS_INBOX", "")
 
     DELIVERY_FEE_API_URL: str = (

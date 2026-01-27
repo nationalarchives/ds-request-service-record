@@ -94,6 +94,7 @@ def _create_new_payment(form_data: dict, record_hash: str) -> str:
             payment_type="service_record",
             id=unique_id,
             _external=True,
+            _scheme="https",
         ),
     )
 

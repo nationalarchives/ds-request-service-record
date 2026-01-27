@@ -1,6 +1,10 @@
 app:
   title: Request a military service record
 pages:
+  all:
+    phase_banner:
+      phase: Beta
+      message: This is a new service. Help us improve it and [give your feedback (opens in new tab)](USER_FEEDBACK_SURVEY).
   request_a_military_service_record:
     heading: Request a military service record
     contents:
@@ -16,7 +20,7 @@ pages:
       options:
         - title: Standard
           paragraphs:
-            - For most applicants a standard request will provide the information they are looking for.
+            - For most applicants a Standard request will provide the information they are looking for.
             - |
               Standard provides a subset of documents from the record. This may include details
               provided when they enlisted, records of service and testimonials.
@@ -24,9 +28,9 @@ pages:
         - title: Full record check
           paragraphs:
             - |
-              Documents not provided in our standard subset will, in most cases, contain sensitive 
-              information and will be closed to the public. However, we can complete a sensitivity 
-              check of the record to assess what can be released. In some cases, we will not be able 
+              Documents not provided in Standard will, in most cases, contain sensitive information and will be closed 
+              to the public. However, we can complete a sensitivity check of the record to assess what can be released. 
+              In some cases, we will not be able 
               to supply the record, or large parts of it will be redacted.
     fees:
       heading: Fees
@@ -46,8 +50,8 @@ pages:
         - option: Full record check
           fee: £48.87 plus £1.04 per page copying fee. For example, 20 pages will cost an additional £20.80.
     delivery_method: |
-      Records are delivered as PDF colour scans digitally via email. We can post the record instead for an 
-      extra fee, but it will take longer to handle.
+      Records are delivered as PDF colour scans digitally via email. We can post a printed copy of the record instead 
+      for an extra fee, but it will take longer to handle.
   how_we_process_requests:
     heading: How we process requests
     paragraphs:
@@ -88,7 +92,7 @@ pages:
       before_first_list:
         paragraphs:
           - |
-            If the person whose record you are looking for was born after [LATEST_BIRTH_YEAR_FOR_OPEN_RECORDS] 
+            If the person whose record you are looking for was born after 1 January [FIRST_BIRTH_YEAR_FOR_CLOSED_RECORDS] 
             and is deceased, we require a digital copy of a proof of death. This is to protect 
             any personal data in the record that might relate to a living person.
           - "You will need to submit one of the following forms of evidence:"
@@ -104,7 +108,7 @@ pages:
         - |
           [Grant of probate (opens in new tab)](PROBATE_SEARCH)
       second_list:
-        - In a JPG, GIF or PNG format
+        - In a JPG, JPEG, GIF or PNG format
         - No more than 5MB in size
         - Clearly showing all the information so our staff can read it
       after_second_list:
@@ -130,6 +134,10 @@ pages:
           We will only use the data you provide to answer your request. 
           [Our privacy notice (opens in new tab)](PRIVACY_NOTICE) 
           explains how we collect, use, and protect personal data.
+  is_service_person_alive:
+    heading: Is the service person alive?
+    paragraphs:
+      - We will process your request differently if the individual is alive, in line with data protection law for a living person.
   you_may_want_to_check_ancestry:
     heading: You may want to check Ancestry
     paragraphs:
@@ -181,11 +189,17 @@ pages:
           - Field Marshal
       - intro_text: "Royal Air Force Commissioned Officer ranks include:"
         ranks:
+          - Pilot Officer
           - Flying Officer
           - Flight Lieutenant
           - Squadron Leader
           - Wing Commander
           - Group Captain
+          - Air Commodore
+          - Air Vice-Marshal
+          - Air Marshal
+          - Air Chief Marshal
+          - Marshal of the Royal Air Force
   have_you_previously_made_a_request:
     heading: Have you previously made a request for this record?
     prompt_to_provide_reference_number: If you select yes, please provide the reference number for your previous request.
@@ -249,13 +263,14 @@ pages:
         is unlikely that we will be able to locate the record of interest within a 
         reasonable timeframe.
       - |
-        Records relating to the Durham Home Guard are currently available in our catalogue.
+        [Records relating to the Durham Home Guard](DURHAM_HOME_GUARD_RECORDS) are currently 
+        available for download in our catalogue.
       - |
         The remaining Home Guard records will be made available via the genealogy company
         Ancestry. We expect all Home Guard records that have been transferred will 
-        be available on Ancestry by September 2027.
+        be available on Ancestry by March 2028.
       - |
-        Please only proceed if you are unable to wait until September 2027 by requesting 
+        Please only proceed if you are unable to wait until March 2028 by requesting 
         a paid search. You will then receive a quotation based on the estimated amount 
         of time it will take to locate the record.
     call_to_action: Request a paid search
@@ -269,7 +284,7 @@ pages:
       - >
         The copy of proof of death must be:
     list_items:
-      - In a JPG, GIF or PNG format
+      - In a JPG, JPEG, GIF or PNG format
       - No more than 5MB in size
       - Clearly showing all the information so our staff can read it
     if_unable_to_upload: If you are unable to upload your file, you can send it to us by replying directly to the email you will receive on completion of this form.
@@ -281,7 +296,7 @@ pages:
     heading: Provide a proof of death
     paragraphs:
       - |
-        As you are requesting a record for someone born after [LATEST_BIRTH_YEAR_FOR_OPEN_RECORDS], 
+        As you are requesting a record for someone born after 1 January [FIRST_BIRTH_YEAR_FOR_CLOSED_RECORDS], 
         you will need to provide a digital copy of a proof of death.
       - >
         You will need to submit one of the following forms of evidence:
@@ -295,7 +310,7 @@ pages:
         [Grant of probate (opens in new tab)](PROBATE_SEARCH)
     copy_requirements: "The copy of proof of death must be:"
     copy_requirements_list:
-      - In a JPG, GIF or PNG format
+      - In a JPG, JPEG, GIF or PNG format
       - No more than 5MB in size
       - Clearly showing all the information so our staff can read it
     warning: If you do not submit a proof of death when required, it is unlikely that we will be able to provide the record.
@@ -309,10 +324,13 @@ pages:
     paragraphs:
       - We are unable to create a payment link at this time.
   payment_incomplete:
-    heading: Payment incomplete
+    heading: Sorry, there was a problem processing your payment
     paragraphs:
-      - Your payment at GOV.UK Pay was not completed successfully.
-      - We will now take you back to the order summary page where you can try to make the payment again.
+      - "We were unable to process your payment. No money has been taken from your account. Try these suggestions:"
+    list_items:
+      - Try the payment again or try again later
+      - Check your payment details are correct
+      - Contact your bank for more details
   your_contact_details:
     heading: Your contact details
   what_is_your_address:
@@ -332,7 +350,7 @@ pages:
       sub_heading: (Recommended)
       paragraphs:
         - |
-          For most applicants a standard request will provide the information they are looking for.
+          For most applicants a Standard request will provide the information they are looking for.
         - |
           Standard provides a subset of documents from the record. This may include details provided
           when they enlisted, records of service and testimonials.
@@ -350,8 +368,8 @@ pages:
       heading: Full record check
       paragraphs:
         - |
-          Documents not provided in Standard will, in most cases, contain sensitive information and will be closed 
-          to the public. However, we can complete a review of the record to assess what can be released.
+          Documents not provided in Standard will, in most cases, contain sensitive information and will be closed to 
+          the public. However, we can complete a sensitivity check of the record to assess what can be released.
         - In some cases, we will not be able to supply the entire record, or large parts of it will be redacted.
         - |
           We charge two fees for a Full record check. The first covers the search for the record and a page check. 
@@ -392,7 +410,7 @@ pages:
       paragraphs:
         - We have sent your request to a member of our team. They will use the information provided to search for the record you are requesting.
         - We will contact you with the result of the search, or to ask for more information, within 30 working days.
-        - Get in touch with us by replying to your confirmation email, or visit our Contact us page.<br><br>[ What did you think of this form? ](USER_FEEDBACK_SURVEY)
+        - Get in touch with us by replying to your confirmation email, or visit our Contact us page.<br><br>[ What did you think of this form? (opens in new tab) ](USER_FEEDBACK_SURVEY)
 forms:
   fields:
     request_a_military_service_record:
@@ -409,10 +427,9 @@ forms:
       call_to_action: "Yes"
     you_may_want_to_check_ancestry:
       call_to_action: Continue
-    submit_data_access_request:
-      call_to_action: Exit this form
+    cancel_this_request:
+      call_to_action: Cancel this request
     is_service_person_alive:
-      label: Is the service person alive?
       messages:
         required: Tell us if the service person is alive
     were_they_a_commissioned_officer:
@@ -465,7 +482,7 @@ forms:
       label: Upload a file
       messages:
         file_size: The selected file must be smaller than 5MB
-        file_allowed: The selected file must be a JPG, GIF or PNG
+        file_allowed: The selected file must be a JPG, JPEG, GIF or PNG
       call_to_action: Continue
     service_number:
       label: Service number (optional)
@@ -550,4 +567,4 @@ forms:
     your_order_summary:
       call_to_action: Pay now
     payment_incomplete:
-      call_to_action: Return to order summary
+      call_to_action: Go back to try the payment again

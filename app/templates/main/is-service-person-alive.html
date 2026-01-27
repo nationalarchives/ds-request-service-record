@@ -14,9 +14,13 @@
         {% if form.errors %}
           {{ tnaErrorSummary(wtforms_errors(form)) }}
         {% endif %}
+        <h1 class="tna-heading-xl tna-!--margin-top-l">{{ content.pages.is_service_person_alive.heading }}</h1>
+        {% for paragraph in content.pages.is_service_person_alive.paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
         <form action="{{ url_for('main.is_service_person_alive') }}" method="post" novalidate>
           {{ form.csrf_token }}
-          {{ form.is_service_person_alive(params={'headingLevel':1, 'headingSize':'xl'}) }}
+          {{ form.is_service_person_alive() }}
           <div class="tna-button-group">
             {{ form.submit(params={'classes':'tna-button--accent'}) }}
           </div>
