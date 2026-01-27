@@ -1,4 +1,8 @@
 # Formatting of 'frontend' files using Black
 b416c87b8983e68809d1d10d94b1869106eaaaa7
 b5d07a5be427213866ecb7e7316fbf4382228ed2
+2c8694217a458bc983a5ed25f125776505f662a2
+
+# Formatting for Flake8 compliance
+8a2e3a0a7daffc5b1adb38f77e7f75392c974b0b
 
