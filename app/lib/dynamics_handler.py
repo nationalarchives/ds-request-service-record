@@ -41,10 +41,11 @@ DYNAMICS_REQUEST_FIELD_MAP = [
     ("provider_id", "provider_id"),
 ]
 
+
 class DynamicsClosureStatus:
-    FOIOP = "FOIOP"   # Open record - Over 115
-    FOICD = "FOICD"   # Closed record - Proof of Death provided
-    FOICDN = "FOICDN" # Closed record - No Proof of Death provided
+    FOIOP = "FOIOP"  # Open record - Over 115
+    FOICD = "FOICD"  # Closed record - Proof of Death provided
+    FOICDN = "FOICDN"  # Closed record - No Proof of Death provided
 
 
 def send_request_to_dynamics(record: ServiceRecordRequest) -> bool:
@@ -119,7 +120,10 @@ def _generate_tagged_data(mapping: list[tuple[str, str | None]], obj) -> str:
                 text = str(value)
                 chunks.append(f"<{tag}>{text}</{tag}>")
         else:
-            if closure_status_calculation(obj.date_of_birth, has_proof_of_death(obj)) != DynamicsClosureStatus.FOIOP:
+            if (
+                closure_status_calculation(obj.date_of_birth, has_proof_of_death(obj))
+                != DynamicsClosureStatus.FOIOP
+            ):
                 value = getattr(obj, attr) if attr else None
                 if value:
                     text = str(value)

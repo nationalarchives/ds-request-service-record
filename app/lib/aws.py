@@ -88,7 +88,7 @@ def send_email(to: str, subject: str, body: str) -> bool:
 
     try:
         ses.send_email(
-            Source=current_app.config["EMAIL_FROM"],
+            Source=f"{current_app.config['EMAIL_FROM_NAME']} <{current_app.config['EMAIL_FROM']}>",
             Destination={"ToAddresses": [to]},
             Message={
                 "Subject": {"Data": subject},
