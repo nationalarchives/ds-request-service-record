@@ -1,6 +1,10 @@
 app:
   title: Request a military service record
 pages:
+  all:
+    phase_banner:
+      phase: Beta
+      message: This is a new service. Help us improve it and [give your feedback (opens in new tab)](USER_FEEDBACK_SURVEY).
   request_a_military_service_record:
     heading: Request a military service record
     contents:

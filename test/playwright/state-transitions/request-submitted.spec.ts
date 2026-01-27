@@ -17,7 +17,7 @@ test.describe("choose your order type", () => {
       await checkExternalLink(
         page,
         "What did you think of this form?",
-        "https://www.smartsurvey.co.uk/s/46WXIN/",
+        "https://www.smartsurvey.co.uk/s/46WXIN/?current_page=request_submitted",
       );
     });
   });

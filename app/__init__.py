@@ -13,6 +13,8 @@ from app.lib.template_filters import (
     parse_first_birth_year_for_closed_records,
     parse_markdown_links,
     slugify,
+    convert_pence_to_pounds_string,
+    inject_unique_survey_link,
 )
 from flask import Flask
 from flask_session import Session
@@ -73,16 +75,16 @@ def create_app(config_class):
     talisman.init_app(
         app,
         content_security_policy={
-            "default-src": default_csp,
-            "base-uri": csp_none,
-            "object-src": csp_none,
-            "script-src": [
-                csp_self,
-                "https://www.googletagmanager.com",
-                "*.google-analytics.com",
-            ],
-        }
-        | csp_rules,
+                                    "default-src": default_csp,
+                                    "base-uri": csp_none,
+                                    "object-src": csp_none,
+                                    "script-src": [
+                                        csp_self,
+                                        "https://www.googletagmanager.com",
+                                        "*.google-analytics.com",
+                                    ],
+                                }
+                                | csp_rules,
         feature_policy={
             "fullscreen": app.config.get("CSP_FEATURE_FULLSCREEN", csp_self),
             "picture-in-picture": app.config.get(
@@ -121,6 +123,7 @@ def create_app(config_class):
     app.add_template_filter(parse_first_birth_year_for_closed_records)
     app.add_template_filter(format_standard_printed_order_price)
     app.add_template_filter(convert_pence_to_pounds_string)
+    app.add_template_filter(inject_unique_survey_link)
 
     @app.context_processor
     def context_processor():

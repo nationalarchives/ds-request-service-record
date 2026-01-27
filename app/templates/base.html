@@ -84,8 +84,8 @@
   {{ tnaGlobalHeader({
   'defaultContent': True,
   'phaseBanner': {
-    'phase': 'Beta',
-    'message': 'This is a new service. Help us improve it and [give your feedback (opens in new tab)](USER_FEEDBACK_SURVEY).' | parse_markdown_links
+    'phase': content.pages.all.phase_banner.phase,
+    'message': content.pages.all.phase_banner.message | inject_unique_survey_link(current_endpoint=request.endpoint)
   }
 }) | indent(6) }}
 {% endblock header %}
