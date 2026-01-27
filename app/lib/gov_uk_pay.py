@@ -55,7 +55,7 @@ def create_payment(
     amount: int, description: str, reference: str, email: str | None, return_url: str
 ) -> dict | None:
     headers = {
-        "Authorization": f"Bearer {current_app.config["GOV_UK_PAY_API_KEY"]}",
+        "Authorization": f"Bearer {current_app.config['GOV_UK_PAY_API_KEY']}",
         "Content-Type": "application/json",
     }
 
@@ -76,7 +76,7 @@ def create_payment(
     try:
         response.raise_for_status()
     except Exception as e:
-        current_app.logger.error(f"Error creating payment: {e}")
+        current_app.logger.error(f"Error creating payment: {e}: {response.text}")
         return None
 
     return response.json()

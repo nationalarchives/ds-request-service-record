@@ -1,5 +1,5 @@
 import requests
-from app.constants import OrderFeesPence, ORDER_TYPES
+from app.constants import ORDER_TYPES, OrderFeesPence
 from flask import current_app
 
 OPTION_MAP = {
