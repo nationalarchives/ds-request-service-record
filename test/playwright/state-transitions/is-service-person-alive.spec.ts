@@ -15,9 +15,9 @@ test.describe("the 'Is the person still alive?' form", () => {
     const selectionMappings = [
       {
         label: "Yes",
-        nextPage: Paths.MUST_SUBMIT_SUBJECT_ACCESS,
+        nextPage: Paths.SUBJECT_ACCESS_REQUEST,
         description:
-          "when 'Yes' is selected, presents the 'Submit a data access request' page ",
+          "when 'Yes' is selected, presents the 'Subject Access Request' page ",
       },
       {
         label: "No",

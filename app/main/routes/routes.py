@@ -148,24 +148,17 @@ def is_service_person_alive(form, state_machine):
     )
 
 
-@bp.route("/must-submit-subject-access-request/", methods=["GET", "POST"])
+@bp.route("/subject-access-request/", methods=["GET", "POST"])
 @update_dynamic_back_link_mapping(
     mappings={
-        MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL: MultiPageFormRoutes.MUST_SUBMIT_SUBJECT_ACCESS_REQUEST,
+        MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL: MultiPageFormRoutes.SUBJECT_ACCESS_REQUEST,
     }
 )
 @with_state_machine
-@with_form_prefilled_from_session(CancelThisRequest)
-def must_submit_subject_access_request(form, state_machine):
-    if form.validate_on_submit():
-        state_machine.continue_from_submit_subject_access_request_form(form)
-        return redirect(url_for(state_machine.route_for_current_state))
-
+def subject_access_request(state_machine):
     return render_template(
-        "main/submit-subject-access-request.html",
-        form=form,
+        "main/subject-access-request.html",
         content=load_content(),
-        subject_access_request_link=ExternalLinks.SUBJECT_ACCESS_REQUEST_FORM,
         back_link_route=get_dynamic_back_link_route(key=request.endpoint),
     )
 
@@ -226,7 +219,7 @@ def we_do_not_have_royal_navy_service_records(form, state_machine):
         "main/we-do-not-have-royal-navy-service-branch-records.html",
         form=form,
         content=load_content(),
-        mod_service_link=ExternalLinks.MOD_SERVICE,
+        mod_service_link=ExternalLinks.MOD_SERVICE_DECEASED_SERVICEPERSON,
     )
 
 
@@ -246,7 +239,7 @@ def we_are_unlikely_to_hold_officer_records__army(form, state_machine):
         "main/we-are-unlikely-to-hold-army-officer-records.html",
         content=load_content(),
         form=form,
-        mod_service_link=ExternalLinks.MOD_SERVICE,
+        mod_service_link=ExternalLinks.MOD_SERVICE_DECEASED_SERVICEPERSON,
     )
 
 
@@ -268,7 +261,7 @@ def we_are_unlikely_to_hold_officer_records__raf(form, state_machine):
         "main/we-are-unlikely-to-hold-raf-officer-records.html",
         content=load_content(),
         form=form,
-        mod_service_link=ExternalLinks.MOD_SERVICE,
+        mod_service_link=ExternalLinks.MOD_SERVICE_DECEASED_SERVICEPERSON,
     )
 
 
@@ -290,7 +283,7 @@ def we_are_unlikely_to_hold_officer_records__generic(form, state_machine):
         "main/we-are-unlikely-to-hold-officer-records-for-this-branch.html",
         content=load_content(),
         form=form,
-        mod_service_link=ExternalLinks.MOD_SERVICE,
+        mod_service_link=ExternalLinks.MOD_SERVICE_DECEASED_SERVICEPERSON,
     )
 
 
@@ -397,7 +390,7 @@ def we_do_not_have_records_for_people_born_after(form, state_machine):
         "main/we-do-not-have-records-for-people-born-after.html",
         content=load_content(),
         form=form,
-        mod_service_link=ExternalLinks.MOD_SERVICE,
+        mod_service_link=ExternalLinks.MOD_SERVICE_DECEASED_SERVICEPERSON,
     )
 
 

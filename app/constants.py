@@ -11,7 +11,7 @@ class MultiPageFormRoutes(Enum):
     HAVE_YOU_CHECKED_THE_CATALOGUE = "main.have_you_checked_the_catalogue"
     SEARCH_THE_CATALOGUE = "main.search_the_catalogue"
     IS_SERVICE_PERSON_ALIVE = "main.is_service_person_alive"
-    MUST_SUBMIT_SUBJECT_ACCESS_REQUEST = "main.must_submit_subject_access_request"
+    SUBJECT_ACCESS_REQUEST = "main.subject_access_request"
     ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_PROOF_OF_DEATH = (
         "main.are_you_sure_you_want_to_proceed_without_proof_of_death"
     )
@@ -75,7 +75,8 @@ class ExternalLinks:
     SUBJECT_ACCESS_REQUEST_FORM = (
         "https://discovery.nationalarchives.gov.uk/mod-dsa-request-step1"
     )
-    MOD_SERVICE = "https://www.gov.uk/get-copy-military-records-of-service/apply-for-the-records-of-a-deceased-serviceperson"
+    MOD_SERVICE_DECEASED_SERVICEPERSON = "https://www.gov.uk/get-copy-military-records-of-service/apply-for-the-records-of-a-deceased-serviceperson"
+    MOD_SERVICE_LIVING_PERSON = "https://www.gov.uk/get-copy-military-records-of-service/apply-for-your-own-records"
     PAID_SEARCH = "https://www.nationalarchives.gov.uk/contact-us/our-paid-search-service/request-a-paid-search/"
     COPIES_OF_DEATH_CERTIFICATES = (
         "https://www.gov.uk/order-copy-birth-death-marriage-certificate"
