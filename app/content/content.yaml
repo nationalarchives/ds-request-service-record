@@ -134,6 +134,10 @@ pages:
           We will only use the data you provide to answer your request. 
           [Our privacy notice (opens in new tab)](PRIVACY_NOTICE) 
           explains how we collect, use, and protect personal data.
+  is_service_person_alive:
+    heading: Is the service person alive?
+    paragraphs:
+      - We will process your request differently if the individual is alive, in line with data protection law for a living person.
   you_may_want_to_check_ancestry:
     heading: You may want to check Ancestry
     paragraphs:
@@ -426,7 +430,6 @@ forms:
     cancel_this_request:
       call_to_action: Cancel this request
     is_service_person_alive:
-      label: Is the service person alive?
       messages:
         required: Tell us if the service person is alive
     were_they_a_commissioned_officer:
