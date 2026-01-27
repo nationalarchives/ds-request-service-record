@@ -74,16 +74,16 @@ def create_app(config_class):
     talisman.init_app(
         app,
         content_security_policy={
-                                    "default-src": default_csp,
-                                    "base-uri": csp_none,
-                                    "object-src": csp_none,
-                                    "script-src": [
-                                        csp_self,
-                                        "https://www.googletagmanager.com",
-                                        "*.google-analytics.com",
-                                    ],
-                                }
-                                | csp_rules,
+            "default-src": default_csp,
+            "base-uri": csp_none,
+            "object-src": csp_none,
+            "script-src": [
+                csp_self,
+                "https://www.googletagmanager.com",
+                "*.google-analytics.com",
+            ],
+        }
+        | csp_rules,
         feature_policy={
             "fullscreen": app.config.get("CSP_FEATURE_FULLSCREEN", csp_self),
             "picture-in-picture": app.config.get(
