@@ -15,7 +15,7 @@ class UploadAProofOfDeath(FlaskForm):
         get_field_content(content, "upload_a_proof_of_death", "label"),
         validators=[
             FileAllowed(
-                upload_set=["jpg", "png", "gif"],
+                upload_set=["jpg", "jpeg", "png", "gif"],
                 message=get_field_content(
                     content, "upload_a_proof_of_death", "messages"
                 )["file_allowed"],
