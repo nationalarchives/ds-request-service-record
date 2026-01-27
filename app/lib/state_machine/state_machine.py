@@ -189,10 +189,6 @@ class RoutingStateMachine(StateMachine):
         subject_access_request_page, cond="living_subject"
     ) | initial.to(service_branch_form, unless="living_subject")
 
-    continue_from_submit_subject_access_request_form = initial.to(
-        are_you_sure_you_want_to_cancel_form
-    )
-
     continue_from_service_branch_form = (
         initial.to(
             were_they_a_commissioned_officer_form,
@@ -321,9 +317,7 @@ class RoutingStateMachine(StateMachine):
         self.route_for_current_state = MultiPageFormRoutes.IS_SERVICE_PERSON_ALIVE.value
 
     def entering_subject_access_request_page(self):
-        self.route_for_current_state = (
-            MultiPageFormRoutes.MUST_SUBMIT_SUBJECT_ACCESS_REQUEST.value
-        )
+        self.route_for_current_state = MultiPageFormRoutes.SUBJECT_ACCESS_REQUEST.value
 
     def entering_service_branch_form(self):
         self.route_for_current_state = MultiPageFormRoutes.SERVICE_BRANCH_FORM.value

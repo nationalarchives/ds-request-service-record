@@ -74,7 +74,7 @@ def test_continue_from_you_may_want_to_check_ancestry_sets_route():
         (
             "yes",
             "subject_access_request_page",
-            MultiPageFormRoutes.MUST_SUBMIT_SUBJECT_ACCESS_REQUEST.value,
+            MultiPageFormRoutes.SUBJECT_ACCESS_REQUEST.value,
         ),
         ("no", "service_branch_form", MultiPageFormRoutes.SERVICE_BRANCH_FORM.value),
         (
@@ -152,18 +152,6 @@ def test_continue_from_we_do_not_have_royal_navy_service_records():
 def test_continue_from_we_are_unlikely_to_locate_this_record():
     sm = RoutingStateMachine()
     sm.continue_from_we_are_unlikely_to_locate_this_record_form()
-    assert sm.current_state.id == "are_you_sure_you_want_to_cancel_form"
-    assert (
-        sm.route_for_current_state
-        == MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL.value
-    )
-
-
-def test_continue_from_submit_subject_access_request_form():
-    sm = RoutingStateMachine()
-    sm.continue_from_submit_subject_access_request_form(
-        form=make_form(submit_subject_access_request=None)
-    )
     assert sm.current_state.id == "are_you_sure_you_want_to_cancel_form"
     assert (
         sm.route_for_current_state

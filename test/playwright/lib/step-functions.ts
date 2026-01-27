@@ -94,10 +94,9 @@ export async function continueFromYouHaveCancelledYourRequest(page) {
   await expect(page).toHaveURL(Paths.JOURNEY_START);
 }
 
-export async function continueFromSubmitDataAccessRequest(page) {
-  await expect(page).toHaveURL(Paths.MUST_SUBMIT_SUBJECT_ACCESS);
-  await expect(page.locator("h1")).toHaveText(/Submit a data access request/);
-  await clickCancelThisRequest(page, "button");
+export async function presentSubjectAccessRequest(page) {
+  await expect(page).toHaveURL(Paths.SUBJECT_ACCESS_REQUEST);
+  await expect(page.locator("h1")).toHaveText(/Subject Access Request/);
 }
 
 export async function continueFromWhichMilitaryBranchDidThePersonServeIn(
