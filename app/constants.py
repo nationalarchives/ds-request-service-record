@@ -336,3 +336,10 @@ FALLBACK_COUNTRY_CHOICES = [
     "Zambia",
     "Zimbabwe",
 ]
+
+ORDER_TYPES = {
+    ("standard", "Digital"): "standard_digital",
+    ("standard", "PrintedTracked"): "standard_printed",
+    ("full", "Digital"): "full_record_check_digital",
+    ("full", "PrintedTracked"): "full_record_check_printed",
+}

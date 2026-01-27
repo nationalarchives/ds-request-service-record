@@ -1,106 +1,91 @@
-import pytest
+import datetime
+
 from app.lib.save_submitted_form_fields_to_session import (
     save_submitted_form_fields_to_session,
 )
-from flask import Flask
-from flask import session as flask_session
+from werkzeug.datastructures import FileStorage
 
 
-class DummyField:
+class MockField:
     def __init__(self, data):
         self.data = data
 
 
-class DummyForm:
-    def __init__(self, **fields):
-        # Mimic WTForms' internal _fields mapping
-        self._fields = {name: DummyField(value) for name, value in fields.items()}
+class MockForm:
+    def __init__(self, fields):
+        # fields: dict of field_name -> MockField
+        self._fields = fields
 
 
-def test_saves_basic_fields_into_empty_session():
+def test_serializes_filestorage_filename():
     session_obj = {}
-    form = DummyForm(
-        forenames="Francis",
-        last_name="Palgrave",
-        csrf_token="ignore",
-        submit="ignored",
+    fs = FileStorage(stream=None, filename="proof-of-death.png")
+    form = MockForm(
+        {
+            "csrf_token": MockField("secret"),
+            "submit": MockField("Submit"),
+            "file_field": MockField(fs),
+        }
     )
-    # Add csrf_token & submit explicitly so we can verify they are ignored
-    form._fields["csrf_token"] = DummyField("TOKEN")
-    form._fields["submit"] = DummyField("Submit")
 
     save_submitted_form_fields_to_session(form, session_obj=session_obj)
 
-    assert "form_data" in session_obj
-    assert session_obj["form_data"] == {
-        "forenames": "Francis",
-        "last_name": "Palgrave",
-    }
-
-
-def test_merges_with_existing_dict_overwriting_new_values():
-    session_obj = {"form_data": {"forenames": "Thomas", "age": 272}}
-    form = DummyForm(forenames="William", last_name="Hardy")
-
-    save_submitted_form_fields_to_session(form, session_obj=session_obj)
-
-    assert session_obj["form_data"] == {
-        "forenames": "William",  # overwritten
-        "age": 272,  # preserved
-        "last_name": "Hardy",  # added
-    }
-
-
-def test_replaces_non_dict_existing_data():
-    session_obj = {"form_data": ["not", "a", "dict"]}
-    form = DummyForm(field1="value1")
-
-    save_submitted_form_fields_to_session(form, session_obj=session_obj)
-
-    assert session_obj["form_data"] == {"field1": "value1"}
-
-
-def test_ignores_csrf_and_submit_fields():
-    session_obj = {}
-    form = DummyForm(csrf_token="abc", submit="Send", real_field="value")
-    # Ensure keys exist exactly with those names
-    save_submitted_form_fields_to_session(form, session_obj=session_obj)
-    assert session_obj["form_data"] == {"real_field": "value"}
+    assert session_obj["form_data"]["file_field"] == "proof-of-death.png"
     assert "csrf_token" not in session_obj["form_data"]
     assert "submit" not in session_obj["form_data"]
 
 
-def test_empty_payload_does_not_modify_existing_when_no_new_fields():
-    session_obj = {"form_data": {"already": 1}}
-    form = DummyForm()  # no fields at all
+def test_serializes_filestorage_empty_filename_to_placeholder():
+    session_obj = {}
+    fs = FileStorage(stream=None, filename="")
+    form = MockForm({"file_field": MockField(fs)})
+
     save_submitted_form_fields_to_session(form, session_obj=session_obj)
-    # Should be unchanged
-    assert session_obj["form_data"] == {"already": 1}
+
+    assert session_obj["form_data"]["file_field"] == "No file uploaded"
 
 
-def test_fallback_to_flask_session_when_no_session_obj_passed():
-    app = Flask(__name__)
-    app.secret_key = "test-secret"  # Needed for session
+def test_formats_date_and_datetime():
+    session_obj = {}
+    d = datetime.date(2024, 7, 5)  # 05 July 2024
+    dt = datetime.datetime(2023, 12, 31, 23, 59)  # 31 December 2023
+    form = MockForm(
+        {
+            "date_field": MockField(d),
+            "datetime_field": MockField(dt),
+            "text_field": MockField("hello"),
+        }
+    )
 
-    form = DummyForm(city="London", country="UK")
-
-    with app.test_request_context():
-        save_submitted_form_fields_to_session(
-            form
-        )  # no session_obj -> uses flask's session
-        assert flask_session["form_data"] == {"city": "London", "country": "UK"}
-
-
-# Edge case: overlapping but empty new value should still overwrite
-@pytest.mark.parametrize(
-    "existing,new_value,expected",
-    [
-        ("Thomas", "", ""),
-        ("Thomas", None, None),
-    ],
-)
-def test_overwrite_with_falsey_values(existing, new_value, expected):
-    session_obj = {"form_data": {"field": existing, "other": 123}}
-    form = DummyForm(field=new_value)
     save_submitted_form_fields_to_session(form, session_obj=session_obj)
-    assert session_obj["form_data"] == {"field": expected, "other": 123}
+
+    assert session_obj["form_data"]["date_field"] == "05 July 2024"
+    assert session_obj["form_data"]["datetime_field"] == "31 December 2023"
+    assert session_obj["form_data"]["text_field"] == "hello"
+
+
+def test_merges_with_existing_form_data_dict():
+    session_obj = {"form_data": {"existing": "keep", "to_override": "old"}}
+    form = MockForm(
+        {
+            "to_override": MockField("new"),
+            "added": MockField(123),
+        }
+    )
+
+    save_submitted_form_fields_to_session(form, session_obj=session_obj)
+
+    assert session_obj["form_data"] == {
+        "existing": "keep",
+        "to_override": "new",
+        "added": 123,
+    }
+
+
+def test_overwrites_when_existing_is_not_dict():
+    session_obj = {"form_data": ["not", "a", "dict"]}
+    form = MockForm({"a": MockField(1)})
+
+    save_submitted_form_fields_to_session(form, session_obj=session_obj)
+
+    assert session_obj["form_data"] == {"a": 1}

@@ -7,11 +7,12 @@ from app.lib.db.models import db
 from app.lib.requires_session_key import requires_session_key
 from app.lib.talisman import talisman
 from app.lib.template_filters import (
-    format_delivery_price,
+    format_standard_printed_order_price,
     parse_bold_text,
     parse_last_birth_year_for_open_records,
     parse_markdown_links,
     slugify,
+    convert_pence_to_pounds_string,
 )
 from flask import Flask
 from flask_session import Session
@@ -20,7 +21,9 @@ from tna_frontend_jinja.wtforms.helpers import WTFormsHelpers
 
 
 def create_app(config_class):
-    app = Flask(__name__, static_url_path="/request-a-military-service-record/static")
+    service_url_prefix = "/request-a-military-service-record"
+
+    app = Flask(__name__, static_url_path=f"{service_url_prefix}/static")
     app.config.from_object(config_class)
 
     if app.config.get("SENTRY_DSN"):
@@ -116,7 +119,8 @@ def create_app(config_class):
     app.add_template_filter(parse_markdown_links)
     app.add_template_filter(parse_bold_text)
     app.add_template_filter(parse_last_birth_year_for_open_records)
-    app.add_template_filter(format_delivery_price)
+    app.add_template_filter(format_standard_printed_order_price)
+    app.add_template_filter(convert_pence_to_pounds_string)
 
     @app.context_processor
     def context_processor():
@@ -137,8 +141,6 @@ def create_app(config_class):
     from .healthcheck import bp as healthcheck_bp
     from .main import bp as site_bp
     from .sitemap import bp as sitemap_bp
-
-    service_url_prefix = "/request-a-military-service-record"
 
     app.register_blueprint(healthcheck_bp, url_prefix="/healthcheck")
     app.register_blueprint(sitemap_bp, url_prefix=service_url_prefix)

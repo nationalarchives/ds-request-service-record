@@ -299,6 +299,8 @@ class RoutingStateMachine(StateMachine):
 
     continue_on_return_from_gov_uk_redirect = initial.to(request_submitted_page)
 
+    continue_from_payment_incomplete_page = initial.to(your_order_summary_form)
+
     def entering_how_we_process_requests_form(self):
         self.route_for_current_state = MultiPageFormRoutes.HOW_WE_PROCESS_REQUESTS.value
 
@@ -461,7 +463,7 @@ class RoutingStateMachine(StateMachine):
         """Condition method to determine if the service person's date of birth requires a proof of death."""
         return (
             form.date_of_birth.data.year
-            >= BoundaryYears.last_birth_year_for_record_to_be_open(datetime.now().year)
+            >= BoundaryYears.first_birth_year_for_closed_records(datetime.now().year)
         )
 
     def does_not_have_email(self, form):

@@ -34,6 +34,12 @@ test.describe("The 'Upload a proof of death' form", () => {
     const bufferSizeBelowLimit = 1024 * 1024 * 4; // 4MB
     const bufferSizeAboveLimit = 1024 * 1024 * 6; // 6MB
 
+    test("when the form is submitted without a file selected, the user is presented with the next page", async ({
+      page,
+    }) => {
+      await continueFromUploadAProofOfDeath(page, "", 0, true, null);
+    });
+
     test("with an uploaded file with the incorrect extension, shows an error", async ({
       page,
     }) => {

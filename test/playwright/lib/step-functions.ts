@@ -274,11 +274,13 @@ export async function continueFromUploadAProofOfDeath(
   await expect(page).toHaveURL(Paths.UPLOAD_A_PROOF_OF_DEATH);
   await expect(page.locator("h1")).toHaveText(/Upload a proof of death/);
   const fileBuffer = Buffer.alloc(fileSizeInBytes);
-  await page.getByLabel("Upload a file").setInputFiles({
-    name: `proof-of-death.${fileExtension}`,
-    mimeType: "application/octet-stream",
-    buffer: fileBuffer,
-  });
+  if (fileExtension && fileSizeInBytes) {
+    await page.getByLabel("Upload a file").setInputFiles({
+      name: `proof-of-death.${fileExtension}`,
+      mimeType: "application/octet-stream",
+      buffer: fileBuffer,
+    });
+  }
   await page.getByRole("button", { name: /Continue/i }).click();
   if (shouldValidate) {
     await page.getByRole("button", { name: /Continue/i }).click();
@@ -431,6 +433,13 @@ export async function continueFromYourPostalAddress(page) {
   await page.getByLabel("Postcode").fill("TW9 4DU");
   await page.getByLabel("Country").selectOption("United Kingdom");
   await page.getByRole("button", { name: /Continue/i }).click();
+  await expect(page).toHaveURL(Paths.YOUR_ORDER_SUMMARY);
+}
+
+export async function continueFromPaymentIncomplete(page) {
+  await expect(page).toHaveURL(Paths.PAYMENT_INCOMPLETE);
+  await expect(page.locator("h1")).toHaveText(/Payment incomplete/);
+  await page.getByRole("button", { name: "Return to order summary" }).click();
   await expect(page).toHaveURL(Paths.YOUR_ORDER_SUMMARY);
 }
 

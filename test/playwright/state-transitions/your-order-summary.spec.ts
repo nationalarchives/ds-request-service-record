@@ -16,8 +16,9 @@ test.describe("Routes to 'Your order summary'", () => {
   const providedByPostTests = [
     {
       buttonText: "standard",
-      orderTypePrice: "£47.16",
-      deliveryFee: "£7.95",
+      totalPrice: "55.11",
+      orderTypePrice: "47.16",
+      deliveryFee: "7.95",
       description: "Standard",
       personMakingRequest: {
         firstName: "Francis",
@@ -26,7 +27,7 @@ test.describe("Routes to 'Your order summary'", () => {
     },
     {
       buttonText: "full",
-      orderTypePrice: "£48.87",
+      totalPrice: "48.87",
       description: "Full record check",
       personMakingRequest: {
         firstName: "Francis",
@@ -37,8 +38,9 @@ test.describe("Routes to 'Your order summary'", () => {
 
   for (const {
     buttonText,
-    orderTypePrice,
+    totalPrice,
     deliveryFee,
+    orderTypePrice,
     description,
     personMakingRequest,
   } of providedByPostTests) {
@@ -52,8 +54,13 @@ test.describe("Routes to 'Your order summary'", () => {
         new RegExp(description),
       );
       await expect(page.locator("[data-price]")).toHaveText(
-        new RegExp(orderTypePrice),
+        new RegExp(totalPrice),
       );
+      if (orderTypePrice) {
+        await expect(page.locator("[data-order-type-price]")).toHaveText(
+          new RegExp(orderTypePrice),
+        );
+      }
       if (deliveryFee) {
         await expect(page.locator("[data-delivery-price]")).toHaveText(
           new RegExp(deliveryFee),

@@ -1,27 +1,21 @@
 {% macro orderPrice(content, order_summary_data) %}
-  {%- set is_full_printed = order_summary_data.processing_option == "full" and order_summary_data.delivery_type == "PrintedTracked" -%}
-  {%- set is_full_digital = order_summary_data.processing_option == "full" and order_summary_data.delivery_type == "Digital" -%}
-  {%- set is_standard_printed = order_summary_data.processing_option == "standard" and order_summary_data.delivery_type == "PrintedTracked" %}
-  {%- set order_type_price_in_pounds = order_summary_data.amount_pence / 100 %}
-  {% if is_standard_printed and order_summary_data.delivery_fee_pence %}
-    {%- set delivery_price_in_pounds = '%.2f' % (order_summary_data.delivery_fee_pence / 100) %}
-  {% endif %}
-  <span>
-    <span data-price="{{ order_type_price_in_pounds }}">
-    £{{ order_type_price_in_pounds }}
-    </span>
-    {% if is_full_printed %}
+  <div>
+    <span
+      data-price="{{ order_type_price_in_pounds }}">£{{ (order_summary_data.delivery_fee_pence + order_summary_data.amount_pence) | convert_pence_to_pounds_string }}</span>
+    {% if order_summary_data.order_type == "standard_printed" %}
       <p>
-      {{ content.pages.your_order_summary.per_page_copying_fee.full_record_check_printed }}
+        {{ content.pages.your_order_summary.costs_standard_printed | format_standard_printed_order_price(order_summary_data.delivery_fee_pence, order_summary_data.amount_pence) | safe }}
       </p>
     {% endif %}
-    {% if is_full_digital %}
+    {% if order_summary_data.order_type == "full_record_check_printed" %}
       <p>
-      {{ content.pages.your_order_summary.per_page_copying_fee.full_record_check_digital }}
+        {{ content.pages.your_order_summary.per_page_copying_fee.full_record_check_printed }}
       </p>
     {% endif %}
-    {% if is_standard_printed and order_summary_data.delivery_fee_pence %}
-      {{ content.pages.your_order_summary.plus_postage_and_packaging | format_delivery_price(delivery_price_in_pounds) | safe }}
+    {% if order_summary_data.order_type == "full_record_check_digital" %}
+      <p>
+        {{ content.pages.your_order_summary.per_page_copying_fee.full_record_check_digital }}
+      </p>
     {% endif %}
-  </span>
+  </div>
 {% endmacro %}

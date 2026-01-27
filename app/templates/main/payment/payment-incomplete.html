@@ -6,10 +6,16 @@
     <div class="tna-container">
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
-        <h1 class="tna-heading-xl">{{ content.pages.payment_incomplete.heading }}</h1>
+        <h1 class="tna-heading-xl tna-!--margin-top-l">{{ content.pages.payment_incomplete.heading }}</h1>
         {% for paragraph in content.pages.payment_incomplete.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
+        <form action="{{ url_for('main.payment_incomplete') }}" method="post" novalidate>
+          {{ form.csrf_token }}
+          <div class="tna-button-group">
+            {{ form.submit(params={'classes':'tna-button--accent'}) }}
+          </div>
+        </form>
       </div>
     </div>
   </div>

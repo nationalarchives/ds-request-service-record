@@ -311,7 +311,8 @@ pages:
   payment_incomplete:
     heading: Payment incomplete
     paragraphs:
-      - Your payment was not completed successfully.
+      - Your payment at GOV.UK Pay was not completed successfully.
+      - We will now take you back to the order summary page where you can try to make the payment again.
   your_contact_details:
     heading: Your contact details
   what_is_your_address:
@@ -376,12 +377,14 @@ pages:
     per_page_copying_fee:
       full_record_check_printed: Please note there will be a second payment to copy the record, priced £1.89 per printed page plus postage and packaging.
       full_record_check_digital: Please note there will be a second payment to copy the record, priced £1.04 per page.
-    plus_postage_and_packaging: plus [DELIVERY_PRICE] for postage and packaging
+    costs_standard_printed: This fee covers £[ORDER_TYPE_FEE] for printed colour copies and £[DELIVERY_FEE] for postage and packaging.
     processing_option_description_standard: Standard
     processing_option_description_full: Full record check
     change_order_type: Change order
   request_submitted:
     heading: Request submitted
+    payment_reference_available: Your payment reference number is
+    payment_reference_not_available: Your payment reference number will be sent to you
     paragraphs:
       - We will send you a confirmation email, or a letter if you selected to be contacted by post.
     what_happens_next:
@@ -389,7 +392,7 @@ pages:
       paragraphs:
         - We have sent your request to a member of our team. They will use the information provided to search for the record you are requesting.
         - We will contact you with the result of the search, or to ask for more information, within 30 working days.
-        - Get in touch with us by replying to your confirmation email, or visit our Contact us page.<br><br>[ What did you think of this form ](USER_FEEDBACK_SURVEY)
+        - Get in touch with us by replying to your confirmation email, or visit our Contact us page.<br><br>[ What did you think of this form? ](USER_FEEDBACK_SURVEY)
 forms:
   fields:
     request_a_military_service_record:
@@ -546,3 +549,5 @@ forms:
       call_to_action: Continue this request
     your_order_summary:
       call_to_action: Pay now
+    payment_incomplete:
+      call_to_action: Return to order summary
