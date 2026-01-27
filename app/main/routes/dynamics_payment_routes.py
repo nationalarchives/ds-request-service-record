@@ -36,7 +36,7 @@ def gov_uk_pay_redirect(id):
         description=f"{payment.case_number}{(': ' + payment.details) if payment.details else ''}",
         reference=payment.reference,
         email=payment.payee_email,
-        return_url=f"{url_for('main.handle_gov_uk_pay_response', payment_type='dynamics', id=id, _external=True)}",
+        return_url=f"{url_for('main.handle_gov_uk_pay_response', payment_type='dynamics', id=id, _external=True, _scheme='https')}",
     )
 
     if not response:
