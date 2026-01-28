@@ -110,6 +110,16 @@ export async function continueFromWhichMilitaryBranchDidThePersonServeIn(
   await expect(page.locator("h1")).toHaveText(
     /Which military branch did the person serve in\?/,
   );
+  await checkInternalLink(
+    page,
+    "our Indian Army personnel research guide",
+    "https://www.nationalarchives.gov.uk/help-with-your-research/research-guides/indian-army-personnel/",
+  );
+  await checkInternalLink(
+    page,
+    "held by the Ministry of Defence",
+    "https://www.gov.uk/get-copy-military-records-of-service/apply-for-the-records-of-a-deceased-serviceperson",
+  );
   if (branchLabel) {
     await page.getByLabel(branchLabel, { exact: true }).check();
     await page.getByRole("button", { name: /Continue/i }).click();

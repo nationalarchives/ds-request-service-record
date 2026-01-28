@@ -91,6 +91,7 @@ class ExternalLinks:
     DURHAM_HOME_GUARD_RECORDS = (
         "https://discovery.nationalarchives.gov.uk/details/r/C12483430"
     )
+    INDIAN_ARMY_PERSONNEL_RESEARCH_GUIDE = "https://www.nationalarchives.gov.uk/help-with-your-research/research-guides/indian-army-personnel/"
 
 
 FALLBACK_COUNTRY_CHOICES = [
