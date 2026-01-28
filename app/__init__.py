@@ -9,11 +9,11 @@ from app.lib.talisman import talisman
 from app.lib.template_filters import (
     convert_pence_to_pounds_string,
     format_standard_printed_order_price,
+    inject_unique_survey_link,
     parse_bold_text,
     parse_first_birth_year_for_closed_records,
     parse_markdown_links,
     slugify,
-    inject_unique_survey_link,
 )
 from flask import Flask
 from flask_session import Session
