@@ -11,6 +11,11 @@ class DummyPayment:
         self.status = "N"
         self.payee_email = "john.doe@nationalarchives.gov.uk"
         self.gov_uk_payment_id = "GOV-UK-PAY-ID"
+        self.first_name = None
+        self.last_name = None
+        self.case_number = "CAS-123"
+        self.total_amount = 7500
+        self.reference = "PAY-0125-33-12345"
 
 
 @pytest.fixture(scope="module")

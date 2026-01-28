@@ -195,14 +195,14 @@ def create_payment_endpoint():
         delete_dynamics_payment(payment)
         return {"error": "Failed to create payment"}, 500
 
-    payment_url = url_for('main.make_payment', id=payment.id, _external=True)
+    payment_url = url_for("main.make_payment", id=payment.id, _external=True)
     name = f"{payment.first_name or ''} {payment.last_name or ''}".strip() or "customer"
     amount_pounds = payment.total_amount / 100
-    
+
     if send_email(
         to=data["payee_email"],
         subject="Payment for Service Record Request",
-        body=f"Dear {name},\n\nThank you for submitting your request to Request a military service record for {payment.case_number}.\n\nPlease visit the following link to complete your payment of £{amount_pounds:.2f}: {payment_url}\n\nOnce payment has been received, we will send you a link to download your requested copies.\n\nThank you,\nRequest a military service record team\nThe National Archives"
+        body=f"Dear {name},\n\nThank you for submitting your request to Request a military service record for {payment.case_number}.\n\nPlease visit the following link to complete your payment of £{amount_pounds:.2f}: {payment_url}\n\nOnce payment has been received, we will send you a link to download your requested copies.\n\nThank you,\nRequest a military service record team\nThe National Archives",
     ):
         return {"message": f"Payment created and sent successfully: {payment.id}"}, 201
     else:
