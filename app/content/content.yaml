@@ -163,6 +163,13 @@ pages:
     paragraphs:
       - No information has been submitted to us. To send a new request for a military service record, please start a new request form.
     start_new_request: Start a new request
+  which_military_branch_did_the_person_serve_in:
+    heading: Which military branch did the person serve in?
+    paragraphs:
+      - "Do not use this service to request records for:"
+    list_items:
+      - The British Indian Army, you can find out how to look for these records on [our Indian Army personnel research guide](INDIAN_ARMY_PERSONNEL_RESEARCH_GUIDE)
+      - Polish forces who served under British command during the Second World War, these are [held by the Ministry of Defence](MOD_SERVICE_DECEASED_SERVICEPERSON)
   were_they_a_commissioned_officer:
     heading: Were they a Commissioned Officer?
     paragraphs:
@@ -494,7 +501,6 @@ forms:
       label: Regiment or squadron (optional)
       hint: Provide the last regiment or squadron they served in if they served in more than one
     service_branch:
-      label: Which military branch did the person serve in?
       messages:
         required: Select the branch they served in
     additional_information:
