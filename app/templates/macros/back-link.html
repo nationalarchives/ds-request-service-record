@@ -1,8 +1,13 @@
+{% from "components/back-link/macro.html" import tnaBackLink %}
+
 {% macro backLink(url) -%}
   <div class="tna-container">
-    <div class="tna-column tna-column--full tna-!--padding-top-m">
+    <div class="tna-column tna-column--full tna-!--padding-top-s">
       <nav class="mod-foi-back-link" aria-label="Back link">
-        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i><a href="{{ url }}" class="tna-link tna-link--no-visited-state">Back</a>
+        {{ tnaBackLink({
+          "text": "Back",
+          "href": url
+        }) }}
       </nav>
     </div>
   </div>
