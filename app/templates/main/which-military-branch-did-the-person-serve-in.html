@@ -14,9 +14,19 @@
         {% if form.errors %}
           {{ tnaErrorSummary(wtforms_errors(form)) }}
         {% endif %}
+        <h1
+          class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.which_military_branch_did_the_person_serve_in.heading }}</h1>
+        {% for paragraph in content.pages.which_military_branch_did_the_person_serve_in.paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+        <ul class="tna-ul">
+          {% for item in content.pages.which_military_branch_did_the_person_serve_in.list_items %}
+            <li>{{ item | parse_markdown_links(new_tab=False) | safe | safe }}</li>
+          {% endfor %}
+        </ul>
         <form action="{{ url_for('main.service_branch_form') }}" method="post" novalidate>
           {{ form.csrf_token }}
-          {{ form.service_branch(params={'headingLevel':1, 'headingSize':'xl'}) }}
+          {{ form.service_branch() }}
           <div class="tna-button-group">
             {{ form.submit(params={'classes':'tna-button--accent'}) }}
           </div>

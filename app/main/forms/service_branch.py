@@ -16,7 +16,7 @@ class ServiceBranch(FlaskForm):
     content = load_content()
 
     service_branch = RadioField(
-        get_field_content(content, "service_branch", "label"),
+        "",
         choices=[
             (name, member.value) for name, member in ServiceBranches.__members__.items()
         ],
@@ -28,6 +28,7 @@ class ServiceBranch(FlaskForm):
             )
         ],
         widget=TnaRadiosWidget(),
+        render_kw={"label": ""},
     )
 
     submit = SubmitField("Continue", widget=TnaSubmitWidget())
