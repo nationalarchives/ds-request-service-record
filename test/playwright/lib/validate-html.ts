@@ -10,6 +10,7 @@ const config: ConfigData = {
     "no-trailing-whitespace": "off",
     "prefer-native-element": "warn", // video.js
     "script-type": "off",
+    "long-title": ["error", { maxlength: 85 }], // Adjusted to accommodate some longer title lengths (See commit)
   },
 };
 
