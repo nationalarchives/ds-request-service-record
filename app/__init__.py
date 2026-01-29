@@ -14,6 +14,7 @@ from app.lib.template_filters import (
     parse_first_birth_year_for_closed_records,
     parse_markdown_links,
     slugify,
+    prepare_page_title,
 )
 from flask import Flask
 from flask_session import Session
@@ -123,6 +124,7 @@ def create_app(config_class):
     app.add_template_filter(format_standard_printed_order_price)
     app.add_template_filter(convert_pence_to_pounds_string)
     app.add_template_filter(inject_unique_survey_link)
+    app.add_template_filter(prepare_page_title)
 
     @app.context_processor
     def context_processor():

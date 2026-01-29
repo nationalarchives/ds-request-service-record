@@ -1,6 +1,7 @@
 import re
 from datetime import datetime
 from urllib.parse import urlencode
+from jinja2 import pass_context
 
 from app.constants import ExternalLinks
 from app.lib.boundary_years import BoundaryYears
@@ -113,3 +114,37 @@ def convert_pence_to_pounds_string(pence):
         return None
     pounds = float(pence) / 100
     return f"{pounds:.2f}"
+
+
+@pass_context
+def prepare_page_title(ctx, title):
+    PAGE_HEADING_LENGTH_LIMIT = 25
+
+    form = ctx.get("form")
+    content = ctx.get("content")
+
+    has_errors = bool(getattr(form, "errors", None))
+
+    app_title = None
+    if content is not None:
+        try:
+            app_title = content["app"]["title"]
+        except Exception:
+            app = getattr(content, "app", None)
+            app_title = getattr(app, "title", None)
+
+    prefix = "Error: " if has_errors else ""
+    page_title = str(title or "")
+
+    # If the page_title is longer than the limit, we want to omit
+    # the app_title from the resulting string.
+    # This is to avoid overly long titles in the `<title>` tag.
+    if len(page_title) >= PAGE_HEADING_LENGTH_LIMIT:
+        app_title = ""
+    else:
+        app_title = f"{app_title}" if app_title else ""
+
+    app_title = f"{app_title}" if app_title else ""
+
+    parts = [p.strip() for p in (page_title, app_title) if p]
+    return prefix + " - ".join(parts)
