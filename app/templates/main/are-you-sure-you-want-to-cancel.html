@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{%- set pageTitle = content.app.title -%}
+{%- set pageTitle = content.pages.are_you_sure_you_want_to_cancel.heading | prepare_page_title -%}
 
 {% block beforeContent %}
   {{ backLink(url_for(back_link_route)) }}

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{%- set pageTitle = content.app.title -%}
+{%- set pageTitle = content.pages.choose_your_order_type.heading | prepare_page_title -%}
 
 {% block beforeContent %}
   {{ backLink(url_for(back_link_route)) }}

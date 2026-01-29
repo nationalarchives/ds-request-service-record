@@ -423,6 +423,8 @@ pages:
         - We have sent your request to a member of our team. They will use the information provided to search for the record you are requesting.
         - We will contact you with the result of the search, or to ask for more information, within 30 working days.
         - Get in touch with us by replying to your confirmation email, or visit our Contact us page.<br><br>[ What did you think of this form? (opens in new tab) ](USER_FEEDBACK_SURVEY)
+  what_was_their_date_of_birth:
+    heading: What was their date of birth?
 forms:
   fields:
     request_a_military_service_record:

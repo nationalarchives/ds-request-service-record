@@ -2,7 +2,7 @@
 
 {%- from 'macros/order-price.html' import orderPrice %}
 
-{%- set pageTitle = content.app.title -%}
+{%- set pageTitle = content.pages.your_order_summary.heading | prepare_page_title -%}
 
 {% block beforeContent %}
   {{ backLink(url_for(back_link_route)) }}
