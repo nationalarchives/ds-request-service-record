@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{%- set pageTitle = content.app.title -%}
+{%- set pageTitle = content.pages.what_was_their_date_of_birth.heading | prepare_page_title -%}
 
 {% block beforeContent %}
   {{ backLink(url_for(back_link_route)) }}

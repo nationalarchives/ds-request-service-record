@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% from "components/warning/macro.html" import tnaWarning %}
 
-{%- set pageTitle = content.app.title -%}
+{%- set pageTitle = content.pages.are_you_sure_you_want_to_proceed_without_proof_of_death.heading | prepare_page_title -%}
 
 {% block beforeContent %}
   {{ backLink(url_for('main.provide_a_proof_of_death')) }}

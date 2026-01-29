@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{%- set pageTitle = content.app.title -%}
+{%- set pageTitle = content.pages.how_we_process_requests.heading | prepare_page_title -%}
 
 {% block beforeContent %}
   {{ backLink(url_for('main.start')) }}

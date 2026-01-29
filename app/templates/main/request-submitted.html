@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{%- set pageTitle = content.app.title -%}
+{%- set pageTitle = content.pages.request_submitted.heading | prepare_page_title -%}
 {% if reference_number %}
   {% set panel_body = content.pages.request_submitted.payment_reference_available ~ ' <strong id="reference-number">' ~ reference_number ~ '</strong>' %}
 {% else %}

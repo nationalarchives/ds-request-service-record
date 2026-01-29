@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% from "components/warning/macro.html" import tnaWarning %}
 
-{%- set pageTitle = content.app.title -%}
+{%- set pageTitle = content.pages.before_you_start.heading | prepare_page_title -%}
 
 {% block beforeContent %}
   {{ backLink(url_for('main.how_we_process_requests')) }}

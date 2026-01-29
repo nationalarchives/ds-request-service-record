@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{%- set pageTitle = content.app.title -%}
+{%- set pageTitle = content.pages.we_are_unlikely_to_locate_this_record.heading | prepare_page_title -%}
 
 {% block beforeContent %}
   {{ backLink(url_for('main.service_branch_form')) }}
