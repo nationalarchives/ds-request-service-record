@@ -369,13 +369,18 @@ pages:
         - |
           Standard is not available for Commissioned Officer record requests.
         - We charge a single fee for Standard of £42.25, which covers the search (£38.95) and record copying fees (£3.30).
-      table_rows:
-        - header: What it costs
-          data: £42.25
-        - header: When you will get the record
-          data: Within 20 to 30 working days
-        - header: Refunds
-          data: We will refund the record copying fee (£3.30) if we do not hold the record. <br><br>The search fee is not refundable.
+      information_list:
+        list_items:
+          - term: What it costs
+            description:
+              - £42.25
+          - term: When you will get the record
+            description:
+              - Within 20 to 30 working days
+          - term: Refunds
+            description:
+              - We will refund the record copying fee (£3.30) if we do not hold the record.
+              - The search fee is not refundable.
     full_record_check:
       heading: Full record check
       paragraphs:
@@ -387,16 +392,19 @@ pages:
           We charge two fees for a Full record check. The first covers the search for the record and a page check. 
           We will then email you a quote for the second payment to copy the parts of the record that can be 
           released.
-      table:
-        costs_header: What it costs
-        costs_data:
-          paragraphs:
-            - An upfront payment of £48.87, which covers the search (£38.95) and the page check (£9.92).
-            - A second payment of £1.04 per page. For example, 20 pages will cost an additional £20.80.
-        delivery_header: When you will get the record
-        delivery_data: We aim to confirm if we hold the record within 30 working days. The record will be released once we have received the second payment.
-        refunds_header: Refunds
-        refunds_data: We will refund the page check fee (£9.92) if we do not hold the record. <br><br>The search fee is not refundable.
+      information_list:
+        list_items:
+          - term: What it costs
+            description:
+              - An upfront payment of £48.87, which covers the search (£38.95) and the page check (£9.92).
+              - A second payment of £1.04 per page. For example, 20 pages will cost an additional £20.80.
+          - term: When you will get the record
+            description:
+              - We aim to confirm if we hold the record within 30 working days. The record will be released once we have received the second payment.
+          - term: Refunds
+            description:
+              - We will refund the page check fee (£9.92) if we do not hold the record.
+              - The search fee is not refundable.
   your_order_summary:
     heading: Your order summary
     order_type_term: Order type

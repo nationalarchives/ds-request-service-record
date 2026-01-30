@@ -1,0 +1,16 @@
+{% macro descriptionList(items) -%}
+  <dl class="tna-dl tna-dl--plain">
+    {% for item in items %}
+      <dt>{{ item.term }}</dt>
+      <dd>
+        {% if (item.description | length) > 1 %}
+          {% for line in item.description %}
+            <p>{{ line | safe }}</p>
+          {% endfor %}
+        {% else %}
+          {{ item.description[0] | safe }}
+        {% endif %}
+      </dd>
+    {% endfor %}
+  </dl>
+{%- endmacro %}
