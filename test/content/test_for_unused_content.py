@@ -14,6 +14,7 @@ class TestForUnusedContent(unittest.TestCase):
         re.compile(r"\.fields"),
         re.compile(r"\.options"),
         re.compile(r"\.branches"),
+        re.compile(r"\.list_items"),
     ]
 
     @classmethod

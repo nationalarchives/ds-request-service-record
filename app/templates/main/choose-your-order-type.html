@@ -25,15 +25,8 @@
         {% for paragraph in content.pages.choose_your_order_type.standard.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
-        {% if content.pages.choose_your_order_type.standard.table_rows %}
-          <table class="tna-table">
-            {% for row in content.pages.choose_your_order_type.standard.table_rows %}
-              <tr class="tna-table__row">
-                <th class="tna-table__header">{{ row.header }}</th>
-                <td class="tna-table__cell">{{ row.data | safe }}</td>
-              </tr>
-            {% endfor %}
-          </table>
+        {% if content.pages.choose_your_order_type.standard.information_list.list_items %}
+          {{ descriptionList(content.pages.choose_your_order_type.standard.information_list.list_items) }}
         {% endif %}
         <form action="{{ url_for('main.choose_your_order_type') }}" method="post" novalidate
               class="form-separator">
@@ -51,32 +44,9 @@
         {% for paragraph in content.pages.choose_your_order_type.full_record_check.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
-        <table class="tna-table">
-          <tr class="tna-table__row">
-            <th
-              class="tna-table__header">{{ content.pages.choose_your_order_type.full_record_check.table.costs_header }}</th>
-            <td class="tna-table__cell">
-              {% for paragraph in content.pages.choose_your_order_type.full_record_check.table.costs_data.paragraphs %}
-                <p
-                  class="tna-!--margin-bottom-s">{{ paragraph }}</p>
-              {% endfor %}
-            </td>
-          </tr>
-          <tr class="tna-table__row">
-            <th
-              class="tna-table__header">{{ content.pages.choose_your_order_type.full_record_check.table.delivery_header }}</th>
-            <td class="tna-table__cell">
-              {{ content.pages.choose_your_order_type.full_record_check.table.delivery_data }}
-            </td>
-          </tr>
-          <tr class="tna-table__row">
-            <th
-              class="tna-table__header">{{ content.pages.choose_your_order_type.full_record_check.table.refunds_header }}</th>
-            <td class="tna-table__cell">
-              {{ content.pages.choose_your_order_type.full_record_check.table.refunds_data | safe }}
-            </td>
-          </tr>
-        </table>
+        {% if content.pages.choose_your_order_type.full_record_check.information_list.list_items %}
+          {{ descriptionList(content.pages.choose_your_order_type.full_record_check.information_list.list_items) }}
+        {% endif %}
         <form action="{{ url_for('main.choose_your_order_type') }}" method="post" novalidate>
           {{ form.csrf_token(id='full-check-option') }}
           {{ form.processing_option(value='full', id='processing_option_full_record_check') }}
