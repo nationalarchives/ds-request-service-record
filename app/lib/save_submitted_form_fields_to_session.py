@@ -22,8 +22,8 @@ def save_submitted_form_fields_to_session(
             # Normalize file uploads to a serializable value
             # We need to do this because FileStorage objects are not serializable
             if isinstance(field_data, FileStorage):
-                # Store only the filename; empty string becomes 'No file uploaded'
-                field_data = field_data.filename or "No file uploaded"
+                # Store only the filename; empty string becomes 'EMPTY'
+                field_data = field_data.filename or "EMPTY"
 
             if isinstance(field_data, datetime.date):
                 field_data = field_data.strftime("%d %B %Y")

@@ -42,7 +42,7 @@ def test_serializes_filestorage_empty_filename_to_placeholder():
 
     save_submitted_form_fields_to_session(form, session_obj=session_obj)
 
-    assert session_obj["form_data"]["file_field"] == "No file uploaded"
+    assert session_obj["form_data"]["file_field"] == "EMPTY"
 
 
 def test_formats_date_and_datetime():
