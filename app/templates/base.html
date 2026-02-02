@@ -12,7 +12,7 @@
 {%- from 'macros/mod-foi-breadcrumbs.html' import modFoiBreadcrumbs %}
 
 {%- set theme = request.cookies.get('theme') or 'system' -%}
-{%- set themeAccent = themeAccent if themeAccent else 'green' -%}
+{%- set themeAccent = 'green' -%}
 {%- set htmlAttributes = {
   'data-ga4id': app_config.GA4_ID or '',
   'data-tna-cookies-domain': app_config.COOKIE_DOMAIN or ''
