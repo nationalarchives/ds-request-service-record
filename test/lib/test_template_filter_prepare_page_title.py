@@ -1,7 +1,7 @@
-from jinja2 import Environment
 from types import SimpleNamespace
 
 from app.lib.template_filters import prepare_page_title
+from jinja2 import Environment
 
 
 def render_with_filter(template_str, context):

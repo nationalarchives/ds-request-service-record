@@ -1,6 +1,4 @@
 import hashlib
-import random
-import string
 import uuid
 from datetime import datetime
 
@@ -120,15 +118,14 @@ def _create_new_payment(form_data: dict, record_hash: str) -> str:
 
 def _generate_reference() -> str:
     """
-    Generate a unique payment reference using Unix timestamp, random letter, and suffix.
-    Format: TNA<timestamp><letter><suffix>
-    Example: TNA20260725X42
+    Generate a unique payment reference using date prefix and UUID.
+    Format: TNA<date><uuid>
+    Example: TNA20260725a1b2c3d4e5f67890abcdef12345678
     """
-    unix_timestamp = int(datetime.now().strftime("%Y%m%d"))
-    random_letter = random.choice(string.ascii_uppercase)
-    random_suffix = random.randint(10, 99)
+    date_stamp = datetime.now().strftime("%Y%m%d")
+    unique_id = uuid.uuid4().hex
 
-    return f"TNA{unix_timestamp}{random_letter}{random_suffix}"
+    return f"TNA{date_stamp}{unique_id}"
 
 
 def _store_payment_record(
