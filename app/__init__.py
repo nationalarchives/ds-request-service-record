@@ -13,8 +13,8 @@ from app.lib.template_filters import (
     parse_bold_text,
     parse_first_birth_year_for_closed_records,
     parse_markdown_links,
-    slugify,
     prepare_page_title,
+    slugify,
 )
 from flask import Flask
 from flask_session import Session
@@ -78,19 +78,9 @@ def create_app(config_class):
             "default-src": default_csp,
             "base-uri": csp_none,
             "object-src": csp_none,
-            "script-src": [
-                csp_self,
-                "https://www.googletagmanager.com",
-                "*.google-analytics.com",
-            ],
         }
         | csp_rules,
-        feature_policy={
-            "fullscreen": app.config.get("CSP_FEATURE_FULLSCREEN", csp_self),
-            "picture-in-picture": app.config.get(
-                "CSP_FEATURE_PICTURE_IN_PICTURE", csp_self
-            ),
-        },
+        content_security_policy_report_uri=app.config.get("CSP_REPORT_URL", None),
         force_https=app.config["FORCE_HTTPS"],
     )
 
