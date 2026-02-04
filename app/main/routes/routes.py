@@ -66,6 +66,12 @@ def start(form, state_machine):
     )
 
 
+@bp.route("/sentry-test/")
+def sentry_test():
+    division_by_zero = 1 / 0
+    return str(division_by_zero)
+
+
 @bp.route("/how-we-process-requests/", methods=["GET", "POST"])
 @with_state_machine
 @with_form_prefilled_from_session(HowTheProcessWorks)
