@@ -6,25 +6,18 @@ def requires_session_key():
 
     exempt_routes = [
         "main.start",
-        "static",
-        "healthcheck.healthcheck",
         "main.create_payment_endpoint",
         "main.make_payment",
-        "sitemap.index",
     ]
 
     short_session_id = request.cookies.get("session", "unknown")[0:7]
-
-    # This path must be exempt because we use it to check for 308 redirects with trailing slashes
-    if request.path == "/healthcheck/live":
-        return
 
     if request.endpoint and any(
         request.endpoint.startswith(route) for route in exempt_routes
     ):
         # If the route is exempt, we set the session key to True
         session["entered_through_index_page"] = True
-        return
+        return None
 
     if required_key not in session or not session[required_key]:
         current_app.logger.warning(
