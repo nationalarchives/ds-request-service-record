@@ -26,3 +26,5 @@ def requires_session_key():
         # If the session key is not set, we set the session key to True before redirecting
         session["entered_through_index_page"] = True
         return redirect(url_for("main.start"))
+
+    return None
