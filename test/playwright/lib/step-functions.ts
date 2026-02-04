@@ -384,7 +384,7 @@ export async function continueFromHaveYouPreviouslyMadeARequest(
   page: any,
   label: any,
   errorMessage?: any,
-  populateReferenceNumber?: any,
+  populatedReferenceNumber?: any,
 ) {
   await expect(page).toHaveURL(Paths.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
   await expect(page.locator("h1")).toHaveText(
@@ -392,8 +392,8 @@ export async function continueFromHaveYouPreviouslyMadeARequest(
   );
   if (label) {
     await page.getByRole("radio", { name: label, exact: true }).check();
-    if (populateReferenceNumber) {
-      await page.getByLabel("Reference number").fill("ABC123");
+    if (populatedReferenceNumber) {
+      await page.getByLabel("Reference number").fill(populatedReferenceNumber);
     }
     await page.getByRole("button", { name: /Continue/i }).click();
     if (errorMessage) {
