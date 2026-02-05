@@ -532,10 +532,13 @@ forms:
         "yes_mod": Yes, to the Ministry of Defence
         "yes_tna": Yes, to The National Archives
         "no": "No"
-      case_reference_number:
-        label: Reference number
-        hint_text: This might either start with 'APV', 'CAS' or 'SPR' followed by a series of numbers.
       call_to_action: Continue
+    case_reference_number:
+      label: Reference number
+      hint_text: This might either start with 'APV', 'CAS' or 'SPR' followed by a series of numbers.
+      messages:
+        required: Enter the reference number for your previous request
+        too_long: Reference number must be %(max)d characters or less
     requester_first_name:
       label: First name
       messages:

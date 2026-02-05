@@ -1,4 +1,5 @@
 from app.lib.content import get_field_content, load_content
+from app.constants import FIELD_LENGTH_LIMITS
 from app.main.forms.validation_helpers.text_field_conditionally_required import (
     text_field_required_unless_radio_has_specific_selection,
 )
@@ -13,7 +14,7 @@ from wtforms import (
     StringField,
     SubmitField,
 )
-from wtforms.validators import InputRequired
+from wtforms.validators import InputRequired, Length
 
 
 class HaveYouPreviouslyMadeARequest(FlaskForm):
@@ -52,21 +53,23 @@ class HaveYouPreviouslyMadeARequest(FlaskForm):
     )
 
     case_reference_number = StringField(
-        get_field_content(
-            content, "have_you_previously_made_a_request", "case_reference_number"
-        )["label"],
-        description=get_field_content(
-            content, "have_you_previously_made_a_request", "case_reference_number"
-        )["hint_text"],
+        get_field_content(content, "case_reference_number", "label"),
+        description=get_field_content(content, "case_reference_number", "hint_text"),
         widget=TnaTextInputWidget(),
         validators=[
             text_field_required_unless_radio_has_specific_selection(
                 radio_field_name="have_you_previously_made_a_request",
                 permissible_selection="no",
-                message=get_field_content(
-                    content, "have_you_previously_made_a_request", "messages"
-                )["reference_number_required"],
-            )
+                message=get_field_content(content, "case_reference_number", "messages")[
+                    "required"
+                ],
+            ),
+            Length(
+                max=FIELD_LENGTH_LIMITS["case_reference_number"],
+                message=get_field_content(content, "case_reference_number", "messages")[
+                    "too_long"
+                ],
+            ),
         ],
     )
 
