@@ -52,15 +52,22 @@ test.describe("have you previously made a request", () => {
       },
       {
         description:
+          "with TNA selected and an excessively long reference number provided, there is an error message",
+        label: "Yes, to The National Archives",
+        populateReferenceNumber: "abcdefghijklmnopqrstuvwxyz".repeat(4),
+        errorMessage: /Reference number must be 64 characters or less/,
+      },
+      {
+        description:
           "with MoD selected and a reference number provided, the user proceeds to the 'Choose your order type' page",
         label: "Yes, to the Ministry of Defence",
-        populateReferenceNumber: true,
+        populateReferenceNumber: "ABC 123",
       },
       {
         description:
           "with TNA selected and a reference number provided, the user proceeds to the 'Choose your order type' page",
         label: "Yes, to The National Archives",
-        populateReferenceNumber: true,
+        populateReferenceNumber: "ABC 123",
       },
     ];
 
