@@ -23,14 +23,14 @@
 
         <form action="{{ url_for('main.service_person_details') }}" method="post" novalidate>
           {{ form.csrf_token }}
-          {{ form.forenames(params={'headingLevel':2, 'size':'m', 'autocomplete':'off'}) }}
-          {{ form.last_name(params={'headingLevel':2, 'size':'m', 'autocomplete':'off'}) }}
-          {{ form.other_last_names(params={'headingLevel':2, 'size':'m', 'autocomplete':'off'}) }}
+          {{ form.forenames(params={'headingLevel':2, 'size':'l', 'autocomplete':'off'}) }}
+          {{ form.last_name(params={'headingLevel':2, 'size':'l', 'autocomplete':'off'}) }}
+          {{ form.other_last_names(params={'headingLevel':2, 'size':'l', 'autocomplete':'off'}) }}
           {{ form.service_number(params={'headingLevel':2, 'size':'m', 'autocomplete':'off', 'hint': content.forms.fields.service_number.hint }) }}
-          {{ form.place_of_birth(params={'headingLevel':2, 'size':'m', 'autocomplete':'off'}) }}
+          {{ form.place_of_birth(params={'headingLevel':2, 'size':'l', 'autocomplete':'off'}) }}
           {{ form.died_in_service(params={'headingLevel':2}) }}
           {{ form.date_of_death(params={'headingLevel':2, 'autocomplete':'off'}) }}
-          {{ form.regiment(params={'headingLevel':2, 'size':'m', 'autocomplete':'off', 'hint': content.forms.fields.regiment.hint }) }}
+          {{ form.regiment(params={'headingLevel':2, 'size':'l', 'autocomplete':'off', 'hint': content.forms.fields.regiment.hint }) }}
           {{ form.additional_information(params={'headingLevel':2}) }}
           <div class="tna-button-group">
             {{ form.submit(params={'classes':'tna-button--accent'}) }}

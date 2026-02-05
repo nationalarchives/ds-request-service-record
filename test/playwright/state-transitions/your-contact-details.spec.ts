@@ -12,6 +12,22 @@ test.describe("Your contact details", () => {
   });
 
   test.describe("works as expected", () => {
+    test("when entries do not exceed allowed field lengths, there are no errors", async ({
+      page,
+    }) => {
+      const suppliedDetails = {
+        firstName: "a".repeat(128),
+        lastName: "a".repeat(128),
+        emailAddress: "a".repeat(40) + "@example.com",
+      };
+
+      await page.getByLabel("First name").fill(suppliedDetails.firstName);
+      await page.getByLabel("Last name").fill(suppliedDetails.lastName);
+      await page.locator("#requester_email").fill(suppliedDetails.emailAddress);
+      await page.getByRole("button", { name: /Continue/i }).click();
+      await expect(page.locator(".tna-form-item__error")).toHaveCount(0);
+    });
+
     test("when the user has an email address", async ({ page }) => {
       await continueFromYourContactDetails(page, {
         firstName: "Hilary",
@@ -105,6 +121,27 @@ test.describe("Your contact details", () => {
       await expect(page.locator(".tna-form-item__error").first()).toHaveText(
         /Email must be blank if you have selected 'I do not have an email address'/,
       );
+    });
+
+    test("when entries exceed allowed field lengths, there are errors", async ({
+      page,
+    }) => {
+      const suppliedDetails = {
+        firstName: "a".repeat(129),
+        lastName: "a".repeat(129),
+        emailAddress: "a".repeat(256) + "@example.com",
+      };
+
+      await page.getByLabel("First name").fill(suppliedDetails.firstName);
+      await page.getByLabel("Last name").fill(suppliedDetails.lastName);
+      await page.locator("#requester_email").fill(suppliedDetails.emailAddress);
+      await page.getByRole("button", { name: /Continue/i }).click();
+      await expect(page.locator(".tna-form-item__error")).toHaveCount(3);
+
+      const errors = page.locator(".tna-form-item__error");
+      for (const error of await errors.all()) {
+        await expect(error).toContainText(/characters or less/i);
+      }
     });
   });
 });
