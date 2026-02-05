@@ -35,5 +35,18 @@ test.describe("what is your address", () => {
         /Select a country from the list/,
       );
     });
+
+    test("without form fields populated with text that exceeds maximum length, shows relevant errors", async ({
+      page,
+    }) => {
+      const longAddress = {
+        addressLine1: "X".repeat(257),
+        addressLine2: "X".repeat(257),
+        townOrCity: "X".repeat(129),
+        county: "X".repeat(65),
+        postcode: "X".repeat(33),
+      };
+      await continueFromYourPostalAddress(page, longAddress, false, 5);
+    });
   });
 });

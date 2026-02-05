@@ -65,7 +65,7 @@ class HaveYouPreviouslyMadeARequest(FlaskForm):
                 ],
             ),
             Length(
-                max=FIELD_LENGTH_LIMITS["case_reference_number"],
+                max=FIELD_LENGTH_LIMITS["m"],
                 message=get_field_content(content, "case_reference_number", "messages")[
                     "too_long"
                 ],
