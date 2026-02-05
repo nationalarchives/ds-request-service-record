@@ -4,7 +4,6 @@ import sentry_sdk
 from app.lib.cache import cache
 from app.lib.context_processor import cookie_preference, now_iso_8601
 from app.lib.db.models import db
-from app.lib.requires_session_key import requires_session_key
 from app.lib.talisman import talisman
 from app.lib.template_filters import (
     convert_pence_to_pounds_string,
@@ -41,8 +40,6 @@ def create_app(config_class):
             traces_sample_rate=app.config.get("SENTRY_SAMPLE_RATE"),
             profiles_sample_rate=app.config.get("SENTRY_SAMPLE_RATE"),
         )
-
-    requires_session_key(app)
 
     if app.config.get("SESSION_TYPE") and app.config.get("SESSION_REDIS"):
         Session(app)
