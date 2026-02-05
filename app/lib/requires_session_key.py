@@ -16,7 +16,9 @@ def requires_session_key(app_or_blueprint):
             "sitemap.index",
         ]
 
-        short_session_id = request.cookies.get("session", "unknown")[0:7]
+        short_session_id = request.cookies.get(
+            current_app.config.get("SESSION_COOKIE_NAME"), "unknown"
+        )[0:7]
 
         # This path must be exempt because we use it to check for 308 redirects with trailing slashes
         if request.path == "/healthcheck/live":
