@@ -1,4 +1,5 @@
 from app.lib.content import get_field_content, load_content
+from app.constants import FIELD_LENGTH_LIMITS
 from app.lib.get_country_choices import get_country_choices
 from app.main.forms.validation_helpers.country_must_be_selected import (
     country_must_be_selected,
@@ -14,7 +15,7 @@ from wtforms import (
     StringField,
     SubmitField,
 )
-from wtforms.validators import InputRequired
+from wtforms.validators import InputRequired, Length
 
 
 class WhatIsYourAddress(FlaskForm):
@@ -32,14 +33,27 @@ class WhatIsYourAddress(FlaskForm):
                 message=get_field_content(
                     content, "requester_address_line_1", "messages"
                 )["required"]
-            )
+            ),
+            Length(
+                max=FIELD_LENGTH_LIMITS["xl"],
+                message=get_field_content(
+                    content, "requester_address_line_1", "messages"
+                )["too_long"],
+            ),
         ],
     )
 
     requester_address2 = StringField(
         get_field_content(content, "requester_address_line_2", "label"),
         widget=TnaTextInputWidget(),
-        validators=[],
+        validators=[
+            Length(
+                max=FIELD_LENGTH_LIMITS["xl"],
+                message=get_field_content(
+                    content, "requester_address_line_2", "messages"
+                )["too_long"],
+            ),
+        ],
     )
 
     requester_town_city = StringField(
@@ -50,14 +64,27 @@ class WhatIsYourAddress(FlaskForm):
                 message=get_field_content(content, "requester_town_city", "messages")[
                     "required"
                 ]
-            )
+            ),
+            Length(
+                max=FIELD_LENGTH_LIMITS["l"],
+                message=get_field_content(content, "requester_town_city", "messages")[
+                    "too_long"
+                ],
+            ),
         ],
     )
 
     requester_county = StringField(
         get_field_content(content, "requester_county", "label"),
         widget=TnaTextInputWidget(),
-        validators=[],
+        validators=[
+            Length(
+                max=FIELD_LENGTH_LIMITS["m"],
+                message=get_field_content(content, "requester_county", "messages")[
+                    "too_long"
+                ],
+            ),
+        ],
     )
 
     requester_postcode = StringField(
@@ -68,7 +95,13 @@ class WhatIsYourAddress(FlaskForm):
                 message=get_field_content(content, "requester_postcode", "messages")[
                     "required"
                 ]
-            )
+            ),
+            Length(
+                max=FIELD_LENGTH_LIMITS["s"],
+                message=get_field_content(content, "requester_postcode", "messages")[
+                    "too_long"
+                ],
+            ),
         ],
     )
 

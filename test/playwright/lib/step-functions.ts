@@ -434,15 +434,39 @@ export async function continueFromYourContactDetails(
   }
 }
 
-export async function continueFromYourPostalAddress(page) {
+export async function continueFromYourPostalAddress(
+  page,
+  address = {},
+  shouldValidate = true,
+  numberOfErrors = 0,
+) {
+  const defaultAddress = {
+    addressLine1: "123 Not a Street",
+    addressLine2: "Not a place",
+    townOrCity: "Not a town",
+    county: "Not a county",
+    postcode: "N0T RE4L",
+    country: "United Kingdom",
+  };
+
+  const mergedAddress = { ...defaultAddress, ...(address || {}) };
+
   await expect(page).toHaveURL(Paths.WHAT_IS_YOUR_ADDRESS);
   await expect(page.locator("h1")).toHaveText(/What is your address/);
-  await page.getByLabel("Address Line 1").fill("123 Non-existent Road");
-  await page.getByLabel("Town or city").fill("Non-existent Town");
-  await page.getByLabel("Postcode").fill("TW9 4DU");
-  await page.getByLabel("Country").selectOption("United Kingdom");
+  await page.getByLabel("Address Line 1").fill(mergedAddress.addressLine1);
+  await page.getByLabel("Address Line 2").fill(mergedAddress.addressLine2);
+  await page.getByLabel("Town or city").fill(mergedAddress.townOrCity);
+  await page.getByLabel("Postcode").fill(mergedAddress.postcode);
+  await page.getByLabel("County").fill(mergedAddress.county);
+  await page.getByLabel("Country").selectOption(mergedAddress.country);
   await page.getByRole("button", { name: /Continue/i }).click();
-  await expect(page).toHaveURL(Paths.YOUR_ORDER_SUMMARY);
+  if (shouldValidate) {
+    await expect(page).toHaveURL(Paths.YOUR_ORDER_SUMMARY);
+  } else {
+    await expect(page.locator(".tna-form-item__error")).toHaveCount(
+      numberOfErrors,
+    );
+  }
 }
 
 export async function continueFromPaymentIncomplete(page) {
