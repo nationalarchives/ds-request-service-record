@@ -15,7 +15,7 @@ from app.lib.template_filters import (
     prepare_page_title,
     slugify,
 )
-from flask import Flask
+from flask import Flask, redirect
 from flask_session import Session
 from jinja2 import ChoiceLoader, PackageLoader
 from tna_frontend_jinja.wtforms.helpers import WTFormsHelpers
@@ -128,6 +128,10 @@ def create_app(config_class):
             },
             feature={},
         )
+
+    @app.route("/")
+    def index_redirect():
+        return redirect(f"{service_url_prefix}/")
 
     from .healthcheck import bp as healthcheck_bp
     from .main import bp as site_bp
