@@ -137,9 +137,7 @@ def _build_filename_with_extension(base_name: str, original_filename: str) -> st
     return f"{base_name}{file_extension}"
 
 
-def _build_key_with_prefix(
-    prefix: str, base_name: str, original_filename: str
-) -> str:
+def _build_key_with_prefix(prefix: str, base_name: str, original_filename: str) -> str:
     normalized_prefix = _normalize_prefix(prefix)
     filename = _build_filename_with_extension(base_name, original_filename)
     return f"{normalized_prefix}{filename}"
