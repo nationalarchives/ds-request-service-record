@@ -1,5 +1,5 @@
-from app.lib.content import get_field_content, load_content
 from app.constants import FIELD_LENGTH_LIMITS
+from app.lib.content import get_field_content, load_content
 from flask_wtf import FlaskForm
 from tna_frontend_jinja.wtforms import (
     TnaDateField,
@@ -15,7 +15,7 @@ from wtforms import (
     SubmitField,
     TextAreaField,
 )
-from wtforms.validators import InputRequired, Optional, Length
+from wtforms.validators import InputRequired, Length, Optional
 
 
 class ServicePersonDetails(FlaskForm):
