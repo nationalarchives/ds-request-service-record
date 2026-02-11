@@ -117,7 +117,7 @@ def test_upload_file_to_s3_retries_on_failure(context):
     # Arrange: create a non-empty file
     content = b"some-bytes"
     stream = io.BytesIO(content)
-    fs = FileStorage(stream=stream, filename="test.pdf", content_type="application/pdf")
+    fs = FileStorage(stream=stream, filename="test.png", content_type="image/png")
 
     mock_s3 = MagicMock()
     # Simulate failure on all attempts

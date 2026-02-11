@@ -16,15 +16,16 @@ def get_boto3_session() -> boto3.session.Session:
     return boto3.session.Session(region_name=region)
 
 
-def upload_proof_of_death(file: FileStorage) -> str | None:
+def upload_proof_of_death(
+    file: FileStorage, session_key: str | None = None
+) -> str | None:
     """
     Function that uploads a proof of death file to S3, with a UUID as the filename.
     """
 
-    uuid_filename = str(uuid.uuid4())
-    key_name = _build_key_with_prefix(
-        _get_proof_of_death_holding_prefix(), uuid_filename, file.filename
-    )
+    base_filename = session_key or str(uuid.uuid4())
+    holding_prefix = _get_proof_of_death_holding_prefix()
+    key_name = _build_key_with_prefix(holding_prefix, base_filename, file.filename)
 
     if current_app.config.get("ENVIRONMENT_NAME") == "test":
         return key_name

@@ -3,7 +3,7 @@ from datetime import datetime
 from app.constants import MultiPageFormRoutes
 from app.lib.aws import upload_proof_of_death
 from app.lib.boundary_years import BoundaryYears
-from flask import current_app
+from flask import current_app, has_request_context, request
 from statemachine import State, StateMachine
 
 
@@ -481,7 +481,11 @@ class RoutingStateMachine(StateMachine):
     def proof_of_death_uploaded_to_s3(self, form):
         """Condition method to determine if proof of death was successfully uploaded to S3."""
         if file_data := self.get_form_field_data(form, "proof_of_death"):
-            file = upload_proof_of_death(file=file_data)
+            session_key = None
+            # Check the user has a valid session key, if not, we'll generate a UUID in upload_proof_of_death()
+            if has_request_context():
+                session_key = request.cookies.get("sessionid")
+            file = upload_proof_of_death(file=file_data, session_key=session_key)
             if file:
                 self.set_form_field_data(form, "proof_of_death", file)
                 return True
