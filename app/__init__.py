@@ -131,7 +131,7 @@ def create_app(config_class):
 
     @app.route("/")
     def index_redirect():
-        return redirect(f"{service_url_prefix}/")
+        return redirect(f"{app.config.get("SERVICE_URL_PREFIX")}/")
 
     from .healthcheck import bp as healthcheck_bp
     from .main import bp as site_bp
