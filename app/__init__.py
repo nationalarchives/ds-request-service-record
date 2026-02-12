@@ -4,7 +4,6 @@ import sentry_sdk
 from app.lib.cache import cache
 from app.lib.context_processor import cookie_preference, now_iso_8601
 from app.lib.db.models import db
-from app.lib.requires_session_key import requires_session_key
 from app.lib.talisman import talisman
 from app.lib.template_filters import (
     convert_pence_to_pounds_string,
@@ -16,7 +15,7 @@ from app.lib.template_filters import (
     prepare_page_title,
     slugify,
 )
-from flask import Flask
+from flask import Flask, redirect
 from flask_session import Session
 from jinja2 import ChoiceLoader, PackageLoader
 from tna_frontend_jinja.wtforms.helpers import WTFormsHelpers
@@ -41,8 +40,6 @@ def create_app(config_class):
             traces_sample_rate=app.config.get("SENTRY_SAMPLE_RATE"),
             profiles_sample_rate=app.config.get("SENTRY_SAMPLE_RATE"),
         )
-
-    requires_session_key(app)
 
     if app.config.get("SESSION_TYPE") and app.config.get("SESSION_REDIS"):
         Session(app)
@@ -131,6 +128,10 @@ def create_app(config_class):
             },
             feature={},
         )
+
+    @app.route("/")
+    def index_redirect():
+        return redirect(f"{service_url_prefix}/")
 
     from .healthcheck import bp as healthcheck_bp
     from .main import bp as site_bp

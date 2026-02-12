@@ -465,12 +465,16 @@ forms:
       label: Forenames
       messages:
         required: Enter forenames
+        too_long: Forenames must be %(max)d characters or less
     last_name:
       label: Last name
       messages:
         required: Enter last name
+        too_long: Last name must be %(max)d characters or less
     other_last_names:
       label: Other last names (optional)
+      messages:
+        too_long: Other last names must be %(max)d characters or less
     date_of_birth:
       label: What was their date of birth?
       description: For example, 31 3 1910.
@@ -482,6 +486,8 @@ forms:
       call_to_action: Continue
     place_of_birth:
       label: Place of birth (optional)
+      messages:
+        too_long: Place of birth must be %(max)d characters or less
     date_of_death:
       label: Date of death (optional)
       description: For example, 31 3 2000, or 2000
@@ -509,9 +515,13 @@ forms:
     service_number:
       label: Service number (optional)
       hint: The unique number assigned to a service person
+      messages:
+        too_long: Service number must be %(max)d characters or less
     regiment:
       label: Regiment or squadron (optional)
       hint: Provide the last regiment or squadron they served in if they served in more than one
+      messages:
+        too_long: Regiment or squadron must be %(max)d characters or less
     service_branch:
       messages:
         required: Select the branch they served in
@@ -543,10 +553,12 @@ forms:
       label: First name
       messages:
         required: Enter your first name
+        too_long: First name must be %(max)d characters or less
     requester_last_name:
       label: Last name
       messages:
         required: Enter your last name
+        too_long: Last name must be %(max)d characters or less
     does_not_have_email:
       label: Email address
       description: I do not have an email address
@@ -557,22 +569,30 @@ forms:
         required: Enter an email address in the correct format like name@example.com, or select 'I do not have an email address'
         address_format: Enter an email address in the correct format, like name@example.com
         must_be_empty_if_no_email: Email must be blank if you have selected 'I do not have an email address'
+        too_long: Email must be %(max)d characters or less
     requester_address_line_1:
       label: Address line 1
       messages:
         required: Enter address line 1, typically the building and street
+        too_long: Address line 1 must be %(max)d characters or less
     requester_address_line_2:
       label: Address line 2 (optional)
+      messages:
+        too_long: Address line 2 must be %(max)d characters or less
     requester_town_city:
       label: Town or city
       messages:
         required: Enter town or city
+        too_long: Town or city must be %(max)d characters or less
     requester_county:
       label: County (optional)
+      messages:
+        too_long: County must be %(max)d characters or less
     requester_postcode:
       label: Postcode
       messages:
         required: Enter postcode
+        too_long: Postcode must be %(max)d characters or less
     requester_country:
       label: Country
       prompt_to_select: Select a country

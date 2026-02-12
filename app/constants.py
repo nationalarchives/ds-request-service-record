@@ -348,4 +348,9 @@ ORDER_TYPES = {
     ("full", "PrintedTracked"): "full_record_check_printed",
 }
 
-FIELD_LENGTH_LIMITS = {"case_reference_number": 64}
+FIELD_LENGTH_LIMITS = {
+    "s": 32,
+    "m": 64,
+    "l": 128,
+    "xl": 256,
+}

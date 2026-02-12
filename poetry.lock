@@ -1031,14 +1031,14 @@ crt = ["botocore[crt] (>=1.37.4,<2.0a0)"]
 
 [[package]]
 name = "sentry-sdk"
-version = "2.51.0"
+version = "2.52.0"
 description = "Python client for Sentry (https://sentry.io)"
 optional = false
 python-versions = ">=3.6"
 groups = ["main"]
 files = [
-    {file = "sentry_sdk-2.51.0-py2.py3-none-any.whl", hash = "sha256:e21016d318a097c2b617bb980afd9fc737e1efc55f9b4f0cdc819982c9717d5f"},
-    {file = "sentry_sdk-2.51.0.tar.gz", hash = "sha256:b89d64577075fd8c13088bc3609a2ce77a154e5beb8cba7cc16560b0539df4f7"},
+    {file = "sentry_sdk-2.52.0-py2.py3-none-any.whl", hash = "sha256:931c8f86169fc6f2752cb5c4e6480f0d516112e78750c312e081ababecbaf2ed"},
+    {file = "sentry_sdk-2.52.0.tar.gz", hash = "sha256:fa0bec872cfec0302970b2996825723d67390cdd5f0229fb9efed93bd5384899"},
 ]
 
 [package.dependencies]
@@ -1207,14 +1207,14 @@ sqlcipher = ["sqlcipher3_binary"]
 
 [[package]]
 name = "tna-frontend-jinja"
-version = "0.32.0"
+version = "0.33.0"
 description = "TNA Frontend Jinja templates"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "tna_frontend_jinja-0.32.0-py3-none-any.whl", hash = "sha256:c2d79d3011e96fe43137d4c818ae5a343776f19b17e6d3f204171c4f6193c22b"},
-    {file = "tna_frontend_jinja-0.32.0.tar.gz", hash = "sha256:7f06e5052418da43184b637c1956d15751ff53e57143de764c65782f609612d8"},
+    {file = "tna_frontend_jinja-0.33.0-py3-none-any.whl", hash = "sha256:0e841f29f03307e5a6f2d92f52f57908cde8734d1ad4a7e1d1bce8cb7dcb1531"},
+    {file = "tna_frontend_jinja-0.33.0.tar.gz", hash = "sha256:b40a4e61e6e1eda0210102d7761ab04658ad48bcc8c18bf4f9b3ebfeb25c203e"},
 ]
 
 [package.dependencies]
@@ -1289,4 +1289,4 @@ email = ["email-validator"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.13"
-content-hash = "ccb8623b2742e455cb5232b3680cf2a0d96012877c0026012f7eaa9684d5bf50"
+content-hash = "4510335e44ef7194521afc0b4fb39d55daafc14eec4d193bff2d1776e8ba654f"

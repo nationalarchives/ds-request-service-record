@@ -1,5 +1,5 @@
-from app.lib.content import get_field_content, load_content
 from app.constants import FIELD_LENGTH_LIMITS
+from app.lib.content import get_field_content, load_content
 from app.main.forms.validation_helpers.text_field_conditionally_required import (
     text_field_required_unless_radio_has_specific_selection,
 )
@@ -65,7 +65,7 @@ class HaveYouPreviouslyMadeARequest(FlaskForm):
                 ],
             ),
             Length(
-                max=FIELD_LENGTH_LIMITS["case_reference_number"],
+                max=FIELD_LENGTH_LIMITS["m"],
                 message=get_field_content(content, "case_reference_number", "messages")[
                     "too_long"
                 ],

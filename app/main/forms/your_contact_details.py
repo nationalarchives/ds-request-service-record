@@ -1,3 +1,4 @@
+from app.constants import FIELD_LENGTH_LIMITS
 from app.lib.content import get_field_content, load_content
 from app.main.forms.validation_helpers.field_must_be_empty_if_checkbox_checked import (
     field_must_be_empty_if_checkbox_checked,
@@ -17,7 +18,7 @@ from wtforms import (
     StringField,
     SubmitField,
 )
-from wtforms.validators import Email, InputRequired
+from wtforms.validators import Email, InputRequired, Length
 
 
 class YourContactDetails(FlaskForm):
@@ -31,7 +32,13 @@ class YourContactDetails(FlaskForm):
                 message=get_field_content(content, "requester_first_name", "messages")[
                     "required"
                 ]
-            )
+            ),
+            Length(
+                max=FIELD_LENGTH_LIMITS["l"],
+                message=get_field_content(content, "requester_first_name", "messages")[
+                    "too_long"
+                ],
+            ),
         ],
     )
 
@@ -43,7 +50,13 @@ class YourContactDetails(FlaskForm):
                 message=get_field_content(content, "requester_last_name", "messages")[
                     "required"
                 ]
-            )
+            ),
+            Length(
+                max=FIELD_LENGTH_LIMITS["l"],
+                message=get_field_content(content, "requester_last_name", "messages")[
+                    "too_long"
+                ],
+            ),
         ],
     )
 
@@ -54,6 +67,12 @@ class YourContactDetails(FlaskForm):
                 "does_not_have_email",
                 message=get_field_content(content, "requester_email", "messages")[
                     "required"
+                ],
+            ),
+            Length(
+                max=FIELD_LENGTH_LIMITS["xl"],
+                message=get_field_content(content, "requester_email", "messages")[
+                    "too_long"
                 ],
             ),
             Email(

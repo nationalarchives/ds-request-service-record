@@ -1,3 +1,4 @@
+from app.constants import FIELD_LENGTH_LIMITS
 from app.lib.content import get_field_content, load_content
 from flask_wtf import FlaskForm
 from tna_frontend_jinja.wtforms import (
@@ -14,7 +15,7 @@ from wtforms import (
     SubmitField,
     TextAreaField,
 )
-from wtforms.validators import InputRequired, Optional
+from wtforms.validators import InputRequired, Length, Optional
 
 
 class ServicePersonDetails(FlaskForm):
@@ -27,6 +28,10 @@ class ServicePersonDetails(FlaskForm):
             InputRequired(
                 message=get_field_content(content, "forenames", "messages")["required"]
             ),
+            Length(
+                max=FIELD_LENGTH_LIMITS["l"],
+                message=get_field_content(content, "forenames", "messages")["too_long"],
+            ),
         ],
     )
 
@@ -36,20 +41,38 @@ class ServicePersonDetails(FlaskForm):
         validators=[
             InputRequired(
                 message=get_field_content(content, "last_name", "messages")["required"]
-            )
+            ),
+            Length(
+                max=FIELD_LENGTH_LIMITS["l"],
+                message=get_field_content(content, "last_name", "messages")["too_long"],
+            ),
         ],
     )
 
     other_last_names = StringField(
         get_field_content(content, "other_last_names", "label"),
         widget=TnaTextInputWidget(),
-        validators=[],
+        validators=[
+            Length(
+                max=FIELD_LENGTH_LIMITS["l"],
+                message=get_field_content(content, "other_last_names", "messages")[
+                    "too_long"
+                ],
+            ),
+        ],
     )
 
     place_of_birth = StringField(
         get_field_content(content, "place_of_birth", "label"),
         widget=TnaTextInputWidget(),
-        validators=[],
+        validators=[
+            Length(
+                max=FIELD_LENGTH_LIMITS["l"],
+                message=get_field_content(content, "place_of_birth", "messages")[
+                    "too_long"
+                ],
+            ),
+        ],
     )
 
     date_of_death = TnaDateField(
@@ -77,13 +100,25 @@ class ServicePersonDetails(FlaskForm):
     service_number = StringField(
         get_field_content(content, "service_number", "label"),
         widget=TnaTextInputWidget(),
-        validators=[],
+        validators=[
+            Length(
+                max=FIELD_LENGTH_LIMITS["m"],
+                message=get_field_content(content, "service_number", "messages")[
+                    "too_long"
+                ],
+            ),
+        ],
     )
 
     regiment = TextAreaField(
         get_field_content(content, "regiment", "label"),
         widget=TnaTextInputWidget(),
-        validators=[],
+        validators=[
+            Length(
+                max=FIELD_LENGTH_LIMITS["l"],
+                message=get_field_content(content, "regiment", "messages")["too_long"],
+            ),
+        ],
     )
 
     additional_information = TextAreaField(
