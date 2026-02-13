@@ -19,12 +19,12 @@ from flask import Flask, redirect
 from flask_session import Session
 from jinja2 import ChoiceLoader, PackageLoader
 from tna_frontend_jinja.wtforms.helpers import WTFormsHelpers
+from werkzeug.utils import import_string
 
 
 def create_app(config_class):
-    service_url_prefix = "/request-a-military-service-record"
-
-    app = Flask(__name__, static_url_path=f"{service_url_prefix}/static")
+    config = import_string(config_class)()
+    app = Flask(__name__, static_url_path=f"{config.SERVICE_URL_PREFIX}/static")
     app.config.from_object(config_class)
 
     if app.config.get("SENTRY_DSN"):
@@ -131,15 +131,15 @@ def create_app(config_class):
 
     @app.route("/")
     def index_redirect():
-        return redirect(f"{service_url_prefix}/")
+        return redirect(f"{app.config.get("SERVICE_URL_PREFIX")}/")
 
     from .healthcheck import bp as healthcheck_bp
     from .main import bp as site_bp
     from .sitemap import bp as sitemap_bp
 
     app.register_blueprint(healthcheck_bp, url_prefix="/healthcheck")
-    app.register_blueprint(sitemap_bp, url_prefix=service_url_prefix)
-    app.register_blueprint(site_bp, url_prefix=service_url_prefix)
+    app.register_blueprint(sitemap_bp, url_prefix=app.config.get("SERVICE_URL_PREFIX"))
+    app.register_blueprint(site_bp, url_prefix=app.config.get("SERVICE_URL_PREFIX"))
 
     db.init_app(app)
 

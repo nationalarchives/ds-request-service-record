@@ -11,10 +11,13 @@ class DummyPayment:
         self.status = "N"
         self.payee_email = "john.doe@nationalarchives.gov.uk"
         self.gov_uk_payment_id = "GOV-UK-PAY-ID"
-        self.first_name = None
-        self.last_name = None
+        self.first_name = ""
+        self.last_name = ""
         self.case_number = "CAS-123"
+        self.net_amount = 0
+        self.delivery_amount = 0
         self.total_amount = 7500
+        self.details = ""
         self.reference = "PAY-0125-33-12345"
 
 
@@ -31,7 +34,9 @@ def client(app):
 @patch("app.main.routes.dynamics_payment_routes.db")
 @patch("app.main.routes.dynamics_payment_routes.send_email")
 @patch("app.main.routes.dynamics_payment_routes.add_dynamics_payment")
-def test_payment_creation_endpoint(mock_add_payment, mock_send_email, mock_db, client):
+def test_payment_creation_endpoint(
+    mock_add_payment, mock_send_email, mock_db, client, app
+):
     # Mock the payment creation to avoid real DB usage
     mock_add_payment.return_value = DummyPayment()
     mock_db.session.commit.return_value = None
@@ -40,7 +45,7 @@ def test_payment_creation_endpoint(mock_add_payment, mock_send_email, mock_db, c
     mock_send_email.return_value = True
 
     rv = client.post(
-        "/request-a-military-service-record/create-payment/",
+        f"{app.config.get('SERVICE_URL_PREFIX')}/create-payment/",
         json={
             "case_number": "CAS123",
             "net_amount": 75.00,
@@ -60,7 +65,7 @@ def test_payment_creation_endpoint(mock_add_payment, mock_send_email, mock_db, c
 
 
 @patch("app.main.routes.dynamics_payment_routes.get_dynamics_payment")
-def test_make_payment_page_renders(mock_get_payment, client):
+def test_make_payment_page_renders(mock_get_payment, client, app):
     dummy = DummyPayment()
     dummy.case_number = "CAS123"
     dummy.reference = "PAY-0125-33-12345"
@@ -72,7 +77,7 @@ def test_make_payment_page_renders(mock_get_payment, client):
     dummy.details = "Order of 100x A4 pages"
     mock_get_payment.return_value = dummy
 
-    rv = client.get("/request-a-military-service-record/payment/TEST-ID/")
+    rv = client.get(f"{app.config.get('SERVICE_URL_PREFIX')}/payment/TEST-ID/")
     assert rv.status_code == 200
     # Updated assertion to match current rendered heading
     assert dummy.case_number in rv.text
@@ -80,20 +85,20 @@ def test_make_payment_page_renders(mock_get_payment, client):
 
 
 @patch("app.main.routes.shared_payment_routes._fetch_payment_by_type")
-def test_handle_gov_uk_pay_response_invalid_payment_type(mock_fetch, client):
+def test_handle_gov_uk_pay_response_invalid_payment_type(mock_fetch, client, app):
     """Test that 400 is returned for invalid payment type."""
     with client.session_transaction() as sess:
         sess["entered_through_index_page"] = True
 
     rv = client.get(
-        "/request-a-military-service-record/handle-gov-uk-pay-response/invalid_type/123/"
+        f"{app.config.get('SERVICE_URL_PREFIX')}/handle-gov-uk-pay-response/invalid_type/123/"
     )
     assert rv.status_code == 400
     mock_fetch.assert_not_called()
 
 
 @patch("app.main.routes.shared_payment_routes._fetch_payment_by_type")
-def test_handle_gov_uk_pay_response_payment_not_found(mock_fetch, client):
+def test_handle_gov_uk_pay_response_payment_not_found(mock_fetch, client, app):
     """Test that 404 is returned when payment record is not found."""
     with client.session_transaction() as sess:
         sess["entered_through_index_page"] = True
@@ -101,7 +106,7 @@ def test_handle_gov_uk_pay_response_payment_not_found(mock_fetch, client):
     mock_fetch.return_value = None
 
     rv = client.get(
-        "/request-a-military-service-record/handle-gov-uk-pay-response/dynamics/123/"
+        f"{app.config.get('SERVICE_URL_PREFIX')}/handle-gov-uk-pay-response/dynamics/123/"
     )
     assert rv.status_code == 404
     mock_fetch.assert_called_once_with("dynamics", "123")
@@ -110,7 +115,7 @@ def test_handle_gov_uk_pay_response_payment_not_found(mock_fetch, client):
 @patch("app.main.routes.shared_payment_routes._get_gov_uk_payment_data")
 @patch("app.main.routes.shared_payment_routes._fetch_payment_by_type")
 def test_handle_gov_uk_pay_response_gov_uk_pay_api_failure(
-    mock_fetch, mock_get_payment_data, client
+    mock_fetch, mock_get_payment_data, client, app
 ):
     """Test that 502 is returned when GOV.UK Pay API fails to return data."""
     with client.session_transaction() as sess:
@@ -125,7 +130,7 @@ def test_handle_gov_uk_pay_response_gov_uk_pay_api_failure(
     mock_get_payment_data.return_value = mock_client
 
     rv = client.get(
-        "/request-a-military-service-record/handle-gov-uk-pay-response/service_record/123/"
+        f"{app.config.get('SERVICE_URL_PREFIX')}/handle-gov-uk-pay-response/service_record/123/"
     )
     assert rv.status_code == 502
     mock_fetch.assert_called_once_with("service_record", "123")
