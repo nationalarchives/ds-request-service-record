@@ -81,6 +81,12 @@ class Production(Features):
 
     AWS_DEFAULT_REGION: str = os.environ.get("AWS_DEFAULT_REGION", "eu-west-2")
     PROOF_OF_DEATH_BUCKET_NAME: str = os.environ.get("PROOF_OF_DEATH_BUCKET_NAME", "")
+    PROOF_OF_DEATH_HOLDING_PREFIX: str = os.environ.get(
+        "PROOF_OF_DEATH_HOLDING_PREFIX", "holding/"
+    )
+    PROOF_OF_DEATH_SUBMITTED_PREFIX: str = os.environ.get(
+        "PROOF_OF_DEATH_SUBMITTED_PREFIX", "submitted/"
+    )
     MAX_UPLOAD_ATTEMPTS: int = int(os.environ.get("MAX_UPLOAD_ATTEMPTS", "3"))
 
     EMAIL_FROM: str = os.environ.get("EMAIL_FROM", "")
