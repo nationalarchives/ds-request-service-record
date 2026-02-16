@@ -1,9 +1,9 @@
 import { test, expect } from "@playwright/test";
+import { basePath } from "./lib/constants.ts";
 
 test.describe("accessing mid-journey pages requirements", () => {
-  const INDEX_URL = "/request-a-military-service-record/";
-  const PROTECTED_URL =
-    "/request-a-military-service-record/which-military-branch-did-the-person-serve-in/";
+  const INDEX_URL = `${basePath}/`;
+  const PROTECTED_URL = `${basePath}/which-military-branch-did-the-person-serve-in/`;
 
   test.beforeEach(async ({ page }) => {
     await page.context().clearCookies();
@@ -16,7 +16,7 @@ test.describe("accessing mid-journey pages requirements", () => {
 
     // Check that we were redirected to the index page
     expect(page.url()).toContain(INDEX_URL);
-    expect(response.status()).toBe(200);
+    expect(response?.status()).toBe(200);
   });
 
   test("allows access to exempt routes without session key", async ({
@@ -25,7 +25,7 @@ test.describe("accessing mid-journey pages requirements", () => {
     const response = await page.goto(INDEX_URL);
 
     expect(page.url()).toContain(INDEX_URL);
-    expect(response.status()).toBe(200);
+    expect(response?.status()).toBe(200);
   });
 
   test("healthcheck endpoint is accessible without session key", async ({
@@ -33,8 +33,8 @@ test.describe("accessing mid-journey pages requirements", () => {
   }) => {
     const response = await page.goto("/healthcheck/live/");
 
-    expect(response.status()).toBe(200);
-    expect(await response.text()).toContain("ok");
+    expect(response?.status()).toBe(200);
+    expect(await response?.text()).toContain("ok");
   });
 
   test("when a user has been redirected once, they are not redirected again", async ({
@@ -48,6 +48,6 @@ test.describe("accessing mid-journey pages requirements", () => {
     const response = await page.goto(PROTECTED_URL);
 
     expect(page.url()).toContain(PROTECTED_URL);
-    expect(response.status()).toBe(200);
+    expect(response?.status()).toBe(200);
   });
 });

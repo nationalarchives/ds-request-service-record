@@ -37,6 +37,8 @@ class Production(Features):
     SENTRY_DSN: str = os.getenv("SENTRY_DSN", "")
     SENTRY_SAMPLE_RATE: float = float(os.getenv("SENTRY_SAMPLE_RATE", "0.1"))
 
+    SERVICE_URL_PREFIX: str = "/request-a-military-service-record"
+
     COOKIE_DOMAIN: str = os.environ.get("COOKIE_DOMAIN", "")
 
     CSP_IMG_SRC: list[str] = os.environ.get("CSP_IMG_SRC", "'self'").split(",")
@@ -69,6 +71,9 @@ class Production(Features):
         os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS", "False")
     )
 
+    SESSION_COOKIE_NAME: str = "ds_request_service_record_session"
+    SESSION_COOKIE_PATH: str = SERVICE_URL_PREFIX
+    SESSION_COOKIE_SECURE: bool = True
     SESSION_REDIS_URL: str = os.environ.get("SESSION_REDIS_URL", "")
     if SESSION_REDIS_URL:
         SESSION_TYPE: str = "redis"
@@ -111,6 +116,8 @@ class Develop(Production):
     SENTRY_SAMPLE_RATE: float = float(os.getenv("SENTRY_SAMPLE_RATE", "0"))
 
     CACHE_DEFAULT_TIMEOUT: int = int(os.environ.get("CACHE_DEFAULT_TIMEOUT", "1"))
+
+    SESSION_COOKIE_SECURE: bool = strtobool(os.getenv("SESSION_COOKIE_SECURE", "True"))
 
 
 class Test(Production):

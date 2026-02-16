@@ -10,8 +10,6 @@ def requires_session_key():
         "main.make_payment",
     ]
 
-    short_session_id = request.cookies.get("session", "unknown")[0:7]
-
     if request.endpoint and any(
         request.endpoint.startswith(route) for route in exempt_routes
     ):
@@ -20,8 +18,8 @@ def requires_session_key():
         return None
 
     if required_key not in session or not session[required_key]:
-        current_app.logger.warning(
-            f"'{required_key}' not found or set on {short_session_id} session. Redirecting to start page."
+        current_app.logger.info(
+            f"'{required_key}' not found or set in session. Redirecting to start page."
         )
         # If the session key is not set, we set the session key to True before redirecting
         session["entered_through_index_page"] = True
