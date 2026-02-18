@@ -106,7 +106,7 @@ def process_valid_request(id: str, payment_data: dict) -> None:
             db.session.commit()
 
 
-def process_valid_payment(id: str, *, provider_id: str, payment_date: str) -> None:
+def process_valid_payment(id: str, *, provider_id: str) -> None:
     payment = get_dynamics_payment(id)
 
     if payment is None:
@@ -114,7 +114,7 @@ def process_valid_payment(id: str, *, provider_id: str, payment_date: str) -> No
 
     payment.status = PAID_STATUS
     payment.provider_id = provider_id
-    payment.payment_date = datetime.strptime(payment_date, "%Y-%m-%d")
+    payment.payment_date = datetime.now()
     db.session.commit()
 
     send_payment_to_mod_copying_app(payment)
