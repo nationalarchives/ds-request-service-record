@@ -89,7 +89,7 @@ def test_send_payment_to_mod_copying_app_payload_format(mock_post, context):
         "PayReference": "PAY-REF-456",
         "GovUkProviderId": "gov-uk-pay-id-789",
         "Amount": 150.0,  # Divided by 100
-        "Date": "2024-03-15",  # Formatted as Y-m-d
+        "Date": "2024-03-15 14:30:00",
     }
 
     # Assertions on the payload
