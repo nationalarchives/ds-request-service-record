@@ -433,6 +433,14 @@ pages:
         - Get in touch with us by replying to your confirmation email, or visit our Contact us page.<br><br>[ What did you think of this form? (opens in new tab) ](USER_FEEDBACK_SURVEY)
   what_was_their_date_of_birth:
     heading: What was their date of birth?
+  payment_summary:
+    heading: Payment summary
+    paragraphs:
+      - Check your details
+    order_type_term: Order
+    price:
+      term: Price
+      message: "The price is calculated based on the number of pages we are copying: £1.04 per page for digital copies, or £1.89 per page for posted copies."
 forms:
   fields:
     request_a_military_service_record:
