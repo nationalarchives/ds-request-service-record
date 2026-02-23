@@ -575,3 +575,17 @@ def request_submitted(id: str = None):
         reference_number=reference_number,
         content=load_content(),
     )
+
+
+@bp.route("/payment-summary/", methods=["GET"])
+def payment_summary():
+    price = session.get("price", None)
+    order_number = session.get("order_number", None)
+    # TODO: We are currently rendering the page without a price or order number if they do not exist.
+    #       When the page we're redirecting to exists, we'll need to update this.
+    return render_template(
+        "main/payment-summary.html",
+        content=load_content(),
+        price=price,
+        order_number=order_number,
+    )
