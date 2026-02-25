@@ -2,6 +2,7 @@ from datetime import datetime
 
 import requests
 from app.lib.api import JSONAPIClient
+from app.lib.aws import move_proof_of_death_to_submitted
 from app.lib.db.constants import (
     NEW_STATUS,
     PAID_STATUS,
@@ -99,6 +100,12 @@ def process_valid_request(id: str, payment_data: dict) -> None:
         record.payment_date = datetime.now().strftime("%d %B %Y")
         record.status = PAID_STATUS
         db.session.commit()
+
+    if record.proof_of_death and record.proof_of_death != "EMPTY":
+        if not move_proof_of_death_to_submitted(record.proof_of_death):
+            current_app.logger.warning(
+                "Failed to move proof of death file to submitted bucket."
+            )
 
     if record.status == PAID_STATUS:
         if send_request_to_dynamics(record):
