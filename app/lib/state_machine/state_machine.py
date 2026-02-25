@@ -484,7 +484,9 @@ class RoutingStateMachine(StateMachine):
             session_key = None
             # Check the user has a valid session key, if not, we'll generate a UUID in upload_proof_of_death()
             if has_request_context():
-                session_key = request.cookies.get(current_app.config["SESSION_COOKIE_NAME"])
+                session_key = request.cookies.get(
+                    current_app.config["SESSION_COOKIE_NAME"]
+                )
                 if session_key:
                     session_key = session_key.lstrip(".")[:32]
             file = upload_proof_of_death(file=file_data, session_key=session_key)
