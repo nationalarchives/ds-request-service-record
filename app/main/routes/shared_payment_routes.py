@@ -42,13 +42,11 @@ def _get_gov_uk_payment_data(gov_uk_payment_id):
 def _process_dynamics_payment(payment, client, gov_uk_payment_id):
     """Process a successful dynamics payment."""
     provider_id = client.data.get("provider_id", None)
-    payment_date = client.data.get("settlement_summary", {}).get("captured_date", None)
 
     try:
         process_valid_payment(
             id=payment.dynamics_payment_id,
             provider_id=provider_id,
-            payment_date=payment_date,
         )
     except Exception as e:
         current_app.logger.error(
@@ -77,7 +75,7 @@ def handle_gov_uk_pay_response(payment_type, id):
 
     client = _get_gov_uk_payment_data(payment.gov_uk_payment_id)
     if client.data is None:
-        abort(502, description="Unable to retrieve payment data ")
+        abort(502, description="Unable to retrieve payment data")
 
     if not client.is_payment_successful():
         return redirect(url_for("main.payment_incomplete"))

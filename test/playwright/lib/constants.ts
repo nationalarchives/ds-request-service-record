@@ -13,6 +13,7 @@ export const Paths = {
   JOURNEY_START: `${basePath}/`,
   SUBJECT_ACCESS_REQUEST: `${basePath}/subject-access-request/`,
   PAYMENT_INCOMPLETE: `${basePath}/payment-incomplete/`,
+  PAYMENT_SUMMARY: `${basePath}/payment-summary/`,
   REQUEST_SUBMITTED: `${basePath}/request-submitted/`,
   WHICH_MILITARY_BRANCH_DID_THE_PERSON_SERVE_IN: `${basePath}/which-military-branch-did-the-person-serve-in/`,
   SERVICE_PERSON_DETAILS: `${basePath}/service-person-details/`,

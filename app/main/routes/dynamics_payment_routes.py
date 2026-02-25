@@ -4,7 +4,6 @@ from datetime import datetime
 from app.lib.aws import send_email
 from app.lib.content import load_content
 from app.lib.db.constants import (
-    PAID_STATUS,
     SENT_STATUS,
 )
 from app.lib.db.db_handler import (
@@ -69,9 +68,6 @@ def make_payment(id):
 
     if payment is None:
         return "Payment not found"
-
-    if payment.status == PAID_STATUS:
-        return render_template("errors/payment_already_processed.html"), 400
 
     form = ProceedToPay()
     content = load_content()
