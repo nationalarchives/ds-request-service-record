@@ -3,7 +3,7 @@ from datetime import datetime
 from app.constants import MultiPageFormRoutes
 from app.lib.aws import upload_proof_of_death
 from app.lib.boundary_years import BoundaryYears
-from flask import current_app, has_request_context, request
+from flask import current_app, has_app_context, has_request_context, request
 from statemachine import State, StateMachine
 
 
@@ -491,9 +491,11 @@ class RoutingStateMachine(StateMachine):
                     session_key = session_key.lstrip(".")[:32]
             file = upload_proof_of_death(file=file_data, session_key=session_key)
             if file:
-                holding_prefix = current_app.config.get(
-                    "PROOF_OF_DEATH_HOLDING_PREFIX", ""
-                )
+                holding_prefix = ""
+                if has_app_context():
+                    holding_prefix = current_app.config.get(
+                        "PROOF_OF_DEATH_HOLDING_PREFIX", ""
+                    )
                 if holding_prefix:
                     normalized_prefix = (
                         holding_prefix
