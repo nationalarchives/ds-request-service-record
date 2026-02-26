@@ -17,6 +17,8 @@ from app.main import bp
 from app.main.forms.proceed_to_pay import ProceedToPay
 from flask import current_app, redirect, render_template, request, url_for
 
+from app.lib.decorators.state_machine_decorator import with_state_machine
+
 
 @bp.route("/payment-redirect/<id>/", methods=["GET"])
 def gov_uk_pay_redirect(id):
@@ -60,24 +62,36 @@ def gov_uk_pay_redirect(id):
 
 
 @bp.route("/payment/<id>/", methods=["GET", "POST"])
-def make_payment(id):
+@with_state_machine
+def make_payment(id, state_machine):
     payment = get_dynamics_payment(id)
+    # attach payment to state machine so condition methods can inspect it
+    state_machine.payment = payment
 
-    if payment is None:
-        return "Payment not found"
+    if payment.status == "N":  # new payment, show complete-your-payment page
+        state_machine.continue_from_initial_second_payment_link()
 
-    form = ProceedToPay()
-    content = load_content()
+        form = ProceedToPay()
+        content = load_content()
 
-    if form.validate_on_submit():
-        return redirect(url_for("main.gov_uk_pay_redirect", id=payment.id))
+        if form.validate_on_submit():
+            # Transition the state machine to the GOV.UK Pay redirect route
+            state_machine.continue_from_your_order_summary_form()
+            return redirect(url_for(state_machine.route_for_current_state, id=payment.id))
 
-    return render_template(
-        "main/payment/dynamics-payment.html",
-        form=form,
-        payment=payment,
-        content=content,
-    )
+        return render_template(
+            "main/payment/dynamics-payment.html",
+            form=form,
+            payment=payment,
+            content=content,
+        )
+
+    # Drive the state machine to the appropriate final/next state
+        # if payment is None the link is not valid
+        # if payment status is "E" then payment expired(?)
+        # if payment status is either "P" or "S" then payment already made or in progress
+    state_machine.continue_from_initial_second_payment_link()
+    return redirect(url_for(state_machine.route_for_current_state))
 
 
 def _validate_and_convert_amount(
