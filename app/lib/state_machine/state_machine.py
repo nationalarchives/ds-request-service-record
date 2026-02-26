@@ -162,6 +162,14 @@ class RoutingStateMachine(StateMachine):
 
     request_submitted_page = State(enter="entering_request_submitted_page", final=True)
 
+    complete_your_payment_page = State(enter="entering_gov_uk_pay_page", final=True)
+
+    payment_already_recieved_page = State(enter="entering_payment_already_recieved_page", final=True)
+    
+    link_expired_page = State(enter="entering_link_expired_page", final=True)
+
+    not_valid_link_page = State(enter="entering_not_valid_link_page", final=True)
+
     """
     These are our Events. They're called in route methods to trigger transitions between States.
 
@@ -297,6 +305,13 @@ class RoutingStateMachine(StateMachine):
 
     continue_from_payment_incomplete_page = initial.to(your_order_summary_form)
 
+    continue_from_initial_second_payment_link = (
+        initial.to(complete_your_payment_page, unless=["payment_already_recieved", "link_expired", "not_a_valid_link"])
+        | initial.to(payment_already_recieved_page, cond="payment_already_recieved")
+        | initial.to(link_expired_page, cond="link_expired")
+        | initial.to(not_valid_link_page, cond="not_a_valid_link")
+        )
+
     def entering_how_we_process_requests_form(self):
         self.route_for_current_state = MultiPageFormRoutes.HOW_WE_PROCESS_REQUESTS.value
 
@@ -414,6 +429,18 @@ class RoutingStateMachine(StateMachine):
     def entering_request_submitted_page(self):
         self.route_for_current_state = MultiPageFormRoutes.REQUEST_SUBMITTED.value
 
+    def entering_gov_uk_pay_page(self):
+        self.route_for_current_state = MultiPageFormRoutes.COMPLETE_PAYMENT.value
+
+    def entering_payment_already_recieved_page(self):
+        self.route_for_current_state = MultiPageFormRoutes.PAYMENT_ALREADY_RECIEVED.value
+
+    def entering_link_expired_page(self):
+        self.route_for_current_state = MultiPageFormRoutes.LINK_EXPIRED.value
+
+    def entering_not_valid_link_page(self):
+        self.route_for_current_state = MultiPageFormRoutes.NOT_A_VALID_LINK.value
+
     def living_subject(self, form):
         """Condition method to determine if the service person is alive."""
         return self.get_form_field_data(form, "is_service_person_alive") == "yes"
@@ -491,3 +518,17 @@ class RoutingStateMachine(StateMachine):
                 return True
         self.set_form_field_data(form, "proof_of_death", None)
         return False  # TODO: Does this need to be True if upload fails? They won't progress otherwise.
+
+    # second payment conditions
+    def payment_already_recieved(self):
+        payment = getattr(self, "payment", None)
+        return payment and (payment.status in ["P", "S"])
+
+    def link_expired(self):
+        payment = getattr(self, "payment", None)
+        return payment and (payment.status == "E")
+
+    def not_a_valid_link(self):
+        # Treat a link as invalid if payment attribute is missing or None
+        payment = getattr(self, "payment", None)
+        return payment is None
