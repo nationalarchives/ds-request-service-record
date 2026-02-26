@@ -103,13 +103,21 @@ def move_proof_of_death_to_submitted(key_name: str) -> bool:
         current_app.logger.error("Proof of death bucket configuration is missing.")
         return False
 
+    holding_prefix = _get_proof_of_death_holding_prefix()
+    submitted_prefix = _get_proof_of_death_submitted_prefix()
+
     destination_key = _to_submitted_key(
         key_name,
-        holding_prefix=_get_proof_of_death_holding_prefix(),
-        submitted_prefix=_get_proof_of_death_submitted_prefix(),
+        holding_prefix=holding_prefix,
+        submitted_prefix=submitted_prefix,
     )
 
-    if destination_key == key_name:
+    normalized_holding = _normalize_prefix(holding_prefix)
+    source_key = key_name
+    if normalized_holding and not key_name.startswith(normalized_holding):
+        source_key = f"{normalized_holding}{key_name.lstrip('/')}"
+
+    if destination_key == source_key:
         return True
 
     session = get_boto3_session()
@@ -119,9 +127,9 @@ def move_proof_of_death_to_submitted(key_name: str) -> bool:
         s3.copy_object(
             Bucket=bucket_name,
             Key=destination_key,
-            CopySource={"Bucket": bucket_name, "Key": key_name},
+            CopySource={"Bucket": bucket_name, "Key": source_key},
         )
-        s3.delete_object(Bucket=bucket_name, Key=key_name)
+        s3.delete_object(Bucket=bucket_name, Key=source_key)
         return True
     except Exception as e:
         current_app.logger.error(

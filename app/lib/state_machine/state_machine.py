@@ -491,6 +491,17 @@ class RoutingStateMachine(StateMachine):
                     session_key = session_key.lstrip(".")[:32]
             file = upload_proof_of_death(file=file_data, session_key=session_key)
             if file:
+                holding_prefix = current_app.config.get(
+                    "PROOF_OF_DEATH_HOLDING_PREFIX", ""
+                )
+                if holding_prefix:
+                    normalized_prefix = (
+                        holding_prefix
+                        if holding_prefix.endswith("/")
+                        else f"{holding_prefix}/"
+                    )
+                    if file.startswith(normalized_prefix):
+                        file = file[len(normalized_prefix) :]
                 self.set_form_field_data(form, "proof_of_death", file)
                 return True
         self.set_form_field_data(form, "proof_of_death", None)
