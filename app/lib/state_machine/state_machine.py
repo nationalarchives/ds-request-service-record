@@ -162,7 +162,7 @@ class RoutingStateMachine(StateMachine):
 
     request_submitted_page = State(enter="entering_request_submitted_page", final=True)
 
-    complete_your_payment_page = State(enter="entering_gov_uk_pay_page", final=True)
+    complete_your_payment_page = State(enter="entering_complete_payment_page")
 
     payment_already_recieved_page = State(enter="entering_payment_already_recieved_page", final=True)
     
@@ -312,6 +312,12 @@ class RoutingStateMachine(StateMachine):
         | initial.to(not_valid_link_page, cond="not_a_valid_link")
         )
 
+    # would remove initial.to here since it should really just be from the complete_your_payment_page, 
+    # but it means the same pattern is followed throughout (i.e. initial state is consistently the previous state)
+    continue_from_complete_your_payment_page = (
+        initial.to(gov_uk_pay_redirect) | complete_your_payment_page.to(gov_uk_pay_redirect)
+    )
+
     def entering_how_we_process_requests_form(self):
         self.route_for_current_state = MultiPageFormRoutes.HOW_WE_PROCESS_REQUESTS.value
 
@@ -417,6 +423,7 @@ class RoutingStateMachine(StateMachine):
     def entering_what_is_your_address_form(self):
         self.route_for_current_state = MultiPageFormRoutes.WHAT_IS_YOUR_ADDRESS.value
 
+
     def entering_choose_your_order_type_form(self):
         self.route_for_current_state = MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE.value
 
@@ -429,7 +436,7 @@ class RoutingStateMachine(StateMachine):
     def entering_request_submitted_page(self):
         self.route_for_current_state = MultiPageFormRoutes.REQUEST_SUBMITTED.value
 
-    def entering_gov_uk_pay_page(self):
+    def entering_complete_payment_page(self):
         self.route_for_current_state = MultiPageFormRoutes.COMPLETE_PAYMENT.value
 
     def entering_payment_already_recieved_page(self):

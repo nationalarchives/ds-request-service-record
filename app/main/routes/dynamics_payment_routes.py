@@ -76,7 +76,8 @@ def make_payment(id, state_machine):
 
         if form.validate_on_submit():
             # Transition the state machine to the GOV.UK Pay redirect route
-            state_machine.continue_from_your_order_summary_form()
+            # same route as continue_from_your_order_summary_form but renamed for clarity
+            state_machine.continue_from_complete_your_payment_page()
             return redirect(url_for(state_machine.route_for_current_state, id=payment.id))
 
         return render_template(
