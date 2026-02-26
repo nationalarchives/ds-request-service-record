@@ -20,8 +20,8 @@ def test_all_events_have_the_expected_suffix():
     sm = RoutingStateMachine()
     for event in sm.events:
         assert re.search(
-            r"(_form|_page|_redirect)$", event.id
-        ), f"Event ID {event.id} does not end with '_form', '_page' or '_redirect'"
+            r"(_form|_page|_link|_redirect)$", event.id
+        ), f"Event ID {event.id} does not end with '_form', '_page' , '_link' or '_redirect'"
 
 
 def test_initial_state_has_no_route():
@@ -522,3 +522,34 @@ def test_continue_from_payment_incomplete_page():
 
 def make_form(**fields):
     return SimpleNamespace(**{k: SimpleNamespace(data=v) for k, v in fields.items()})
+
+
+def test_initial_state_to_continue_to_payment_page():
+    sm = RoutingStateMachine()
+    sm.continue_from_initial_second_payment_link()
+    assert sm.current_state.id == "complete_your_payment_page"
+    assert sm.route_for_current_state == MultiPageFormRoutes.COMPLETE_PAYMENT.value
+
+    # ensure condition method can inspect a payment object and drive the event
+def test_continue_to_already_recieved_payment_from_initial():
+    sm = RoutingStateMachine()
+    sm.payment = SimpleNamespace(status="P")
+    sm.continue_from_initial_second_payment_link()
+    assert sm.current_state.id == "payment_already_recieved_page"
+    assert sm.route_for_current_state == MultiPageFormRoutes.PAYMENT_ALREADY_RECIEVED.value
+
+def test_continue_to_expired_payment_from_initial():
+    sm = RoutingStateMachine()
+    sm.payment = SimpleNamespace(status="E")
+    sm.continue_from_initial_second_payment_link()
+    assert sm.current_state.id == "link_expired_page"
+    assert sm.route_for_current_state == MultiPageFormRoutes.LINK_EXPIRED.value
+
+def test_continue_to_not_valid_link_from_initial():
+    sm = RoutingStateMachine()
+    # no payment attached -> should be treated as not a valid link
+    sm.payment = None
+    sm.continue_from_initial_second_payment_link()
+    assert sm.current_state.id == "not_valid_link_page"
+    assert sm.route_for_current_state == MultiPageFormRoutes.NOT_A_VALID_LINK.value
+
