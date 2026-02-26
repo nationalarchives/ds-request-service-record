@@ -88,7 +88,7 @@ def make_payment(id, state_machine):
 
     # Drive the state machine to the appropriate final/next state
         # if payment is None the link is not valid
-        # if payment status is "E" then payment expired(?)
+        # if payment status is "E" then payment link expired(?)
         # if payment status is either "P" or "S" then payment already made or in progress
     state_machine.continue_from_initial_second_payment_link()
     return redirect(url_for(state_machine.route_for_current_state))
