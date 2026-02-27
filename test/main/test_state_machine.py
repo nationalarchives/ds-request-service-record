@@ -534,8 +534,8 @@ def test_initial_state_to_continue_to_payment_page():
 def test_continue_from_complete_your_payment_page():
     sm = RoutingStateMachine()
     sm.continue_from_complete_your_payment_page(form=make_form(submit=None))
-    assert sm.current_state.id == "gov_uk_pay_redirect"
-    assert sm.route_for_current_state == MultiPageFormRoutes.SEND_TO_GOV_UK_PAY.value
+    assert sm.current_state.id == "gov_uk_pay_second_payment_redirect"
+    assert sm.route_for_current_state == MultiPageFormRoutes.SEND_TO_GOV_UK_PAY_SECOND_PAYMENT.value
 
 def test_continue_to_complete_your_payment_page_from_initial():
     sm = RoutingStateMachine()
@@ -544,8 +544,8 @@ def test_continue_to_complete_your_payment_page_from_initial():
     assert sm.current_state.id == "complete_your_payment_page"
     assert sm.route_for_current_state == MultiPageFormRoutes.COMPLETE_PAYMENT.value
     sm.continue_from_complete_your_payment_page(form=make_form(submit=None))
-    assert sm.current_state.id == "gov_uk_pay_redirect"
-    assert sm.route_for_current_state == MultiPageFormRoutes.SEND_TO_GOV_UK_PAY.value
+    assert sm.current_state.id == "gov_uk_pay_second_payment_redirect"
+    assert sm.route_for_current_state == MultiPageFormRoutes.SEND_TO_GOV_UK_PAY_SECOND_PAYMENT.value
 
 def test_continue_to_already_recieved_payment_from_initial():
     sm = RoutingStateMachine()

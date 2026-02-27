@@ -7,6 +7,12 @@ from flask import current_app, has_request_context, request
 from statemachine import State, StateMachine
 
 
+from app.lib.db.constants import (
+    SENT_STATUS,
+    PAID_STATUS,
+    EXPIRED_STATUS,
+)
+
 class RoutingStateMachine(StateMachine):
     """
     _route_for_current_state is updated by entering_* methods. to hold the route associated with the current state
@@ -170,6 +176,8 @@ class RoutingStateMachine(StateMachine):
 
     not_valid_link_page = State(enter="entering_not_valid_link_page", final=True)
 
+    gov_uk_pay_second_payment_redirect = State(enter="entering_gov_uk_pay_second_payment_redirect", final=True)
+
     """
     These are our Events. They're called in route methods to trigger transitions between States.
 
@@ -315,7 +323,7 @@ class RoutingStateMachine(StateMachine):
     # would remove initial.to here since it should really just be from the complete_your_payment_page, 
     # but it means the same pattern is followed throughout (i.e. initial state is consistently the previous state)
     continue_from_complete_your_payment_page = (
-        initial.to(gov_uk_pay_redirect) | complete_your_payment_page.to(gov_uk_pay_redirect)
+        initial.to(gov_uk_pay_second_payment_redirect) | complete_your_payment_page.to(gov_uk_pay_second_payment_redirect)
     )
 
     def entering_how_we_process_requests_form(self):
@@ -448,6 +456,9 @@ class RoutingStateMachine(StateMachine):
     def entering_not_valid_link_page(self):
         self.route_for_current_state = MultiPageFormRoutes.NOT_A_VALID_LINK.value
 
+    def entering_gov_uk_pay_second_payment_redirect(self):
+        self.route_for_current_state = MultiPageFormRoutes.SEND_TO_GOV_UK_PAY_SECOND_PAYMENT.value
+
     def living_subject(self, form):
         """Condition method to determine if the service person is alive."""
         return self.get_form_field_data(form, "is_service_person_alive") == "yes"
@@ -529,11 +540,11 @@ class RoutingStateMachine(StateMachine):
     # second payment conditions
     def payment_already_recieved(self):
         payment = getattr(self, "payment", None)
-        return payment and (payment.status in ["P", "S"])
+        return payment and (payment.status in [PAID_STATUS, SENT_STATUS])
 
     def link_expired(self):
         payment = getattr(self, "payment", None)
-        return payment and (payment.status == "E")
+        return payment and (payment.status == EXPIRED_STATUS)
 
     def not_a_valid_link(self):
         # Treat a link as invalid if payment attribute is missing or None

@@ -3,6 +3,10 @@ from datetime import datetime
 
 from app.lib.aws import send_email
 from app.lib.content import load_content
+from app.lib.db.constants import (
+    SENT_STATUS,
+    NEW_STATUS,
+)
 from app.lib.db.db_handler import (
     add_dynamics_payment,
     add_gov_uk_dynamics_payment,
@@ -20,7 +24,7 @@ from flask import current_app, redirect, render_template, request, url_for
 from app.lib.decorators.state_machine_decorator import with_state_machine
 
 
-@bp.route("/payment-redirect/<id>/", methods=["GET"])
+@bp.route("/gov-uk-pay-redirect/<id>/", methods=["GET"])
 def gov_uk_pay_redirect(id):
     payment = get_dynamics_payment(id)
 
@@ -68,7 +72,7 @@ def make_payment(id, state_machine):
     # attach payment to state machine so condition methods can inspect it
     state_machine.payment = payment
 
-    if payment.status == "N":  # new payment, show complete-your-payment page
+    if payment and (payment.status in [NEW_STATUS, SENT_STATUS]):  # new payment, show complete-your-payment page
         state_machine.continue_from_initial_second_payment_link()
 
         form = ProceedToPay()
@@ -88,12 +92,28 @@ def make_payment(id, state_machine):
         )
 
     # Drive the state machine to the appropriate final/next state
-        # if payment is None the link is not valid
-        # if payment status is "E" then payment link expired(?)
-        # if payment status is either "P" or "S" then payment already made or in progress
     state_machine.continue_from_initial_second_payment_link()
     return redirect(url_for(state_machine.route_for_current_state))
 
+
+# TODO: replace with templates
+@bp.route("/not-a-valid-link/", methods=["GET"])
+@bp.route("/not-a-valid-link/<id>", methods=["GET"])
+def not_a_valid_link(id: str = None):
+
+    return "Not a valid link"
+# TODO: replace with templates
+@bp.route("/link-expired/", methods=["GET"])
+@bp.route("/link-expired/<id>", methods=["GET"])
+def link_expired(id: str = None):
+
+    return "Link expired"
+# TODO: replace with templates
+@bp.route("/payment-already-made/", methods=["GET"])
+@bp.route("/payment-already-made/<id>", methods=["GET"])
+def payment_already_made(id: str = None):
+
+    return "Payment already made"
 
 def _validate_and_convert_amount(
     amount_value: float | int | str, field_name: str

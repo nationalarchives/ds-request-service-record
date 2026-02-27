@@ -52,6 +52,7 @@ class MultiPageFormRoutes(Enum):
     PAYMENT_ALREADY_RECIEVED = "main.payment_already_recieved"
     LINK_EXPIRED = "main.link_expired"
     NOT_A_VALID_LINK = "main.not_a_valid_link"
+    SEND_TO_GOV_UK_PAY_SECOND_PAYMENT = "main.gov_uk_pay_redirect"
 
 class ServiceBranches(Enum):
     ROYAL_NAVY = "Royal Navy (including Royal Marines)"
