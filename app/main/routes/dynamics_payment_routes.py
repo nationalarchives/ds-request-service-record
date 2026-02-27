@@ -83,7 +83,7 @@ def make_payment(id, state_machine):
             # Transition the state machine to the GOV.UK Pay redirect route
             state_machine.continue_from_complete_your_payment_page()
             return redirect(
-                url_for(state_machine.route_for_current_state, id=payment.id)
+                url_for(state_machine.route_for_current_state, id=id)
             )
 
         return render_template(
@@ -95,7 +95,7 @@ def make_payment(id, state_machine):
 
     # Drive the state machine to the appropriate final/next state
     state_machine.continue_from_initial_second_payment_link()
-    return redirect(url_for(state_machine.route_for_current_state))
+    return redirect(url_for(state_machine.route_for_current_state, id=id))
 
 
 # TODO: replace with templates
