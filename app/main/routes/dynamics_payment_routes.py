@@ -72,7 +72,7 @@ def make_payment(id, state_machine):
     state_machine.payment = payment
 
     if payment and (
-        payment.status in [NEW_STATUS, SENT_STATUS]
+        payment.status == NEW_STATUS
     ):  # new payment, show complete-your-payment page
         state_machine.continue_from_initial_second_payment_link()
 
