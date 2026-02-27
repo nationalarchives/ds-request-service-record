@@ -4,8 +4,8 @@ from datetime import datetime
 from app.lib.aws import send_email
 from app.lib.content import load_content
 from app.lib.db.constants import (
-    SENT_STATUS,
     NEW_STATUS,
+    SENT_STATUS,
 )
 from app.lib.db.db_handler import (
     add_dynamics_payment,
@@ -14,14 +14,13 @@ from app.lib.db.db_handler import (
     get_dynamics_payment,
 )
 from app.lib.db.models import DynamicsPayment, db
+from app.lib.decorators.state_machine_decorator import with_state_machine
 from app.lib.gov_uk_pay import (
     create_payment,
 )
 from app.main import bp
 from app.main.forms.proceed_to_pay import ProceedToPay
 from flask import current_app, redirect, render_template, request, url_for
-
-from app.lib.decorators.state_machine_decorator import with_state_machine
 
 
 @bp.route("/gov-uk-pay-redirect/<id>/", methods=["GET"])
@@ -72,7 +71,9 @@ def make_payment(id, state_machine):
     # attach payment to state machine so condition methods can inspect it
     state_machine.payment = payment
 
-    if payment and (payment.status in [NEW_STATUS, SENT_STATUS]):  # new payment, show complete-your-payment page
+    if payment and (
+        payment.status in [NEW_STATUS, SENT_STATUS]
+    ):  # new payment, show complete-your-payment page
         state_machine.continue_from_initial_second_payment_link()
 
         form = ProceedToPay()
@@ -82,7 +83,9 @@ def make_payment(id, state_machine):
             # Transition the state machine to the GOV.UK Pay redirect route
             # same route as continue_from_your_order_summary_form but renamed for clarity
             state_machine.continue_from_complete_your_payment_page()
-            return redirect(url_for(state_machine.route_for_current_state, id=payment.id))
+            return redirect(
+                url_for(state_machine.route_for_current_state, id=payment.id)
+            )
 
         return render_template(
             "main/payment/dynamics-payment.html",
@@ -102,18 +105,23 @@ def make_payment(id, state_machine):
 def not_a_valid_link(id: str = None):
 
     return "Not a valid link"
+
+
 # TODO: replace with templates
 @bp.route("/link-expired/", methods=["GET"])
 @bp.route("/link-expired/<id>", methods=["GET"])
 def link_expired(id: str = None):
 
     return "Link expired"
+
+
 # TODO: replace with templates
 @bp.route("/payment-already-made/", methods=["GET"])
 @bp.route("/payment-already-made/<id>", methods=["GET"])
 def payment_already_made(id: str = None):
 
     return "Payment already made"
+
 
 def _validate_and_convert_amount(
     amount_value: float | int | str, field_name: str
