@@ -170,8 +170,8 @@ class RoutingStateMachine(StateMachine):
 
     complete_your_payment_page = State(enter="entering_complete_payment_page")
 
-    payment_already_recieved_page = State(
-        enter="entering_payment_already_recieved_page", final=True
+    payment_already_received_page = State(
+        enter="entering_payment_already_received_page", final=True
     )
 
     link_expired_page = State(enter="entering_link_expired_page", final=True)
@@ -320,9 +320,9 @@ class RoutingStateMachine(StateMachine):
     continue_from_initial_second_payment_link = (
         initial.to(
             complete_your_payment_page,
-            unless=["payment_already_recieved", "link_expired", "not_a_valid_link"],
+            unless=["payment_already_received", "link_expired", "not_a_valid_link"],
         )
-        | initial.to(payment_already_recieved_page, cond="payment_already_recieved")
+        | initial.to(payment_already_received_page, cond="payment_already_received")
         | initial.to(link_expired_page, cond="link_expired")
         | initial.to(not_valid_link_page, cond="not_a_valid_link")
     )
@@ -453,9 +453,9 @@ class RoutingStateMachine(StateMachine):
     def entering_complete_payment_page(self):
         self.route_for_current_state = MultiPageFormRoutes.COMPLETE_PAYMENT.value
 
-    def entering_payment_already_recieved_page(self):
+    def entering_payment_already_received_page(self):
         self.route_for_current_state = (
-            MultiPageFormRoutes.PAYMENT_ALREADY_RECIEVED.value
+            MultiPageFormRoutes.PAYMENT_ALREADY_RECEIVED.value
         )
 
     def entering_link_expired_page(self):
@@ -548,7 +548,7 @@ class RoutingStateMachine(StateMachine):
         return False  # TODO: Does this need to be True if upload fails? They won't progress otherwise.
 
     # second payment conditions
-    def payment_already_recieved(self):
+    def payment_already_received(self):
         payment = getattr(self, "payment", None)
         return payment and (payment.status in [PAID_STATUS, SENT_STATUS])
 

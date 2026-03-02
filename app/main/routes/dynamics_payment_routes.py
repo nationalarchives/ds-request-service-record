@@ -113,11 +113,11 @@ def link_expired(id: str = None):
 
 
 # TODO: replace with templates
-@bp.route("/payment-already-made/", methods=["GET"])
-@bp.route("/payment-already-made/<id>", methods=["GET"])
-def payment_already_made(id: str = None):
+@bp.route("/payment-already-received/", methods=["GET"])
+@bp.route("/payment-already-received/<id>", methods=["GET"])
+def payment_already_received(id: str = None):
 
-    return "Payment already made"
+    return "Payment already received"
 
 
 def _validate_and_convert_amount(

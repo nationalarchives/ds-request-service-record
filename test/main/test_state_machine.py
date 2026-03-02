@@ -563,23 +563,23 @@ def test_continue_to_complete_your_payment_page_from_initial():
     )
 
 
-def test_continue_to_already_recieved_payment_from_initial_via_paid_status():
+def test_continue_to_already_received_payment_from_initial_via_paid_status():
     sm = RoutingStateMachine()
     sm.payment = SimpleNamespace(status=PAID_STATUS)
     sm.continue_from_initial_second_payment_link()
-    assert sm.current_state.id == "payment_already_recieved_page"
+    assert sm.current_state.id == "payment_already_received_page"
     assert (
-        sm.route_for_current_state == MultiPageFormRoutes.PAYMENT_ALREADY_RECIEVED.value
+        sm.route_for_current_state == MultiPageFormRoutes.PAYMENT_ALREADY_RECEIVED.value
     )
 
 
-def test_continue_to_already_recieved_payment_from_initial_via_sent_status():
+def test_continue_to_already_received_payment_from_initial_via_sent_status():
     sm = RoutingStateMachine()
     sm.payment = SimpleNamespace(status=SENT_STATUS)
     sm.continue_from_initial_second_payment_link()
-    assert sm.current_state.id == "payment_already_recieved_page"
+    assert sm.current_state.id == "payment_already_received_page"
     assert (
-        sm.route_for_current_state == MultiPageFormRoutes.PAYMENT_ALREADY_RECIEVED.value
+        sm.route_for_current_state == MultiPageFormRoutes.PAYMENT_ALREADY_RECEIVED.value
     )
 
 
