@@ -3,7 +3,6 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from app.lib.aws import move_proof_of_death_to_submitted, upload_file_to_s3
-
 from flask import current_app
 from werkzeug.datastructures import FileStorage
 
