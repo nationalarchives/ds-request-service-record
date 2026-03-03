@@ -3,9 +3,6 @@ from datetime import datetime
 
 from app.lib.aws import send_email
 from app.lib.content import load_content
-from app.lib.db.constants import (
-    SENT_STATUS,
-)
 from app.lib.db.db_handler import (
     add_dynamics_payment,
     add_gov_uk_dynamics_payment,
