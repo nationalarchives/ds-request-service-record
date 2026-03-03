@@ -3,9 +3,6 @@ from datetime import datetime
 
 from app.lib.aws import send_email
 from app.lib.content import load_content
-from app.lib.db.constants import (
-    SENT_STATUS,
-)
 from app.lib.db.db_handler import (
     add_dynamics_payment,
     add_gov_uk_dynamics_payment,
@@ -179,16 +176,6 @@ def create_payment_endpoint():
     payment = add_dynamics_payment(data)
 
     if payment is None:
-        return {"error": "Failed to create payment"}, 500
-
-    try:
-        payment.status = SENT_STATUS
-        db.session.commit()
-    except Exception as e:
-        current_app.logger.error(
-            f"Error updating payment status for payment {payment.id}: {e}, deleting payment record."
-        )
-        delete_dynamics_payment(payment)
         return {"error": "Failed to create payment"}, 500
 
     payment_url = url_for("main.make_payment", id=payment.id, _external=True)

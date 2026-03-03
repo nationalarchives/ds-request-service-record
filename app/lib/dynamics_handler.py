@@ -87,7 +87,7 @@ def subject_status(record: ServiceRecordRequest) -> str:
     return f"? FOI DIRECT MOD {closure_status}{option}"
 
 
-def send_payment_to_mod_copying_app(payment: DynamicsPayment) -> None:
+def send_payment_to_mod_copying_app(payment: DynamicsPayment) -> bool:
     payload = {
         "CaseNumber": payment.case_number,
         "PayReference": payment.reference,
@@ -102,11 +102,14 @@ def send_payment_to_mod_copying_app(payment: DynamicsPayment) -> None:
         headers={"Content-Type": "application/json"},
     )
 
-    if response.status_code != 200:
+    try:
+        response.raise_for_status()
+        return True
+    except Exception as e:
         current_app.logger.error(
-            f"Failed to update MOD Copying app for payment ID {payment.id}: {response.status_code} - {response.text}"
+            f"Error sending payment to MOD Copying app for payment {payment.id}: {e}: {response.text}"
         )
-        raise ValueError("Could not update MOD Copying app with payment details")
+        return False
 
 
 def _generate_tagged_data(mapping: list[tuple[str, str | None]], obj) -> str:
