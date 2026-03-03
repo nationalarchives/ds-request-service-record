@@ -124,4 +124,6 @@ def process_valid_payment(id: str, *, provider_id: str) -> None:
     payment.payment_date = datetime.now()
     db.session.commit()
 
-    send_payment_to_mod_copying_app(payment)
+    if send_payment_to_mod_copying_app(payment):
+        payment.status = SENT_STATUS
+        db.session.commit()

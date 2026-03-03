@@ -181,16 +181,6 @@ def create_payment_endpoint():
     if payment is None:
         return {"error": "Failed to create payment"}, 500
 
-    try:
-        payment.status = SENT_STATUS
-        db.session.commit()
-    except Exception as e:
-        current_app.logger.error(
-            f"Error updating payment status for payment {payment.id}: {e}, deleting payment record."
-        )
-        delete_dynamics_payment(payment)
-        return {"error": "Failed to create payment"}, 500
-
     payment_url = url_for("main.make_payment", id=payment.id, _external=True)
     name = f"{payment.first_name or ''} {payment.last_name or ''}".strip() or "customer"
     amount_pounds = payment.total_amount / 100
