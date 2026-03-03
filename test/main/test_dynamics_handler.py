@@ -98,12 +98,11 @@ def test_send_payment_to_mod_copying_app_payload_format(mock_post, context):
 
 
 @patch("app.lib.dynamics_handler.requests.post")
-def test_send_payment_to_mod_copying_app_raises_on_error(mock_post, context):
-    """Test that the function raises ValueError when API returns non-200 status"""
+def test_send_payment_to_mod_copying_app_returns_false_on_error(mock_post, context):
+    """Test that the function returns False when API returns non-200 status"""
     # Setup mock response with error
     mock_response = MagicMock()
-    mock_response.status_code = 500
-    mock_response.text = "Internal Server Error"
+    mock_response.raise_for_status.side_effect = Exception("HTTP 500")
     mock_post.return_value = mock_response
 
     # Create test payment
@@ -119,6 +118,5 @@ def test_send_payment_to_mod_copying_app_raises_on_error(mock_post, context):
         payment_date=datetime(2024, 3, 15, 14, 30, 0),
     )
 
-    # Verify it raises ValueError
-    with pytest.raises(ValueError, match="Could not update MOD Copying app"):
-        send_payment_to_mod_copying_app(payment)
+    # Verify it returns False on error
+    assert send_payment_to_mod_copying_app(payment) is False
