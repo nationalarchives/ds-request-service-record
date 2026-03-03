@@ -587,14 +587,17 @@ def test_continue_to_expired_payment_from_initial():
     sm = RoutingStateMachine()
     sm.payment = SimpleNamespace(status=EXPIRED_STATUS)
     sm.continue_from_initial_second_payment_link()
-    assert sm.current_state.id == "link_expired_page"
+    assert sm.current_state.id == "second_payment_link_expired_page"
     assert sm.route_for_current_state == MultiPageFormRoutes.LINK_EXPIRED.value
 
 
-def test_continue_to_not_valid_link_from_initial():
+def test_continue_to_not_valid_payment_link_from_initial():
     sm = RoutingStateMachine()
     # no payment attached -> should be treated as invalid link
     sm.payment = None
     sm.continue_from_initial_second_payment_link()
-    assert sm.current_state.id == "not_valid_link_page"
-    assert sm.route_for_current_state == MultiPageFormRoutes.NOT_A_VALID_LINK.value
+    assert sm.current_state.id == "not_valid_payment_link_page"
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.NOT_A_VALID_SECOND_PAYMENT_LINK.value
+    )

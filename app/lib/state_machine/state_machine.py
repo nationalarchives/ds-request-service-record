@@ -168,15 +168,19 @@ class RoutingStateMachine(StateMachine):
 
     request_submitted_page = State(enter="entering_request_submitted_page", final=True)
 
-    complete_your_payment_page = State(enter="entering_complete_payment_page")
+    complete_your_payment_page = State(enter="entering_complete_your_payment_page")
 
     payment_already_received_page = State(
         enter="entering_payment_already_received_page", final=True
     )
 
-    link_expired_page = State(enter="entering_link_expired_page", final=True)
+    second_payment_link_expired_page = State(
+        enter="entering_second_payment_link_expired_page", final=True
+    )
 
-    not_valid_link_page = State(enter="entering_not_valid_link_page", final=True)
+    not_valid_payment_link_page = State(
+        enter="entering_not_valid_payment_link_page", final=True
+    )
 
     gov_uk_pay_second_payment_redirect = State(
         enter="entering_gov_uk_pay_second_payment_redirect", final=True
@@ -320,15 +324,19 @@ class RoutingStateMachine(StateMachine):
     continue_from_initial_second_payment_link = (
         initial.to(
             complete_your_payment_page,
-            unless=["payment_already_received", "link_expired", "not_a_valid_link"],
+            unless=[
+                "payment_already_received",
+                "second_payment_link_expired",
+                "not_a_valid_link",
+            ],
         )
         | initial.to(payment_already_received_page, cond="payment_already_received")
-        | initial.to(link_expired_page, cond="link_expired")
-        | initial.to(not_valid_link_page, cond="not_a_valid_link")
+        | initial.to(
+            second_payment_link_expired_page, cond="second_payment_link_expired"
+        )
+        | initial.to(not_valid_payment_link_page, cond="not_a_valid_link")
     )
 
-    # would remove initial.to here since it should really just be from the complete_your_payment_page,
-    # but it means the same pattern is followed throughout (i.e. initial state is consistently the previous state)
     continue_from_complete_your_payment_page = initial.to(
         gov_uk_pay_second_payment_redirect
     ) | complete_your_payment_page.to(gov_uk_pay_second_payment_redirect)
@@ -450,7 +458,7 @@ class RoutingStateMachine(StateMachine):
     def entering_request_submitted_page(self):
         self.route_for_current_state = MultiPageFormRoutes.REQUEST_SUBMITTED.value
 
-    def entering_complete_payment_page(self):
+    def entering_complete_your_payment_page(self):
         self.route_for_current_state = MultiPageFormRoutes.COMPLETE_PAYMENT.value
 
     def entering_payment_already_received_page(self):
@@ -458,11 +466,13 @@ class RoutingStateMachine(StateMachine):
             MultiPageFormRoutes.PAYMENT_ALREADY_RECEIVED.value
         )
 
-    def entering_link_expired_page(self):
+    def entering_second_payment_link_expired_page(self):
         self.route_for_current_state = MultiPageFormRoutes.LINK_EXPIRED.value
 
-    def entering_not_valid_link_page(self):
-        self.route_for_current_state = MultiPageFormRoutes.NOT_A_VALID_LINK.value
+    def entering_not_valid_payment_link_page(self):
+        self.route_for_current_state = (
+            MultiPageFormRoutes.NOT_A_VALID_SECOND_PAYMENT_LINK.value
+        )
 
     def entering_gov_uk_pay_second_payment_redirect(self):
         self.route_for_current_state = (
@@ -552,7 +562,7 @@ class RoutingStateMachine(StateMachine):
         payment = getattr(self, "payment", None)
         return payment and (payment.status in [PAID_STATUS, SENT_STATUS])
 
-    def link_expired(self):
+    def second_payment_link_expired(self):
         payment = getattr(self, "payment", None)
         return payment and (payment.status == EXPIRED_STATUS)
 

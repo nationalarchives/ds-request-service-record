@@ -50,8 +50,8 @@ class MultiPageFormRoutes(Enum):
 
     COMPLETE_PAYMENT = "main.complete_payment"
     PAYMENT_ALREADY_RECEIVED = "main.payment_already_received"
-    LINK_EXPIRED = "main.link_expired"
-    NOT_A_VALID_LINK = "main.not_a_valid_link"
+    LINK_EXPIRED = "main.second_payment_link_expired"
+    NOT_A_VALID_SECOND_PAYMENT_LINK = "main.not_a_valid_second_payment_link"
     SEND_TO_GOV_UK_PAY_SECOND_PAYMENT = "main.gov_uk_pay_redirect"
 
 
