@@ -4,7 +4,7 @@ from app.constants import MultiPageFormRoutes
 from app.lib.aws import upload_proof_of_death
 from app.lib.boundary_years import BoundaryYears
 
-from flask import current_app, has_request_context, request
+from flask import current_app, has_request_context, request, session
 from app.lib.db.constants import (
     EXPIRED_STATUS,
     PAID_STATUS,
@@ -557,16 +557,16 @@ class RoutingStateMachine(StateMachine):
         self.set_form_field_data(form, "proof_of_death", None)
         return False  # TODO: Does this need to be True if upload fails? They won't progress otherwise.
 
-    # second payment conditions g.payment is set in make_payment
+    # second payment conditions session is set in make_payment
     def payment_already_received(self):
-        payment = g.get("payment")
-        return payment and (payment.status in [PAID_STATUS, SENT_STATUS])
+        payment_status = session.get("payment_status")
+        return payment_status and (payment_status in [PAID_STATUS, SENT_STATUS])
 
     def second_payment_link_expired(self):
-        payment = g.get("payment")
-        return payment and (payment.status == EXPIRED_STATUS)
+        payment_status = session.get("payment_status")
+        return payment_status and (payment_status == EXPIRED_STATUS)
 
     def not_a_valid_link(self):
         # Treat a link as invalid if payment attribute is missing or None
-        payment = g.get("payment")
-        return payment is None
+        payment_status = session.get("payment_status")
+        return payment_status is None

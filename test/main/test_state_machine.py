@@ -12,9 +12,17 @@ from app.lib.db.constants import (
     SENT_STATUS,
 )
 from app.lib.state_machine.state_machine import RoutingStateMachine
-from flask import g
+from flask import session
 
 from app import create_app
+
+
+@pytest.fixture(autouse=True)
+def app_context():
+    """Provide a Flask request context so session is usable in all tests."""
+    app = create_app("config.Test")
+    with app.test_request_context():
+        yield
 
 
 def test_all_states_have_the_expected_suffix():
@@ -529,14 +537,6 @@ def test_continue_from_payment_incomplete_page():
     assert sm.route_for_current_state == MultiPageFormRoutes.YOUR_ORDER_SUMMARY.value
 
 
-@pytest.fixture(autouse=True)
-def app_context():
-    """Provide a request context so flask.g is usable in tests that set attributes on it."""
-    app = create_app("config.Test")
-    with app.test_request_context():
-        yield
-
-
 def make_form(**fields):
     return SimpleNamespace(**{k: SimpleNamespace(data=v) for k, v in fields.items()})
 
@@ -544,7 +544,7 @@ def make_form(**fields):
 # ensure condition method can inspect a payment object and drive the event
 def test_initial_state_to_continue_to_payment_page():
     sm = RoutingStateMachine()
-    g.payment = SimpleNamespace(status=NEW_STATUS)
+    session["payment_status"] = NEW_STATUS
     sm.continue_from_initial_second_payment_link()
     assert sm.current_state.id == "complete_your_payment_page"
     assert sm.route_for_current_state == MultiPageFormRoutes.COMPLETE_PAYMENT.value
@@ -562,7 +562,7 @@ def test_continue_from_complete_your_payment_page():
 
 def test_continue_to_complete_your_payment_page_from_initial(app_context):
     sm = RoutingStateMachine()
-    g.payment = SimpleNamespace(status=NEW_STATUS)
+    session["payment_status"] = NEW_STATUS
     sm.continue_from_initial_second_payment_link()
     assert sm.current_state.id == "complete_your_payment_page"
     assert sm.route_for_current_state == MultiPageFormRoutes.COMPLETE_PAYMENT.value
@@ -576,7 +576,7 @@ def test_continue_to_complete_your_payment_page_from_initial(app_context):
 
 def test_continue_to_already_received_payment_from_initial_via_paid_status(app_context):
     sm = RoutingStateMachine()
-    g.payment = SimpleNamespace(status=PAID_STATUS)
+    session["payment_status"] = PAID_STATUS
     sm.continue_from_initial_second_payment_link()
     assert sm.current_state.id == "payment_already_received_page"
     assert (
@@ -586,7 +586,7 @@ def test_continue_to_already_received_payment_from_initial_via_paid_status(app_c
 
 def test_continue_to_already_received_payment_from_initial_via_sent_status(app_context):
     sm = RoutingStateMachine()
-    g.payment = SimpleNamespace(status=SENT_STATUS)
+    session["payment_status"] = SENT_STATUS
     sm.continue_from_initial_second_payment_link()
     assert sm.current_state.id == "payment_already_received_page"
     assert (
@@ -596,7 +596,7 @@ def test_continue_to_already_received_payment_from_initial_via_sent_status(app_c
 
 def test_continue_to_expired_payment_from_initial(app_context):
     sm = RoutingStateMachine()
-    g.payment = SimpleNamespace(status=EXPIRED_STATUS)
+    session["payment_status"] = EXPIRED_STATUS
     sm.continue_from_initial_second_payment_link()
     assert sm.current_state.id == "second_payment_link_expired_page"
     assert sm.route_for_current_state == MultiPageFormRoutes.LINK_EXPIRED.value
@@ -605,7 +605,7 @@ def test_continue_to_expired_payment_from_initial(app_context):
 def test_continue_to_not_valid_payment_link_from_initial(app_context):
     sm = RoutingStateMachine()
     # no payment attached -> should be treated as invalid link
-    g.payment = None
+    session["payment_status"] = None
     sm.continue_from_initial_second_payment_link()
     assert sm.current_state.id == "not_valid_payment_link_page"
     assert (
