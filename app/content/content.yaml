@@ -441,6 +441,12 @@ pages:
     price:
       term: Price
       message: "The price is calculated based on the number of pages we are copying: £1.04 per page for digital copies, or £1.89 per page for posted copies."
+  page_not_found:
+    heading: Page not found
+    paragraphs:
+      - If you typed the web address, check it is correct.
+      - If you pasted the web address, check you copied the entire address.
+      - If the web address if correct or you selected a link or button, get in touch with us by replying to the last email we sent you, or by visiting our [Contact us](CONTACT_US) page.
 forms:
   fields:
     request_a_military_service_record:
