@@ -589,3 +589,8 @@ def payment_summary():
         price=price,
         order_number=order_number,
     )
+
+
+@bp.route("/not-a-valid-link/", methods=["GET"])
+def not_a_valid_link():
+    return render_template("errors/page-not-found.html", content=load_content())
