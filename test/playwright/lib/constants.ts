@@ -31,4 +31,5 @@ export const Paths = {
   YOUR_CONTACT_DETAILS: `${basePath}/your-contact-details/`,
   WHAT_IS_YOUR_ADDRESS: `${basePath}/what-is-your-address/`,
   YOUR_ORDER_SUMMARY: `${basePath}/your-order-summary/`,
+  NOT_A_VALID_LINK: `${basePath}/not-a-valid-link/`,
 };

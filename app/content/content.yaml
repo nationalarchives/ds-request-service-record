@@ -23,7 +23,7 @@ pages:
             - For most applicants a Standard request will provide the information they are looking for.
             - |
               Standard provides a subset of documents from the record. This may include details
-              provided when they enlisted, records of service and testimonials.
+              provided when the service person enlisted, records of service and testimonials.
             - Standard is not available for Commissioned Officer record requests.
         - title: Full record check
           paragraphs:
@@ -227,8 +227,8 @@ pages:
     heading: We do not hold this record
     paragraphs:
       - |
-        The Royal Navy service personnel records will not be transferred to us until after April 
-        2026. Please use the Ministry of Defence service to request access to Royal Navy records.
+        The Royal Navy service personnel records will not be transferred to us until 2027. 
+        Please use the Ministry of Defence service to request access to Royal Navy records.
     call_to_action: Request from the Ministry of Defence
   we_are_unlikely_to_hold_officer_records__generic:
     heading: We are unlikely to hold this record yet
@@ -365,7 +365,7 @@ pages:
           For most applicants a Standard request will provide the information they are looking for.
         - |
           Standard provides a subset of documents from the record. This may include details provided
-          when they enlisted, records of service and testimonials.
+          when the service person enlisted, records of service and testimonials.
         - |
           Standard is not available for Commissioned Officer record requests.
         - We charge a single fee for Standard of £42.25, which covers the search (£38.95) and record copying fees (£3.30).
@@ -441,6 +441,12 @@ pages:
     price:
       term: Price
       message: "The price is calculated based on the number of pages we are copying: £1.04 per page for digital copies, or £1.89 per page for posted copies."
+  page_not_found:
+    heading: Page not found
+    paragraphs:
+      - If you typed the web address, check it is correct.
+      - If you pasted the web address, check you copied the entire address.
+      - If the web address if correct or you selected a link or button, get in touch with us by replying to the last email we sent you, or by visiting our [Contact us](CONTACT_US) page.
 forms:
   fields:
     request_a_military_service_record:

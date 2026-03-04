@@ -486,8 +486,20 @@ export async function checkExternalLink(page, linkText, expectedHref) {
   await expect(link).toHaveAttribute("target", "_blank");
 }
 
-export async function checkInternalLink(page, linkText, expectedPath) {
-  const link = page.getByRole("link", { name: linkText });
+export async function checkInternalLink(
+  page,
+  linkText,
+  expectedPath,
+  containerId: string = "",
+) {
+  let link: any;
+  if (containerId === "") {
+    link = page.getByRole("link", { name: linkText });
+  } else {
+    let container = page.locator(`#${containerId}`);
+    link = container.getByRole("link", { name: linkText });
+  }
+
   await expect(link).not.toHaveAttribute("target", "_blank");
   await expect(link).toHaveAttribute("href", expectedPath);
 }
