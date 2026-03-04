@@ -98,22 +98,19 @@ def make_payment(id, state_machine):
 
 # TODO: replace with templates
 @bp.route("/not-a-valid-second-payment-link/", methods=["GET"])
-def not_a_valid_second_payment_link(id: str = None):
-
+def not_a_valid_second_payment_link():
     return "Not a valid link"
 
 
 # TODO: replace with templates
 @bp.route("/second-payment-link-expired/", methods=["GET"])
-def second_payment_link_expired(id: str = None):
-
+def second_payment_link_expired():
     return "Link expired"
 
 
 # TODO: replace with templates
 @bp.route("/payment-already-received/", methods=["GET"])
-def payment_already_received(id: str = None):
-
+def payment_already_received():
     return "Payment already received"
 
 
