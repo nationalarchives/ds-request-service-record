@@ -20,7 +20,7 @@ from app.lib.gov_uk_pay import (
 )
 from app.main import bp
 from app.main.forms.proceed_to_pay import ProceedToPay
-from flask import current_app, redirect, render_template, request, url_for
+from flask import current_app, g, redirect, render_template, request, url_for
 
 
 @bp.route("/gov-uk-pay-redirect/<id>/", methods=["GET"])
@@ -68,8 +68,8 @@ def gov_uk_pay_redirect(id):
 @with_state_machine
 def make_payment(id, state_machine):
     payment = get_dynamics_payment(id)
-    # attach payment to state machine so condition methods can inspect it
-    state_machine.payment = payment
+    # store payment on flask.g  (request scoped) for the condition methods to avoid persistent data
+    g.payment = payment or None
 
     if payment and (
         payment.status == NEW_STATUS

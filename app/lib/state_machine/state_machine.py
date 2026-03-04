@@ -557,16 +557,16 @@ class RoutingStateMachine(StateMachine):
         self.set_form_field_data(form, "proof_of_death", None)
         return False  # TODO: Does this need to be True if upload fails? They won't progress otherwise.
 
-    # second payment conditions
+    # second payment conditions g.payment is set in make_payment
     def payment_already_received(self):
-        payment = getattr(self, "payment", None)
+        payment = g.get("payment")
         return payment and (payment.status in [PAID_STATUS, SENT_STATUS])
 
     def second_payment_link_expired(self):
-        payment = getattr(self, "payment", None)
+        payment = g.get("payment")
         return payment and (payment.status == EXPIRED_STATUS)
 
     def not_a_valid_link(self):
         # Treat a link as invalid if payment attribute is missing or None
-        payment = getattr(self, "payment", None)
+        payment = g.get("payment")
         return payment is None
