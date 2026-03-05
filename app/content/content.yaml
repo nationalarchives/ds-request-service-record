@@ -343,6 +343,11 @@ pages:
       - Try the payment again or try again later
       - Check your payment details are correct
       - Contact your bank for more details
+  payment_link_expired:
+    heading: Your payment link has expired
+    paragraphs:
+      - Payment links automatically expire after 30 days.
+      - You can request a new payment link by replying to the last email we sent you, or by visiting our [Contact us](CONTACT_US) page.
   your_contact_details:
     heading: Your contact details
   what_is_your_address:
