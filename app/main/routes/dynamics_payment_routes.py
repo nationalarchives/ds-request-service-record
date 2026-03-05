@@ -68,8 +68,8 @@ def gov_uk_pay_redirect(id):
 def make_payment(id, state_machine):
     payment = get_dynamics_payment(id)
     # store payment in the flask session so it's available for condition functions to check
-    session["payment_id"] = payment.id
-    session["payment_status"] = payment.status or None
+    session["payment_id"] = payment.id if payment else None
+    session["payment_status"] = payment.status if payment else None
 
     if payment and (
         payment.status == NEW_STATUS
@@ -94,24 +94,6 @@ def make_payment(id, state_machine):
     # Drive the state machine to the appropriate final/next state
     state_machine.continue_from_initial_second_payment_link()
     return redirect(url_for(state_machine.route_for_current_state, id=id))
-
-
-# TODO: replace with templates
-@bp.route("/not-a-valid-second-payment-link/", methods=["GET"])
-def not_a_valid_second_payment_link():
-    return "Not a valid link"
-
-
-# TODO: replace with templates
-@bp.route("/second-payment-link-expired/", methods=["GET"])
-def second_payment_link_expired():
-    return "Link expired"
-
-
-# TODO: replace with templates
-@bp.route("/payment-already-received/", methods=["GET"])
-def payment_already_received():
-    return "Payment already received"
 
 
 def _validate_and_convert_amount(
