@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{%- set pageTitle = content.pages.payment_already_made.heading | prepare_page_title -%}
+
+{% if reference_number %}
+  {% set payment_reference_paragraph = (
+    content.pages.payment_already_made.payment_reference_paragraph.part_one ~
+    ' ' ~
+    content.pages.payment_already_made.payment_reference_paragraph.part_two ~
+    ' <strong id="reference-number">' ~ reference_number ~ '</strong>'
+) %}
+{% else %}
+  {% set payment_reference_paragraph = content.pages.payment_already_made.payment_reference_paragraph.part_one %}
+{% endif %}
+
+{% block content %}
+  <div class="tna-section tna-!--padding-top-m" id="payment-already-made">
+    <div class="tna-container">
+      <div
+        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+        <h1 class="tna-heading-xl">{{ content.pages.payment_already_made.heading }}</h1>
+        <p>{{ payment_reference_paragraph | safe }}</p>
+        {% for paragraph in content.pages.payment_already_made.further_paragraphs %}
+          <p>{{ paragraph | parse_markdown_links(new_tab=False) | safe }}</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock content %}
