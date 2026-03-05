@@ -5,7 +5,6 @@ from app.lib.aws import send_email
 from app.lib.content import load_content
 from app.lib.db.constants import (
     NEW_STATUS,
-    SENT_STATUS,
 )
 from app.lib.db.db_handler import (
     add_dynamics_payment,

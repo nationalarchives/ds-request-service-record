@@ -3,13 +3,12 @@ from datetime import datetime
 from app.constants import MultiPageFormRoutes
 from app.lib.aws import upload_proof_of_death
 from app.lib.boundary_years import BoundaryYears
-
-from flask import current_app, has_request_context, request, session
 from app.lib.db.constants import (
     EXPIRED_STATUS,
     PAID_STATUS,
     SENT_STATUS,
 )
+from flask import current_app, has_request_context, request, session
 from statemachine import State, StateMachine
 
 
