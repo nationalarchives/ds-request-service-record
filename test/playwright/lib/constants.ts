@@ -32,4 +32,6 @@ export const Paths = {
   WHAT_IS_YOUR_ADDRESS: `${basePath}/what-is-your-address/`,
   YOUR_ORDER_SUMMARY: `${basePath}/your-order-summary/`,
   NOT_A_VALID_LINK: `${basePath}/not-a-valid-link/`,
+  PAYMENT_LINK_EXPIRED: `${basePath}/payment-link-expired/`,
+  PAYMENT_ALREADY_MADE: `${basePath}/payment-already-made/`,
 };

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{%- set pageTitle = content.pages.payment_link_expired.heading | prepare_page_title -%}
+
+{% block content %}
+  <div class="tna-section tna-!--padding-top-m" id="payment-link-expired">
+    <div class="tna-container">
+      <div
+        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+        <h1 class="tna-heading-xl">{{ content.pages.payment_link_expired.heading }}</h1>
+        {% for paragraph in content.pages.payment_link_expired.paragraphs %}
+          <p>{{ paragraph | parse_markdown_links(new_tab=False) | safe }}</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock content %}
