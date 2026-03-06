@@ -3,6 +3,9 @@ from datetime import datetime
 
 from app.lib.aws import send_email
 from app.lib.content import load_content
+from app.lib.db.constants import (
+    NEW_STATUS,
+)
 from app.lib.db.db_handler import (
     add_dynamics_payment,
     add_gov_uk_dynamics_payment,
@@ -10,15 +13,16 @@ from app.lib.db.db_handler import (
     get_dynamics_payment,
 )
 from app.lib.db.models import DynamicsPayment, db
+from app.lib.decorators.state_machine_decorator import with_state_machine
 from app.lib.gov_uk_pay import (
     create_payment,
 )
 from app.main import bp
 from app.main.forms.proceed_to_pay import ProceedToPay
-from flask import current_app, redirect, render_template, request, url_for
+from flask import current_app, redirect, render_template, request, session, url_for
 
 
-@bp.route("/payment-redirect/<id>/", methods=["GET"])
+@bp.route("/gov-uk-pay-redirect/<id>/", methods=["GET"])
 def gov_uk_pay_redirect(id):
     payment = get_dynamics_payment(id)
 
@@ -60,24 +64,36 @@ def gov_uk_pay_redirect(id):
 
 
 @bp.route("/payment/<id>/", methods=["GET", "POST"])
-def make_payment(id):
+@with_state_machine
+def make_payment(id, state_machine):
     payment = get_dynamics_payment(id)
+    # store payment in the flask session so it's available for condition functions to check
+    session["payment_id"] = payment.id if payment else None
+    session["payment_status"] = payment.status if payment else None
 
-    if payment is None:
-        return "Payment not found"
+    if payment and (
+        payment.status == NEW_STATUS
+    ):  # new payment, show complete-your-payment page
+        state_machine.continue_from_initial_second_payment_link()
 
-    form = ProceedToPay()
-    content = load_content()
+        form = ProceedToPay()
+        content = load_content()
 
-    if form.validate_on_submit():
-        return redirect(url_for("main.gov_uk_pay_redirect", id=payment.id))
+        if form.validate_on_submit():
+            # Transition the state machine to the GOV.UK Pay redirect route
+            state_machine.continue_from_complete_your_payment_page()
+            return redirect(url_for(state_machine.route_for_current_state, id=id))
 
-    return render_template(
-        "main/payment/dynamics-payment.html",
-        form=form,
-        payment=payment,
-        content=content,
-    )
+        return render_template(
+            "main/payment/dynamics-payment.html",
+            form=form,
+            payment=payment,
+            content=content,
+        )
+
+    # Drive the state machine to the appropriate final/next state
+    state_machine.continue_from_initial_second_payment_link()
+    return redirect(url_for(state_machine.route_for_current_state, id=id))
 
 
 def _validate_and_convert_amount(
