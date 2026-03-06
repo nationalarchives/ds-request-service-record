@@ -90,46 +90,52 @@ def move_proof_of_death_to_submitted(key_name: str) -> bool:
     """
     Move a proof of death file from the holding prefix to the submitted prefix.
     """
-    return True
 
-    # TODO: Uncomment when EC2 roles are updated to successfully allow CopyObject
-    # if not key_name:
-    #     return False
+    if not key_name:
+        return False
 
-    # if current_app.config.get("ENVIRONMENT_NAME") == "test":
-    #     return True
+    if current_app.config.get("ENVIRONMENT_NAME") == "test":
+        return True
 
-    # bucket_name = current_app.config.get("PROOF_OF_DEATH_BUCKET_NAME")
+    bucket_name = current_app.config.get("PROOF_OF_DEATH_BUCKET_NAME")
 
-    # if not bucket_name:
-    #     current_app.logger.error("Proof of death bucket configuration is missing.")
-    #     return False
+    if not bucket_name:
+        current_app.logger.error("Proof of death bucket configuration is missing.")
+        return False
 
-    # destination_key = _to_submitted_key(
-    #     key_name,
-    #     holding_prefix=_get_proof_of_death_holding_prefix(),
-    #     submitted_prefix=_get_proof_of_death_submitted_prefix(),
-    # )
+    holding_prefix = _get_proof_of_death_holding_prefix()
+    submitted_prefix = _get_proof_of_death_submitted_prefix()
 
-    # if destination_key == key_name:
-    #     return True
+    destination_key = _to_submitted_key(
+        key_name,
+        holding_prefix=holding_prefix,
+        submitted_prefix=submitted_prefix,
+    )
 
-    # session = get_boto3_session()
-    # s3 = session.client("s3")
+    normalized_holding = _normalize_prefix(holding_prefix)
+    source_key = key_name
+    if normalized_holding and not key_name.startswith(normalized_holding):
+        source_key = f"{normalized_holding}{key_name.lstrip('/')}"
 
-    # try:
-    #     s3.copy_object(
-    #         Bucket=bucket_name,
-    #         Key=destination_key,
-    #         CopySource={"Bucket": bucket_name, "Key": key_name},
-    #     )
-    #     s3.delete_object(Bucket=bucket_name, Key=key_name)
-    #     return True
-    # except Exception as e:
-    #     current_app.logger.error(
-    #         f"Error moving proof of death file {key_name} to submitted bucket: {e}"
-    #     )
-    #     return False
+    if destination_key == source_key:
+        return True
+
+    session = get_boto3_session()
+    s3 = session.client("s3")
+
+    try:
+        s3.copy_object(
+            Bucket=bucket_name,
+            Key=destination_key,
+            CopySource={"Bucket": bucket_name, "Key": source_key},
+        )
+        s3.delete_object(Bucket=bucket_name, Key=source_key)
+        return True
+    except Exception as e:
+        current_app.logger.error(
+            f"Error moving proof of death file {key_name} to submitted bucket: {e}"
+        )
+        return False
 
 
 def _build_filename_with_extension(base_name: str, original_filename: str) -> str:
@@ -141,9 +147,9 @@ def _build_filename_with_extension(base_name: str, original_filename: str) -> st
 
 
 def _build_key_with_prefix(prefix: str, base_name: str, original_filename: str) -> str:
-    # normalized_prefix = _normalize_prefix(prefix) TODO: Uncomment when EC2 permissions are updated
+    normalized_prefix = _normalize_prefix(prefix)
     filename = _build_filename_with_extension(base_name, original_filename)
-    return f"{filename}"  # TODO: Use {normalized_prefix}{filename} when EC2 permissions are updated
+    return f"{normalized_prefix}{filename}"
 
 
 def _normalize_prefix(prefix: str) -> str:
