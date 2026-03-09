@@ -36,6 +36,7 @@ test.describe("the 'Tell us as much as you know about the service person form?' 
         placeOfBirth: "X".repeat(128),
         regimentOrSquadron: "X".repeat(128),
         serviceNumber: "X".repeat(64),
+        additionalInformation: "X".repeat(1900),
         shouldValidate: true,
       };
       await continueFromServicePersonDetails(page, longEntries);
@@ -87,8 +88,9 @@ test.describe("the 'Tell us as much as you know about the service person form?' 
         placeOfBirth: "X".repeat(129),
         regimentOrSquadron: "X".repeat(129),
         serviceNumber: "X".repeat(65),
+        additionalInformation: "X".repeat(2001),
         shouldValidate: false,
-        numberOfErrors: 6,
+        numberOfErrors: 7,
       };
       await continueFromServicePersonDetails(page, longEntries);
     });

@@ -70,6 +70,9 @@ class Production(Features):
         os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS", "False")
     )
 
+    PERMANENT_SESSION_LIFETIME: int = int(
+        os.environ.get("PERMANENT_SESSION_LIFETIME", "86400")
+    )
     SESSION_COOKIE_NAME: str = "ds_request_service_record_session"
     SESSION_COOKIE_PATH: str = SERVICE_URL_PREFIX
     SESSION_COOKIE_SECURE: bool = True

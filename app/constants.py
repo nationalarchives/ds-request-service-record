@@ -360,4 +360,5 @@ FIELD_LENGTH_LIMITS = {
     "m": 64,
     "l": 128,
     "xl": 256,
+    "dynamics_limit": 2000,
 }
