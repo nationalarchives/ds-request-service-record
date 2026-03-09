@@ -124,7 +124,14 @@ class ServicePersonDetails(FlaskForm):
     additional_information = TextAreaField(
         get_field_content(content, "additional_information", "label"),
         description=get_field_content(content, "additional_information", "description"),
-        validators=[],
+        validators=[
+            Length(
+                max=FIELD_LENGTH_LIMITS["dynamics_limit"],
+                message=get_field_content(
+                    content, "additional_information", "messages"
+                )["too_long"],
+            ),
+        ],
         widget=TnaTextareaWidget(),
     )
 

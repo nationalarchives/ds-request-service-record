@@ -556,6 +556,8 @@ forms:
       label: Additional information (optional)
       description: |
         Anything else you know about them that you think might help our search
+      messages:
+        too_long: Additional information must be %(max)d characters or less
     died_in_service:
       label: Did they die in service? (optional)
       messages:
