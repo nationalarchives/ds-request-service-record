@@ -16,9 +16,12 @@ from app.lib.template_filters import (
     slugify,
 )
 from flask import Flask, redirect
+from flask_migrate import Migrate
 from flask_session import Session
 from jinja2 import ChoiceLoader, PackageLoader
 from tna_frontend_jinja.wtforms.helpers import WTFormsHelpers
+
+migrate = Migrate()
 
 
 def create_app(config_class):
@@ -142,5 +145,6 @@ def create_app(config_class):
     app.register_blueprint(site_bp, url_prefix=service_url_prefix)
 
     db.init_app(app)
+    migrate.init_app(app, db)
 
     return app
