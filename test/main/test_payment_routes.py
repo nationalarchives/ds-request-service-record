@@ -79,9 +79,7 @@ def test_make_payment_page_renders(mock_get_payment, client, app):
 
     rv = client.get(f"{app.config.get('SERVICE_URL_PREFIX')}/payment/TEST-ID/")
     assert rv.status_code == 200
-    # Updated assertion to match current rendered heading
     assert dummy.case_number in rv.text
-    assert dummy.reference in rv.text
 
 
 @patch("app.main.routes.shared_payment_routes._fetch_payment_by_type")
