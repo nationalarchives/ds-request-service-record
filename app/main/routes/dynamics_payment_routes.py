@@ -73,7 +73,7 @@ def make_payment(id):
         return redirect(url_for("main.gov_uk_pay_redirect", id=payment.id))
 
     return render_template(
-        "main/payment/dynamics-payment.html",
+        "main/payment/second-payment-summary.html",
         form=form,
         payment=payment,
         content=content,
