@@ -91,6 +91,7 @@ class ExternalLinks:
         "https://discovery.nationalarchives.gov.uk/details/r/C12483430"
     )
     INDIAN_ARMY_PERSONNEL_RESEARCH_GUIDE = "https://www.nationalarchives.gov.uk/help-with-your-research/research-guides/indian-army-personnel/"
+    BRITISH_ARMY_FIRST_WORLD_WAR_RESEARCH_GUIDE = "https://www.nationalarchives.gov.uk/help-with-your-research/research-guides/british-army-soldiers-of-the-first-world-war/"
     CONTACT_US = "https://www.nationalarchives.gov.uk/contact-us/"
 
 
