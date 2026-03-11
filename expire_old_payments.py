@@ -7,11 +7,12 @@ This is intended to be run as a cron job.
 import os
 from datetime import datetime, timedelta, timezone
 
-from app import create_app
 from app.lib.aws import send_email
 from app.lib.db.constants import EXPIRED_STATUS, NEW_STATUS
 from app.lib.db.models import DynamicsPayment, db
 from flask import current_app
+
+from app import create_app
 
 
 def expire_old_payments(days: int = 30) -> int:
