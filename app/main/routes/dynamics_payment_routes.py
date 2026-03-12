@@ -85,15 +85,14 @@ def make_payment(id, state_machine):
             return redirect(url_for(state_machine.route_for_current_state, id=id))
 
         return render_template(
-            "main/payment/dynamics-payment.html",
+            "main/payment/second-payment-summary.html",
             form=form,
             payment=payment,
             content=content,
         )
 
-    # Drive the state machine to the appropriate final/next state
     state_machine.continue_from_initial_second_payment_link()
-    return redirect(url_for(state_machine.route_for_current_state, id=id))
+    return redirect(url_for(state_machine.route_for_current_state))
 
 
 def _validate_and_convert_amount(
