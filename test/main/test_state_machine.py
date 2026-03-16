@@ -5,7 +5,24 @@ from unittest.mock import patch
 
 import pytest
 from app.constants import MultiPageFormRoutes
+from app.lib.db.constants import (
+    EXPIRED_STATUS,
+    NEW_STATUS,
+    PAID_STATUS,
+    SENT_STATUS,
+)
 from app.lib.state_machine.state_machine import RoutingStateMachine
+from flask import session
+
+from app import create_app
+
+
+@pytest.fixture(autouse=True)
+def app_context():
+    """Provide a Flask request context so session is usable in all tests."""
+    app = create_app("config.Test")
+    with app.test_request_context():
+        yield
 
 
 def test_all_states_have_the_expected_suffix():
@@ -20,8 +37,8 @@ def test_all_events_have_the_expected_suffix():
     sm = RoutingStateMachine()
     for event in sm.events:
         assert re.search(
-            r"(_form|_page|_redirect)$", event.id
-        ), f"Event ID {event.id} does not end with '_form', '_page' or '_redirect'"
+            r"(_form|_page|_link|_redirect)$", event.id
+        ), f"Event ID {event.id} does not end with '_form', '_page' , '_link' or '_redirect'"
 
 
 def test_initial_state_has_no_route():
@@ -522,3 +539,76 @@ def test_continue_from_payment_incomplete_page():
 
 def make_form(**fields):
     return SimpleNamespace(**{k: SimpleNamespace(data=v) for k, v in fields.items()})
+
+
+# ensure condition method can inspect a payment object and drive the event
+def test_initial_state_to_continue_to_payment_page():
+    sm = RoutingStateMachine()
+    session["payment_status"] = NEW_STATUS
+    sm.continue_from_initial_second_payment_link()
+    assert sm.current_state.id == "complete_your_payment_page"
+    assert sm.route_for_current_state == MultiPageFormRoutes.COMPLETE_PAYMENT.value
+
+
+def test_continue_from_complete_your_payment_page():
+    sm = RoutingStateMachine()
+    sm.continue_from_complete_your_payment_page(form=make_form(submit=None))
+    assert sm.current_state.id == "gov_uk_pay_second_payment_redirect"
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.SEND_TO_GOV_UK_PAY_SECOND_PAYMENT.value
+    )
+
+
+def test_continue_to_complete_your_payment_page_from_initial(app_context):
+    sm = RoutingStateMachine()
+    session["payment_status"] = NEW_STATUS
+    sm.continue_from_initial_second_payment_link()
+    assert sm.current_state.id == "complete_your_payment_page"
+    assert sm.route_for_current_state == MultiPageFormRoutes.COMPLETE_PAYMENT.value
+    sm.continue_from_complete_your_payment_page(form=make_form(submit=None))
+    assert sm.current_state.id == "gov_uk_pay_second_payment_redirect"
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.SEND_TO_GOV_UK_PAY_SECOND_PAYMENT.value
+    )
+
+
+def test_continue_to_already_received_payment_from_initial_via_paid_status(app_context):
+    sm = RoutingStateMachine()
+    session["payment_status"] = PAID_STATUS
+    sm.continue_from_initial_second_payment_link()
+    assert sm.current_state.id == "payment_already_received_page"
+    assert (
+        sm.route_for_current_state == MultiPageFormRoutes.PAYMENT_ALREADY_RECEIVED.value
+    )
+
+
+def test_continue_to_already_received_payment_from_initial_via_sent_status(app_context):
+    sm = RoutingStateMachine()
+    session["payment_status"] = SENT_STATUS
+    sm.continue_from_initial_second_payment_link()
+    assert sm.current_state.id == "payment_already_received_page"
+    assert (
+        sm.route_for_current_state == MultiPageFormRoutes.PAYMENT_ALREADY_RECEIVED.value
+    )
+
+
+def test_continue_to_expired_payment_from_initial(app_context):
+    sm = RoutingStateMachine()
+    session["payment_status"] = EXPIRED_STATUS
+    sm.continue_from_initial_second_payment_link()
+    assert sm.current_state.id == "second_payment_link_expired_page"
+    assert sm.route_for_current_state == MultiPageFormRoutes.LINK_EXPIRED.value
+
+
+def test_continue_to_not_valid_payment_link_from_initial(app_context):
+    sm = RoutingStateMachine()
+    # no payment attached -> should be treated as invalid link
+    session["payment_status"] = None
+    sm.continue_from_initial_second_payment_link()
+    assert sm.current_state.id == "not_valid_payment_link_page"
+    assert (
+        sm.route_for_current_state
+        == MultiPageFormRoutes.NOT_A_VALID_SECOND_PAYMENT_LINK.value
+    )

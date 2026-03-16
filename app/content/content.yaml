@@ -14,6 +14,10 @@ pages:
           military service record for someone who served in the British Armed Forces 
           after 1918 and who was born before 1940.
         - These records predominantly cover the period of the Second World War.
+        - |
+          If you are looking for a First World War record, see our 
+          [British Army soldiers of the First World War research guide](BRITISH_ARMY_FIRST_WORLD_WAR_RESEARCH_GUIDE). 
+          The majority are not available through this service.
     ways_to_request_a_record:
       heading: Ways to request a record
       paragraph: There are two ways to request a record.
@@ -454,6 +458,12 @@ pages:
     price:
       term: Price
       message: "The price is calculated based on the number of pages we are copying: £1.04 per page for digital copies, or £1.89 per page for posted copies."
+  second_payment_summary:
+    heading: Payment summary
+    paragraph: Check your details
+    order_term: Order
+    price_term: Price
+    pricing_information: "The price is calculated based on the number of pages we are copying: £1.04 per page for digital copies, or £1.89 per page for posted copies."
   page_not_found:
     heading: Page not found
     paragraphs:
@@ -556,6 +566,8 @@ forms:
       label: Additional information (optional)
       description: |
         Anything else you know about them that you think might help our search
+      messages:
+        too_long: Additional information must be %(max)d characters or less
     died_in_service:
       label: Did they die in service? (optional)
       messages:
@@ -626,7 +638,7 @@ forms:
       messages:
         required: Select a country from the list
     proceed_to_payment:
-      call_to_action: Proceed to make payment using GOV.UK Pay
+      call_to_action: Pay now
     choose_your_order_type:
       label: Please choose a format
       standard:
