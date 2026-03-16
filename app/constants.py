@@ -48,6 +48,12 @@ class MultiPageFormRoutes(Enum):
     SEND_TO_GOV_UK_PAY = "main.send_to_gov_uk_pay"
     REQUEST_SUBMITTED = "main.request_submitted"
 
+    COMPLETE_PAYMENT = "main.complete_payment"
+    PAYMENT_ALREADY_RECEIVED = "main.payment_already_received"
+    LINK_EXPIRED = "main.second_payment_link_expired"
+    NOT_A_VALID_SECOND_PAYMENT_LINK = "main.not_a_valid_second_payment_link"
+    SEND_TO_GOV_UK_PAY_SECOND_PAYMENT = "main.gov_uk_pay_redirect"
+
 
 class ServiceBranches(Enum):
     ROYAL_NAVY = "Royal Navy (including Royal Marines)"
@@ -91,6 +97,7 @@ class ExternalLinks:
         "https://discovery.nationalarchives.gov.uk/details/r/C12483430"
     )
     INDIAN_ARMY_PERSONNEL_RESEARCH_GUIDE = "https://www.nationalarchives.gov.uk/help-with-your-research/research-guides/indian-army-personnel/"
+    BRITISH_ARMY_FIRST_WORLD_WAR_RESEARCH_GUIDE = "https://www.nationalarchives.gov.uk/help-with-your-research/research-guides/british-army-soldiers-of-the-first-world-war/"
     CONTACT_US = "https://www.nationalarchives.gov.uk/contact-us/"
 
 

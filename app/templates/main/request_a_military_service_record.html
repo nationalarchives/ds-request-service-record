@@ -20,7 +20,7 @@
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny tna-!--padding-top-m">
         {% for paragraph in content.pages.request_a_military_service_record.contents.paragraphs %}
-          <p>{{ paragraph }}</p>
+          <p>{{ paragraph | parse_markdown_links(new_tab=False) | safe }}</p>
         {% endfor %}
         <h2
           class="tna-heading-l">{{ content.pages.request_a_military_service_record.ways_to_request_a_record.heading }}</h2>

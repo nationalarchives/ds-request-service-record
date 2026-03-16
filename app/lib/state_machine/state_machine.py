@@ -3,7 +3,12 @@ from datetime import datetime
 from app.constants import MultiPageFormRoutes
 from app.lib.aws import upload_proof_of_death
 from app.lib.boundary_years import BoundaryYears
-from flask import current_app, has_request_context, request
+from app.lib.db.constants import (
+    EXPIRED_STATUS,
+    PAID_STATUS,
+    SENT_STATUS,
+)
+from flask import current_app, has_request_context, request, session
 from statemachine import State, StateMachine
 
 
@@ -162,6 +167,24 @@ class RoutingStateMachine(StateMachine):
 
     request_submitted_page = State(enter="entering_request_submitted_page", final=True)
 
+    complete_your_payment_page = State(enter="entering_complete_your_payment_page")
+
+    payment_already_received_page = State(
+        enter="entering_payment_already_received_page", final=True
+    )
+
+    second_payment_link_expired_page = State(
+        enter="entering_second_payment_link_expired_page", final=True
+    )
+
+    not_valid_payment_link_page = State(
+        enter="entering_not_valid_payment_link_page", final=True
+    )
+
+    gov_uk_pay_second_payment_redirect = State(
+        enter="entering_gov_uk_pay_second_payment_redirect", final=True
+    )
+
     """
     These are our Events. They're called in route methods to trigger transitions between States.
 
@@ -297,6 +320,26 @@ class RoutingStateMachine(StateMachine):
 
     continue_from_payment_incomplete_page = initial.to(your_order_summary_form)
 
+    continue_from_initial_second_payment_link = (
+        initial.to(
+            complete_your_payment_page,
+            unless=[
+                "payment_already_received",
+                "second_payment_link_expired",
+                "not_a_valid_link",
+            ],
+        )
+        | initial.to(payment_already_received_page, cond="payment_already_received")
+        | initial.to(
+            second_payment_link_expired_page, cond="second_payment_link_expired"
+        )
+        | initial.to(not_valid_payment_link_page, cond="not_a_valid_link")
+    )
+
+    continue_from_complete_your_payment_page = initial.to(
+        gov_uk_pay_second_payment_redirect
+    ) | complete_your_payment_page.to(gov_uk_pay_second_payment_redirect)
+
     def entering_how_we_process_requests_form(self):
         self.route_for_current_state = MultiPageFormRoutes.HOW_WE_PROCESS_REQUESTS.value
 
@@ -414,6 +457,27 @@ class RoutingStateMachine(StateMachine):
     def entering_request_submitted_page(self):
         self.route_for_current_state = MultiPageFormRoutes.REQUEST_SUBMITTED.value
 
+    def entering_complete_your_payment_page(self):
+        self.route_for_current_state = MultiPageFormRoutes.COMPLETE_PAYMENT.value
+
+    def entering_payment_already_received_page(self):
+        self.route_for_current_state = (
+            MultiPageFormRoutes.PAYMENT_ALREADY_RECEIVED.value
+        )
+
+    def entering_second_payment_link_expired_page(self):
+        self.route_for_current_state = MultiPageFormRoutes.LINK_EXPIRED.value
+
+    def entering_not_valid_payment_link_page(self):
+        self.route_for_current_state = (
+            MultiPageFormRoutes.NOT_A_VALID_SECOND_PAYMENT_LINK.value
+        )
+
+    def entering_gov_uk_pay_second_payment_redirect(self):
+        self.route_for_current_state = (
+            MultiPageFormRoutes.SEND_TO_GOV_UK_PAY_SECOND_PAYMENT.value
+        )
+
     def living_subject(self, form):
         """Condition method to determine if the service person is alive."""
         return self.get_form_field_data(form, "is_service_person_alive") == "yes"
@@ -491,3 +555,17 @@ class RoutingStateMachine(StateMachine):
                 return True
         self.set_form_field_data(form, "proof_of_death", None)
         return False  # TODO: Does this need to be True if upload fails? They won't progress otherwise.
+
+    # second payment conditions session is set in make_payment
+    def payment_already_received(self):
+        payment_status = session.get("payment_status")
+        return payment_status and (payment_status in [PAID_STATUS, SENT_STATUS])
+
+    def second_payment_link_expired(self):
+        payment_status = session.get("payment_status")
+        return payment_status and (payment_status == EXPIRED_STATUS)
+
+    def not_a_valid_link(self):
+        # Treat a link as invalid if payment attribute is missing or None
+        payment_status = session.get("payment_status")
+        return payment_status is None
