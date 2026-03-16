@@ -614,3 +614,12 @@ def test_continue_to_not_valid_payment_link_from_initial(app_context):
         sm.route_for_current_state
         == MultiPageFormRoutes.NOT_A_VALID_SECOND_PAYMENT_LINK.value
     )
+
+
+def test_continue_from_sorry_you_will_have_to_start_again():
+    sm = RoutingStateMachine()
+    sm.continue_from_sorry_you_will_have_to_start_again_form(
+        form=make_form(submit=None)
+    )
+    assert sm.current_state.id == "service_start_page"
+    assert sm.route_for_current_state == MultiPageFormRoutes.JOURNEY_START.value

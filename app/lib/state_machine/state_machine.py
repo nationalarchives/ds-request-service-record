@@ -62,6 +62,8 @@ class RoutingStateMachine(StateMachine):
     """
     initial = State(initial=True)  # The initial state of our machine
 
+    service_start_page = State(enter="entering_service_start_page", final=True)
+
     how_we_process_requests_form = State(
         enter="entering_how_we_process_requests_form", final=True
     )
@@ -339,6 +341,13 @@ class RoutingStateMachine(StateMachine):
     continue_from_complete_your_payment_page = initial.to(
         gov_uk_pay_second_payment_redirect
     ) | complete_your_payment_page.to(gov_uk_pay_second_payment_redirect)
+
+    continue_from_sorry_you_will_have_to_start_again_form = initial.to(
+        service_start_page
+    )
+
+    def entering_service_start_page(self):
+        self.route_for_current_state = MultiPageFormRoutes.JOURNEY_START.value
 
     def entering_how_we_process_requests_form(self):
         self.route_for_current_state = MultiPageFormRoutes.HOW_WE_PROCESS_REQUESTS.value

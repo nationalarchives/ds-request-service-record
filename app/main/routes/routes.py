@@ -38,6 +38,9 @@ from app.main.forms.request_a_military_service_record import (
 )
 from app.main.forms.service_branch import ServiceBranch
 from app.main.forms.service_person_details import ServicePersonDetails
+from app.main.forms.sorry_you_will_have_to_start_again import (
+    SorryYouWillHaveToStartAgain,
+)
 from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
 from app.main.forms.we_are_unlikely_to_hold_this_record import (
     WeAreUnlikelyToHoldThisRecord,
@@ -609,3 +612,18 @@ def payment_already_received():
 @bp.route("/not-a-valid-second-payment-link/", methods=["GET"])
 def not_a_valid_second_payment_link():
     return render_template("errors/page-not-found.html", content=load_content())
+
+
+@bp.route("/sorry-you-will-have-to-start-again/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(SorryYouWillHaveToStartAgain)
+@with_state_machine
+def sorry_you_will_have_to_start_again(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_sorry_you_will_have_to_start_again_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
+
+    return render_template(
+        "main/sorry-you-will-have-to-start-again.html",
+        content=load_content(),
+        form=form,
+    )

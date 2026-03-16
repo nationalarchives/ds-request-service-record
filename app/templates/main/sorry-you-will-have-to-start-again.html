@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{%- set pageTitle = content.pages.sorry_you_will_have_to_start_again.heading | prepare_page_title -%}
+{% block content %}
+  <div class="tna-section tna-!--padding-top-s">
+    <div class="tna-container">
+      <div
+        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny tna-!--padding-top-m">
+        <h1
+          class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.sorry_you_will_have_to_start_again.heading }}</h1>
+        {% for paragraph in content.pages.sorry_you_will_have_to_start_again.initial_paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+        <ul class="tna-ul">
+          {% for item in content.pages.sorry_you_will_have_to_start_again.list_items %}
+            <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+        {% for paragraph in content.pages.sorry_you_will_have_to_start_again.further_paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+        <form action="{{ url_for('main.sorry_you_will_have_to_start_again') }}" method="post" novalidate>
+          {{ form.csrf_token }}
+          <div class="tna-button-group">
+            {{ form.submit(params={'classes':'tna-button--accent'}) }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
