@@ -591,21 +591,21 @@ def payment_summary():
     )
 
 
-@bp.route("/payment-link-expired/", methods=["GET"])
-def payment_link_expired():
+@bp.route("/second-payment-link-expired/", methods=["GET"])
+def second_payment_link_expired():
     return render_template(
         "main/payment/payment-link-expired.html", content=load_content()
     )
 
 
-@bp.route("/payment-already-made/", methods=["GET"])
-def payment_already_made():
+@bp.route("/payment-already-received/", methods=["GET"])
+def payment_already_received():
     return render_template(
         "main/payment/payment-already-made.html",
         content=load_content(),
     )
 
 
-@bp.route("/not-a-valid-link/", methods=["GET"])
-def not_a_valid_link():
+@bp.route("/not-a-valid-second-payment-link/", methods=["GET"])
+def not_a_valid_second_payment_link():
     return render_template("errors/page-not-found.html", content=load_content())

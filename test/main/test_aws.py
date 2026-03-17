@@ -2,9 +2,8 @@ import io
 from unittest.mock import MagicMock, patch
 
 import pytest
-from app.lib.aws import upload_file_to_s3  # move_proof_of_death_to_submitted
-
-# from flask import current_app
+from app.lib.aws import move_proof_of_death_to_submitted, upload_file_to_s3
+from flask import current_app
 from werkzeug.datastructures import FileStorage
 
 from app import create_app
@@ -64,36 +63,35 @@ def test_upload_file_to_s3_valid_file_returns_filename(context):
     assert call_args[0][2] == "override-name.png"
 
 
-# TODO: Uncomment when S3 permissions are updated to allow CopyObject (currently fails with AccessDenied)
-# def test_move_proof_of_death_to_submitted_copies_and_deletes(context):
-#     # config.Test sets ENVIRONMENT_NAME == "test" which causes move_proof_of_death_to_submitted
-#     # to early-return True (skipping boto3). Override so we exercise the S3 copy+delete logic.
-#     previous_env = current_app.config.get("ENVIRONMENT_NAME")
-#     current_app.config["ENVIRONMENT_NAME"] = ""
+def test_move_proof_of_death_to_submitted_copies_and_deletes(context):
+    # config.Test sets ENVIRONMENT_NAME == "test" which causes move_proof_of_death_to_submitted
+    # to early-return True (skipping boto3). Override so we exercise the S3 copy+delete logic.
+    previous_env = current_app.config.get("ENVIRONMENT_NAME")
+    current_app.config["ENVIRONMENT_NAME"] = ""
 
-#     mock_s3 = MagicMock()
-#     mock_s3.copy_object = MagicMock(return_value=None)
-#     mock_s3.delete_object = MagicMock(return_value=None)
+    mock_s3 = MagicMock()
+    mock_s3.copy_object = MagicMock(return_value=None)
+    mock_s3.delete_object = MagicMock(return_value=None)
 
-#     mock_session = MagicMock()
-#     mock_session.client.return_value = mock_s3
+    mock_session = MagicMock()
+    mock_session.client.return_value = mock_s3
 
-#     try:
-#         with patch("app.lib.aws.get_boto3_session", return_value=mock_session):
-#             result = move_proof_of_death_to_submitted("holding/proof.png")
-#     finally:
-#         current_app.config["ENVIRONMENT_NAME"] = previous_env
+    try:
+        with patch("app.lib.aws.get_boto3_session", return_value=mock_session):
+            result = move_proof_of_death_to_submitted("holding/proof.png")
+    finally:
+        current_app.config["ENVIRONMENT_NAME"] = previous_env
 
-#     assert result is True
-#     mock_session.client.assert_called_once_with("s3")
-#     mock_s3.copy_object.assert_called_once_with(
-#         Bucket="proof-bucket",
-#         Key="submitted/proof.png",
-#         CopySource={"Bucket": "proof-bucket", "Key": "holding/proof.png"},
-#     )
-#     mock_s3.delete_object.assert_called_once_with(
-#         Bucket="proof-bucket", Key="holding/proof.png"
-#     )
+    assert result is True
+    mock_session.client.assert_called_once_with("s3")
+    mock_s3.copy_object.assert_called_once_with(
+        Bucket="proof-bucket",
+        Key="submitted/proof.png",
+        CopySource={"Bucket": "proof-bucket", "Key": "holding/proof.png"},
+    )
+    mock_s3.delete_object.assert_called_once_with(
+        Bucket="proof-bucket", Key="holding/proof.png"
+    )
 
 
 def test_upload_file_to_s3_invalid_empty_file_returns_none(context):
