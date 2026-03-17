@@ -48,9 +48,7 @@ class ServiceRecordRequest(db.Model):
     payment_reference = db.Column(db.String(64), nullable=True)
     amount_received = db.Column(db.String(32), nullable=True)  # amount in £xx.xx format
     record_hash = db.Column(db.String(64), nullable=False, unique=True)
-    status = db.Column(
-        db.String(1), nullable=False, default=NEW_STATUS
-    )  # N=New, P=Paid, S=Sent
+    status = db.Column(db.String(1), nullable=False, default=NEW_STATUS)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
 
@@ -73,9 +71,7 @@ class DynamicsPayment(db.Model):
     first_name = db.Column(db.String(128), nullable=True)
     last_name = db.Column(db.String(128), nullable=True)
     details = db.Column(db.String(256), nullable=True)
-    status = db.Column(
-        db.String(1), nullable=False, default=NEW_STATUS
-    )  # N=New, S=Sent, P=Paid
+    status = db.Column(db.String(1), nullable=False, default=NEW_STATUS)
     provider_id = db.Column(
         db.String(64), nullable=True
     )  # GOV.UK Pay provider ID if paid
