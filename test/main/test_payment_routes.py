@@ -1,8 +1,10 @@
 from unittest.mock import MagicMock, patch
 
 import pytest
+from flask import session
 
 from app import create_app
+from app.main.routes.shared_payment_routes import handle_gov_uk_pay_response
 
 
 class DummyPayment:
@@ -133,3 +135,72 @@ def test_handle_gov_uk_pay_response_gov_uk_pay_api_failure(
     assert rv.status_code == 502
     mock_fetch.assert_called_once_with("service_record", "123")
     mock_get_payment_data.assert_called_once_with("GOV-UK-PAY-ID")
+
+
+@patch("app.main.routes.shared_payment_routes._process_service_record_payment")
+@patch("app.main.routes.shared_payment_routes._get_gov_uk_payment_data")
+@patch("app.main.routes.shared_payment_routes._fetch_payment_by_type")
+def test_handle_gov_uk_pay_response_successful_payment_clears_session(
+    mock_fetch,
+    mock_get_payment_data,
+    mock_process_service_record_payment,
+    app,
+):
+    dummy_payment = DummyPayment()
+    mock_fetch.return_value = dummy_payment
+
+    mock_client = MagicMock()
+    mock_client.data = {"provider_id": "prov-123"}
+    mock_client.is_payment_successful.return_value = True
+    mock_get_payment_data.return_value = mock_client
+
+    with app.test_request_context(
+        f"{app.config.get('SERVICE_URL_PREFIX')}/handle-gov-uk-pay-response/service_record/{dummy_payment.id}/"
+    ):
+        session["entered_through_index_page"] = True
+        session["test_key"] = "keep-if-not-cleared"
+        rv = handle_gov_uk_pay_response("service_record", dummy_payment.id)
+
+        assert "test_key" not in session
+        assert "entered_through_index_page" not in session
+
+    assert rv.status_code == 302
+    assert "/request-submitted/TEST-ID" in rv.location
+    mock_fetch.assert_called_once_with("service_record", "TEST-ID")
+    mock_get_payment_data.assert_called_once_with("GOV-UK-PAY-ID")
+    mock_process_service_record_payment.assert_called_once_with(
+        dummy_payment, mock_client, "GOV-UK-PAY-ID"
+    )
+
+
+@patch("app.main.routes.shared_payment_routes._process_service_record_payment")
+@patch("app.main.routes.shared_payment_routes._get_gov_uk_payment_data")
+@patch("app.main.routes.shared_payment_routes._fetch_payment_by_type")
+def test_handle_gov_uk_pay_response_unsuccessful_payment_does_not_clear_session(
+    mock_fetch,
+    mock_get_payment_data,
+    mock_process_service_record_payment,
+    app,
+):
+    dummy_payment = DummyPayment()
+    mock_fetch.return_value = dummy_payment
+
+    mock_client = MagicMock()
+    mock_client.data = {"provider_id": "prov-123"}
+    mock_client.is_payment_successful.return_value = False
+    mock_get_payment_data.return_value = mock_client
+
+    with app.test_request_context(
+        f"{app.config.get('SERVICE_URL_PREFIX')}/handle-gov-uk-pay-response/service_record/{dummy_payment.id}/"
+    ):
+        session["entered_through_index_page"] = True
+        session["test_key"] = "should-remain"
+        rv = handle_gov_uk_pay_response("service_record", dummy_payment.id)
+
+        assert session.get("test_key") == "should-remain"
+
+    assert rv.status_code == 302
+    assert "/payment-incomplete/" in rv.location
+    mock_fetch.assert_called_once_with("service_record", "TEST-ID")
+    mock_get_payment_data.assert_called_once_with("GOV-UK-PAY-ID")
+    mock_process_service_record_payment.assert_not_called()
