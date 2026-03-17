@@ -1,10 +1,10 @@
 from unittest.mock import MagicMock, patch
 
 import pytest
+from app.main.routes.shared_payment_routes import handle_gov_uk_pay_response
 from flask import session
 
 from app import create_app
-from app.main.routes.shared_payment_routes import handle_gov_uk_pay_response
 
 
 class DummyPayment:

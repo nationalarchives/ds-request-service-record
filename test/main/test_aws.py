@@ -2,7 +2,11 @@ import io
 from unittest.mock import MagicMock, patch
 
 import pytest
-from app.lib.aws import move_proof_of_death_to_submitted, upload_file_to_s3
+from app.lib.aws import (
+    move_proof_of_death_to_submitted,
+    upload_file_to_s3,
+    upload_proof_of_death,
+)
 from flask import current_app
 from werkzeug.datastructures import FileStorage
 
@@ -135,3 +139,16 @@ def test_upload_file_to_s3_retries_on_failure(context):
     assert result is None
     # Should retry 3 times (MAX_UPLOAD_ATTEMPTS)
     assert mock_s3.upload_fileobj.call_count == 3
+
+
+def test_upload_proof_of_death_uses_uuid_for_key_name(context):
+    file = FileStorage(
+        stream=io.BytesIO(b"image-bytes"),
+        filename="proof.png",
+        content_type="image/png",
+    )
+
+    with patch("app.lib.aws.uuid.uuid4", return_value="generated-uuid"):
+        result = upload_proof_of_death(file=file)
+
+    assert result == "holding/generated-uuid.png"
