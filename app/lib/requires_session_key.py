@@ -8,6 +8,8 @@ def requires_session_key():
         "main.start",
         "main.create_payment_endpoint",
         "main.make_payment",
+        "main.handle_gov_uk_pay_response",
+        "main.request_submitted",
     ]
 
     if request.endpoint and any(
