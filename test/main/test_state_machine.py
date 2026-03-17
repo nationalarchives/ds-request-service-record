@@ -392,6 +392,7 @@ def test_continue_from_upload_a_proof_of_death_where_upload_proof_of_death_retur
     )
     assert sm.current_state.id == "upload_a_proof_of_death_form"
     assert sm.route_for_current_state == "main.upload_a_proof_of_death"
+    mock_upload.assert_called_once_with(file="an-uploaded-file-object")
 
 
 # In this test we are again mocking upload_proof_of_death, but this time we simulate a successful
@@ -409,6 +410,7 @@ def test_continue_from_upload_a_proof_of_death_where_upload_proof_of_death_retur
     )
     assert sm.current_state.id == "service_person_details_form"
     assert sm.route_for_current_state == "main.service_person_details"
+    mock_upload.assert_called_once_with(file="an-uploaded-file-object")
 
 
 # In this case we are again testing sm.continue_from_upload_a_proof_of_death_form but there is no
