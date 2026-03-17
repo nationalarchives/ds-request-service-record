@@ -19,6 +19,9 @@ from app.lib.gov_uk_pay import (
     create_payment,
 )
 from app.lib.price_calculations import calculate_amount_based_on_form_data
+from app.lib.check_for_fields_required_by_gov_uk_pay import (
+    check_for_fields_required_by_gov_uk_pay,
+)
 from app.main import bp
 from flask import current_app, redirect, session, url_for
 
@@ -35,9 +38,15 @@ def send_to_gov_uk_pay():
     """Initiate payment process for service record request."""
     form_data = session.get("form_data")
 
-    if not form_data:
-        current_app.logger.warning("No form data in session")
-        return redirect(url_for("main.start"))
+    if form_data is None:
+        current_app.logger.warning(
+            "Missing form_data in session when sending to GOV.UK Pay; "
+            "redirecting to start-again page."
+        )
+        return redirect(url_for("main.sorry_you_will_have_to_start_again"))
+
+    if not check_for_fields_required_by_gov_uk_pay(form_data, current_app):
+        return redirect(url_for("main.sorry_you_will_have_to_start_again"))
 
     transformed_data = transform_form_data_to_record(form_data)
 
@@ -50,7 +59,6 @@ def send_to_gov_uk_pay():
 
 
 def _create_new_payment_or_redirect(form_data: dict):
-
     record_hash = _hash_form_data(form_data)
     if existing_record := hash_check(record_hash):
         if redirect_response := _handle_existing_payment(existing_record):
