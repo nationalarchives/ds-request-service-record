@@ -2,6 +2,9 @@ import hashlib
 import uuid
 from datetime import datetime
 
+from app.lib.check_for_fields_required_by_gov_uk_pay import (
+    check_for_fields_required_by_gov_uk_pay,
+)
 from app.lib.content import load_content
 from app.lib.db.db_handler import (
     add_service_record_request,
@@ -19,9 +22,6 @@ from app.lib.gov_uk_pay import (
     create_payment,
 )
 from app.lib.price_calculations import calculate_amount_based_on_form_data
-from app.lib.check_for_fields_required_by_gov_uk_pay import (
-    check_for_fields_required_by_gov_uk_pay,
-)
 from app.main import bp
 from flask import current_app, redirect, session, url_for
 

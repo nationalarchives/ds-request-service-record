@@ -1,5 +1,4 @@
 import pytest
-
 from app.lib.check_for_fields_required_by_gov_uk_pay import (
     check_for_fields_required_by_gov_uk_pay,
 )
