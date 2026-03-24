@@ -14,7 +14,7 @@ from app.lib.gov_uk_pay import (
 )
 from app.main import bp
 from app.main.forms.payment_incomplete import PaymentIncomplete
-from flask import abort, current_app, redirect, render_template, url_for
+from flask import abort, current_app, redirect, render_template, session, url_for
 
 
 def _fetch_payment_by_type(payment_type, id):
@@ -85,6 +85,7 @@ def handle_gov_uk_pay_response(payment_type, id):
         return redirect(url_for("main.confirm_payment_received"))
     else:
         _process_service_record_payment(payment, client, payment.gov_uk_payment_id)
+        session.clear()
         return redirect(url_for("main.request_submitted", id=payment.id))
 
 

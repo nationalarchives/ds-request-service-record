@@ -470,6 +470,15 @@ pages:
       - If you typed the web address, check it is correct.
       - If you pasted the web address, check you copied the entire address.
       - If the web address if correct or you selected a link or button, get in touch with us by replying to the last email we sent you, or by visiting our [Contact us](CONTACT_US) page.
+  sorry_you_will_have_to_start_again:
+    heading: Sorry, you will have to start again
+    initial_paragraphs:
+      - "Your session has ended. This may be because:"
+    list_items:
+      - Sessions automatically reset after 24 hours
+      - There was an error with the service
+    further_paragraphs:
+      - Please try again.
 forms:
   fields:
     request_a_military_service_record:
@@ -651,3 +660,5 @@ forms:
       call_to_action: Pay now
     payment_incomplete:
       call_to_action: Go back to try the payment again
+    sorry_you_will_have_to_start_again:
+      call_to_action: Start again

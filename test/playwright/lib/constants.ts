@@ -17,6 +17,7 @@ export const Paths = {
   REQUEST_SUBMITTED: `${basePath}/request-submitted/`,
   WHICH_MILITARY_BRANCH_DID_THE_PERSON_SERVE_IN: `${basePath}/which-military-branch-did-the-person-serve-in/`,
   SERVICE_PERSON_DETAILS: `${basePath}/service-person-details/`,
+  SORRY_YOU_WILL_HAVE_TO_START_AGAIN: `${basePath}/sorry-you-will-have-to-start-again/`,
   UPLOAD_A_PROOF_OF_DEATH: `${basePath}/upload-a-proof-of-death/`,
   ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_A_PROOF_OF_DEATH: `${basePath}/are-you-sure-you-want-to-proceed-without-proof-of-death/`,
   WERE_THEY_A_COMMISSIONED_OFFICER: `${basePath}/were-they-a-commissioned-officer/`,

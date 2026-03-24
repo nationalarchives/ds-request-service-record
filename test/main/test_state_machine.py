@@ -392,6 +392,7 @@ def test_continue_from_upload_a_proof_of_death_where_upload_proof_of_death_retur
     )
     assert sm.current_state.id == "upload_a_proof_of_death_form"
     assert sm.route_for_current_state == "main.upload_a_proof_of_death"
+    mock_upload.assert_called_once_with(file="an-uploaded-file-object")
 
 
 # In this test we are again mocking upload_proof_of_death, but this time we simulate a successful
@@ -409,6 +410,7 @@ def test_continue_from_upload_a_proof_of_death_where_upload_proof_of_death_retur
     )
     assert sm.current_state.id == "service_person_details_form"
     assert sm.route_for_current_state == "main.service_person_details"
+    mock_upload.assert_called_once_with(file="an-uploaded-file-object")
 
 
 # In this case we are again testing sm.continue_from_upload_a_proof_of_death_form but there is no
@@ -612,3 +614,12 @@ def test_continue_to_not_valid_payment_link_from_initial(app_context):
         sm.route_for_current_state
         == MultiPageFormRoutes.NOT_A_VALID_SECOND_PAYMENT_LINK.value
     )
+
+
+def test_continue_from_sorry_you_will_have_to_start_again():
+    sm = RoutingStateMachine()
+    sm.continue_from_sorry_you_will_have_to_start_again_form(
+        form=make_form(submit=None)
+    )
+    assert sm.current_state.id == "service_start_page"
+    assert sm.route_for_current_state == MultiPageFormRoutes.JOURNEY_START.value

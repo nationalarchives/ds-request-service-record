@@ -8,7 +8,7 @@ from app.lib.db.constants import (
     PAID_STATUS,
     SENT_STATUS,
 )
-from flask import current_app, has_request_context, request, session
+from flask import current_app, has_app_context, session
 from statemachine import State, StateMachine
 
 
@@ -61,6 +61,8 @@ class RoutingStateMachine(StateMachine):
 
     """
     initial = State(initial=True)  # The initial state of our machine
+
+    service_start_page = State(enter="entering_service_start_page", final=True)
 
     how_we_process_requests_form = State(
         enter="entering_how_we_process_requests_form", final=True
@@ -340,6 +342,13 @@ class RoutingStateMachine(StateMachine):
         gov_uk_pay_second_payment_redirect
     ) | complete_your_payment_page.to(gov_uk_pay_second_payment_redirect)
 
+    continue_from_sorry_you_will_have_to_start_again_form = initial.to(
+        service_start_page
+    )
+
+    def entering_service_start_page(self):
+        self.route_for_current_state = MultiPageFormRoutes.JOURNEY_START.value
+
     def entering_how_we_process_requests_form(self):
         self.route_for_current_state = MultiPageFormRoutes.HOW_WE_PROCESS_REQUESTS.value
 
@@ -545,12 +554,21 @@ class RoutingStateMachine(StateMachine):
     def proof_of_death_uploaded_to_s3(self, form):
         """Condition method to determine if proof of death was successfully uploaded to S3."""
         if file_data := self.get_form_field_data(form, "proof_of_death"):
-            session_key = None
-            # Check the user has a valid session key, if not, we'll generate a UUID in upload_proof_of_death()
-            if has_request_context():
-                session_key = request.cookies.get("sessionid")
-            file = upload_proof_of_death(file=file_data, session_key=session_key)
+            file = upload_proof_of_death(file=file_data)
             if file:
+                holding_prefix = ""
+                if has_app_context():
+                    holding_prefix = current_app.config.get(
+                        "PROOF_OF_DEATH_HOLDING_PREFIX", ""
+                    )
+                if holding_prefix:
+                    normalized_prefix = (
+                        holding_prefix
+                        if holding_prefix.endswith("/")
+                        else f"{holding_prefix}/"
+                    )
+                    if file.startswith(normalized_prefix):
+                        file = file[len(normalized_prefix) :]
                 self.set_form_field_data(form, "proof_of_death", file)
                 return True
         self.set_form_field_data(form, "proof_of_death", None)
