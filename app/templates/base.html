@@ -7,6 +7,7 @@
 {%- from 'components/details/macro.html' import tnaDetails -%}
 {%- from 'components/panel/macro.html' import tnaPanel -%}
 
+{%- from 'macros/analytics-meta-tags.html' import analytics_meta_tags %}
 {%- from 'macros/back-link.html' import backLink %}
 {%- from 'macros/description-list.html' import descriptionList %}
 {%- from 'macros/mod-foi-breadcrumbs.html' import modFoiBreadcrumbs %}
@@ -53,6 +54,7 @@
   <meta name="tna.app.build-version" content="{{ app_config.BUILD_VERSION }}">
   <meta name="tna.app.tna-frontend" content="{{ app_config.TNA_FRONTEND_VERSION }}">
   <meta name="tna.settings.theme" content="{{ theme }}">
+  {{ analytics_meta_tags(self._TemplateReference__context.name) }}
 {% endblock head %}
 
 {% block stylesheets %}

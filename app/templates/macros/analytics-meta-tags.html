@@ -1,0 +1,10 @@
+{% macro analytics_meta_tags(template_reference) %}
+  {% if template_reference %}
+    {% set template_file_name_no_extension = template_reference | replace("main/", "") | replace(".html", "") %}
+  {% else %}
+    {% set template_file_name_no_extension = "unknown_template" %}
+  {% endif %}
+
+  <meta name="tna_root:content_group" content="Request a military service">
+  <meta name="tna_root:page_type" content="{{ template_file_name_no_extension }}_ramsr">
+{% endmacro %}
