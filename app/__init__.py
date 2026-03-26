@@ -12,6 +12,7 @@ from app.lib.template_filters import (
     parse_bold_text,
     parse_first_birth_year_for_closed_records,
     parse_markdown_links,
+    prepare_page_type_for_analytics_meta_tag,
     prepare_page_title,
     slugify,
 )
@@ -114,6 +115,7 @@ def create_app(config_class):
     app.add_template_filter(convert_pence_to_pounds_string)
     app.add_template_filter(inject_unique_survey_link)
     app.add_template_filter(prepare_page_title)
+    app.add_template_filter(prepare_page_type_for_analytics_meta_tag)
 
     @app.context_processor
     def context_processor():
