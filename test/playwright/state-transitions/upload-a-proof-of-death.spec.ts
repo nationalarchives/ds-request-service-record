@@ -48,11 +48,11 @@ test.describe("The 'Upload a proof of death' form", () => {
         ".docx",
         bufferSizeBelowLimit,
         false,
-        /The selected file must be a JPG, JPEG, GIF or PNG/,
+        /The selected file must be a PDF, JPG, JPEG, GIF or PNG/,
       );
     });
 
-    ["jpg", "jpeg", "gif", "png"].forEach((extension) => {
+    ["pdf", "jpg", "jpeg", "gif", "png"].forEach((extension) => {
       test(`with a valid extension (of .${extension}) which is above the size limit, shows an error`, async ({
         page,
       }) => {
