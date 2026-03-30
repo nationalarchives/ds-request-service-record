@@ -12,8 +12,8 @@ from app.lib.template_filters import (
     parse_bold_text,
     parse_first_birth_year_for_closed_records,
     parse_markdown_links,
-    prepare_page_type_for_analytics_meta_tag,
     prepare_page_title,
+    prepare_page_type_for_analytics_meta_tag,
     slugify,
 )
 from flask import Flask, redirect
