@@ -65,6 +65,34 @@ def test_upload_file_to_s3_valid_file_returns_filename(context):
     call_args = mock_s3.upload_fileobj.call_args
     assert call_args[0][1] == "test-bucket"
     assert call_args[0][2] == "override-name.png"
+    assert call_args.kwargs["ExtraArgs"] == {"ContentType": "image/png"}
+
+
+def test_upload_file_to_s3_pdf_uses_application_pdf_content_type(context):
+    content = b"%PDF-1.4\n..."
+    stream = io.BytesIO(content)
+    fs = FileStorage(
+        stream=stream,
+        filename="death-certificate.pdf",
+        content_type="application/octet-stream",
+    )
+
+    mock_s3 = MagicMock()
+    mock_s3.upload_fileobj = MagicMock(return_value=None)
+
+    mock_session = MagicMock()
+    mock_session.client.return_value = mock_s3
+
+    with patch("app.lib.aws.get_boto3_session", return_value=mock_session):
+        result = upload_file_to_s3(
+            file=fs,
+            bucket_name="test-bucket",
+            filename_override="override-name",
+        )
+
+    assert result == "override-name.pdf"
+    call_args = mock_s3.upload_fileobj.call_args
+    assert call_args.kwargs["ExtraArgs"] == {"ContentType": "application/pdf"}
 
 
 def test_move_proof_of_death_to_submitted_copies_and_deletes(context):
