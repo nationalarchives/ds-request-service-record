@@ -148,3 +148,34 @@ def prepare_page_title(ctx, title):
 
     parts = [p.strip() for p in (page_title, app_title) if p]
     return prefix + " - ".join(parts)
+
+
+def prepare_page_type_for_analytics_meta_tag(request_path):
+    if not request_path:
+        return ""
+
+    # Coerce string and remove whitespace
+    value = str(request_path).strip()
+    if not value:
+        return ""
+
+    # Remove leading and trailing slashes
+    value = value.strip("/")
+
+    base = "request-a-military-service-record"
+    suffix = "ramsr"
+
+    # If we're at the base path, return the base path and suffix
+    if value == base:
+        return f"{base}_{suffix}"
+
+    # If we're on another path, remove the base path, normalise to the first segment,
+    # and append the suffix so page_type stays stable and does not include dynamic IDs.
+    if value.startswith(f"{base}/"):
+        rest = value.removeprefix(f"{base}/")
+        first_segment = rest.split("/", 1)[0] if rest else ""
+        if not first_segment:
+            return f"{base}_{suffix}"
+        return f"{first_segment}_{suffix}"
+
+    return value

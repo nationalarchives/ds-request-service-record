@@ -1,4 +1,5 @@
 import io
+import mimetypes
 import os
 import uuid
 
@@ -67,10 +68,17 @@ def upload_file_to_s3(
         if filename_override:
             filename = _build_filename_with_extension(filename_override, file.filename)
 
+        content_type = _determine_content_type(file, filename)
+
         for attempt in range(1, current_app.config["MAX_UPLOAD_ATTEMPTS"] + 1):
             stream = io.BytesIO(data)
             try:
-                s3.upload_fileobj(stream, bucket_name, filename)
+                s3.upload_fileobj(
+                    stream,
+                    bucket_name,
+                    filename,
+                    ExtraArgs={"ContentType": content_type},
+                )
                 return filename
             except Exception as e:
                 current_app.logger.error(
@@ -174,6 +182,21 @@ def _get_proof_of_death_holding_prefix() -> str:
 
 def _get_proof_of_death_submitted_prefix() -> str:
     return current_app.config.get("PROOF_OF_DEATH_SUBMITTED_PREFIX")
+
+
+def _determine_content_type(file: FileStorage, filename: str) -> str:
+    """
+    Determine the content type of a file for uploading to S3.
+    """
+    content_type = (file.content_type or "").strip().lower()
+    if content_type and content_type != "application/octet-stream":
+        return content_type
+
+    guessed_content_type, _ = mimetypes.guess_type(filename)
+    if guessed_content_type:
+        return guessed_content_type
+
+    return "application/octet-stream"
 
 
 def send_email(to: str, subject: str, body: str) -> bool:

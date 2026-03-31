@@ -65,7 +65,7 @@ def start(form, state_machine):
         return redirect(url_for(state_machine.route_for_current_state))
 
     return render_template(
-        "main/request_a_military_service_record.html", form=form, content=load_content()
+        "main/request-a-military-service-record.html", form=form, content=load_content()
     )
 
 
