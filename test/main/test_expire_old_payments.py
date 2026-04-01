@@ -12,12 +12,16 @@ from app import create_app
 class DummyPayment:
     def __init__(
         self,
+        case_number: str,
+        reference: str,
         payment_id: str,
         email: str,
         first_name: str = "",
         last_name: str = "",
     ):
         self.id = payment_id
+        self.case_number = case_number
+        self.reference = reference
         self.payee_email = email
         self.first_name = first_name
         self.last_name = last_name
@@ -57,8 +61,22 @@ def _mock_query_chain(mock_db, payments):
 
 def test_expire_old_payments_updates_status_and_sends_email(context):
     payments = [
-        DummyPayment("pmt-1", "one@example.com", "Jane", "Doe"),
-        DummyPayment("pmt-2", "two@example.com", "", ""),
+        DummyPayment(
+            case_number="CASE-1",
+            reference="REF-1",
+            payment_id="pmt-1",
+            email="one@example.com",
+            first_name="Jane",
+            last_name="Doe",
+        ),
+        DummyPayment(
+            case_number="CASE-2",
+            reference="REF-2",
+            payment_id="pmt-2",
+            email="two@example.com",
+            first_name="",
+            last_name="",
+        ),
     ]
 
     with (
@@ -77,7 +95,12 @@ def test_expire_old_payments_updates_status_and_sends_email(context):
 
 
 def test_expire_old_payments_logs_when_email_fails(context):
-    payment = DummyPayment("pmt-3", "three@example.com")
+    payment = DummyPayment(
+        case_number="CASE-3",
+        reference="REF-3",
+        payment_id="pmt-3",
+        email="three@example.com",
+    )
 
     with (
         patch("expire_old_payments.db") as mock_db,
@@ -95,7 +118,12 @@ def test_expire_old_payments_logs_when_email_fails(context):
 
 
 def test_expire_old_payments_rolls_back_on_commit_error(context):
-    payment = DummyPayment("pmt-4", "four@example.com")
+    payment = DummyPayment(
+        case_number="CASE-4",
+        reference="REF-4",
+        payment_id="pmt-4",
+        email="four@example.com",
+    )
 
     with (
         patch("expire_old_payments.db") as mock_db,

@@ -41,7 +41,7 @@ def expire_old_payments(days: int = 30) -> int:
                 subject="Your payment link has expired",
                 body=(
                     f"Dear {name},\n\n"
-                    "Your payment link for your service record request has expired. "
+                    f"Your payment link for your service record request ({payment.case_number}) has expired. "
                     "Please contact us if you still need to make this payment.\n\n"
                     "Thank you,\n"
                     "Request a military service record team\n"
