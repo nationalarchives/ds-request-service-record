@@ -8,11 +8,12 @@ send to the MOD Copying API are retried.
 
 import os
 
-from app import create_app
 from app.lib.db.constants import PAID_STATUS, SENT_STATUS
 from app.lib.db.models import DynamicsPayment, db
 from app.lib.dynamics_handler import send_payment_to_mod_copying_app
 from flask import current_app
+
+from app import create_app
 
 
 def resend_paid_dynamics_payments() -> int:
