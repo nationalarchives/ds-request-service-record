@@ -2,6 +2,7 @@ from datetime import datetime
 
 import requests
 from app.lib.aws import send_email
+from app.lib.boundary_years import BoundaryYears
 from app.lib.db.models import DynamicsPayment, ServiceRecordRequest
 from flask import current_app
 
@@ -58,9 +59,11 @@ def send_request_to_dynamics(record: ServiceRecordRequest) -> bool:
 
 def closure_status_calculation(date_of_birth: str, has_proof_of_death: bool) -> str:
     dob = datetime.strptime(date_of_birth, "%d %B %Y")
-    age = datetime.now().year - dob.year
+    first_birth_year_for_closed_records = (
+        BoundaryYears.first_birth_year_for_closed_records()
+    )
 
-    if age >= 115:
+    if dob.year < first_birth_year_for_closed_records:
         closure_status = DynamicsClosureStatus.FOIOP
     else:
         if has_proof_of_death:
