@@ -52,7 +52,7 @@ from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 from app.main.forms.you_may_want_to_check_ancestry import YouMayWantToCheckAncestry
 from app.main.forms.your_contact_details import YourContactDetails
 from app.main.forms.your_order_summary import YourOrderSummary
-from flask import redirect, render_template, request, session, url_for
+from flask import current_app, redirect, render_template, request, session, url_for
 
 
 @bp.route("/", methods=["GET", "POST"])
@@ -544,12 +544,18 @@ def your_order_summary(form, state_machine):
         return redirect(url_for(state_machine.route_for_current_state))
 
     form_data = session.get("form_data", None)
-    order_summary_data = prepare_order_summary_data(form_data)
+
+    if not form_data:
+        return redirect(url_for("main.sorry_you_will_have_to_start_again"))
+
+    try:
+        order_summary_data = prepare_order_summary_data(form_data)
+    except ValueError as e:
+        current_app.logger.error(f"Error preparing order summary data: {e}")
+        order_summary_data = None
 
     if not order_summary_data:
-        return redirect(
-            url_for("main.start")
-        )  # TODO: What should the user see if order summary fails?
+        return redirect(url_for("main.sorry_you_will_have_to_start_again"))
 
     return render_template(
         "main/your-order-summary.html",
