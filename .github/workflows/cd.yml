@@ -17,7 +17,9 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Run tests
         uses: ./.github/actions/node-tests
 
@@ -26,7 +28,9 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Run tests
         uses: ./.github/actions/playwright-tests
 
@@ -35,7 +39,9 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Run tests
         uses: ./.github/actions/python-tests
 
@@ -44,7 +50,9 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Run tests
         uses: ./.github/actions/check-formatting
 
@@ -59,7 +67,9 @@ jobs:
       packages: write
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Generate version tag
         id: version-tag
         uses: nationalarchives/ds-docker-actions/.github/actions/get-version-tag@main
@@ -96,11 +106,12 @@ jobs:
       - build
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           repository: nationalarchives/ds-infrastructure-web
           ref: main
           token: ${{ secrets.ACTIONS_GITHUB_TOKEN }}
+          persist-credentials: false
       - name: Set up git config
         run: |
           git config user.name "${{ github.triggering_actor }}"
@@ -108,13 +119,17 @@ jobs:
       - name: Install jq
         run: sudo apt-get install jq
       - name: Update config
-        run: jq --indent 4 '(.services.requestservicerecord.version|="${{ needs.build.outputs.version }}")' config/develop.json > tmp.$$.json && mv tmp.$$.json config/develop.json
+        run: jq --indent 4 '(.services.requestservicerecord.version|="${NEEDS_BUILD_OUTPUTS_VERSION}")' config/develop.json > tmp.$$.json && mv tmp.$$.json config/develop.json
+        env:
+          NEEDS_BUILD_OUTPUTS_VERSION: ${{ needs.build.outputs.version }}
       - name: Push new version
         run: |
           git add config/develop.json
           COMMIT_MESSAGE_HEADER=$(git log -1 --pretty=%B | head -n 1)
-          git commit -m "Update requestservicerecord to v${{ needs.build.outputs.version }}" -m "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}"
+          git commit -m "Update requestservicerecord to v${NEEDS_BUILD_OUTPUTS_VERSION}" -m "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}"
           git push origin main
+        env:
+          NEEDS_BUILD_OUTPUTS_VERSION: ${{ needs.build.outputs.version }}
 
   update-dblclk:
     runs-on: ubuntu-latest
@@ -124,11 +139,12 @@ jobs:
       - build
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           repository: nationalarchives/ds-etna
           ref: proof-of-concept
           token: ${{ secrets.ACTIONS_GITHUB_TOKEN }}
+          persist-credentials: false
       - name: Set up git config
         run: |
           git config user.name "${{ github.triggering_actor }}"
@@ -137,10 +153,15 @@ jobs:
         uses: dcarbone/install-yq-action@v1.1.1
       - name: Update config
         run: |
-          yq '(.services.request-a-service-record.image|="ghcr.io/${{ github.repository_owner }}/${{ vars.DOCKER_IMAGE_NAME }}:${{ needs.build.outputs.version }}")' docker-compose.yml > tmp.$$.yml && mv tmp.$$.yml docker-compose.yml
+          yq '(.services.request-a-service-record.image|="ghcr.io/${{ github.repository_owner }}/${VARS_DOCKER_IMAGE_NAME}:${NEEDS_BUILD_OUTPUTS_VERSION}")' docker-compose.yml > tmp.$$.yml && mv tmp.$$.yml docker-compose.yml
+        env:
+          VARS_DOCKER_IMAGE_NAME: ${{ vars.DOCKER_IMAGE_NAME }}
+          NEEDS_BUILD_OUTPUTS_VERSION: ${{ needs.build.outputs.version }}
       - name: Push new version
         run: |
           git add docker-compose.yml
           COMMIT_MESSAGE_HEADER=$(git log -1 --pretty=%B | head -n 1)
-          git commit -m "Update request-a-service-record to v${{ needs.build.outputs.version }}" -m "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}"
+          git commit -m "Update request-a-service-record to v${NEEDS_BUILD_OUTPUTS_VERSION}" -m "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}"
           git push origin proof-of-concept
+        env:
+          NEEDS_BUILD_OUTPUTS_VERSION: ${{ needs.build.outputs.version }}

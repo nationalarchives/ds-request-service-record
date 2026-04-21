@@ -5,16 +5,11 @@ from urllib.parse import urlencode
 from app.constants import ExternalLinks
 from app.lib.boundary_years import BoundaryYears
 from jinja2 import pass_context
+from tna_utilities.string import slugify as slugify_util
 
 
 def slugify(s):
-    if not s:
-        return s
-    s = s.lower().strip()
-    s = re.sub(r"[^\w\s-]", "", s)
-    s = re.sub(r"[\s_-]+", "-", s)
-    s = re.sub(r"^-+|-+$", "", s)
-    return s
+    return slugify_util(s)
 
 
 def parse_markdown_links(s, new_tab=True):

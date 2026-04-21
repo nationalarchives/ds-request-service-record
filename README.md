@@ -59,7 +59,8 @@ In addition to the [base Docker image variables](https://github.com/nationalarch
 | `DEBUG`                           | If true, allow debugging[^1]                                                                     | `False`                                                   |
 | `SENTRY_DSN`                      | The Sentry DSN (project code)                                                                    | _none_                                                    |
 | `SENTRY_SAMPLE_RATE`              | How often to sample traces and profiles (0-1.0)                                                  | production: `0.1`, staging: `1`, develop: `0`             |
-| `COOKIE_DOMAIN`                   | The domain to save cookie preferences against                                                    | _none_                                                    |
+| `COOKIE_DOMAIN`                   | The domain to save cookie preferences against                                                    | `.nationalarchives.gov.uk`                                |
+| `COOKIE_PREFERENCES_URL`          | The URL for changing cookie preferences                                                          | `/cookies/`                                               |
 | `CSP_IMG_SRC`                     | A comma separated list of CSP rules for `img-src`                                                | `'self'`                                                  |
 | `CSP_SCRIPT_SRC`                  | A comma separated list of CSP rules for `script-src`                                             | `'self'`                                                  |
 | `CSP_STYLE_SRC`                   | A comma separated list of CSP rules for `style-src`                                              | `'self'`                                                  |
@@ -68,7 +69,7 @@ In addition to the [base Docker image variables](https://github.com/nationalarch
 | `CSP_MEDIA_SRC`                   | A comma separated list of CSP rules for `media-src`                                              | `'self'`                                                  |
 | `CSP_WORKER_SRC`                  | A comma separated list of CSP rules for `worker-src`                                             | `'self'`                                                  |
 | `CSP_FRAME_SRC`                   | A comma separated list of CSP rules for `frame-src`                                              | `'self'`                                                  |
-| `CSP_REPORT_URL`                  | The URL to report CSP violations to                                                              | _none_                                                    |
+| `CSP_REPORT_URI`                  | The URL to report CSP violations to                                                              | _none_                                                    |
 | `FORCE_HTTPS`                     | Redirect requests to HTTPS as part of the CSP                                                    | `False`                                                   |
 | `CACHE_TYPE`                      | https://flask-caching.readthedocs.io/en/latest/#configuring-flask-caching                        | _none_                                                    |
 | `CACHE_DEFAULT_TIMEOUT`           | The number of seconds to cache pages for                                                         | production: `300`, staging: `60`, develop: `1`, test: `1` |

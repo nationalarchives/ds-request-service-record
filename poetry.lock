@@ -361,18 +361,6 @@ flask = ">=2.2.5"
 sqlalchemy = ">=2.0.16"
 
 [[package]]
-name = "flask-talisman"
-version = "1.1.0"
-description = "HTTP security headers for Flask."
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "flask-talisman-1.1.0.tar.gz", hash = "sha256:c5f486f5f54420729f84b3c3850cd63f96e8b033a9629bee66c524ea363797ff"},
-    {file = "flask_talisman-1.1.0-py2.py3-none-any.whl", hash = "sha256:3c42b610ebe49b0e35ca150e179bf51aa1da01e4635b49a674868ea681046208"},
-]
-
-[[package]]
 name = "flask-wtf"
 version = "1.2.2"
 description = "Form rendering, validation, and CSRF protection for Flask with WTForms."
@@ -1228,6 +1216,25 @@ jinja2 = ">=3"
 wtforms = ["flask-wtf[email]"]
 
 [[package]]
+name = "tna-utilities"
+version = "1.4.0"
+description = "A library of common National Archives Python functions"
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "tna_utilities-1.4.0-py3-none-any.whl", hash = "sha256:0dcbb38efc1f27b87c3de47dc421bbf572595bb661127c0a893dff9981538022"},
+    {file = "tna_utilities-1.4.0.tar.gz", hash = "sha256:b36cd0319122d5f3ff2d17bf0f1193cae4924370ab6fcc60f8c07a5ad4b4bfe5"},
+]
+
+[package.dependencies]
+Flask = {version = "*", optional = true, markers = "extra == \"flask\""}
+requests = "*"
+
+[package.extras]
+flask = ["Flask"]
+
+[[package]]
 name = "typing-extensions"
 version = "4.15.0"
 description = "Backported and Experimental Type Hints for Python 3.9+"
@@ -1296,4 +1303,4 @@ email = ["email-validator"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.13"
-content-hash = "cb14168505d89fdea2d7b546fa32423baa5fca8ae8f07f946720ac7db3a43c03"
+content-hash = "23c9ef442622edb77dcb955383b0c50a5a1f400a03282ab4259313e5a2f7b220"

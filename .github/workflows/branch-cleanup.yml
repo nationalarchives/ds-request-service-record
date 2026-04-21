@@ -12,12 +12,19 @@ jobs:
     if: github.event.ref_type == 'branch' && github.event.ref != 'main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Get tag from deleted branch
         id: version-tag
-        run: echo "VERSION=$(echo "${{ github.event.ref }}" | sed -e 's,/,-,g')" >> "$GITHUB_OUTPUT"
+        run: echo "VERSION=$(echo "${EVENT_REF}" | sed -e 's,/,-,g')" >> "$GITHUB_OUTPUT"
+        env:
+          EVENT_REF: ${{ github.event.ref }}
       - name: Debug
-        run: echo "Clean up Docker image ${{ vars.DOCKER_IMAGE_NAME }}:${{ steps.version-tag.outputs.VERSION }}"
+        run: echo "Clean up Docker image ${VARS_DOCKER_IMAGE_NAME}:${STEPS_VERSION_TAG_OUTPUTS_VERSION}"
+        env:
+          VARS_DOCKER_IMAGE_NAME: ${{ vars.DOCKER_IMAGE_NAME }}
+          STEPS_VERSION_TAG_OUTPUTS_VERSION: ${{ steps.version-tag.outputs.VERSION }}
       - name: Delete image
         if: ${{ steps.version-tag.outputs.VERSION }}
         uses: bots-house/ghcr-delete-image-action@v1.1.0
