@@ -130,38 +130,3 @@ jobs:
           git push origin main
         env:
           NEEDS_BUILD_OUTPUTS_VERSION: ${{ needs.build.outputs.version }}
-
-  update-dblclk:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    needs:
-      - build
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          repository: nationalarchives/ds-etna
-          ref: proof-of-concept
-          token: ${{ secrets.ACTIONS_GITHUB_TOKEN }}
-          persist-credentials: false
-      - name: Set up git config
-        run: |
-          git config user.name "${{ github.triggering_actor }}"
-          git config user.email "<>"
-      - name: Install yq
-        uses: dcarbone/install-yq-action@v1.1.1
-      - name: Update config
-        run: |
-          yq '(.services.request-a-service-record.image|="ghcr.io/${{ github.repository_owner }}/${VARS_DOCKER_IMAGE_NAME}:${NEEDS_BUILD_OUTPUTS_VERSION}")' docker-compose.yml > tmp.$$.yml && mv tmp.$$.yml docker-compose.yml
-        env:
-          VARS_DOCKER_IMAGE_NAME: ${{ vars.DOCKER_IMAGE_NAME }}
-          NEEDS_BUILD_OUTPUTS_VERSION: ${{ needs.build.outputs.version }}
-      - name: Push new version
-        run: |
-          git add docker-compose.yml
-          COMMIT_MESSAGE_HEADER=$(git log -1 --pretty=%B | head -n 1)
-          git commit -m "Update request-a-service-record to v${NEEDS_BUILD_OUTPUTS_VERSION}" -m "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}"
-          git push origin proof-of-concept
-        env:
-          NEEDS_BUILD_OUTPUTS_VERSION: ${{ needs.build.outputs.version }}
