@@ -6,15 +6,15 @@ services:
         IMAGE: ghcr.io/nationalarchives/tna-python-dev
         IMAGE_TAG: preview
     environment:
-      - ENVIRONMENT_NAME=${ENVIRONMENT_NAME:-develop}
+      - ENVIRONMENT_NAME=${ENVIRONMENT_NAME:-localhost}
       - CONFIG=${CONFIG:-config.Develop}
-      - ALLOW_INSECURE=true
+      - BUILD_VERSION=local
       - DEBUG=true
       - SECRET_KEY=abc123
       - NPM_DEVELOP_COMMAND=dev
       - COOKIE_DOMAIN=localhost
-      - CSP_STYLE_SRC='self',fonts.googleapis.com,p.typekit.net,use.typekit.net
-      - CSP_FONT_SRC='self',fonts.gstatic.com,use.typekit.net
+      - CSP_STYLE_SRC=p.typekit.net,use.typekit.net
+      - CSP_FONT_SRC=use.typekit.net
       - SESSION_REDIS_URL=redis://redis:6379/0
       - SQLALCHEMY_DATABASE_URI=postgresql://postgres:postgres@db:5432/postgres
       - CACHE_TYPE=RedisCache
