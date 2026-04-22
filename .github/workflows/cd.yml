@@ -118,7 +118,7 @@ jobs:
       - name: Install jq
         run: sudo apt-get install jq
       - name: Update config
-        run: jq --indent 4 '(.services.requestservicerecord.version|="${NEEDS_BUILD_OUTPUTS_VERSION}")' config/develop.json > tmp.$$.json && mv tmp.$$.json config/develop.json
+        run: jq --indent 4 '(.services.requestservicerecord.version|="$NEEDS_BUILD_OUTPUTS_VERSION")' config/develop.json > tmp.$$.json && mv tmp.$$.json config/develop.json
         env:
           NEEDS_BUILD_OUTPUTS_VERSION: ${{ needs.build.outputs.version }}
       - name: Push new version
