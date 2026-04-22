@@ -118,14 +118,10 @@ jobs:
       - name: Install jq
         run: sudo apt-get install jq
       - name: Update config
-        run: jq --indent 4 '(.services.requestservicerecord.version|="$NEEDS_BUILD_OUTPUTS_VERSION")' config/develop.json > tmp.$$.json && mv tmp.$$.json config/develop.json
-        env:
-          NEEDS_BUILD_OUTPUTS_VERSION: ${{ needs.build.outputs.version }}
+        run: jq --indent 4 '(.services.requestservicerecord.version|="${{ needs.build.outputs.version }}")' config/develop.json > tmp.$$.json && mv tmp.$$.json config/develop.json
       - name: Push new version
         run: |
           git add config/develop.json
           COMMIT_MESSAGE_HEADER=$(git log -1 --pretty=%B | head -n 1)
-          git commit -m "Update requestservicerecord to v${NEEDS_BUILD_OUTPUTS_VERSION}" -m "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}"
+          git commit -m "Update requestservicerecord to v${{ needs.build.outputs.version }}" -m "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}"
           git push origin main
-        env:
-          NEEDS_BUILD_OUTPUTS_VERSION: ${{ needs.build.outputs.version }}
