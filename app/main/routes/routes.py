@@ -243,6 +243,7 @@ def we_are_unlikely_to_hold_officer_records__army(form, state_machine):
         content=load_content(),
         form=form,
         mod_service_link=ExternalLinks.MOD_SERVICE_DECEASED_SERVICEPERSON,
+        invitation_to_participate_in_research_link=ExternalLinks.OFFICER_ENDPOINT_SURVEY,
     )
 
 

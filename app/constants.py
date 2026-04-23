@@ -99,6 +99,7 @@ class ExternalLinks:
     INDIAN_ARMY_PERSONNEL_RESEARCH_GUIDE = "https://www.nationalarchives.gov.uk/help-with-your-research/research-guides/indian-army-personnel/"
     BRITISH_ARMY_FIRST_WORLD_WAR_RESEARCH_GUIDE = "https://www.nationalarchives.gov.uk/help-with-your-research/research-guides/british-army-soldiers-of-the-first-world-war/"
     CONTACT_US = "https://www.nationalarchives.gov.uk/contact-us/"
+    OFFICER_ENDPOINT_SURVEY = "https://www.smartsurvey.co.uk/s/1KKGX5/"
 
 
 FALLBACK_COUNTRY_CHOICES = [

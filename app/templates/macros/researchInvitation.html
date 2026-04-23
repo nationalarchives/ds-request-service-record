@@ -1,0 +1,14 @@
+{% macro researchInvitation(headingText, linkUrl, bodyText) %}
+  <div
+    class="tna-!--margin-top-l tna-!--padding-vertical-xs tna-!--margin-top-s tna-card--horizontal tna-card--padded tna-background-tint">
+    <hgroup class="tna-hgroup-s tna-card__heading">
+      <h2 class="tna-hgroup__title">
+        <a href="{{ linkUrl }}" target="_blank" rel="noreferrer noopener"
+           class="tna-card__heading-link">{{ headingText }}</a>
+      </h2>
+    </hgroup>
+    <div class="tna-card__body">
+      <p>{{ bodyText }}</p>
+    </div>
+  </div>
+{% endmacro %}
