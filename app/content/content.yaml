@@ -264,6 +264,11 @@ pages:
     list:
       - Grenadier Guards
       - Welsh Guards
+    invitation_to_participate_in_research:
+      heading: Register to take part in a research session (opens in new tab)
+      body:
+        We are looking for people who are requesting records for Commissioned Officers.
+        Help us develop this part of the service and receive a voucher for your time.
     call_to_action: Request from the Ministry of Defence
   we_do_not_have_records_for_people_born_after:
     heading: We do not have records for people born after 1939
