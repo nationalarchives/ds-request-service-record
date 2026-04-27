@@ -251,6 +251,11 @@ pages:
         If you have not done so already, we recommend you check with the Ministry of Defence first.
       - |
         We anticipate holding most Royal Air Force Commissioned Officer records by February 2027.
+    invitation_to_participate_in_research:
+      heading: Register to take part in a research session (opens in new tab)
+      body:
+        We are looking for people who are requesting records for Commissioned Officers.
+        Help us develop this part of the service and receive a voucher for your time.
     call_to_action: Request from the Ministry of Defence
   we_are_unlikely_to_hold_officer_records__army:
     heading: We are unlikely to hold this record yet
