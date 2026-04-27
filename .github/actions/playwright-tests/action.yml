@@ -8,7 +8,7 @@ runs:
         node-version: lts/jod
     - name: Get installed Playwright version
       id: playwright-version
-      run: echo "PLAYWRIGHT_VERSION=$(node -e "console.log(require('./package-lock.json').packages['node_modules/@playwright/test'].version)")" >> $GITHUB_OUTPUT
+      run: echo "PLAYWRIGHT_VERSION=$(jq -r '(.packages."node_modules/@playwright/test".version)' package-lock.json)" >> $GITHUB_OUTPUT
       shell: bash
     - name: Cache playwright binaries
       uses: actions/cache@6f8efc29b200d32929f49075959781ed54ec270c # v3.5.0
