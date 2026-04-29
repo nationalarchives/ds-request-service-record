@@ -12,6 +12,17 @@ test.describe("The variant of 'We are unlikely to hold this record' for Army Off
     await page.goto(Paths.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__GENERIC);
   });
 
+  test("tells users that Full record check is the only order option", async ({
+    page,
+  }) => {
+    await expect(page.locator("main")).toHaveText(
+      /Unless they served in the Royal Air Force/,
+    );
+    await expect(page.locator("main")).toHaveText(
+      /Commissioned Officer records can only be requested from us using a Full record check/,
+    );
+  });
+
   test("the 'Request from the Ministry of Defence' link is correct", async ({
     page,
   }) => {
