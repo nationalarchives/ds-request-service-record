@@ -12,6 +12,14 @@ test.describe("The variant of 'We are unlikely to hold this record' for Army Off
     await page.goto(Paths.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY);
   });
 
+  test("tells users that Full record check is the only order option", async ({
+    page,
+  }) => {
+    await expect(page.locator("main")).toHaveText(
+      /British Army Commissioned Officer records can only be requested from us using a Full record check/,
+    );
+  });
+
   test("the link inviting users to participate in user research is correct", async ({
     page,
   }) => {

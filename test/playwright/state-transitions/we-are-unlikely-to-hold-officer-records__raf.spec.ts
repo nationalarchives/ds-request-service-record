@@ -12,6 +12,14 @@ test.describe("The variant of 'We are unlikely to hold this record' for Army Off
     await page.goto(Paths.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__RAF);
   });
 
+  test("tells users RAF records are currently being transferred", async ({
+    page,
+  }) => {
+    await expect(page.locator("main")).toHaveText(
+      /Royal Air Force Commissioned Officer records are currently being transferred to us/,
+    );
+  });
+
   test("the link inviting users to participate in user research is correct", async ({
     page,
   }) => {
