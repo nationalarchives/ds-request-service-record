@@ -241,6 +241,9 @@ pages:
         Commissioned Officer records are currently being transferred to us. We may not hold the record you are looking for yet.
       - |
         If you have not done so already, we recommend you check with the Ministry of Defence first.
+      - |
+        Unless they served in the Royal Air Force, Commissioned Officer records can only be requested from us using a Full record check, 
+        our Standard option is not available yet.
     call_to_action: Request from the Ministry of Defence
   we_are_unlikely_to_hold_officer_records__raf:
     heading: We are unlikely to hold this record yet
@@ -264,6 +267,8 @@ pages:
         British Army Commissioned Officer records are currently being transferred to us. We may not hold the record you are looking for yet.
       - |
         We anticipate holding most Army Commissioned Officer records by December 2026.
+      - |
+        British Army Commissioned Officer records can only be requested from us using a Full record check, our Standard option is not available yet.
       - |
         We recommend you check with the Ministry of Defence first, unless the record is contained in list the below:
     list:
