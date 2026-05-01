@@ -26,7 +26,7 @@ class ServiceRecordRequest(db.Model):
     catalogue_reference = db.Column(db.String(64), nullable=True)
     other_last_names = db.Column(db.String(128), nullable=True)
     place_of_birth = db.Column(db.String(128), nullable=True)
-    regiment = db.Column(db.String(128), nullable=True)
+    regiment = db.Column(db.String(200), nullable=True)
     requester_address1 = db.Column(db.String(256))
     requester_address2 = db.Column(db.String(256), nullable=True)
     requester_contact_preference = db.Column(db.String(32))
