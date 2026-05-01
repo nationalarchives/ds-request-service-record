@@ -77,6 +77,9 @@ def calculate_amount_based_on_form_data(form_data: dict) -> int:
 
 
 def prepare_order_summary_data(form_data: dict) -> dict:
+    if not form_data:
+        raise ValueError("Form data is required to prepare order summary data")
+
     processing_option = form_data.get("processing_option", "standard")
     delivery_type = get_delivery_type(form_data)
 
