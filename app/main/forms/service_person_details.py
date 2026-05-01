@@ -115,7 +115,7 @@ class ServicePersonDetails(FlaskForm):
         widget=TnaTextInputWidget(),
         validators=[
             Length(
-                max=FIELD_LENGTH_LIMITS["l"],
+                max=FIELD_LENGTH_LIMITS["regiment_limit"],
                 message=get_field_content(content, "regiment", "messages")["too_long"],
             ),
         ],
