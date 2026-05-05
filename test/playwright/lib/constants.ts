@@ -31,6 +31,7 @@ export const Paths = {
   WHAT_WAS_THEIR_DATE_OF_BIRTH: `${basePath}/what-was-their-date-of-birth/`,
   YOUR_CONTACT_DETAILS: `${basePath}/your-contact-details/`,
   WHAT_IS_YOUR_ADDRESS: `${basePath}/what-is-your-address/`,
+  YOUR_ORDER_TYPE_BRITISH_ARMY_OFFICERS: `${basePath}/your-order-type-british-army-officers/`,
   YOUR_ORDER_SUMMARY: `${basePath}/your-order-summary/`,
   NOT_A_VALID_LINK: `${basePath}/not-a-valid-second-payment-link/`,
   PAYMENT_LINK_EXPIRED: `${basePath}/second-payment-link-expired/`,
