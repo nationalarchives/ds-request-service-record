@@ -530,3 +530,14 @@ export async function continueFromYourOrderTypeBritishArmyOfficers(page) {
     .click();
   await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
 }
+
+export async function continueFromYourOrderTypeOtherAndDontKnowOfficers(page) {
+  await expect(page).toHaveURL(
+    Paths.YOUR_ORDER_TYPE_OTHER_AND_DONT_KNOW_OFFICERS,
+  );
+  await expect(page.locator("h1")).toHaveText(/Your order type/);
+  await page
+    .getByRole("button", { name: "Request a Full record check" })
+    .click();
+  await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
+}

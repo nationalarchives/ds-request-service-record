@@ -54,6 +54,13 @@ from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 from app.main.forms.you_may_want_to_check_ancestry import YouMayWantToCheckAncestry
 from app.main.forms.your_contact_details import YourContactDetails
 from app.main.forms.your_order_summary import YourOrderSummary
+from app.main.forms.your_order_type_british_army_officers import (
+    YourOrderTypeBritishArmyOfficers,
+)
+from app.main.forms.your_order_type_other_and_dont_know_officers import (
+    YourOrderTypeOtherAndDontKnowOfficers,
+)
+
 from flask import redirect, render_template, request, session, url_for
 
 
@@ -628,6 +635,39 @@ def sorry_you_will_have_to_start_again(form, state_machine):
 
     return render_template(
         "main/sorry-you-will-have-to-start-again.html",
+        content=load_content(),
+        form=form,
+    )
+
+
+@bp.route("/your-order-type-british-army-officers/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(YourOrderTypeBritishArmyOfficers)
+@with_state_machine
+def your_order_type_british_army_officers(form, state_machine):
+    if form.validate_on_submit():
+        save_submitted_form_fields_to_session(form)
+        state_machine.continue_from_your_order_type_british_army_officer_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
+
+    return render_template(
+        "main/your-order-type-british-army-officers.html",
+        content=load_content(),
+        form=form,
+    )
+
+
+@bp.route("/your-order-type-other-and-dont-know-officers/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(YourOrderTypeOtherAndDontKnowOfficers)
+@with_state_machine
+def your_order_type_other_and_dont_know_officers(form, state_machine):
+    if form.validate_on_submit():
+        save_submitted_form_fields_to_session(form)
+        state_machine.continue_from_your_order_type_other_and_dont_know_officer_form(
+            form
+        )
+        return redirect(url_for(state_machine.route_for_current_state))
+    return render_template(
+        "main/your-order-type-other-and-dont-know-officers.html",
         content=load_content(),
         form=form,
     )
