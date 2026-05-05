@@ -18,6 +18,8 @@
           class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.have_you_previously_made_a_request.heading }}</h1>
         <form action="{{ url_for('main.have_you_previously_made_a_request') }}" method="post" novalidate>
           {{ form.csrf_token }}
+          {{ form.service_branch }}
+          {{ form.were_they_a_commissioned_officer }}
           <p>{{ content.pages.have_you_previously_made_a_request.prompt_to_provide_reference_number }}</p>
           {{ form.have_you_previously_made_a_request(params={'size':'m'}) }}
           {{ form.case_reference_number(params={'size':'m'}) }}

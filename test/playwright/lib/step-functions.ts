@@ -154,7 +154,7 @@ export async function continueFromWeAreUnlikelyToHoldThisRecord(
 ) {
   await expect(page).toHaveURL(pathVariant);
   await expect(page.locator("h1")).toHaveText(
-    /We are unlikely to hold this record/,
+    /We are unlikely to hold this record yet/,
   );
   await clickContinueThisRequestForm(page, "button");
 }
@@ -382,9 +382,12 @@ export async function continueFromServicePersonDetails(
 
 export async function continueFromHaveYouPreviouslyMadeARequest(
   page: any,
-  label: any,
-  errorMessage?: any,
-  populatedReferenceNumber?: any,
+  {
+    label = null,
+    errorMessage = null,
+    populatedReferenceNumber = null,
+    nextPath = null,
+  },
 ) {
   await expect(page).toHaveURL(Paths.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
   await expect(page.locator("h1")).toHaveText(
@@ -401,7 +404,7 @@ export async function continueFromHaveYouPreviouslyMadeARequest(
         errorMessage,
       );
     } else {
-      await expect(page).toHaveURL(Paths.CHOOSE_YOUR_ORDER_TYPE);
+      await expect(page).toHaveURL(nextPath || Paths.CHOOSE_YOUR_ORDER_TYPE);
     }
   }
 }
@@ -517,4 +520,13 @@ export async function clickContinueThisRequestForm(page, element) {
 export async function clickBackLink(page, expectedPath) {
   await page.getByRole("link", { name: "Back", exact: true }).click();
   await expect(page).toHaveURL(expectedPath);
+}
+
+export async function continueFromYourOrderTypeBritishArmyOfficers(page) {
+  await expect(page).toHaveURL(Paths.YOUR_ORDER_TYPE_BRITISH_ARMY_OFFICERS);
+  await expect(page.locator("h1")).toHaveText(/Your order type/);
+  await page
+    .getByRole("button", { name: "Request a Full record check" })
+    .click();
+  await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
 }
