@@ -14,70 +14,92 @@ import {
   continueFromWhatWasTheirDateOfBirth,
   continueFromWhichMilitaryBranchDidThePersonServeIn,
   continueFromYouMayWantToCheckAncestry,
-  continueFromYourOrderTypeBritishArmyOfficers,
+  continueFromYourOrderTypeOtherAndDontKnowOfficers,
 } from "../lib/step-functions";
-import { armyOfficer } from "../end-to-end/test-cases/your-order-type-variants/army-officer";
+import { otherOfficer } from "../end-to-end/test-cases/your-order-type-variants/other-officer";
+import { unknownOfficer } from "../end-to-end/test-cases/your-order-type-variants/unknown-officer";
 
-test.describe("the 'Your order type page for British Army officers' form", () => {
+test.describe("the 'Your order type for officers where service branch is 'other' or unknown form", () => {
+  const scenarios = [{ person: otherOfficer }, { person: unknownOfficer }];
+
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START);
   });
 
-  test("works as expected", async ({ page }) => {
-    test.setTimeout(120_000); // Increase timeout to 2 minutes for this test because it is end-to-end
+  async function runFromStartPageToYourOrderTypePage(page, person) {
+    test.setTimeout(120_000); // End-to-end path
+
     await continueFromJourneyStart(page);
     await continueFromHowWeProcessRequests(page);
     await continueFromBeforeYouStart(page, true);
     await continueFromYouMayWantToCheckAncestry(page);
+
     await continueFromIsServicePersonAlive(
       page,
-      armyOfficer.isAlive,
+      person.isAlive,
       Paths.WHICH_MILITARY_BRANCH_DID_THE_PERSON_SERVE_IN,
     );
+
     await continueFromWhichMilitaryBranchDidThePersonServeIn(
       page,
-      armyOfficer.serviceBranch,
+      person.serviceBranch,
       Paths.WERE_THEY_A_COMMISSIONED_OFFICER,
     );
+
     await continueFromWereTheyACommissionedOfficer(
       page,
-      armyOfficer.wasOfficer,
-      Paths.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY,
-      "unlikely-to-hold--army-officer-records",
+      person.wasOfficer,
+      Paths.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__GENERIC,
+      "we-are-unlikely-to-hold-this-record--generic",
     );
+
     await continueFromWeAreUnlikelyToHoldThisRecord(
       page,
-      Paths.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY,
+      Paths.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__GENERIC,
     );
+
     await continueFromWhatWasTheirDateOfBirth(
       page,
-      armyOfficer.dateOfBirth.day,
-      armyOfficer.dateOfBirth.month,
-      armyOfficer.dateOfBirth.year,
+      person.dateOfBirth.day,
+      person.dateOfBirth.month,
+      person.dateOfBirth.year,
       Paths.PROVIDE_A_PROOF_OF_DEATH,
       true,
       "",
     );
+
     await continueFromProvideAProofOfDeath(
       page,
-      armyOfficer.hasDeathCertificate,
+      person.hasDeathCertificate,
       Paths.UPLOAD_A_PROOF_OF_DEATH,
       "Upload a proof of death",
     );
+
     await continueFromUploadAProofOfDeath(
       page,
       ".jpg",
-      1024 * 1024 * 4, //  4MB
+      1024 * 1024 * 4,
       true,
       "",
     );
-    await continueFromServicePersonDetails(page, armyOfficer);
+
+    await continueFromServicePersonDetails(page, person);
+
     await continueFromHaveYouPreviouslyMadeARequest(page, {
-      label: armyOfficer.hasPreviouslyMadeRequest,
+      label: person.hasPreviouslyMadeRequest,
       errorMessage: null,
       populatedReferenceNumber: null,
-      nextPath: Paths.YOUR_ORDER_TYPE_BRITISH_ARMY_OFFICERS,
+      nextPath: Paths.YOUR_ORDER_TYPE_OTHER_AND_DONT_KNOW_OFFICERS,
     });
-    await continueFromYourOrderTypeBritishArmyOfficers(page);
+
+    await continueFromYourOrderTypeOtherAndDontKnowOfficers(page);
+  }
+
+  scenarios.forEach(({ person }) => {
+    test(`works as expected when service branch is '${person.serviceBranch}'`, async ({
+      page,
+    }) => {
+      await runFromStartPageToYourOrderTypePage(page, person);
+    });
   });
 });

@@ -412,6 +412,37 @@ pages:
               - The search fee is not refundable.
     final_paragraphs:
       - We will send you a digital colour scan of the record by email. You can request a printed copy by post for an extra cost.
+  your_order_type_other_and_dont_know_officers:
+    heading: Your order type
+    paragraphs:
+      - |
+        You are requesting a Commissioned Officer record. These can only be requested with a Full record check, our Standard option is not available.
+      - |
+        As Commissioned Officer records are currently being transferred to us from the Ministry of Defence, we recommend waiting until December 2026 to submit your request. By then, we anticipate most will have been transferred to us.
+    full_record_check:
+      heading: Full record check
+      paragraphs:
+        - |
+          Service records will, in most cases, contain sensitive information and will be closed to the public. However, we can complete a sensitivity check of the record to assess what can be released.
+        - |
+          In some cases, we will not be able to supply the entire record, or large parts of it will be redacted.
+        - |
+          We charge two fees for a Full record check. The first covers the search for the record and a page check. We will then email you a quote for the second payment to copy the parts of the record that can be released, priced per page. Commissioned Officer records can exceed 100 pages.
+      information_list:
+        list_items:
+          - term: What it costs
+            description:
+              - An upfront payment of £48.87, which covers the search (£38.95) and the page check (£9.92).
+              - A second payment of £1.04 per page. For example, 100 pages will cost an additional £104.
+          - term: When you will get the record
+            description:
+              - We aim to confirm if we hold the record within 30 working days. The record will be released once we have received the second payment.
+          - term: Refunds
+            description:
+              - We will refund the page check fee (£9.92) if we do not hold the record.
+              - The search fee is not refundable.
+    final_paragraphs:
+      - We will send you a digital colour scan of the record by email. You can request a printed copy by post for an extra cost.
   choose_your_order_type:
     heading: Choose your order type
     paragraphs:
@@ -709,4 +740,6 @@ forms:
     sorry_you_will_have_to_start_again:
       call_to_action: Start again
     your_order_type_british_army_officers:
+      call_to_action: Request a Full record check
+    your_order_type_other_and_dont_know_officers:
       call_to_action: Request a Full record check

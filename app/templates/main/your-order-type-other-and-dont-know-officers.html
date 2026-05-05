@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{%- set pageTitle = content.pages.your_order_type_other_and_dont_know_officers.heading | prepare_page_title -%}
+
+{% block beforeContent %}
+  {{ backLink(url_for('main.have_you_previously_made_a_request')) }}
+{% endblock beforeContent %}
+
+{% block content %}
+  <div class="tna-section tna-!--padding-top-s">
+    <div class="tna-container">
+      <div
+        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+        <h1
+          class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.your_order_type_other_and_dont_know_officers.heading }}</h1>
+        {% for paragraph in content.pages.your_order_type_other_and_dont_know_officers.paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+
+        <h2
+          class="tna-heading-l">{{ content.pages.your_order_type_other_and_dont_know_officers.full_record_check.heading }}</h2>
+        {% for paragraph in content.pages.your_order_type_other_and_dont_know_officers.full_record_check.paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+        {% if content.pages.your_order_type_other_and_dont_know_officers.full_record_check.information_list.list_items %}
+          {{ descriptionList(content.pages.your_order_type_other_and_dont_know_officers.full_record_check.information_list.list_items) }}
+        {% endif %}
+        {% for paragraph in content.pages.your_order_type_other_and_dont_know_officers.final_paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+        <div class="tna-!--margin-top-m">
+          <form action="{{ url_for('main.your_order_type_other_and_dont_know_officers') }}" method="post" novalidate>
+            {{ form.csrf_token }}
+            {{ form.processing_option(value='full', id='processing_option_full_record_check') }}
+            <div class="tna-button-group">
+              {{ form.submit(params={'classes': 'tna-button--accent'}) }}
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

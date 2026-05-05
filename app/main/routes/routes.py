@@ -58,6 +58,10 @@ from app.main.forms.your_order_type_british_army_officers import (
 
 from flask import redirect, render_template, request, session, url_for
 
+from app.main.forms.your_order_type_other_and_dont_know_officers import (
+    YourOrderTypeOtherAndDontKnowOfficers,
+)
+
 
 @bp.route("/", methods=["GET", "POST"])
 @with_state_machine
@@ -646,6 +650,23 @@ def your_order_type_british_army_officers(form, state_machine):
 
     return render_template(
         "main/your-order-type-british-army-officers.html",
+        content=load_content(),
+        form=form,
+    )
+
+
+@bp.route("/your-order-type-other-and-dont-know-officers/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(YourOrderTypeOtherAndDontKnowOfficers)
+@with_state_machine
+def your_order_type_other_and_dont_know_officers(form, state_machine):
+    if form.validate_on_submit():
+        save_submitted_form_fields_to_session(form)
+        state_machine.continue_from_your_order_type_other_and_dont_know_officer_form(
+            form
+        )
+        return redirect(url_for(state_machine.route_for_current_state))
+    return render_template(
+        "main/your-order-type-other-and-dont-know-officers.html",
         content=load_content(),
         form=form,
     )
