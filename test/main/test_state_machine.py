@@ -448,6 +448,7 @@ def test_continue_from_have_you_previously_made_a_request():
             service_number=None,
             regiment=None,
             additional_information=None,
+            were_they_a_commissioned_officer=None,
             submit=None,
         )
     )
@@ -623,3 +624,10 @@ def test_continue_from_sorry_you_will_have_to_start_again():
     )
     assert sm.current_state.id == "service_start_page"
     assert sm.route_for_current_state == MultiPageFormRoutes.JOURNEY_START.value
+
+
+def test_continue_from_your_order_type_british_army_officer_form():
+    sm = RoutingStateMachine()
+    sm.continue_from_your_order_type_british_army_officer_form()
+    assert sm.current_state.id == "your_contact_details_form"
+    assert sm.route_for_current_state == MultiPageFormRoutes.YOUR_CONTACT_DETAILS.value

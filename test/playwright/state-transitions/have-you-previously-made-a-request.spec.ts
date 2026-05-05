@@ -21,12 +21,12 @@ test.describe("have you previously made a request", () => {
     test("without a selection, the user is shown an error message", async ({
       page,
     }) => {
-      await continueFromHaveYouPreviouslyMadeARequest(
-        page,
-        "",
-        /Tell us if you have made a request for this record before/,
-        false,
-      );
+      await continueFromHaveYouPreviouslyMadeARequest(page, {
+        label: "",
+        errorMessage:
+          /Tell us if you have made a request for this record before/,
+        populatedReferenceNumber: false,
+      });
     });
 
     const selectionMappings = [
@@ -34,52 +34,51 @@ test.describe("have you previously made a request", () => {
         description:
           "with 'No' selected the user proceeds to the 'Choose your order type' page",
         label: "No",
-        populateReferenceNumber: false,
+        populatedReferenceNumber: false,
       },
       {
         description:
           "with MoD selected and no reference number provided, there is an error message",
         label: "Yes, to the Ministry of Defence",
-        populateReferenceNumber: false,
+        populatedReferenceNumber: false,
         errorMessage: /Enter the reference number for your previous request/,
       },
       {
         description:
           "with TNA selected and no reference number provided, there is an error message",
         label: "Yes, to The National Archives",
-        populateReferenceNumber: false,
+        populatedReferenceNumber: false,
         errorMessage: /Enter the reference number for your previous request/,
       },
       {
         description:
           "with TNA selected and an excessively long reference number provided, there is an error message",
         label: "Yes, to The National Archives",
-        populateReferenceNumber: "abcdefghijklmnopqrstuvwxyz".repeat(4),
+        populatedReferenceNumber: "abcdefghijklmnopqrstuvwxyz".repeat(4),
         errorMessage: /Reference number must be 64 characters or less/,
       },
       {
         description:
           "with MoD selected and a reference number provided, the user proceeds to the 'Choose your order type' page",
         label: "Yes, to the Ministry of Defence",
-        populateReferenceNumber: "ABC 123",
+        populatedReferenceNumber: "ABC 123",
       },
       {
         description:
           "with TNA selected and a reference number provided, the user proceeds to the 'Choose your order type' page",
         label: "Yes, to The National Archives",
-        populateReferenceNumber: "ABC 123",
+        populatedReferenceNumber: "ABC 123",
       },
     ];
 
     selectionMappings.forEach(
-      ({ description, label, errorMessage, populateReferenceNumber }) => {
+      ({ description, label, errorMessage, populatedReferenceNumber }) => {
         test(description, async ({ page }) => {
-          await continueFromHaveYouPreviouslyMadeARequest(
-            page,
+          await continueFromHaveYouPreviouslyMadeARequest(page, {
             label,
             errorMessage,
-            populateReferenceNumber,
-          );
+            populatedReferenceNumber,
+          });
         });
       },
     );
