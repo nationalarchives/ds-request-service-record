@@ -13,12 +13,17 @@ from wtforms import (
     RadioField,
     StringField,
     SubmitField,
+    HiddenField,
 )
 from wtforms.validators import InputRequired, Length
 
 
 class HaveYouPreviouslyMadeARequest(FlaskForm):
     content = load_content()
+
+    service_branch = HiddenField()
+
+    were_they_a_commissioned_officer = HiddenField()
 
     have_you_previously_made_a_request = RadioField(
         get_field_content(content, "have_you_previously_made_a_request", "label"),

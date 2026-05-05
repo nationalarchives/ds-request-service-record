@@ -71,10 +71,9 @@ test.describe("End-to-end journey", () => {
         "",
       );
       await continueFromServicePersonDetails(page, robertHughJones);
-      await continueFromHaveYouPreviouslyMadeARequest(
-        page,
-        robertHughJones.hasPreviouslyMadeRequest,
-      );
+      await continueFromHaveYouPreviouslyMadeARequest(page, {
+        label: robertHughJones.hasPreviouslyMadeRequest,
+      });
       await continueFromChooseYourOrderType(
         page,
         robertHughJones.orderSelection,

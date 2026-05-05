@@ -43,6 +43,7 @@ class MultiPageFormRoutes(Enum):
     HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST = "main.have_you_previously_made_a_request"
     YOUR_CONTACT_DETAILS = "main.your_contact_details"
     WHAT_IS_YOUR_ADDRESS = "main.what_is_your_address"
+    YOUR_ORDER_TYPE_BRITISH_ARMY_OFFICER = "main.your_order_type_british_army_officers"
     CHOOSE_YOUR_ORDER_TYPE = "main.choose_your_order_type"
     YOUR_ORDER_SUMMARY = "main.your_order_summary"
     SEND_TO_GOV_UK_PAY = "main.send_to_gov_uk_pay"
