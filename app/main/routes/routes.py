@@ -9,6 +9,9 @@ from app.lib.decorators.update_dynamic_back_link_mapping import (
 from app.lib.decorators.with_form_prefilled_from_session import (
     with_form_prefilled_from_session,
 )
+from app.lib.derive_if_change_order_is_available import (
+    derive_if_change_order_is_available,
+)
 from app.lib.get_dynamic_back_link_route import get_dynamic_back_link_route
 from app.lib.price_calculations import prepare_order_summary_data
 from app.lib.save_catalogue_reference_to_session import (
@@ -561,6 +564,8 @@ def your_order_summary(form, state_machine):
             url_for("main.start")
         )  # TODO: What should the user see if order summary fails?
 
+    can_change_order = derive_if_change_order_is_available(form_data)
+
     return render_template(
         "main/your-order-summary.html",
         content=load_content(),
@@ -568,6 +573,7 @@ def your_order_summary(form, state_machine):
         form_data=form_data,
         order_summary_data=order_summary_data,
         back_link_route=get_dynamic_back_link_route(key=request.endpoint),
+        can_change_order=can_change_order,
     )
 
 
