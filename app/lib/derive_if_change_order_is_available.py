@@ -22,6 +22,7 @@ def derive_if_change_order_is_available(form_data: Optional[dict]) -> bool:
         bool: True if the user can change their order, False otherwise.
               Returns True if:
               - Service person was not an officer (was "no"), OR
+              - Service person may have been an officer (was "unknown"), OR
               - Service person was an officer ("yes") AND service branch is "ROYAL_AIR_FORCE"
 
               Returns False in all other cases.
@@ -34,6 +35,10 @@ def derive_if_change_order_is_available(form_data: Optional[dict]) -> bool:
 
     # If service person was not an officer, return True
     if officer_status == "no":
+        return True
+
+    # If officer status is unknown, return True
+    if officer_status == "unknown":
         return True
 
     # If service person was an officer AND service branch is RAF, return True

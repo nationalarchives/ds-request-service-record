@@ -176,7 +176,7 @@ test.describe("'Change order' availability rules on 'Your order summary'", () =>
       wasOfficer: "I do not know",
       nextUrlAfterOfficerSelection: Paths.WE_MAY_HOLD_THIS_RECORD,
       expectedTemplateIdentifier: "we-may-hold-this-record--generic",
-      isChangeOrderAvailable: false,
+      isChangeOrderAvailable: true,
     },
   ];
 

@@ -78,4 +78,4 @@ class TestDeriveIfChangeOrderIsAvailable:
                 "were_they_a_commissioned_officer": "unknown",
                 "service_branch": branch,
             }
-            assert derive_if_change_order_is_available(form_data) is False
+            assert derive_if_change_order_is_available(form_data) is True
