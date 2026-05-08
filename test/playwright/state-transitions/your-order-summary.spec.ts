@@ -5,12 +5,17 @@ import {
   continueFromChooseYourOrderType,
   continueFromYourContactDetails,
   continueFromYourPostalAddress,
+  continueToChooseYourOrderTypeFromJourneyStart,
 } from "../lib/step-functions";
 
 test.describe("Routes to 'Your order summary'", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(Paths.JOURNEY_START);
-    await page.goto(Paths.CHOOSE_YOUR_ORDER_TYPE);
+    test.setTimeout(120_000); // Increase timeout to 2 minutes for this test because it is end-to-end
+    await continueToChooseYourOrderTypeFromJourneyStart(page, {
+      isAlive: "No",
+      serviceBranch: "British Army",
+      wasOfficer: "No",
+    });
   });
 
   const providedByPostTests = [
@@ -130,6 +135,72 @@ test.describe("Routes to 'Your order summary'", () => {
       await continueFromYourContactDetails(page, personMakingRequest);
       await page.getByRole("link", { name: "Change order" }).click();
       await expect(page).toHaveURL(Paths.CHOOSE_YOUR_ORDER_TYPE);
+    });
+  }
+});
+
+test.describe("'Change order' availability rules on 'Your order summary'", () => {
+  // These are just a sample of combinations - the full range of combinations is
+  // covered by unit tests.
+  const changeOrderAvailabilityScenarios = [
+    {
+      description: "when the service person was not an officer",
+      serviceBranch: "British Army",
+      wasOfficer: "No",
+      nextUrlAfterOfficerSelection: Paths.WE_MAY_HOLD_THIS_RECORD,
+      expectedTemplateIdentifier: "we-may-hold-this-record--generic",
+      isChangeOrderAvailable: true,
+    },
+    {
+      description:
+        "when the service person was an officer in the Royal Air Force",
+      serviceBranch: "Royal Air Force",
+      wasOfficer: "Yes",
+      nextUrlAfterOfficerSelection:
+        Paths.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__RAF,
+      expectedTemplateIdentifier: "unlikely-to-hold--raf-officer-records",
+      isChangeOrderAvailable: true,
+    },
+    {
+      description: "when the service person was an officer in a non-RAF branch",
+      serviceBranch: "British Army",
+      wasOfficer: "Yes",
+      nextUrlAfterOfficerSelection:
+        Paths.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY,
+      expectedTemplateIdentifier: "unlikely-to-hold--army-officer-records",
+      isChangeOrderAvailable: false,
+    },
+    {
+      description: "when officer status is unknown",
+      serviceBranch: "Royal Air Force",
+      wasOfficer: "I do not know",
+      nextUrlAfterOfficerSelection: Paths.WE_MAY_HOLD_THIS_RECORD,
+      expectedTemplateIdentifier: "we-may-hold-this-record--generic",
+      isChangeOrderAvailable: true,
+    },
+  ];
+
+  for (const scenario of changeOrderAvailabilityScenarios) {
+    test(`the 'Change order' link is ${scenario.isChangeOrderAvailable ? "" : "not "}shown ${scenario.description}`, async ({
+      page,
+    }) => {
+      await continueToChooseYourOrderTypeFromJourneyStart(page, scenario);
+      await continueFromChooseYourOrderType(page, "Choose standard");
+      await continueFromYourContactDetails(page, {
+        firstName: "Francis",
+        lastName: "Palgrave",
+        emailAddress: "test@example.com",
+      });
+
+      const changeOrderLink = page.getByRole("link", { name: "Change order" });
+
+      if (scenario.isChangeOrderAvailable) {
+        await expect(changeOrderLink).toBeVisible();
+        await changeOrderLink.click();
+        await expect(page).toHaveURL(Paths.CHOOSE_YOUR_ORDER_TYPE);
+      } else {
+        await expect(changeOrderLink).toHaveCount(0);
+      }
     });
   }
 });
