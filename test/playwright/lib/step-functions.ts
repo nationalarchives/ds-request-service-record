@@ -549,13 +549,17 @@ export async function continueFromYourOrderTypeOtherAndDontKnowOfficers(page) {
 export async function continueToChooseYourOrderTypeFromJourneyStart(
   page,
   {
-    isAlive,
+    isAlive = "No",
     serviceBranch,
     wasOfficer,
+    nextUrlAfterOfficerSelection = Paths.WE_MAY_HOLD_THIS_RECORD,
+    expectedTemplateIdentifier = "we-may-hold-this-record--generic",
   }: {
-    isAlive: string;
+    isAlive?: string;
     serviceBranch: string;
     wasOfficer: string;
+    nextUrlAfterOfficerSelection?: string;
+    expectedTemplateIdentifier?: string;
   },
 ) {
   await page.goto(Paths.JOURNEY_START);
@@ -576,8 +580,8 @@ export async function continueToChooseYourOrderTypeFromJourneyStart(
   await continueFromWereTheyACommissionedOfficer(
     page,
     wasOfficer,
-    Paths.WE_MAY_HOLD_THIS_RECORD,
-    "we-may-hold-this-record--generic",
+    nextUrlAfterOfficerSelection,
+    expectedTemplateIdentifier,
   );
 
   await page.goto(Paths.CHOOSE_YOUR_ORDER_TYPE);
