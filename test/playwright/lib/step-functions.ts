@@ -541,3 +541,44 @@ export async function continueFromYourOrderTypeOtherAndDontKnowOfficers(page) {
     .click();
   await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
 }
+
+/**
+ * Builds the journey state needed for order-summary tests, then navigates
+ * directly to Choose your order type once the required prior answers are set.
+ */
+export async function continueToChooseYourOrderTypeFromJourneyStart(
+  page,
+  {
+    isAlive,
+    serviceBranch,
+    wasOfficer,
+  }: {
+    isAlive: string;
+    serviceBranch: string;
+    wasOfficer: string;
+  },
+) {
+  await page.goto(Paths.JOURNEY_START);
+  await continueFromJourneyStart(page);
+  await continueFromHowWeProcessRequests(page);
+  await continueFromBeforeYouStart(page, true);
+  await continueFromYouMayWantToCheckAncestry(page);
+  await continueFromIsServicePersonAlive(
+    page,
+    isAlive,
+    Paths.WHICH_MILITARY_BRANCH_DID_THE_PERSON_SERVE_IN,
+  );
+  await continueFromWhichMilitaryBranchDidThePersonServeIn(
+    page,
+    serviceBranch,
+    Paths.WERE_THEY_A_COMMISSIONED_OFFICER,
+  );
+  await continueFromWereTheyACommissionedOfficer(
+    page,
+    wasOfficer,
+    Paths.WE_MAY_HOLD_THIS_RECORD,
+    "we-may-hold-this-record--generic",
+  );
+
+  await page.goto(Paths.CHOOSE_YOUR_ORDER_TYPE);
+}
