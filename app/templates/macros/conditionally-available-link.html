@@ -1,0 +1,7 @@
+{% macro conditionallyAvailableLink(route_name, content, should_render=True) -%}
+  {% if should_render %}
+    <a href="{{ url_for(route_name) }}" class="tna-button tna-button--plain">
+      {{ content }}
+    </a>
+  {% endif %}
+{%- endmacro %}
