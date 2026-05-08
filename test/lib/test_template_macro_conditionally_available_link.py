@@ -16,13 +16,13 @@ def test_conditionally_available_link_renders_route_href_text_and_classes(app):
             "macros/conditionally-available-link.html"
         )
         rendered = macro_template.module.conditionallyAvailableLink(
-            "main.choose_your_order_type", "Change order type", True
+            "main.choose_your_order_type", "Change order", True
         )
 
         expected_href = url_for("main.choose_your_order_type")
 
     assert f'href="{expected_href}"' in rendered
-    assert "Change order type" in rendered
+    assert "Change order" in rendered
 
 
 def test_conditionally_available_link_raises_for_invalid_route_name(app):
@@ -43,7 +43,7 @@ def test_conditionally_available_link_renders_nothing_when_flag_is_false(app):
             "macros/conditionally-available-link.html"
         )
         rendered = macro_template.module.conditionallyAvailableLink(
-            "main.choose_your_order_type", "Change order type", False
+            "main.choose_your_order_type", "Change order", False
         )
 
     assert rendered.strip() == ""
@@ -55,10 +55,10 @@ def test_conditionally_available_link_renders_when_should_render_omitted(app):
             "macros/conditionally-available-link.html"
         )
         rendered = macro_template.module.conditionallyAvailableLink(
-            "main.choose_your_order_type", "Change order type"
+            "main.choose_your_order_type", "Change order"
         )
 
         expected_href = url_for("main.choose_your_order_type")
 
     assert f'href="{expected_href}"' in rendered
-    assert "Change order type" in rendered
+    assert "Change order" in rendered
