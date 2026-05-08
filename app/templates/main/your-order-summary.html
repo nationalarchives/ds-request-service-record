@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {%- from 'macros/order-price.html' import orderPrice %}
+{%- from 'macros/conditionally-available-link.html' import conditionallyAvailableLink %}
 
 {%- set pageTitle = content.pages.your_order_summary.heading | prepare_page_title -%}
 
@@ -48,9 +49,7 @@
           <form action="{{ url_for('main.your_order_summary') }}" method="post" novalidate>
             {{ form.csrf_token }}
             <div class="tna-button-group">
-              <a href="{{ url_for('main.choose_your_order_type') }}" class="tna-button tna-button--plain">
-                {{ content.pages.your_order_summary.change_order_type }}
-              </a>
+              {{ conditionallyAvailableLink('main.choose_your_order_type', content.pages.your_order_summary.change_order_type) }}
               {{ form.submit(params={'classes': 'tna-button--accent'}) }}
             </div>
           </form>
