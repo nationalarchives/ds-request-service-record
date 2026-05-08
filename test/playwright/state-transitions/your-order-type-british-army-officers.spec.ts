@@ -1,6 +1,7 @@
 import { test } from "@playwright/test";
 import { Paths } from "../lib/constants";
 import {
+  clickBackLink,
   continueFromBeforeYouStart,
   continueFromHaveYouPreviouslyMadeARequest,
   continueFromHowWeProcessRequests,
@@ -79,5 +80,8 @@ test.describe("the 'Your order type page for British Army officers' form", () =>
       nextPath: Paths.YOUR_ORDER_TYPE_BRITISH_ARMY_OFFICERS,
     });
     await continueFromYourOrderTypeBritishArmyOfficers(page);
+    // the previous step function results in the user being on "Your contact details"
+    // so we check the back link takes them back to the correct order type variant
+    await clickBackLink(page, Paths.YOUR_ORDER_TYPE_BRITISH_ARMY_OFFICERS);
   });
 });

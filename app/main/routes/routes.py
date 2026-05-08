@@ -243,6 +243,7 @@ def we_do_not_have_royal_navy_service_records(form, state_machine):
 @update_dynamic_back_link_mapping(
     mappings={
         MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH: MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY,
+        MultiPageFormRoutes.YOUR_CONTACT_DETAILS: MultiPageFormRoutes.YOUR_ORDER_TYPE_BRITISH_ARMY_OFFICER,
     }
 )
 @with_state_machine
@@ -288,6 +289,7 @@ def we_are_unlikely_to_hold_officer_records__raf(form, state_machine):
 @update_dynamic_back_link_mapping(
     mappings={
         MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH: MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__GENERIC,
+        MultiPageFormRoutes.YOUR_CONTACT_DETAILS: MultiPageFormRoutes.YOUR_ORDER_TYPE_OTHER_AND_DONT_KNOW_OFFICER,
     }
 )
 @with_form_prefilled_from_session(WeAreUnlikelyToHoldThisRecord)
@@ -463,7 +465,10 @@ def your_contact_details(form, state_machine):
         state_machine.continue_from_your_contact_details_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/your-contact-details.html", form=form, content=load_content()
+        "main/your-contact-details.html",
+        form=form,
+        content=load_content(),
+        back_link_route=get_dynamic_back_link_route(key=request.endpoint),
     )
 
 
@@ -508,6 +513,11 @@ def what_is_your_address(form, state_machine):
 
 
 @bp.route("/choose-your-order-type/", methods=["GET", "POST"])
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.YOUR_CONTACT_DETAILS: MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE,
+    }
+)
 @with_state_machine
 def choose_your_order_type(state_machine):
     form = ChooseYourOrderType()
