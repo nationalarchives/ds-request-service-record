@@ -5,12 +5,16 @@ import {
   continueFromChooseYourOrderType,
   continueFromYourContactDetails,
   continueFromYourPostalAddress,
+  continueToChooseYourOrderTypeFromJourneyStart,
 } from "../lib/step-functions";
 
 test.describe("Routes to 'Your order summary'", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(Paths.JOURNEY_START);
-    await page.goto(Paths.CHOOSE_YOUR_ORDER_TYPE);
+    await continueToChooseYourOrderTypeFromJourneyStart(page, {
+      isAlive: "No",
+      serviceBranch: "British Army",
+      wasOfficer: "No",
+    });
   });
 
   const providedByPostTests = [
