@@ -1,6 +1,7 @@
 import { test } from "@playwright/test";
 import { Paths } from "../lib/constants";
 import {
+  clickBackLink,
   continueFromBeforeYouStart,
   continueFromHaveYouPreviouslyMadeARequest,
   continueFromHowWeProcessRequests,
@@ -100,6 +101,12 @@ test.describe("the 'Your order type for officers where service branch is 'other'
       page,
     }) => {
       await runFromStartPageToYourOrderTypePage(page, person);
+      // the previous step function results in the user being on "Your contact details"
+      // so we check the back link takes them back to the correct order type variant
+      await clickBackLink(
+        page,
+        Paths.YOUR_ORDER_TYPE_OTHER_AND_DONT_KNOW_OFFICERS,
+      );
     });
   });
 });
