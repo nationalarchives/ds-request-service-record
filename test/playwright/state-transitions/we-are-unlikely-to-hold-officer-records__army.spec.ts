@@ -16,7 +16,7 @@ test.describe("The variant of 'We are unlikely to hold this record' for Army Off
     page,
   }) => {
     await expect(page.locator("main")).toHaveText(
-      /British Army Commissioned Officer records can only be requested from us using a Full record check/,
+      /These records can only be requested from us using a Full record check/,
     );
   });
 
