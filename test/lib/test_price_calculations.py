@@ -242,6 +242,13 @@ def test_calculate_amount_when_delivery_fee_api_fails(app_context):
             calculate_amount_based_on_form_data(form_data)
 
 
+def test_prepare_order_summary_data_when_form_data_is_none(app_context):
+    """Test order summary preparation returns None when form data is None."""
+    result = prepare_order_summary_data(None)
+
+    assert result is None
+
+
 def test_prepare_order_summary_data_when_api_fails(app_context):
     """Test order summary preparation when delivery fee API fails."""
     form_data = {

@@ -77,6 +77,10 @@ def calculate_amount_based_on_form_data(form_data: dict) -> int:
 
 
 def prepare_order_summary_data(form_data: dict) -> dict:
+    if not form_data:
+        current_app.logger.error("prepare_order_summary_data called with no form data")
+        return None
+
     processing_option = form_data.get("processing_option", "standard")
     delivery_type = get_delivery_type(form_data)
 
