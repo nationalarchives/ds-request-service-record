@@ -25,7 +25,10 @@ class DummyPayment:
 
 @pytest.fixture(scope="module")
 def app():
-    return create_app("config.Test")
+    app = create_app("config.Test")
+    # We need to disable CSRF protection for those tests that POST to routes which use form.validate_on_submit()
+    app.config["WTF_CSRF_ENABLED"] = False
+    return app
 
 
 @pytest.fixture()
@@ -204,3 +207,71 @@ def test_handle_gov_uk_pay_response_unsuccessful_payment_does_not_clear_session(
     mock_fetch.assert_called_once_with("service_record", "TEST-ID")
     mock_get_payment_data.assert_called_once_with("GOV-UK-PAY-ID")
     mock_process_service_record_payment.assert_not_called()
+
+
+def test_your_order_summary_redirects_to_start_when_form_data_missing(client, app):
+    """Test that your order summary redirects to service start page when form data is missing from session."""
+    with client.session_transaction() as sess:
+        sess["entered_through_index_page"] = True
+
+    rv = client.get(f"{app.config.get('SERVICE_URL_PREFIX')}/your-order-summary/")
+
+    assert rv.status_code == 302
+    assert rv.location.endswith(f"{app.config.get('SERVICE_URL_PREFIX')}/")
+
+
+def test_your_order_summary_renders_when_form_data_present(client, app):
+    """Test that "Your order summary" renders when form data is present in the session."""
+    with client.session_transaction() as sess:
+        sess["entered_through_index_page"] = True
+        sess["form_data"] = {
+            "processing_option": "standard",
+            "does_not_have_email": False,
+        }
+
+    rv = client.get(f"{app.config.get('SERVICE_URL_PREFIX')}/your-order-summary/")
+
+    assert rv.status_code == 200
+    assert "Your order summary" in rv.text
+
+
+def test_payment_incomplete_continue_redirects_to_order_summary_when_form_data_present(
+    client, app
+):
+    """Test that payment incomplete redirects to order summary when it is requested."""
+    with client.session_transaction() as sess:
+        sess["entered_through_index_page"] = True
+        sess["form_data"] = {
+            "processing_option": "standard",
+            "does_not_have_email": False,
+        }
+
+    rv = client.post(
+        f"{app.config.get('SERVICE_URL_PREFIX')}/payment-incomplete/",
+        data={"submit": "1"},
+    )
+
+    assert rv.status_code == 302
+    assert rv.location.endswith(
+        f"{app.config.get('SERVICE_URL_PREFIX')}/your-order-summary/"
+    )
+
+
+def test_payment_incomplete_continue_redirects_to_order_summary_when_form_data_missing(
+    client, app
+):
+    """
+    Test that payment incomplete ultimately redirects to order summary even when form data is missing.
+    Note: in actuality, this redirect is via the guarded "Your order summary" route (hence the `follow_redirects`)
+    """
+    with client.session_transaction() as sess:
+        sess["entered_through_index_page"] = True
+
+    rv = client.post(
+        f"{app.config.get('SERVICE_URL_PREFIX')}/payment-incomplete/",
+        data={"submit": "1"},
+        follow_redirects=True,
+    )
+
+    assert rv.status_code == 200
+    assert app.config.get("SERVICE_URL_PREFIX") in rv.request.path
