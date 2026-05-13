@@ -68,10 +68,13 @@ def create_app(config_class):
         content_security_policy=app.config["CONTENT_SECURITY_POLICY"],
         allow_google_content_security_policy=True,
         force_https=app.config["FORCE_HTTPS"],
-        extra_headers={
-            "Cache-Control": "no-cache, no-store, must-revalidate",
-        }
     )
+
+    @app.after_request
+    def apply_extra_headers(response):
+        if "Cache-Control" not in response.headers:
+            response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        return response
 
     WTFormsHelpers(app)
 
