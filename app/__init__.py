@@ -73,7 +73,7 @@ def create_app(config_class):
     @app.after_request
     def apply_extra_headers(response):
         if "Cache-Control" not in response.headers:
-            response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+            response.headers["Cache-Control"] = "no-store"
         return response
 
     WTFormsHelpers(app)
