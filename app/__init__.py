@@ -68,6 +68,9 @@ def create_app(config_class):
         content_security_policy=app.config["CONTENT_SECURITY_POLICY"],
         allow_google_content_security_policy=True,
         force_https=app.config["FORCE_HTTPS"],
+        extra_headers={
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+        }
     )
 
     WTFormsHelpers(app)
