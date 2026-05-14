@@ -70,6 +70,12 @@ def create_app(config_class):
         force_https=app.config["FORCE_HTTPS"],
     )
 
+    @app.after_request
+    def apply_extra_headers(response):
+        if "Cache-Control" not in response.headers:
+            response.headers["Cache-Control"] = "no-store"
+        return response
+
     WTFormsHelpers(app)
 
     app.jinja_env.trim_blocks = True
