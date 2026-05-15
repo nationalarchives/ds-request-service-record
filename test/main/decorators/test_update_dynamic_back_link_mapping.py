@@ -1,10 +1,11 @@
 # python
 import pytest
+from flask import Flask, session
+
 from app.constants import MultiPageFormRoutes
 from app.lib.decorators.update_dynamic_back_link_mapping import (
     update_dynamic_back_link_mapping,
 )
-from flask import Flask, session
 
 
 @pytest.fixture

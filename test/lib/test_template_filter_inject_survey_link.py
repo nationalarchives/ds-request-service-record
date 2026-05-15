@@ -1,4 +1,5 @@
 import pytest
+
 from app.lib.template_filters import inject_unique_survey_link
 
 MODULE_PATH = "app.lib.template_filters"

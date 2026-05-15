@@ -1,7 +1,8 @@
 import pytest
+from flask import Flask, session
+
 from app.constants import MultiPageFormRoutes
 from app.lib.get_dynamic_back_link_route import get_dynamic_back_link_route
-from flask import Flask, session
 
 
 @pytest.fixture

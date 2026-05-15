@@ -1,8 +1,3 @@
-from app.constants import FIELD_LENGTH_LIMITS
-from app.lib.content import get_field_content, load_content
-from app.main.forms.validation_helpers.text_field_conditionally_required import (
-    text_field_required_unless_radio_has_specific_selection,
-)
 from flask_wtf import FlaskForm
 from tna_frontend_jinja.wtforms import (
     TnaRadiosWidget,
@@ -15,6 +10,12 @@ from wtforms import (
     SubmitField,
 )
 from wtforms.validators import InputRequired, Length
+
+from app.constants import FIELD_LENGTH_LIMITS
+from app.lib.content import get_field_content, load_content
+from app.main.forms.validation_helpers.text_field_conditionally_required import (
+    text_field_required_unless_radio_has_specific_selection,
+)
 
 
 class HaveYouPreviouslyMadeARequest(FlaskForm):

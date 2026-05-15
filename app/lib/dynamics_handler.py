@@ -1,10 +1,11 @@
 from datetime import datetime
 
 import requests
+from flask import current_app
+
 from app.lib.aws import send_email
 from app.lib.boundary_years import BoundaryYears
 from app.lib.db.models import DynamicsPayment, ServiceRecordRequest
-from flask import current_app
 
 DYNAMICS_REQUEST_FIELD_MAP = [
     ("mandatory_forename", "requester_first_name"),

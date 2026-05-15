@@ -2,6 +2,12 @@ import logging
 import os
 
 import sentry_sdk
+from flask import Flask, redirect
+from flask_session import Session
+from jinja2 import ChoiceLoader, PackageLoader
+from tna_frontend_jinja.wtforms.helpers import WTFormsHelpers
+from werkzeug.utils import import_string
+
 from app.lib.cache import cache
 from app.lib.context_processor import cookie_preference, now_iso_8601
 from app.lib.db.models import db
@@ -17,11 +23,6 @@ from app.lib.template_filters import (
     prepare_page_type_for_analytics_meta_tag,
     slugify,
 )
-from flask import Flask, redirect
-from flask_session import Session
-from jinja2 import ChoiceLoader, PackageLoader
-from tna_frontend_jinja.wtforms.helpers import WTFormsHelpers
-from werkzeug.utils import import_string
 
 
 def create_app(config_class):

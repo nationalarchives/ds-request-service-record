@@ -1,4 +1,5 @@
 import pytest
+
 from app.lib.template_filters import parse_bold_text
 
 

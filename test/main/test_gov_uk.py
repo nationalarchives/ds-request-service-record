@@ -1,12 +1,12 @@
 from unittest.mock import MagicMock, patch
 
 import pytest
+
+from app import create_app
 from app.lib.gov_uk_pay import (
     GOVUKPayAPIClient,
     create_payment,
 )
-
-from app import create_app
 
 
 @pytest.fixture(scope="module")

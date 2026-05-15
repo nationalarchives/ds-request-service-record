@@ -1,5 +1,6 @@
-from app.sitemap import bp
 from flask import make_response, render_template
+
+from app.sitemap import bp
 
 
 @bp.route("/sitemap.xml")

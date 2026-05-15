@@ -1,8 +1,9 @@
 import inspect
 from functools import wraps
 
-from app.lib.state_machine.state_machine import RoutingStateMachine
 from flask import g
+
+from app.lib.state_machine.state_machine import RoutingStateMachine
 
 
 def with_state_machine(function):

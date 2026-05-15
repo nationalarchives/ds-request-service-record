@@ -1,5 +1,8 @@
 from datetime import datetime
 
+from flask import current_app, has_app_context, session
+from statemachine import State, StateMachine
+
 from app.constants import MultiPageFormRoutes
 from app.lib.aws import upload_proof_of_death
 from app.lib.boundary_years import BoundaryYears
@@ -8,8 +11,6 @@ from app.lib.db.constants import (
     PAID_STATUS,
     SENT_STATUS,
 )
-from flask import current_app, has_app_context, session
-from statemachine import State, StateMachine
 
 
 class RoutingStateMachine(StateMachine):
@@ -418,9 +419,7 @@ class RoutingStateMachine(StateMachine):
         )
 
     def entering_are_you_sure_you_want_to_proceed_without_proof_of_death_form(self):
-        self.route_for_current_state = (
-            MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_PROOF_OF_DEATH.value
-        )
+        self.route_for_current_state = MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_PROOF_OF_DEATH.value
 
     def entering_are_you_sure_you_want_to_cancel_form(self):
         self.route_for_current_state = (

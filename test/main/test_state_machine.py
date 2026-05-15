@@ -4,6 +4,9 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 import pytest
+from flask import session
+
+from app import create_app
 from app.constants import MultiPageFormRoutes
 from app.lib.db.constants import (
     EXPIRED_STATUS,
@@ -12,9 +15,6 @@ from app.lib.db.constants import (
     SENT_STATUS,
 )
 from app.lib.state_machine.state_machine import RoutingStateMachine
-from flask import session
-
-from app import create_app
 
 
 @pytest.fixture(autouse=True)
@@ -28,17 +28,17 @@ def app_context():
 def test_all_states_have_the_expected_suffix():
     sm = RoutingStateMachine()
     for state in sm.states:
-        assert re.search(
-            r"(_redirect|_form|_page|initial)$", state.id
-        ), f"State ID {state.id} does not end with '_form', '_page', '_redirect', or 'initial'"
+        assert re.search(r"(_redirect|_form|_page|initial)$", state.id), (
+            f"State ID {state.id} does not end with '_form', '_page', '_redirect', or 'initial'"
+        )
 
 
 def test_all_events_have_the_expected_suffix():
     sm = RoutingStateMachine()
     for event in sm.events:
-        assert re.search(
-            r"(_form|_page|_link|_redirect)$", event.id
-        ), f"Event ID {event.id} does not end with '_form', '_page' , '_link' or '_redirect'"
+        assert re.search(r"(_form|_page|_link|_redirect)$", event.id), (
+            f"Event ID {event.id} does not end with '_form', '_page' , '_link' or '_redirect'"
+        )
 
 
 def test_initial_state_has_no_route():

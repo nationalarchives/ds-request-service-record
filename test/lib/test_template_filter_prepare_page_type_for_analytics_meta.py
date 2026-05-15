@@ -1,4 +1,5 @@
 import pytest
+
 from app.lib.template_filters import prepare_page_type_for_analytics_meta_tag
 
 

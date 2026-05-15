@@ -1,6 +1,8 @@
 import uuid
 from datetime import datetime
 
+from flask import current_app, redirect, render_template, request, session, url_for
+
 from app.lib.aws import send_email
 from app.lib.content import load_content
 from app.lib.db.constants import (
@@ -19,7 +21,6 @@ from app.lib.gov_uk_pay import (
 )
 from app.main import bp
 from app.main.forms.proceed_to_pay import ProceedToPay
-from flask import current_app, redirect, render_template, request, session, url_for
 
 
 @bp.route("/gov-uk-pay-redirect/<id>/", methods=["GET"])

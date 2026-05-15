@@ -8,12 +8,12 @@ to Dynamics are retried.
 
 import os
 
-from app.lib.db.constants import PAID_STATUS, SENT_STATUS
-from app.lib.db.models import ServiceRecordRequest, db
-from app.lib.dynamics_handler import send_request_to_dynamics
 from flask import current_app
 
 from app import create_app
+from app.lib.db.constants import PAID_STATUS, SENT_STATUS
+from app.lib.db.models import ServiceRecordRequest, db
+from app.lib.dynamics_handler import send_request_to_dynamics
 
 
 def resend_paid_requests() -> int:

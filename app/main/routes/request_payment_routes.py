@@ -2,6 +2,8 @@ import hashlib
 import uuid
 from datetime import datetime
 
+from flask import current_app, redirect, session, url_for
+
 from app.lib.check_for_fields_required_by_gov_uk_pay import (
     check_for_fields_required_by_gov_uk_pay,
 )
@@ -23,7 +25,6 @@ from app.lib.gov_uk_pay import (
 )
 from app.lib.price_calculations import calculate_amount_based_on_form_data
 from app.main import bp
-from flask import current_app, redirect, session, url_for
 
 
 @bp.route("/return-from-gov-uk-pay/")

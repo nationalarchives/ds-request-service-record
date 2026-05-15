@@ -2,14 +2,14 @@ from unittest.mock import patch
 
 import pytest
 import requests
+
+from app import create_app
 from app.lib.price_calculations import (
     calculate_amount_based_on_form_data,
     calculate_delivery_fee,
     get_delivery_type,
     prepare_order_summary_data,
 )
-
-from app import create_app
 
 
 @pytest.fixture

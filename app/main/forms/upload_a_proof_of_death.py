@@ -1,4 +1,3 @@
-from app.lib.content import get_field_content, load_content
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileSize
 from tna_frontend_jinja.wtforms import TnaDroppableFileInputWidget, TnaSubmitWidget
@@ -6,6 +5,8 @@ from wtforms import (
     FileField,
     SubmitField,
 )
+
+from app.lib.content import get_field_content, load_content
 
 
 class UploadAProofOfDeath(FlaskForm):

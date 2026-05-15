@@ -2,11 +2,11 @@ from datetime import datetime, timezone
 from unittest.mock import MagicMock, patch
 
 import pytest
+
+from app import create_app
 from app.lib.db.constants import NEW_STATUS, PAID_STATUS, SENT_STATUS
 from app.lib.db.models import DynamicsPayment, db
 from retry_paid_dynamics_payments import resend_paid_dynamics_payments
-
-from app import create_app
 
 
 class DummyPayment:

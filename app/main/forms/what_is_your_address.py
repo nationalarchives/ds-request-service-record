@@ -1,9 +1,3 @@
-from app.constants import FIELD_LENGTH_LIMITS
-from app.lib.content import get_field_content, load_content
-from app.lib.get_country_choices import get_country_choices
-from app.main.forms.validation_helpers.country_must_be_selected import (
-    country_must_be_selected,
-)
 from flask_wtf import FlaskForm
 from tna_frontend_jinja.wtforms import (
     TnaSelectWidget,
@@ -16,6 +10,13 @@ from wtforms import (
     SubmitField,
 )
 from wtforms.validators import InputRequired, Length
+
+from app.constants import FIELD_LENGTH_LIMITS
+from app.lib.content import get_field_content, load_content
+from app.lib.get_country_choices import get_country_choices
+from app.main.forms.validation_helpers.country_must_be_selected import (
+    country_must_be_selected,
+)
 
 
 class WhatIsYourAddress(FlaskForm):

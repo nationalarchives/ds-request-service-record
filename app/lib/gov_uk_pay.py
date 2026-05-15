@@ -1,6 +1,8 @@
 from datetime import datetime
 
 import requests
+from flask import current_app
+
 from app.lib.api import JSONAPIClient
 from app.lib.aws import move_proof_of_death_to_submitted
 from app.lib.db.constants import (
@@ -17,7 +19,6 @@ from app.lib.dynamics_handler import (
     send_payment_to_mod_copying_app,
     send_request_to_dynamics,
 )
-from flask import current_app
 
 SUCCESSFUL_PAYMENT_STATUSES: set[str] = {"success"}
 

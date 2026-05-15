@@ -1,8 +1,9 @@
 import json
 import os
 
-from app.lib.util import strtobool
 from redis import Redis
+
+from app.lib.util import strtobool
 
 
 class Features:

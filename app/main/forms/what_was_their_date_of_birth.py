@@ -1,5 +1,3 @@
-from app.lib.content import get_field_content, load_content
-from app.main.forms.validation_helpers.born_too_early import BornTooEarly
 from flask_wtf import FlaskForm
 from tna_frontend_jinja.wtforms import (
     TnaDateField,
@@ -10,6 +8,9 @@ from wtforms import (
     SubmitField,
 )
 from wtforms.validators import InputRequired
+
+from app.lib.content import get_field_content, load_content
+from app.main.forms.validation_helpers.born_too_early import BornTooEarly
 
 
 class WhatWasTheirDateOfBirth(FlaskForm):

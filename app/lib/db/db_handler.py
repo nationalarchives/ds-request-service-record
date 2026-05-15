@@ -1,3 +1,5 @@
+from flask import current_app
+
 from app.constants import ServiceBranches
 from app.lib.db.models import (
     DynamicsPayment,
@@ -6,7 +8,6 @@ from app.lib.db.models import (
     db,
 )
 from app.lib.price_calculations import get_delivery_type
-from flask import current_app
 
 
 def hash_check(record_hash: str) -> ServiceRecordRequest | None:

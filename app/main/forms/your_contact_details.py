@@ -1,11 +1,3 @@
-from app.constants import FIELD_LENGTH_LIMITS
-from app.lib.content import get_field_content, load_content
-from app.main.forms.validation_helpers.field_must_be_empty_if_checkbox_checked import (
-    field_must_be_empty_if_checkbox_checked,
-)
-from app.main.forms.validation_helpers.field_required_unless_checkbox_checked import (
-    field_required_unless_checkbox_checked,
-)
 from flask_wtf import FlaskForm
 from tna_frontend_jinja.wtforms import (
     TnaCheckboxWidget,
@@ -19,6 +11,15 @@ from wtforms import (
     SubmitField,
 )
 from wtforms.validators import Email, InputRequired, Length
+
+from app.constants import FIELD_LENGTH_LIMITS
+from app.lib.content import get_field_content, load_content
+from app.main.forms.validation_helpers.field_must_be_empty_if_checkbox_checked import (
+    field_must_be_empty_if_checkbox_checked,
+)
+from app.main.forms.validation_helpers.field_required_unless_checkbox_checked import (
+    field_required_unless_checkbox_checked,
+)
 
 
 class YourContactDetails(FlaskForm):
