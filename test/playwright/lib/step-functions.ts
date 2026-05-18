@@ -154,7 +154,7 @@ export async function continueFromWeAreUnlikelyToHoldThisRecord(
 ) {
   await expect(page).toHaveURL(pathVariant);
   await expect(page.locator("h1")).toHaveText(
-    /We are unlikely to hold this record/,
+    /We are unlikely to hold this record yet/,
   );
   await clickContinueThisRequestForm(page, "button");
 }
@@ -382,9 +382,12 @@ export async function continueFromServicePersonDetails(
 
 export async function continueFromHaveYouPreviouslyMadeARequest(
   page: any,
-  label: any,
-  errorMessage?: any,
-  populatedReferenceNumber?: any,
+  {
+    label = null,
+    errorMessage = null,
+    populatedReferenceNumber = null,
+    nextPath = null,
+  },
 ) {
   await expect(page).toHaveURL(Paths.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
   await expect(page.locator("h1")).toHaveText(
@@ -401,7 +404,7 @@ export async function continueFromHaveYouPreviouslyMadeARequest(
         errorMessage,
       );
     } else {
-      await expect(page).toHaveURL(Paths.CHOOSE_YOUR_ORDER_TYPE);
+      await expect(page).toHaveURL(nextPath || Paths.CHOOSE_YOUR_ORDER_TYPE);
     }
   }
 }
@@ -517,4 +520,69 @@ export async function clickContinueThisRequestForm(page, element) {
 export async function clickBackLink(page, expectedPath) {
   await page.getByRole("link", { name: "Back", exact: true }).click();
   await expect(page).toHaveURL(expectedPath);
+}
+
+export async function continueFromYourOrderTypeBritishArmyOfficers(page) {
+  await expect(page).toHaveURL(Paths.YOUR_ORDER_TYPE_BRITISH_ARMY_OFFICERS);
+  await expect(page.locator("h1")).toHaveText(/Your order type/);
+  await page
+    .getByRole("button", { name: "Request a Full record check" })
+    .click();
+  await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
+}
+
+export async function continueFromYourOrderTypeOtherAndDontKnowOfficers(page) {
+  await expect(page).toHaveURL(
+    Paths.YOUR_ORDER_TYPE_OTHER_AND_DONT_KNOW_OFFICERS,
+  );
+  await expect(page.locator("h1")).toHaveText(/Your order type/);
+  await page
+    .getByRole("button", { name: "Request a Full record check" })
+    .click();
+  await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
+}
+
+/**
+ * Builds the journey state needed for order-summary tests, then navigates
+ * directly to Choose your order type once the required prior answers are set.
+ */
+export async function continueToChooseYourOrderTypeFromJourneyStart(
+  page,
+  {
+    isAlive = "No",
+    serviceBranch,
+    wasOfficer,
+    nextUrlAfterOfficerSelection = Paths.WE_MAY_HOLD_THIS_RECORD,
+    expectedTemplateIdentifier = "we-may-hold-this-record--generic",
+  }: {
+    isAlive?: string;
+    serviceBranch: string;
+    wasOfficer: string;
+    nextUrlAfterOfficerSelection?: string;
+    expectedTemplateIdentifier?: string;
+  },
+) {
+  await page.goto(Paths.JOURNEY_START);
+  await continueFromJourneyStart(page);
+  await continueFromHowWeProcessRequests(page);
+  await continueFromBeforeYouStart(page, true);
+  await continueFromYouMayWantToCheckAncestry(page);
+  await continueFromIsServicePersonAlive(
+    page,
+    isAlive,
+    Paths.WHICH_MILITARY_BRANCH_DID_THE_PERSON_SERVE_IN,
+  );
+  await continueFromWhichMilitaryBranchDidThePersonServeIn(
+    page,
+    serviceBranch,
+    Paths.WERE_THEY_A_COMMISSIONED_OFFICER,
+  );
+  await continueFromWereTheyACommissionedOfficer(
+    page,
+    wasOfficer,
+    nextUrlAfterOfficerSelection,
+    expectedTemplateIdentifier,
+  );
+
+  await page.goto(Paths.CHOOSE_YOUR_ORDER_TYPE);
 }

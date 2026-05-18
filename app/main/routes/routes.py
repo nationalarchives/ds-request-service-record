@@ -11,6 +11,9 @@ from app.lib.decorators.update_dynamic_back_link_mapping import (
 from app.lib.decorators.with_form_prefilled_from_session import (
     with_form_prefilled_from_session,
 )
+from app.lib.derive_if_change_order_is_available import (
+    derive_if_change_order_is_available,
+)
 from app.lib.get_dynamic_back_link_route import get_dynamic_back_link_route
 from app.lib.price_calculations import prepare_order_summary_data
 from app.lib.save_catalogue_reference_to_session import (
@@ -54,6 +57,12 @@ from app.main.forms.what_was_their_date_of_birth import WhatWasTheirDateOfBirth
 from app.main.forms.you_may_want_to_check_ancestry import YouMayWantToCheckAncestry
 from app.main.forms.your_contact_details import YourContactDetails
 from app.main.forms.your_order_summary import YourOrderSummary
+from app.main.forms.your_order_type_british_army_officers import (
+    YourOrderTypeBritishArmyOfficers,
+)
+from app.main.forms.your_order_type_other_and_dont_know_officers import (
+    YourOrderTypeOtherAndDontKnowOfficers,
+)
 
 
 @bp.route("/", methods=["GET", "POST"])
@@ -232,6 +241,7 @@ def we_do_not_have_royal_navy_service_records(form, state_machine):
 @update_dynamic_back_link_mapping(
     mappings={
         MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH: MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY,
+        MultiPageFormRoutes.YOUR_CONTACT_DETAILS: MultiPageFormRoutes.YOUR_ORDER_TYPE_BRITISH_ARMY_OFFICER,
     }
 )
 @with_state_machine
@@ -277,6 +287,7 @@ def we_are_unlikely_to_hold_officer_records__raf(form, state_machine):
 @update_dynamic_back_link_mapping(
     mappings={
         MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH: MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__GENERIC,
+        MultiPageFormRoutes.YOUR_CONTACT_DETAILS: MultiPageFormRoutes.YOUR_ORDER_TYPE_OTHER_AND_DONT_KNOW_OFFICER,
     }
 )
 @with_form_prefilled_from_session(WeAreUnlikelyToHoldThisRecord)
@@ -452,7 +463,10 @@ def your_contact_details(form, state_machine):
         state_machine.continue_from_your_contact_details_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/your-contact-details.html", form=form, content=load_content()
+        "main/your-contact-details.html",
+        form=form,
+        content=load_content(),
+        back_link_route=get_dynamic_back_link_route(key=request.endpoint),
     )
 
 
@@ -497,6 +511,11 @@ def what_is_your_address(form, state_machine):
 
 
 @bp.route("/choose-your-order-type/", methods=["GET", "POST"])
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.YOUR_CONTACT_DETAILS: MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE,
+    }
+)
 @with_state_machine
 def choose_your_order_type(state_machine):
     form = ChooseYourOrderType()
@@ -554,6 +573,8 @@ def your_order_summary(form, state_machine):
             url_for("main.start")
         )  # TODO: What should the user see if order summary fails?
 
+    can_change_order = derive_if_change_order_is_available(form_data)
+
     return render_template(
         "main/your-order-summary.html",
         content=load_content(),
@@ -561,6 +582,7 @@ def your_order_summary(form, state_machine):
         form_data=form_data,
         order_summary_data=order_summary_data,
         back_link_route=get_dynamic_back_link_route(key=request.endpoint),
+        can_change_order=can_change_order,
     )
 
 
@@ -627,6 +649,39 @@ def sorry_you_will_have_to_start_again(form, state_machine):
 
     return render_template(
         "main/sorry-you-will-have-to-start-again.html",
+        content=load_content(),
+        form=form,
+    )
+
+
+@bp.route("/your-order-type-british-army-officers/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(YourOrderTypeBritishArmyOfficers)
+@with_state_machine
+def your_order_type_british_army_officers(form, state_machine):
+    if form.validate_on_submit():
+        save_submitted_form_fields_to_session(form)
+        state_machine.continue_from_your_order_type_british_army_officer_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
+
+    return render_template(
+        "main/your-order-type-british-army-officers.html",
+        content=load_content(),
+        form=form,
+    )
+
+
+@bp.route("/your-order-type-other-and-dont-know-officers/", methods=["GET", "POST"])
+@with_form_prefilled_from_session(YourOrderTypeOtherAndDontKnowOfficers)
+@with_state_machine
+def your_order_type_other_and_dont_know_officers(form, state_machine):
+    if form.validate_on_submit():
+        save_submitted_form_fields_to_session(form)
+        state_machine.continue_from_your_order_type_other_and_dont_know_officer_form(
+            form
+        )
+        return redirect(url_for(state_machine.route_for_current_state))
+    return render_template(
+        "main/your-order-type-other-and-dont-know-officers.html",
         content=load_content(),
         form=form,
     )

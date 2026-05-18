@@ -28,7 +28,7 @@ pages:
             - |
               Standard provides a subset of documents from the record. This may include details
               provided when the service person enlisted, records of service and testimonials.
-            - Standard is not available for Commissioned Officer record requests.
+            - Standard is not available for British Army Commissioned Officer record requests.
         - title: Full record check
           paragraphs:
             - |
@@ -96,7 +96,7 @@ pages:
       before_first_list:
         paragraphs:
           - |
-            If the person whose record you are looking for was born after 1 January [FIRST_BIRTH_YEAR_FOR_CLOSED_RECORDS] 
+            If the person whose record you are looking for was born on or after 1 January [FIRST_BIRTH_YEAR_FOR_CLOSED_RECORDS] 
             and is deceased, we require a digital copy of a proof of death. This is to protect 
             any personal data in the record that might relate to a living person.
           - "You will need to submit one of the following forms of evidence:"
@@ -241,6 +241,9 @@ pages:
         Commissioned Officer records are currently being transferred to us. We may not hold the record you are looking for yet.
       - |
         If you have not done so already, we recommend you check with the Ministry of Defence first.
+      - |
+        Unless they served in the Royal Air Force, Commissioned Officer records can only be requested from us using a Full record check, 
+        our Standard option is not available.
     call_to_action: Request from the Ministry of Defence
   we_are_unlikely_to_hold_officer_records__raf:
     heading: We are unlikely to hold this record yet
@@ -260,10 +263,9 @@ pages:
   we_are_unlikely_to_hold_officer_records__army:
     heading: We are unlikely to hold this record yet
     paragraphs:
-      - |
-        British Army Commissioned Officer records are currently being transferred to us. We may not hold the record you are looking for yet.
-      - |
-        We anticipate holding most Army Commissioned Officer records by December 2026.
+      - British Army Commissioned Officer records are currently being transferred to us. We may not hold the record you are looking for yet.
+      - We anticipate holding most Army Commissioned Officer records by December 2026.
+      - These records can only be requested from us using a Full record check, our Standard option is not available.
       - |
         We recommend you check with the Ministry of Defence first, unless the record is contained in list the below:
     list:
@@ -322,7 +324,7 @@ pages:
     heading: Provide a proof of death
     paragraphs:
       - |
-        As you are requesting a record for someone born after 1 January [FIRST_BIRTH_YEAR_FOR_CLOSED_RECORDS], 
+        As you are requesting a record for someone born on or after 1 January [FIRST_BIRTH_YEAR_FOR_CLOSED_RECORDS], 
         you will need to provide a digital copy of a proof of death.
       - >
         You will need to submit one of the following forms of evidence:
@@ -376,6 +378,68 @@ pages:
     heading: What is your address?
     paragraphs:
       - You have not provided an email address. Please provide a postal address so we can contact you about your request and, if we have the record, send it to you. There will be an extra fee for printed copies.
+  your_order_type_army_officer:
+    heading: Your order type
+    paragraphs:
+      - |
+        You are requesting a British Army Commissioned Officer record. These can only be requested with a Full record check, our Standard option is not available.
+      - |
+        As British Army Commissioned Officer records are currently being transferred to us from the Ministry of Defence, we recommend waiting until December 2026 to submit your request. By then, we anticipate most will have been transferred to us.
+    full_record_check:
+      heading: Full record check
+      paragraphs:
+        - |
+          Service records will, in most cases, contain sensitive information and will be closed to the public. However, we can complete a sensitivity check of the record to assess what can be released.
+        - |
+          In some cases, we will not be able to supply the entire record, or large parts of it will be redacted.
+        - |
+          We charge two fees for a Full record check. The first covers the search for the record and a page check. We will then email you a quote for the second payment to copy the parts of the record that can be released, priced per page. Commissioned Officer records can exceed 100 pages.
+      information_list:
+        list_items:
+          - term: What it costs
+            description:
+              - An upfront payment of £48.87, which covers the search (£38.95) and the page check (£9.92).
+              - A second payment of £1.04 per page. For example, 100 pages will cost an additional £104.
+          - term: When you will get the record
+            description:
+              - We aim to confirm if we hold the record within 30 working days. The record will be released once we have received the second payment.
+          - term: Refunds
+            description:
+              - We will refund the page check fee (£9.92) if we do not hold the record.
+              - The search fee is not refundable.
+    final_paragraphs:
+      - We will send you a digital colour scan of the record by email. You can request a printed copy by post for an extra cost.
+  your_order_type_other_and_dont_know_officers:
+    heading: Your order type
+    paragraphs:
+      - |
+        You are requesting a Commissioned Officer record. These can only be requested with a Full record check, our Standard option is not available.
+      - |
+        As Commissioned Officer records are currently being transferred to us from the Ministry of Defence, we recommend waiting until December 2026 to submit your request. By then, we anticipate most will have been transferred to us.
+    full_record_check:
+      heading: Full record check
+      paragraphs:
+        - |
+          Service records will, in most cases, contain sensitive information and will be closed to the public. However, we can complete a sensitivity check of the record to assess what can be released.
+        - |
+          In some cases, we will not be able to supply the entire record, or large parts of it will be redacted.
+        - |
+          We charge two fees for a Full record check. The first covers the search for the record and a page check. We will then email you a quote for the second payment to copy the parts of the record that can be released, priced per page. Commissioned Officer records can exceed 100 pages.
+      information_list:
+        list_items:
+          - term: What it costs
+            description:
+              - An upfront payment of £48.87, which covers the search (£38.95) and the page check (£9.92).
+              - A second payment of £1.04 per page. For example, 100 pages will cost an additional £104.
+          - term: When you will get the record
+            description:
+              - We aim to confirm if we hold the record within 30 working days. The record will be released once we have received the second payment.
+          - term: Refunds
+            description:
+              - We will refund the page check fee (£9.92) if we do not hold the record.
+              - The search fee is not refundable.
+    final_paragraphs:
+      - We will send you a digital colour scan of the record by email. You can request a printed copy by post for an extra cost.
   choose_your_order_type:
     heading: Choose your order type
     paragraphs:
@@ -672,3 +736,7 @@ forms:
       call_to_action: Go back to try the payment again
     sorry_you_will_have_to_start_again:
       call_to_action: Start again
+    your_order_type_british_army_officers:
+      call_to_action: Request a Full record check
+    your_order_type_other_and_dont_know_officers:
+      call_to_action: Request a Full record check

@@ -435,11 +435,56 @@ def test_continue_from_service_person_details():
     )
 
 
-def test_continue_from_have_you_previously_made_a_request():
+@pytest.mark.parametrize(
+    "service_branch,was_officer,expected_state,expected_route",
+    [
+        (
+            "BRITISH_ARMY",
+            "yes",
+            "your_order_type_british_army_officer_form",
+            MultiPageFormRoutes.YOUR_ORDER_TYPE_BRITISH_ARMY_OFFICER.value,
+        ),
+        (
+            "BRITISH_ARMY",
+            "no",
+            "choose_your_order_type_form",
+            MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE.value,
+        ),
+        (
+            "OTHER",
+            "yes",
+            "your_order_type_other_and_dont_know_officer_form",
+            MultiPageFormRoutes.YOUR_ORDER_TYPE_OTHER_AND_DONT_KNOW_OFFICER.value,
+        ),
+        (
+            "OTHER",
+            "no",
+            "choose_your_order_type_form",
+            MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE.value,
+        ),
+        (
+            "UNKNOWN",
+            "yes",
+            "your_order_type_other_and_dont_know_officer_form",
+            MultiPageFormRoutes.YOUR_ORDER_TYPE_OTHER_AND_DONT_KNOW_OFFICER.value,
+        ),
+        (
+            "UNKNOWN",
+            "no",
+            "choose_your_order_type_form",
+            MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE.value,
+        ),
+    ],
+)
+def test_continue_from_have_you_previously_made_a_request_routes_by_condition(
+    service_branch, was_officer, expected_state, expected_route
+):
     sm = RoutingStateMachine()
 
     sm.continue_from_have_you_previously_made_a_request_form(
         form=make_form(
+            service_branch=service_branch,
+            were_they_a_commissioned_officer=was_officer,
             forenames=None,
             last_name=None,
             place_of_birth=None,
@@ -451,6 +496,9 @@ def test_continue_from_have_you_previously_made_a_request():
             submit=None,
         )
     )
+
+    assert sm.current_state.id == expected_state
+    assert sm.route_for_current_state == expected_route
 
 
 @pytest.mark.parametrize(
@@ -623,3 +671,10 @@ def test_continue_from_sorry_you_will_have_to_start_again():
     )
     assert sm.current_state.id == "service_start_page"
     assert sm.route_for_current_state == MultiPageFormRoutes.JOURNEY_START.value
+
+
+def test_continue_from_your_order_type_british_army_officer_form():
+    sm = RoutingStateMachine()
+    sm.continue_from_your_order_type_british_army_officer_form()
+    assert sm.current_state.id == "your_contact_details_form"
+    assert sm.route_for_current_state == MultiPageFormRoutes.YOUR_CONTACT_DETAILS.value

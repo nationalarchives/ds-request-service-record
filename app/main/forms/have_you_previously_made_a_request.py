@@ -5,6 +5,7 @@ from tna_frontend_jinja.wtforms import (
     TnaTextInputWidget,
 )
 from wtforms import (
+    HiddenField,
     RadioField,
     StringField,
     SubmitField,
@@ -20,6 +21,10 @@ from app.main.forms.validation_helpers.text_field_conditionally_required import 
 
 class HaveYouPreviouslyMadeARequest(FlaskForm):
     content = load_content()
+
+    service_branch = HiddenField()
+
+    were_they_a_commissioned_officer = HiddenField()
 
     have_you_previously_made_a_request = RadioField(
         get_field_content(content, "have_you_previously_made_a_request", "label"),

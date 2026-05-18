@@ -158,6 +158,14 @@ class RoutingStateMachine(StateMachine):
         enter="entering_what_is_your_address_form", final=True
     )
 
+    your_order_type_british_army_officer_form = State(
+        enter="entering_your_order_type_british_army_officer_form", final=True
+    )
+
+    your_order_type_other_and_dont_know_officer_form = State(
+        enter="entering_your_order_type_other_and_dont_know_officer_form", final=True
+    )
+
     choose_your_order_type_form = State(
         enter="entering_choose_your_order_type_form", final=True
     )
@@ -305,8 +313,20 @@ class RoutingStateMachine(StateMachine):
         have_you_previously_made_a_request_form
     )
 
-    continue_from_have_you_previously_made_a_request_form = initial.to(
-        choose_your_order_type_form
+    continue_from_have_you_previously_made_a_request_form = (
+        initial.to(
+            your_order_type_british_army_officer_form,
+            cond="was_officer and service_branch_is_army",
+        )
+        | initial.to(
+            your_order_type_other_and_dont_know_officer_form,
+            cond="was_officer and service_branch_is_other",
+        )
+        | initial.to(
+            your_order_type_other_and_dont_know_officer_form,
+            cond="was_officer and service_branch_is_unknown",
+        )
+        | initial.to(choose_your_order_type_form)
     )
 
     continue_from_your_contact_details_form = initial.to(
@@ -314,6 +334,14 @@ class RoutingStateMachine(StateMachine):
     ) | initial.to(your_order_summary_form)
 
     continue_from_what_is_your_address_form = initial.to(your_order_summary_form)
+
+    continue_from_your_order_type_other_and_dont_know_officer_form = initial.to(
+        your_contact_details_form
+    )
+
+    continue_from_your_order_type_british_army_officer_form = initial.to(
+        your_contact_details_form
+    )
 
     continue_from_choose_your_order_type_form = initial.to(your_contact_details_form)
 
@@ -452,6 +480,16 @@ class RoutingStateMachine(StateMachine):
 
     def entering_what_is_your_address_form(self):
         self.route_for_current_state = MultiPageFormRoutes.WHAT_IS_YOUR_ADDRESS.value
+
+    def entering_your_order_type_british_army_officer_form(self):
+        self.route_for_current_state = (
+            MultiPageFormRoutes.YOUR_ORDER_TYPE_BRITISH_ARMY_OFFICER.value
+        )
+
+    def entering_your_order_type_other_and_dont_know_officer_form(self):
+        self.route_for_current_state = (
+            MultiPageFormRoutes.YOUR_ORDER_TYPE_OTHER_AND_DONT_KNOW_OFFICER.value
+        )
 
     def entering_choose_your_order_type_form(self):
         self.route_for_current_state = MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE.value
