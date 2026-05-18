@@ -1,12 +1,13 @@
-from app.lib.content import get_field_content, load_content
 from flask_wtf import FlaskForm
 from tna_frontend_jinja.wtforms import (
     TnaSubmitWidget,
 )
 from wtforms import (
-    SubmitField,
     HiddenField,
+    SubmitField,
 )
+
+from app.lib.content import get_field_content, load_content
 
 
 class YourOrderTypeBritishArmyOfficers(FlaskForm):

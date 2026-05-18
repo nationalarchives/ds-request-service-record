@@ -64,8 +64,6 @@ from app.main.forms.your_order_type_other_and_dont_know_officers import (
     YourOrderTypeOtherAndDontKnowOfficers,
 )
 
-from flask import redirect, render_template, request, session, url_for
-
 
 @bp.route("/", methods=["GET", "POST"])
 @with_state_machine

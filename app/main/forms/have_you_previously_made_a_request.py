@@ -5,10 +5,10 @@ from tna_frontend_jinja.wtforms import (
     TnaTextInputWidget,
 )
 from wtforms import (
+    HiddenField,
     RadioField,
     StringField,
     SubmitField,
-    HiddenField,
 )
 from wtforms.validators import InputRequired, Length
 
