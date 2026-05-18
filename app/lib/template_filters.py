@@ -2,10 +2,11 @@ import re
 from datetime import datetime
 from urllib.parse import urlencode
 
-from app.constants import ExternalLinks
-from app.lib.boundary_years import BoundaryYears
 from jinja2 import pass_context
 from tna_utilities.string import slugify as slugify_util
+
+from app.constants import ExternalLinks
+from app.lib.boundary_years import BoundaryYears
 
 
 def slugify(s):

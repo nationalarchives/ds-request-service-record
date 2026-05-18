@@ -2,10 +2,10 @@ from datetime import datetime
 from unittest.mock import MagicMock, patch
 
 import pytest
-from app.lib.db.models import DynamicsPayment
-from app.lib.dynamics_handler import send_payment_to_mod_copying_app, subject_status
 
 from app import create_app
+from app.lib.db.models import DynamicsPayment
+from app.lib.dynamics_handler import send_payment_to_mod_copying_app, subject_status
 
 
 class DummyRecord:

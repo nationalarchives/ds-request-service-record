@@ -1,9 +1,10 @@
 import pytest
+from flask import Flask, request
+from flask import session as flask_session
+
 from app.lib.save_catalogue_reference_to_session import (
     save_catalogue_reference_to_session,
 )
-from flask import Flask, request
-from flask import session as flask_session
 
 
 def make_app():

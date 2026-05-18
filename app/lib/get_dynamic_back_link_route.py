@@ -1,5 +1,6 @@
-from app.constants import MultiPageFormRoutes
 from flask import session
+
+from app.constants import MultiPageFormRoutes
 
 
 def get_dynamic_back_link_route(key: str):

@@ -1,3 +1,5 @@
+from flask import abort, current_app, redirect, render_template, session, url_for
+
 from app.lib.content import load_content
 from app.lib.db.db_handler import (
     get_gov_uk_dynamics_payment,
@@ -14,7 +16,6 @@ from app.lib.gov_uk_pay import (
 )
 from app.main import bp
 from app.main.forms.payment_incomplete import PaymentIncomplete
-from flask import abort, current_app, redirect, render_template, session, url_for
 
 
 def _fetch_payment_by_type(payment_type, id):

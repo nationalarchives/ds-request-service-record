@@ -1,5 +1,3 @@
-from app.constants import ServiceBranches
-from app.lib.content import get_field_content, load_content
 from flask_wtf import FlaskForm
 from tna_frontend_jinja.wtforms import (
     TnaRadiosWidget,
@@ -10,6 +8,9 @@ from wtforms import (
     SubmitField,
 )
 from wtforms.validators import InputRequired
+
+from app.constants import ServiceBranches
+from app.lib.content import get_field_content, load_content
 
 
 class ServiceBranch(FlaskForm):

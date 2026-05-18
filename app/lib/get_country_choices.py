@@ -1,7 +1,8 @@
 import requests
+from flask import current_app
+
 from app.constants import FALLBACK_COUNTRY_CHOICES
 from app.lib.cache import cache
-from flask import current_app
 
 CACHE_KEY = "country_choices"
 CACHE_TIMEOUT = 43200  # 12 hours

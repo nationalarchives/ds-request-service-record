@@ -1,7 +1,8 @@
 import datetime
 
-from app.lib.boundary_years import BoundaryYears
 from wtforms.validators import ValidationError
+
+from app.lib.boundary_years import BoundaryYears
 
 
 class BornTooEarly:
@@ -31,8 +32,8 @@ class BornTooEarly:
             if type(field_date) is not datetime.date:
                 try:
                     field_date = datetime.date.fromisoformat(field.data)
-                except Exception:
-                    raise ValueError()
+                except Exception as e:
+                    raise ValueError() from e
             if field_date < datetime.date(
                 BoundaryYears.EARLIEST_SERVICE_PERSON_BIRTH_YEAR_FOR_THIS_SERVICE,
                 1,
