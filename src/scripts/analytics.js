@@ -12,9 +12,9 @@ if (ga4Id) {
       eventName: "double_click",
       on: "dblclick",
       data: {
-        // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars, max-params
         state: ($el, $scope, event, index) => helpers.getXPathTo(event.target),
-        // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars, max-params
         value: ($el, $scope, event, index) => event.target.innerHTML,
       },
     },
