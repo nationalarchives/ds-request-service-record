@@ -4,8 +4,12 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from app import create_app
-from app.lib.db.models import DynamicsPayment
-from app.lib.dynamics_handler import send_payment_to_mod_copying_app, subject_status
+from app.lib.db.models import DynamicsPayment, ServiceRecordRequest
+from app.lib.dynamics_handler import (
+    generate_tagged_request,
+    send_payment_to_mod_copying_app,
+    subject_status,
+)
 
 
 class DummyRecord:
@@ -51,6 +55,25 @@ def test_no_evidence_sets_FOICDN_full(context):
     dob = f"20 August {recent_year}"
     r = DummyRecord(dob, None, "full")
     assert subject_status(r) == "? FOI DIRECT MOD FOICDN2"
+
+
+def test_generate_tagged_request_includes_commissioned_officer_status(context):
+    record = ServiceRecordRequest(
+        requester_first_name="Jane",
+        requester_last_name="Doe",
+        requester_email="jane@example.com",
+        requester_address1="1 Test Street",
+        requester_town_city="London",
+        requester_country="United Kingdom",
+        forenames="John",
+        last_name="Smith",
+        date_of_birth="01 January 1950",
+        were_they_a_commissioned_officer="unknown",
+    )
+
+    tagged_request = generate_tagged_request(record)
+
+    assert "<commissioned_officer>unknown</commissioned_officer>" in tagged_request
 
 
 @patch("app.lib.dynamics_handler.requests.post")

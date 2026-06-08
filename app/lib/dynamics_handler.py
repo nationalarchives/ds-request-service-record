@@ -33,6 +33,7 @@ DYNAMICS_REQUEST_FIELD_MAP = [
     ("date_of_death", "date_of_death"),
     ("mod_barcode_number", "mod_reference"),
     ("service_branch", "service_branch"),
+    ("commissioned_officer", "were_they_a_commissioned_officer"),
     ("died_in_service", "died_in_service"),
     ("prior_contact_reference", "case_reference_number"),
     ("payment_date", "payment_date"),

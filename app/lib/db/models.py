@@ -38,6 +38,7 @@ class ServiceRecordRequest(db.Model):
     requester_postcode = db.Column(db.String(32), nullable=True)
     requester_town_city = db.Column(db.String(128))
     service_branch = db.Column(db.String(64))
+    were_they_a_commissioned_officer = db.Column(db.String(32), nullable=True)
     service_number = db.Column(db.String(64), nullable=True)
     proof_of_death = db.Column(db.String(64), nullable=True)
     gov_uk_payment_id = db.Column(db.String(64), nullable=True, unique=True)
