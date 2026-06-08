@@ -8,6 +8,7 @@ from app.lib.db.db_handler import (
     add_service_record_request,
     delete_service_record_request,
     get_service_record_request,
+    transform_form_data_to_record,
 )
 from app.lib.db.models import db
 
@@ -44,6 +45,7 @@ def test_add_service_record_request(session):
             "requester_country": "United Kingdom",
             "requester_contact_preference": "email",
             "service_branch": "british_army",
+            "were_they_a_commissioned_officer": "yes",
             "record_hash": "dummyhashvalue",
             "gov_uk_payment_id": "testpaymentid123",
         }
@@ -51,6 +53,19 @@ def test_add_service_record_request(session):
     assert record is not None
     assert record.forenames == "John"
     assert record.requester_email == "john.doe@email.com"
+    assert record.were_they_a_commissioned_officer == "yes"
+
+
+def test_transform_form_data_to_record_normalises_commissioned_officer_status():
+    transformed = transform_form_data_to_record(
+        {
+            "service_branch": "BRITISH_ARMY",
+            "were_they_a_commissioned_officer": "unknown",
+        }
+    )
+
+    assert transformed["service_branch"] == "British Army"
+    assert transformed["were_they_a_commissioned_officer"] == "unknown"
 
 
 def test_get_service_record_request(session):
