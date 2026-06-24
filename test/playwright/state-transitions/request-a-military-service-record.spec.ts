@@ -12,6 +12,13 @@ test.describe("the 'Request a military service record' form", () => {
     await page.goto(Paths.JOURNEY_START);
   });
 
+  test("has the <meta> description", async ({ page }) => {
+    const metaDescriptionElementCount = await page
+      .locator('head > meta[name="description"]')
+      .count();
+    test.expect(metaDescriptionElementCount).toBe(1);
+  });
+
   test("has the correct links", async ({ page }) => {
     await checkInternalLink(
       page,

@@ -2,6 +2,11 @@
 
 {%- set pageTitle = content.app.title -%}
 
+{% block head %}
+  {{ super() }}
+  <meta name="description" content="{{ content.app.meta_description }}">
+{% endblock head %}
+
 {% block beforeContent %}
   {{ modFoiBreadcrumbs({'breadcrumbItems': breadcrumbItems, 'hasAccentBackground': true}) }}
 {% endblock beforeContent %}
