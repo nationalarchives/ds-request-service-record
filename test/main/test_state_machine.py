@@ -390,8 +390,8 @@ def test_continue_from_upload_a_proof_of_death_where_upload_proof_of_death_retur
     sm.continue_from_upload_a_proof_of_death_form(
         form=make_form(proof_of_death="an-uploaded-file-object")
     )
-    assert sm.current_state.id == "upload_a_proof_of_death_form"
-    assert sm.route_for_current_state == "main.upload_a_proof_of_death"
+    assert sm.current_state.id == "upload_a_proof_of_death_error_page"
+    assert sm.route_for_current_state == "main.upload_a_proof_of_death_error"
     mock_upload.assert_called_once_with(file="an-uploaded-file-object")
 
 

@@ -550,6 +550,19 @@ def upload_a_proof_of_death(form, state_machine):
     )
 
 
+@bp.route("/upload-a-proof-of-death-error/", methods=["GET"])
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.SERVICE_PERSON_DETAILS: MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH_ERROR,
+    }
+)
+def upload_a_proof_of_death_error():
+    return render_template(
+        "main/upload-a-proof-of-death-error.html",
+        content=load_content(),
+    )
+
+
 @bp.route("/your-order-summary/", methods=["GET", "POST"])
 @update_dynamic_back_link_mapping(
     mappings={

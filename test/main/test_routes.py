@@ -35,3 +35,12 @@ class MainBlueprintTestCase(unittest.TestCase):
         self.assertIn(
             '<h1 class="tna-heading-xl">Request a military service record</h1>', rv.text
         )
+
+    def test_upload_a_proof_of_death_error_page(self):
+        with self.client.session_transaction() as session:
+            session["entered_through_index_page"] = True
+        rv = self.client.get(
+            f"{self.app.config.get('SERVICE_URL_PREFIX')}/upload-a-proof-of-death-error/"
+        )
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("Sorry, there was an error uploading your file", rv.text)

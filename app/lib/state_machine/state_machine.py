@@ -141,6 +141,10 @@ class RoutingStateMachine(StateMachine):
         enter="entering_upload_a_proof_of_death_form", final=True
     )
 
+    upload_a_proof_of_death_error_page = State(
+        enter="entering_upload_a_proof_of_death_error_page", final=True
+    )
+
     are_you_sure_you_want_to_proceed_without_proof_of_death_form = State(
         enter="entering_are_you_sure_you_want_to_proceed_without_proof_of_death_form",
         final=True,
@@ -306,7 +310,7 @@ class RoutingStateMachine(StateMachine):
             service_person_details_form, cond="user_has_not_uploaded_proof_of_death"
         )
         | initial.to(service_person_details_form, cond="proof_of_death_uploaded_to_s3")
-        | initial.to(upload_a_proof_of_death_form)
+        | initial.to(upload_a_proof_of_death_error_page)
     )
 
     continue_from_service_person_details_form = initial.to(
@@ -469,6 +473,11 @@ class RoutingStateMachine(StateMachine):
 
     def entering_upload_a_proof_of_death_form(self):
         self.route_for_current_state = MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH.value
+
+    def entering_upload_a_proof_of_death_error_page(self):
+        self.route_for_current_state = (
+            MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH_ERROR.value
+        )
 
     def entering_have_you_previously_made_a_request_form(self):
         self.route_for_current_state = (
