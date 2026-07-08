@@ -395,6 +395,21 @@ def test_continue_from_upload_a_proof_of_death_where_upload_proof_of_death_retur
     mock_upload.assert_called_once_with(file="an-uploaded-file-object")
 
 
+@patch("app.lib.state_machine.state_machine.upload_proof_of_death", return_value=None)
+def test_continue_from_upload_a_proof_of_death_routes_to_error_page_when_max_retries_exhausted(
+    mock_upload,
+):
+    session["proof_of_death_upload_failed_after_max_retries"] = True
+    sm = RoutingStateMachine()
+    sm.continue_from_upload_a_proof_of_death_form(
+        form=make_form(proof_of_death="an-uploaded-file-object")
+    )
+    assert sm.current_state.id == "proof_of_death_upload_failed_page"
+    assert sm.route_for_current_state == "main.proof_of_death_upload_failed"
+    assert "proof_of_death_upload_failed_after_max_retries" not in session
+    mock_upload.assert_called_once_with(file="an-uploaded-file-object")
+
+
 # In this test we are again mocking upload_proof_of_death, but this time we simulate a successful
 # upload by having it return a filename.
 @patch(

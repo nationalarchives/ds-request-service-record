@@ -550,6 +550,14 @@ def upload_a_proof_of_death(form, state_machine):
     )
 
 
+@bp.route("/proof-of-death-upload-failed/", methods=["GET"])
+def proof_of_death_upload_failed():
+    return render_template(
+        "main/proof-of-death-upload-failed.html",
+        content=load_content(),
+    )
+
+
 @bp.route("/your-order-summary/", methods=["GET", "POST"])
 @update_dynamic_back_link_mapping(
     mappings={

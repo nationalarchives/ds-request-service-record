@@ -4,8 +4,11 @@ import os
 import uuid
 
 import boto3
-from flask import current_app
+from flask import current_app, has_request_context, session
 from werkzeug.datastructures.file_storage import FileStorage
+
+
+UPLOAD_FAILED_SESSION_KEY = "proof_of_death_upload_failed_after_max_retries"
 
 
 def get_boto3_session() -> boto3.session.Session:
@@ -53,6 +56,9 @@ def upload_file_to_s3(
 
     Returns file name for use in other parts of application.
     """
+    if has_request_context():
+        session.pop(UPLOAD_FAILED_SESSION_KEY, None)
+
     if file:
         data = file.read()
 
@@ -79,6 +85,8 @@ def upload_file_to_s3(
                     filename,
                     ExtraArgs={"ContentType": content_type},
                 )
+                if has_request_context():
+                    session.pop(UPLOAD_FAILED_SESSION_KEY, None)
                 return filename
             except Exception as e:
                 current_app.logger.error(
@@ -88,8 +96,10 @@ def upload_file_to_s3(
                     current_app.logger.error(
                         f"Max upload attempts reached for file {filename}. Upload failed."
                     )
-                    return filename_override  # TODO: Once we have a proper flow for handling failed uploads, we should return None here.
-    return filename_override  # TODO: Once we have a proper flow for handling failed uploads, we should return None here.
+                    if has_request_context():
+                        session[UPLOAD_FAILED_SESSION_KEY] = True
+                    return None
+    return None
 
 
 def move_proof_of_death_to_submitted(key_name: str) -> bool:

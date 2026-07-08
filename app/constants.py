@@ -40,6 +40,7 @@ class MultiPageFormRoutes(Enum):
     SERVICE_PERSON_DETAILS = "main.service_person_details"
     PROVIDE_A_PROOF_OF_DEATH = "main.provide_a_proof_of_death"
     UPLOAD_A_PROOF_OF_DEATH = "main.upload_a_proof_of_death"
+    PROOF_OF_DEATH_UPLOAD_FAILED = "main.proof_of_death_upload_failed"
     HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST = "main.have_you_previously_made_a_request"
     YOUR_CONTACT_DETAILS = "main.your_contact_details"
     WHAT_IS_YOUR_ADDRESS = "main.what_is_your_address"

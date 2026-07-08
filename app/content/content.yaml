@@ -307,6 +307,13 @@ pages:
       - No more than 5MB in size
       - Clearly showing all the information so our staff can read it
     if_unable_to_upload: If you are unable to upload your file, you can send it to us by replying directly to the email you will receive on completion of this form.
+  proof_of_death_upload_failed:
+    heading: Sorry, there was an error uploading your file
+    paragraphs:
+      - There was a problem on our end while uploading your proof of death.
+      - You can continue without uploading your proof of death now.
+      - After you submit your request, reply to your confirmation email and attach your proof of death.
+    call_to_action: Continue without uploading proof of death
   service_person_details:
     heading: Tell us as much as you know about the service person
     paragraphs:

@@ -4,7 +4,7 @@ from flask import current_app, has_app_context, session
 from statemachine import State, StateMachine
 
 from app.constants import MultiPageFormRoutes
-from app.lib.aws import upload_proof_of_death
+from app.lib.aws import UPLOAD_FAILED_SESSION_KEY, upload_proof_of_death
 from app.lib.boundary_years import BoundaryYears
 from app.lib.db.constants import (
     EXPIRED_STATUS,
@@ -139,6 +139,10 @@ class RoutingStateMachine(StateMachine):
 
     upload_a_proof_of_death_form = State(
         enter="entering_upload_a_proof_of_death_form", final=True
+    )
+
+    proof_of_death_upload_failed_page = State(
+        enter="entering_proof_of_death_upload_failed_page", final=True
     )
 
     are_you_sure_you_want_to_proceed_without_proof_of_death_form = State(
@@ -306,6 +310,10 @@ class RoutingStateMachine(StateMachine):
             service_person_details_form, cond="user_has_not_uploaded_proof_of_death"
         )
         | initial.to(service_person_details_form, cond="proof_of_death_uploaded_to_s3")
+        | initial.to(
+            proof_of_death_upload_failed_page,
+            cond="proof_of_death_upload_failed_after_max_retries",
+        )
         | initial.to(upload_a_proof_of_death_form)
     )
 
@@ -470,6 +478,11 @@ class RoutingStateMachine(StateMachine):
     def entering_upload_a_proof_of_death_form(self):
         self.route_for_current_state = MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH.value
 
+    def entering_proof_of_death_upload_failed_page(self):
+        self.route_for_current_state = (
+            MultiPageFormRoutes.PROOF_OF_DEATH_UPLOAD_FAILED.value
+        )
+
     def entering_have_you_previously_made_a_request_form(self):
         self.route_for_current_state = (
             MultiPageFormRoutes.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST.value
@@ -609,7 +622,11 @@ class RoutingStateMachine(StateMachine):
                 self.set_form_field_data(form, "proof_of_death", file)
                 return True
         self.set_form_field_data(form, "proof_of_death", None)
-        return False  # TODO: Does this need to be True if upload fails? They won't progress otherwise.
+        return False
+
+    def proof_of_death_upload_failed_after_max_retries(self, form):
+        """Condition method to determine if proof of death upload exhausted all retries."""
+        return session.pop(UPLOAD_FAILED_SESSION_KEY, False)
 
     # second payment conditions session is set in make_payment
     def payment_already_received(self):
