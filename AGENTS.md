@@ -82,10 +82,11 @@ Run commands inside the app container unless there is a clear reason not to.
 - If adding a new dependency, justify it in the PR/change notes.
 - Validate with the smallest relevant test set first, then broader tests if needed.
 
-## Recommended change workflow
+## Change workflow
 
 1. Read related route/form/helper tests before editing.
-2. Implement minimal code changes.
-3. Run targeted tests.
-4. Run formatting/linting if Python code changed.
-5. Summarize functional impact and any remaining risks.
+2. Implement code changes.
+3. Create necessary tests (Python and/or Playwright).
+4. Run formatting/linting.
+5. Run tests.
+6. Summarize functional impact and any remaining risks.
