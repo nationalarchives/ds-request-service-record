@@ -14,7 +14,7 @@
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
         <h1
           class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.we_are_unlikely_to_hold_officer_records__army.heading }}</h1>
-        {% for paragraph in content.pages.we_are_unlikely_to_hold_officer_records__army.paragraphs %}
+        {% for paragraph in content.pages.we_are_unlikely_to_hold_officer_records__army.initial_paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
         <ul class="tna-ul" id="exceptions-list">
@@ -22,6 +22,9 @@
             <li>{{ rank }}</li>
           {% endfor %}
         </ul>
+        {% for paragraph in content.pages.we_are_unlikely_to_hold_officer_records__army.subsequent_paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
         <form action="{{ url_for('main.we_are_unlikely_to_hold_officer_records__army') }}" method="post" novalidate>
           {{ form.csrf_token }}
           <div class="tna-button-group">

@@ -93,14 +93,13 @@ pages:
         - Their full date of birth
         - Your contact details so we can answer your request
     proof_of_death_requirement:
-      heading: Proof of death
+      heading: You may need a proof of death
       before_first_list:
         paragraphs:
           - |
-            If the person whose record you are looking for was born on or after 1 January [FIRST_BIRTH_YEAR_FOR_CLOSED_RECORDS] 
-            and is deceased, we require a digital copy of a proof of death. This is to protect 
-            any personal data in the record that might relate to a living person.
-          - "You will need to submit one of the following forms of evidence:"
+            If the person was born on or after 1 January [FIRST_BIRTH_YEAR_FOR_CLOSED_RECORDS] and is deceased, we will ask for 
+            a proof of death. This is to protect any personal data in the record that might relate to a living person.
+          - "You can submit one of the following forms of evidence: "
       before_second_list:
         paragraphs:
           - "The copy of proof of death must be:"
@@ -121,9 +120,9 @@ pages:
           If you do not submit a proof of death when required, it is 
           unlikely that we will be able to provide the record.
     important_information_that_will_help:
-      heading: Important information that will help our search
+      heading: Useful information that will help our search
       paragraphs:
-        - "To help us further, we also ask that you provide:"
+        - "To help us find the correct record, we will also ask optional questions on: "
       list_items:
         - The service person's service number
         - Military branch in which they served
@@ -258,15 +257,17 @@ pages:
     call_to_action: Request from the Ministry of Defence
   we_are_unlikely_to_hold_officer_records__army:
     heading: We are unlikely to hold this record yet
-    paragraphs:
-      - British Army Commissioned Officer records are currently being transferred to us. We may not hold the record you are looking for yet.
-      - We anticipate holding most Army Commissioned Officer records by December 2026.
-      - These records can only be requested from us using a Full record check, our Standard option is not available.
+    initial_paragraphs:
       - |
-        We recommend you check with the Ministry of Defence first, unless the record is contained in list the below:
+        British Army Commissioned Officer records are currently being transferred to us. We may not have the record you are looking for yet or are still processing it.
+        We recommend waiting until December 2026 to submit a request. By then, we will have received and processed most of these records and will be in a better position to search for it.
+      - "We do, however, hold records for:"
     list:
       - Grenadier Guards
       - Welsh Guards
+    subsequent_paragraphs:
+      - Continue if the record you are looking for is contained in this list.
+      - These records can only be requested from us using a Full record check, our Standard option is not available.
     call_to_action: Request from the Ministry of Defence
   we_do_not_have_records_for_people_born_after:
     heading: We do not have records for people born after 1939
@@ -397,7 +398,7 @@ pages:
           - term: Refunds
             description:
               - We will refund the page check fee (£9.92) if we do not hold the record.
-              - The search fee is not refundable.
+              - The search fee of £38.95 is not refundable.
     final_paragraphs:
       - We will send you a digital colour scan of the record by email. You can request a printed copy by post for an extra cost.
   your_order_type_other_and_dont_know_officers:
@@ -428,7 +429,7 @@ pages:
           - term: Refunds
             description:
               - We will refund the page check fee (£9.92) if we do not hold the record.
-              - The search fee is not refundable.
+              - The search fee of £38.95 is not refundable.
     final_paragraphs:
       - We will send you a digital colour scan of the record by email. You can request a printed copy by post for an extra cost.
   choose_your_order_type:
@@ -462,7 +463,7 @@ pages:
           - term: Refunds
             description:
               - We will refund the record copying fee (£3.30) if we do not hold the record.
-              - The search fee is not refundable.
+              - The search fee of £38.95 is not refundable.
     full_record_check:
       heading: Full record check
       paragraphs:
@@ -486,7 +487,7 @@ pages:
           - term: Refunds
             description:
               - We will refund the page check fee (£9.92) if we do not hold the record.
-              - The search fee is not refundable.
+              - The search fee of £38.95 is not refundable.
   your_order_summary:
     heading: Your order summary
     order_type_term: Order type
