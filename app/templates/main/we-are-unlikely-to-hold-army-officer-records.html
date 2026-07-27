@@ -29,10 +29,8 @@
           {{ form.csrf_token }}
           <div class="tna-button-group">
             {{ form.submit(params={'classes':'tna-button--plain'}) }}
-            <a href="{{ mod_service_link }}" target="_blank"
-               rel="noreferrer noopener" class="tna-button tna-button--accent">
-              {{ content.pages.we_are_unlikely_to_hold_officer_records__army.call_to_action }}
-            </a>
+            <a href="{{ url_for('main.are_you_sure_you_want_to_cancel') }}"
+               class="tna-button tna-button--accent">{{ content.pages.we_are_unlikely_to_hold_officer_records__army.call_to_action }}</a>
           </div>
         </form>
       </div>

@@ -268,7 +268,7 @@ pages:
     subsequent_paragraphs:
       - Continue if the record you are looking for is contained in this list.
       - These records can only be requested from us using a Full record check, our Standard option is not available.
-    call_to_action: Request from the Ministry of Defence
+    call_to_action: Cancel this request
   we_do_not_have_records_for_people_born_after:
     heading: We do not have records for people born after 1939
     paragraphs:

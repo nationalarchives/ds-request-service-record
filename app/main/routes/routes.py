@@ -242,6 +242,7 @@ def we_do_not_have_royal_navy_service_records(form, state_machine):
     mappings={
         MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH: MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY,
         MultiPageFormRoutes.YOUR_CONTACT_DETAILS: MultiPageFormRoutes.YOUR_ORDER_TYPE_BRITISH_ARMY_OFFICER,
+        MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL: MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY,
     }
 )
 @with_state_machine
