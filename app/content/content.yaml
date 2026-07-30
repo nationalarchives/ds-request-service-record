@@ -260,6 +260,7 @@ pages:
     initial_paragraphs:
       - |
         British Army Commissioned Officer records are currently being transferred to us. We may not have the record you are looking for yet or are still processing it.
+      - |
         We recommend waiting until December 2026 to submit a request. By then, we will have received and processed most of these records and will be in a better position to search for it.
       - "We do, however, hold records for:"
     list:
@@ -376,7 +377,10 @@ pages:
       - |
         You are requesting a British Army Commissioned Officer record. These can only be requested with a Full record check, our Standard option is not available.
       - |
-        As British Army Commissioned Officer records are currently being transferred to us from the Ministry of Defence, we recommend waiting until December 2026 to submit your request. By then, we anticipate most will have been transferred to us.
+        British Army Commissioned Officer records are currently being transferred to us. We may not have the record you are looking for yet or are still processing it.
+      - |
+        We recommend waiting until December 2026 to submit a request. By then, we will have received and processed most of these records and will be in a better position 
+        to search for it.
     full_record_check:
       heading: Full record check
       paragraphs:
@@ -398,7 +402,7 @@ pages:
           - term: Refunds
             description:
               - We will refund the page check fee (£9.92) if we do not hold the record.
-              - The search fee of £38.95 is not refundable.
+              - The search fee of £38.95 is non-refundable.
     final_paragraphs:
       - We will send you a digital colour scan of the record by email. You can request a printed copy by post for an extra cost.
   your_order_type_other_and_dont_know_officers:
@@ -429,7 +433,7 @@ pages:
           - term: Refunds
             description:
               - We will refund the page check fee (£9.92) if we do not hold the record.
-              - The search fee of £38.95 is not refundable.
+              - The search fee of £38.95 is non-refundable.
     final_paragraphs:
       - We will send you a digital colour scan of the record by email. You can request a printed copy by post for an extra cost.
   choose_your_order_type:
@@ -463,7 +467,7 @@ pages:
           - term: Refunds
             description:
               - We will refund the record copying fee (£3.30) if we do not hold the record.
-              - The search fee of £38.95 is not refundable.
+              - The search fee of £38.95 is non-refundable.
     full_record_check:
       heading: Full record check
       paragraphs:
@@ -487,7 +491,7 @@ pages:
           - term: Refunds
             description:
               - We will refund the page check fee (£9.92) if we do not hold the record.
-              - The search fee of £38.95 is not refundable.
+              - The search fee of £38.95 is non-refundable.
   your_order_summary:
     heading: Your order summary
     order_type_term: Order type
