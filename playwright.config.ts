@@ -1,6 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
-export const cookiePreferencesSetKey = "dontShowCookieNotice";
+export const cookiePreferencesSetKey = "cookie_preferences_set";
 
 export default defineConfig({
   testDir: "./test/playwright",
