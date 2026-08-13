@@ -234,6 +234,11 @@ pages:
         The Royal Navy service personnel records will not be transferred to us until 2027. 
         Please use the Ministry of Defence service to request access to Royal Navy records.
     call_to_action: Request from the Ministry of Defence
+    invitation_to_participate_in_research:
+      heading: Register to take part in a research session (opens in new tab)
+      body:
+        We are looking for people who are requesting Royal Navy service records.
+        Help us develop this part of the service and receive a voucher for your time.
   we_are_unlikely_to_hold_officer_records__generic:
     heading: We are unlikely to hold this record yet
     paragraphs:

@@ -233,6 +233,7 @@ def we_do_not_have_royal_navy_service_records(form, state_machine):
         form=form,
         content=load_content(),
         mod_service_link=ExternalLinks.MOD_SERVICE_DECEASED_SERVICEPERSON,
+        invitation_to_participate_in_research_link=ExternalLinks.ROYAL_NAVY_ENDPOINT_SURVEY,
     )
 
 

@@ -50,4 +50,14 @@ test.describe("the 'We do not hold this record' form", () => {
       Paths.WE_DO_NOT_HAVE_ROYAL_NAVY_SERVICE_RECORDS,
     );
   });
+
+  test("the link inviting users to participate in user research is correct", async ({
+    page,
+  }) => {
+    await checkExternalLink(
+      page,
+      "Register to take part in a research session (opens in new tab)",
+      "https://www.smartsurvey.co.uk/t/2ASYVT/",
+    );
+  });
 });
