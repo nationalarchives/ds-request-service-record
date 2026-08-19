@@ -13,7 +13,7 @@ const acceptAllCookies = () => {
     ]);
     await context.addCookies([
       {
-        name: "cookies_policy",
+        name: "cookie_preferences",
         value:
           "%7B%22usage%22%3Atrue%2C%22settings%22%3Atrue%2C%22marketing%22%3Atrue%2C%22essential%22%3Atrue%7D",
         domain: "localhost",

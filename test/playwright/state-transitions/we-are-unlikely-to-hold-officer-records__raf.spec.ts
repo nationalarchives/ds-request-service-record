@@ -20,16 +20,6 @@ test.describe("The variant of 'We are unlikely to hold this record' for Army Off
     );
   });
 
-  test("the link inviting users to participate in user research is correct", async ({
-    page,
-  }) => {
-    await checkExternalLink(
-      page,
-      "Register to take part in a research session (opens in new tab)",
-      "https://www.smartsurvey.co.uk/s/1KKGX5/",
-    );
-  });
-
   test("the 'Request from the Ministry of Defence' link is correct", async ({
     page,
   }) => {

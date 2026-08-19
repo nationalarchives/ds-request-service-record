@@ -1200,14 +1200,14 @@ sqlcipher = ["sqlcipher3_binary"]
 
 [[package]]
 name = "tna-frontend-jinja"
-version = "0.40.0"
+version = "1.2.0"
 description = "TNA Frontend Jinja templates"
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "tna_frontend_jinja-0.40.0-py3-none-any.whl", hash = "sha256:fe6973c6c8937c362e479f23ea10009f1148404a9d1dfe76c81f37da393e459d"},
-    {file = "tna_frontend_jinja-0.40.0.tar.gz", hash = "sha256:f970a4d53257e7ea37ba4871b735b42beb9513af48becb86abdcc779cee0afa0"},
+    {file = "tna_frontend_jinja-1.2.0-py3-none-any.whl", hash = "sha256:4cb4100b46d2261c1893354c96259d1cf280c78b4e966c5f3e8132e9b8472ff5"},
+    {file = "tna_frontend_jinja-1.2.0.tar.gz", hash = "sha256:4bd79a35e6ad59ee34d99d6e3ed59a70b3e3131001090530b1ab5fa8ecfa5641"},
 ]
 
 [package.dependencies]
@@ -1304,4 +1304,4 @@ email = ["email-validator"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.13"
-content-hash = "901c4df518d415bdf757c39187034040390c49ffc72b59f5b56f5a067583f624"
+content-hash = "859983d96fe3f1946c27896b7984ff1e7c27d81883c6d0ddb567cbc01af90dca"
