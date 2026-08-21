@@ -196,6 +196,10 @@ class RoutingStateMachine(StateMachine):
         enter="entering_gov_uk_pay_second_payment_redirect", final=True
     )
 
+    unable_to_upload_proof_of_death_form = State(
+        enter="entering_unable_to_upload_proof_of_death_form", final=True
+    )
+
     """
     These are our Events. They're called in route methods to trigger transitions between States.
 
@@ -306,7 +310,11 @@ class RoutingStateMachine(StateMachine):
             service_person_details_form, cond="user_has_not_uploaded_proof_of_death"
         )
         | initial.to(service_person_details_form, cond="proof_of_death_uploaded_to_s3")
-        | initial.to(upload_a_proof_of_death_form)
+        | initial.to(unable_to_upload_proof_of_death_form)
+    )
+
+    continue_from_unable_to_upload_proof_of_death_form = initial.to(
+        service_person_details_form
     )
 
     continue_from_service_person_details_form = initial.to(
@@ -469,6 +477,11 @@ class RoutingStateMachine(StateMachine):
 
     def entering_upload_a_proof_of_death_form(self):
         self.route_for_current_state = MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH.value
+
+    def entering_unable_to_upload_proof_of_death_form(self):
+        self.route_for_current_state = (
+            MultiPageFormRoutes.UNABLE_TO_UPLOAD_A_PROOF_OF_DEATH.value
+        )
 
     def entering_have_you_previously_made_a_request_form(self):
         self.route_for_current_state = (
