@@ -46,6 +46,7 @@ from app.main.forms.service_person_details import ServicePersonDetails
 from app.main.forms.sorry_you_will_have_to_start_again import (
     SorryYouWillHaveToStartAgain,
 )
+from app.main.forms.unable_to_upload_proof_of_death import UnableToUploadProofOfDeath
 from app.main.forms.upload_a_proof_of_death import UploadAProofOfDeath
 from app.main.forms.we_are_unlikely_to_hold_this_record import (
     WeAreUnlikelyToHoldThisRecord,
@@ -682,6 +683,26 @@ def your_order_type_other_and_dont_know_officers(form, state_machine):
         return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
         "main/your-order-type-other-and-dont-know-officers.html",
+        content=load_content(),
+        form=form,
+    )
+
+
+@bp.route("/unable-to-upload-proof-of-death/", methods=["GET", "POST"])
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.SERVICE_PERSON_DETAILS: MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH,
+    }
+)
+@with_form_prefilled_from_session(UnableToUploadProofOfDeath)
+@with_state_machine
+def unable_to_upload_proof_of_death(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_unable_to_upload_proof_of_death_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
+
+    return render_template(
+        "main/unable-to-upload-proof-of-death.html",
         content=load_content(),
         form=form,
     )

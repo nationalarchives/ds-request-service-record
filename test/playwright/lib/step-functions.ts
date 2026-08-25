@@ -301,6 +301,13 @@ export async function continueFromUploadAProofOfDeath(
   }
 }
 
+export async function presentUnableToUploadProofOfDeath(page) {
+  await expect(page).toHaveURL(Paths.UNABLE_TO_PROVIDE_PROOF_OF_DEATH);
+  await expect(page.locator("h1")).toHaveText(
+    /Sorry, we were unable to upload your file/,
+  );
+}
+
 export async function continueFromServicePersonDetails(
   page,
   {
