@@ -554,6 +554,11 @@ pages:
       - There was an error with the service
     further_paragraphs:
       - Please try again.
+  unable_to_upload_proof_of_death:
+    heading: Sorry, we were unable to upload your file
+    paragraphs:
+      - There is a problem with our file upload system.
+      - Please continue your request. You can send your file to us by replying directly to the email you will receive on completion of this form.
 forms:
   fields:
     request_a_military_service_record:
@@ -741,3 +746,5 @@ forms:
       call_to_action: Request a Full record check
     your_order_type_other_and_dont_know_officers:
       call_to_action: Request a Full record check
+    unable_to_upload_proof_of_death:
+      call_to_action: Continue

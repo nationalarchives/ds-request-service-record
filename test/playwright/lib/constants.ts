@@ -19,6 +19,7 @@ export const Paths = {
   SERVICE_PERSON_DETAILS: `${basePath}/service-person-details/`,
   SORRY_YOU_WILL_HAVE_TO_START_AGAIN: `${basePath}/sorry-you-will-have-to-start-again/`,
   UPLOAD_A_PROOF_OF_DEATH: `${basePath}/upload-a-proof-of-death/`,
+  UNABLE_TO_PROVIDE_PROOF_OF_DEATH: `${basePath}/unable-to-upload-proof-of-death/`,
   ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_A_PROOF_OF_DEATH: `${basePath}/are-you-sure-you-want-to-proceed-without-proof-of-death/`,
   WERE_THEY_A_COMMISSIONED_OFFICER: `${basePath}/were-they-a-commissioned-officer/`,
   WE_DO_NOT_HAVE_RECORDS_FOR_PEOPLE_BORN_AFTER: `${basePath}/we-do-not-have-records-for-people-born-after/`,
