@@ -43,7 +43,7 @@ def upload_proof_of_death(file: FileStorage) -> str | None:
 
 
 def upload_file_to_s3(
-    file: FileStorage, bucket_name: str, filename_override: str | None = None
+        file: FileStorage, bucket_name: str, filename_override: str | None = None
 ) -> str | None:
     """
     Generic function that takes a file and uploads it to a given S3 bucket.
@@ -88,8 +88,8 @@ def upload_file_to_s3(
                     current_app.logger.error(
                         f"Max upload attempts reached for file {filename}. Upload failed."
                     )
-                    return filename_override  # TODO: Once we have a proper flow for handling failed uploads, we should return None here.
-    return filename_override  # TODO: Once we have a proper flow for handling failed uploads, we should return None here.
+                    return None  # Maximum number of attempts reached
+    return None  # No file was uploaded
 
 
 def move_proof_of_death_to_submitted(key_name: str) -> bool:
@@ -165,13 +165,13 @@ def _normalize_prefix(prefix: str) -> str:
 
 
 def _to_submitted_key(
-    key_name: str, *, holding_prefix: str, submitted_prefix: str
+        key_name: str, *, holding_prefix: str, submitted_prefix: str
 ) -> str:
     normalized_holding = _normalize_prefix(holding_prefix)
     normalized_submitted = _normalize_prefix(submitted_prefix)
 
     if normalized_holding and key_name.startswith(normalized_holding):
-        key_name = key_name[len(normalized_holding) :]
+        key_name = key_name[len(normalized_holding):]
 
     return f"{normalized_submitted}{key_name}"
 
