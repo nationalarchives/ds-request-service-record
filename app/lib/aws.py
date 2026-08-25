@@ -88,8 +88,8 @@ def upload_file_to_s3(
                     current_app.logger.error(
                         f"Max upload attempts reached for file {filename}. Upload failed."
                     )
-                    return filename_override  # TODO: Once we have a proper flow for handling failed uploads, we should return None here.
-    return filename_override  # TODO: Once we have a proper flow for handling failed uploads, we should return None here.
+                    return None  # Maximum number of attempts reached
+    return None  # No file was uploaded
 
 
 def move_proof_of_death_to_submitted(key_name: str) -> bool:
