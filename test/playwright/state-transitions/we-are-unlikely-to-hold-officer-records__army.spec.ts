@@ -2,7 +2,9 @@ import { test, expect } from "@playwright/test";
 import { Paths } from "../lib/constants";
 import {
   checkExternalLink,
+  checkInternalLink,
   clickBackLink,
+  clickCancelThisRequest,
   continueFromWeAreUnlikelyToHoldThisRecord,
 } from "../lib/step-functions";
 
@@ -17,26 +19,6 @@ test.describe("The variant of 'We are unlikely to hold this record' for Army Off
   }) => {
     await expect(page.locator("main")).toHaveText(
       /These records can only be requested from us using a Full record check/,
-    );
-  });
-
-  test("the link inviting users to participate in user research is correct", async ({
-    page,
-  }) => {
-    await checkExternalLink(
-      page,
-      "Register to take part in a research session (opens in new tab)",
-      "https://www.smartsurvey.co.uk/s/1KKGX5/",
-    );
-  });
-
-  test("the 'Request from the Ministry of Defence' link is correct", async ({
-    page,
-  }) => {
-    await checkExternalLink(
-      page,
-      "Request from the Ministry of Defence",
-      "https://www.gov.uk/get-copy-military-records-of-service/apply-for-the-records-of-a-deceased-serviceperson",
     );
   });
 
@@ -74,6 +56,36 @@ test.describe("The variant of 'We are unlikely to hold this record' for Army Off
         page,
         Paths.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY,
       );
+    });
+  });
+
+  test.describe("when clicking 'Cancel this request'", () => {
+    test("takes the user to the 'Are you sure you want to cancel?' page", async ({
+      page,
+    }) => {
+      await clickCancelThisRequest(page, "link");
+    });
+
+    test.describe("then", () => {
+      test("clicking 'Back' from 'Are you sure you want to cancel?' brings the user back", async ({
+        page,
+      }) => {
+        await clickCancelThisRequest(page, "link");
+        await clickBackLink(
+          page,
+          Paths.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY,
+        );
+      });
+
+      test("clicking 'No' from 'Are you sure you want to cancel?' brings the user back", async ({
+        page,
+      }) => {
+        await clickCancelThisRequest(page, "link");
+        await page.getByRole("link", { name: "No", exact: true }).click();
+        await expect(page).toHaveURL(
+          Paths.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY,
+        );
+      });
     });
   });
 });

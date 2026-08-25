@@ -233,6 +233,7 @@ def we_do_not_have_royal_navy_service_records(form, state_machine):
         form=form,
         content=load_content(),
         mod_service_link=ExternalLinks.MOD_SERVICE_DECEASED_SERVICEPERSON,
+        invitation_to_participate_in_research_link=ExternalLinks.ROYAL_NAVY_ENDPOINT_SURVEY,
     )
 
 
@@ -242,6 +243,7 @@ def we_do_not_have_royal_navy_service_records(form, state_machine):
     mappings={
         MultiPageFormRoutes.WHAT_WAS_THEIR_DATE_OF_BIRTH: MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY,
         MultiPageFormRoutes.YOUR_CONTACT_DETAILS: MultiPageFormRoutes.YOUR_ORDER_TYPE_BRITISH_ARMY_OFFICER,
+        MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_CANCEL: MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__ARMY,
     }
 )
 @with_state_machine
@@ -254,7 +256,6 @@ def we_are_unlikely_to_hold_officer_records__army(form, state_machine):
         content=load_content(),
         form=form,
         mod_service_link=ExternalLinks.MOD_SERVICE_DECEASED_SERVICEPERSON,
-        invitation_to_participate_in_research_link=ExternalLinks.OFFICER_ENDPOINT_SURVEY,
     )
 
 
@@ -277,7 +278,6 @@ def we_are_unlikely_to_hold_officer_records__raf(form, state_machine):
         content=load_content(),
         form=form,
         mod_service_link=ExternalLinks.MOD_SERVICE_DECEASED_SERVICEPERSON,
-        invitation_to_participate_in_research_link=ExternalLinks.OFFICER_ENDPOINT_SURVEY,
     )
 
 
