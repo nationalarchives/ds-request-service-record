@@ -35,6 +35,7 @@ runs:
       run: |
         echo "CONFIG=config.Test" > .env
         echo "ENVIRONMENT_NAME=test" >> .env
+        echo "MOCK_S3=true" >> .env
         cat .env
       shell: bash
     - name: Start service
@@ -44,5 +45,5 @@ runs:
       run: docker compose up --detach --wait --wait-timeout 300 app || docker compose logs app
       shell: bash
     - name: Run tests
-      run: CI=true npx playwright test --project=chromium --grep-invert "@wip"
+      run: CI=true MOCK_S3=true npx playwright test --project=chromium --grep-invert "@wip"
       shell: bash

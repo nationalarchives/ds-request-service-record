@@ -6,7 +6,7 @@
     "dev:css": "sass --load-path=node_modules --watch src/styles:app/static",
     "dev:js": "webpack --config webpack.config.js --mode=development --watch",
     "dev": "npm run dev:css & npm run dev:js &",
-    "test:playwright": "npx playwright install && CI=true npx playwright test",
+    "test:playwright": "npx playwright install && CI=true MOCK_S3=true npx playwright test",
     "test:playwright:ui": "npx playwright install && npx playwright test --ui"
   },
   "dependencies": {

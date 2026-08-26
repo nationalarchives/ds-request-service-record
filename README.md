@@ -84,6 +84,7 @@ In addition to the [base Docker image variables](https://github.com/nationalarch
 | `SESSION_COOKIE_SECURE`           | Whether cookies are marked secure (develop config override)                                      | `True`                                                    |
 | `SESSION_REDIS_URL`               | Redis URL connection string for sessions                                                         | _none_                                                    |
 | `AWS_DEFAULT_REGION`              | AWS region for clients (SES/S3)                                                                  | `eu-west-2`                                               |
+| `MOCK_S3`                         | Use mocked S3 behaviour for proof-of-death uploads                                               | production: `False`                                       |
 | `PROOF_OF_DEATH_BUCKET_NAME`      | S3 bucket location for uploaded proof-of-death files                                             | _none_ (required for file uploads)                        |
 | `PROOF_OF_DEATH_HOLDING_PREFIX`   | S3 prefix used for holding proof-of-death files                                                  | `holding/`                                                |
 | `PROOF_OF_DEATH_SUBMITTED_PREFIX` | S3 prefix used for submitted proof-of-death files                                                | `submitted/`                                              |
