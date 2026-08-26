@@ -26,7 +26,7 @@ def upload_proof_of_death(file: FileStorage) -> str | None:
     holding_prefix = _get_proof_of_death_holding_prefix()
     key_name = _build_key_with_prefix(holding_prefix, base_filename, file.filename)
 
-    if current_app.config.get("ENVIRONMENT_NAME") == "test":
+    if _should_mock_s3():
         return key_name
 
     bucket_name = current_app.config.get("PROOF_OF_DEATH_BUCKET_NAME")
@@ -182,6 +182,10 @@ def _get_proof_of_death_holding_prefix() -> str:
 
 def _get_proof_of_death_submitted_prefix() -> str:
     return current_app.config.get("PROOF_OF_DEATH_SUBMITTED_PREFIX")
+
+
+def _should_mock_s3() -> bool:
+    return current_app.config.get("MOCK_S3", False)
 
 
 def _determine_content_type(file: FileStorage, filename: str) -> str:

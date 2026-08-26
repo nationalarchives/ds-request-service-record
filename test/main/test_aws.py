@@ -169,14 +169,44 @@ def test_upload_file_to_s3_retries_on_failure(context):
     assert mock_s3.upload_fileobj.call_count == 3
 
 
-def test_upload_proof_of_death_uses_uuid_for_key_name(context):
+def test_upload_proof_of_death_returns_key_name_when_mock_s3_enabled(context):
     file = FileStorage(
         stream=io.BytesIO(b"image-bytes"),
         filename="proof.png",
         content_type="image/png",
     )
 
-    with patch("app.lib.aws.uuid.uuid4", return_value="generated-uuid"):
+    with (
+        patch.dict(current_app.config, {"MOCK_S3": True}),
+        patch("app.lib.aws.uuid.uuid4", return_value="generated-uuid"),
+        patch("app.lib.aws.upload_file_to_s3") as mock_upload,
+    ):
         result = upload_proof_of_death(file=file)
 
     assert result == "holding/generated-uuid.png"
+    mock_upload.assert_not_called()
+
+
+def test_upload_proof_of_death_uploads_to_s3_when_mock_s3_disabled(context):
+    file = FileStorage(
+        stream=io.BytesIO(b"image-bytes"),
+        filename="proof.png",
+        content_type="image/png",
+    )
+
+    with (
+        patch.dict(current_app.config, {"MOCK_S3": False}),
+        patch("app.lib.aws.uuid.uuid4", return_value="generated-uuid"),
+        patch(
+            "app.lib.aws.upload_file_to_s3",
+            return_value="holding/generated-uuid.png",
+        ) as mock_upload,
+    ):
+        result = upload_proof_of_death(file=file)
+
+    assert result == "holding/generated-uuid.png"
+    mock_upload.assert_called_once_with(
+        file=file,
+        bucket_name="proof-bucket",
+        filename_override="holding/generated-uuid.png",
+    )
