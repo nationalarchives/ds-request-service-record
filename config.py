@@ -94,6 +94,7 @@ class Production(Features):
     PROOF_OF_DEATH_SUBMITTED_PREFIX: str = os.environ.get(
         "PROOF_OF_DEATH_SUBMITTED_PREFIX", "submitted/"
     )
+    MOCK_S3: bool = strtobool(os.getenv("MOCK_S3", "False"))
     MAX_UPLOAD_ATTEMPTS: int = int(os.environ.get("MAX_UPLOAD_ATTEMPTS", "3"))
 
     EMAIL_FROM: str = os.environ.get("EMAIL_FROM", "")
@@ -129,6 +130,7 @@ class Develop(Production):
 
 class Test(Production):
     ENVIRONMENT_NAME = "test"
+    MOCK_S3: bool = True
 
     SECRET_KEY: str = "abc123"
     DEBUG: bool = True
