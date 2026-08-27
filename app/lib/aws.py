@@ -4,6 +4,7 @@ import os
 import uuid
 
 import boto3
+from botocore.client import Config
 from flask import current_app
 from werkzeug.datastructures.file_storage import FileStorage
 
@@ -17,6 +18,25 @@ def get_boto3_session() -> boto3.session.Session:
     return boto3.session.Session(region_name=region)
 
 
+def get_s3_client():
+    """
+    Returns an S3 client, pointed at the local mock S3 container when one is configured.
+    """
+    session = get_boto3_session()
+    endpoint_url = _get_mock_s3_endpoint_url()
+
+    if not endpoint_url:
+        return session.client("s3")
+
+    return session.client(
+        "s3",
+        endpoint_url=endpoint_url,
+        aws_access_key_id=current_app.config.get("MOCK_S3_ACCESS_KEY_ID"),
+        aws_secret_access_key=current_app.config.get("MOCK_S3_SECRET_ACCESS_KEY"),
+        config=Config(s3={"addressing_style": "path"}),
+    )
+
+
 def upload_proof_of_death(file: FileStorage) -> str | None:
     """
     Function that uploads a proof of death file to S3, with a UUID as the filename.
@@ -25,9 +45,6 @@ def upload_proof_of_death(file: FileStorage) -> str | None:
     base_filename = str(uuid.uuid4())
     holding_prefix = _get_proof_of_death_holding_prefix()
     key_name = _build_key_with_prefix(holding_prefix, base_filename, file.filename)
-
-    if _should_mock_s3():
-        return key_name
 
     bucket_name = current_app.config.get("PROOF_OF_DEATH_BUCKET_NAME")
 
@@ -60,8 +77,7 @@ def upload_file_to_s3(
             current_app.logger.error("File is empty, cannot upload to S3.")
             return None
 
-        session = get_boto3_session()
-        s3 = session.client("s3")
+        s3 = get_s3_client()
 
         filename = file.filename
 
@@ -126,8 +142,7 @@ def move_proof_of_death_to_submitted(key_name: str) -> bool:
     if destination_key == source_key:
         return True
 
-    session = get_boto3_session()
-    s3 = session.client("s3")
+    s3 = get_s3_client()
 
     try:
         s3.copy_object(
@@ -186,6 +201,15 @@ def _get_proof_of_death_submitted_prefix() -> str:
 
 def _should_mock_s3() -> bool:
     return current_app.config.get("MOCK_S3", False)
+
+
+def _get_mock_s3_endpoint_url() -> str:
+    """
+    The mock S3 endpoint is only used when S3 mocking is switched on.
+    """
+    if not _should_mock_s3():
+        return ""
+    return current_app.config.get("MOCK_S3_ENDPOINT_URL", "")
 
 
 def _determine_content_type(file: FileStorage, filename: str) -> str:
