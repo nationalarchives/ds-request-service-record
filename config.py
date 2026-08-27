@@ -143,7 +143,9 @@ class Test(Production):
     MOCK_S3_SECRET_ACCESS_KEY: str = os.environ.get(
         "MOCK_S3_SECRET_ACCESS_KEY", "minioadmin"
     )
-    PROOF_OF_DEATH_BUCKET_NAME: str = os.environ.get("PROOF_OF_DEATH_BUCKET_NAME", "test-proof-of-death")
+    PROOF_OF_DEATH_BUCKET_NAME: str = os.environ.get(
+        "PROOF_OF_DEATH_BUCKET_NAME", "test-proof-of-death"
+    )
 
     SECRET_KEY: str = "abc123"
     DEBUG: bool = True
