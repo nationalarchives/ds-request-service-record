@@ -116,9 +116,6 @@ def move_proof_of_death_to_submitted(key_name: str) -> bool:
     if not key_name:
         return False
 
-    if current_app.config.get("ENVIRONMENT_NAME") == "test":
-        return True
-
     bucket_name = current_app.config.get("PROOF_OF_DEATH_BUCKET_NAME")
 
     if not bucket_name:
