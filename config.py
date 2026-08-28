@@ -94,7 +94,6 @@ class Production(Features):
     PROOF_OF_DEATH_SUBMITTED_PREFIX: str = os.environ.get(
         "PROOF_OF_DEATH_SUBMITTED_PREFIX", "submitted/"
     )
-    MOCK_S3: bool = strtobool(os.getenv("MOCK_S3", "False"))
     MAX_UPLOAD_ATTEMPTS: int = int(os.environ.get("MAX_UPLOAD_ATTEMPTS", "3"))
 
     EMAIL_FROM: str = os.environ.get("EMAIL_FROM", "")
@@ -127,10 +126,26 @@ class Develop(Production):
 
     SESSION_COOKIE_SECURE: bool = strtobool(os.getenv("SESSION_COOKIE_SECURE", "True"))
 
+    MOCK_S3: bool = strtobool(os.getenv("MOCK_S3", "False"))
+    MOCK_S3_ENDPOINT_URL: str = os.environ.get("MOCK_S3_ENDPOINT_URL", "")
+    MOCK_S3_ACCESS_KEY_ID: str = os.environ.get("MOCK_S3_ACCESS_KEY_ID", "minioadmin")
+    MOCK_S3_SECRET_ACCESS_KEY: str = os.environ.get(
+        "MOCK_S3_SECRET_ACCESS_KEY", "minioadmin"
+    )
+
 
 class Test(Production):
     ENVIRONMENT_NAME = "test"
-    MOCK_S3: bool = True
+
+    MOCK_S3: bool = strtobool(os.getenv("MOCK_S3", "True"))
+    MOCK_S3_ENDPOINT_URL: str = os.environ.get("MOCK_S3_ENDPOINT_URL", "")
+    MOCK_S3_ACCESS_KEY_ID: str = os.environ.get("MOCK_S3_ACCESS_KEY_ID", "minioadmin")
+    MOCK_S3_SECRET_ACCESS_KEY: str = os.environ.get(
+        "MOCK_S3_SECRET_ACCESS_KEY", "minioadmin"
+    )
+    PROOF_OF_DEATH_BUCKET_NAME: str = os.environ.get(
+        "PROOF_OF_DEATH_BUCKET_NAME", "test-proof-of-death"
+    )
 
     SECRET_KEY: str = "abc123"
     DEBUG: bool = True

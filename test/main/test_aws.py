@@ -1,212 +1,221 @@
 import io
-from unittest.mock import MagicMock, patch
+import logging
+import socket
+import uuid
+from unittest.mock import patch
+from urllib.parse import urlparse
 
 import pytest
+from botocore.exceptions import ClientError
 from flask import current_app
 from werkzeug.datastructures import FileStorage
 
 from app import create_app
 from app.lib.aws import (
+    get_s3_client,
     move_proof_of_death_to_submitted,
     upload_file_to_s3,
     upload_proof_of_death,
 )
 
 
+def _endpoint_is_reachable(endpoint_url: str) -> bool:
+    parsed = urlparse(endpoint_url)
+    try:
+        with socket.create_connection((parsed.hostname, parsed.port or 80), timeout=3):
+            return True
+    except OSError:
+        return False
+
+
 @pytest.fixture(scope="module")
 def app():
     app = create_app("config.Test")
-    # Minimal config needed by upload_file_to_s3
-    app.config.update(
-        {
-            "AWS_ACCESS_KEY_ID": "test",
-            "AWS_SECRET_ACCESS_KEY": "test",
-            "AWS_SESSION_TOKEN": "test-token",
-            "AWS_DEFAULT_REGION": "eu-west-2",
-            "MAX_UPLOAD_ATTEMPTS": 3,
-            "PROOF_OF_DEATH_BUCKET_NAME": "proof-bucket",
-            "PROOF_OF_DEATH_HOLDING_PREFIX": "holding/",
-            "PROOF_OF_DEATH_SUBMITTED_PREFIX": "submitted/",
-        }
-    )
+
+    endpoint_url = app.config.get("MOCK_S3_ENDPOINT_URL")
+    # These tests empty the configured bucket, so refuse to run unless S3 is mocked.
+    if (
+        not app.config.get("MOCK_S3")
+        or not endpoint_url
+        or not _endpoint_is_reachable(endpoint_url)
+    ):
+        pytest.skip(
+            "Mock S3 is not reachable. Start it with: docker compose up mock-s3",
+            allow_module_level=True,
+        )
+
     return app
 
 
-@pytest.fixture()
-def context(app):
+@pytest.fixture(scope="module")
+def bucket_name(app):
+    return app.config["PROOF_OF_DEATH_BUCKET_NAME"]
+
+
+@pytest.fixture(scope="module")
+def s3(app, bucket_name):
+    """Creates the configured bucket in the mock S3 if the init container hasn't already."""
     with app.app_context():
+        client = get_s3_client()
+        try:
+            client.head_bucket(Bucket=bucket_name)
+        except ClientError:
+            client.create_bucket(Bucket=bucket_name)
+        try:
+            yield client
+        finally:
+            _empty_bucket(client, bucket_name)
+
+
+@pytest.fixture()
+def context(app, s3, bucket_name):
+    """Gives each test an app context and an empty bucket to work against."""
+    with app.app_context():
+        _empty_bucket(s3, bucket_name)
         yield
 
 
-def test_upload_file_to_s3_valid_file_returns_filename(context):
-    # Arrange: create a non-empty file-like object
-    content = b"some-bytes"
-    stream = io.BytesIO(content)
-    fs = FileStorage(stream=stream, filename="original.png", content_type="image/png")
-
-    mock_s3 = MagicMock()
-    mock_s3.upload_fileobj = MagicMock(return_value=None)
-
-    mock_session = MagicMock()
-    mock_session.client.return_value = mock_s3
-
-    with patch("app.lib.aws.get_boto3_session", return_value=mock_session):
-        result = upload_file_to_s3(
-            file=fs,
-            bucket_name="test-bucket",
-            filename_override="override-name",
+def _empty_bucket(client, bucket_name):
+    response = client.list_objects_v2(Bucket=bucket_name)
+    contents = response.get("Contents", [])
+    if contents:
+        client.delete_objects(
+            Bucket=bucket_name,
+            Delete={"Objects": [{"Key": item["Key"]} for item in contents]},
         )
 
-    assert isinstance(result, str)
+
+def _list_keys(client, bucket_name) -> list[str]:
+    response = client.list_objects_v2(Bucket=bucket_name)
+    return sorted(item["Key"] for item in response.get("Contents", []))
+
+
+def _make_file(
+    content=b"some-bytes", filename="original.png", content_type="image/png"
+):
+    return FileStorage(
+        stream=io.BytesIO(content), filename=filename, content_type=content_type
+    )
+
+
+def test_upload_file_to_s3_valid_file_stores_object(context, s3, bucket_name):
+    file = _make_file(content=b"some-bytes")
+
+    result = upload_file_to_s3(
+        file=file,
+        bucket_name=bucket_name,
+        filename_override="override-name",
+    )
+
     assert result == "override-name.png"
-    mock_session.client.assert_called_once_with("s3")
-    mock_s3.upload_fileobj.assert_called_once()
-    # Verify the correct arguments were passed
-    call_args = mock_s3.upload_fileobj.call_args
-    assert call_args[0][1] == "test-bucket"
-    assert call_args[0][2] == "override-name.png"
-    assert call_args.kwargs["ExtraArgs"] == {"ContentType": "image/png"}
+    assert _list_keys(s3, bucket_name) == ["override-name.png"]
+
+    stored = s3.get_object(Bucket=bucket_name, Key="override-name.png")
+    assert stored["Body"].read() == b"some-bytes"
+    assert stored["ContentType"] == "image/png"
 
 
-def test_upload_file_to_s3_pdf_uses_application_pdf_content_type(context):
-    content = b"%PDF-1.4\n..."
-    stream = io.BytesIO(content)
-    fs = FileStorage(
-        stream=stream,
+def test_upload_file_to_s3_pdf_uses_application_pdf_content_type(
+    context, s3, bucket_name
+):
+    file = _make_file(
+        content=b"%PDF-1.4\n...",
         filename="death-certificate.pdf",
         content_type="application/octet-stream",
     )
 
-    mock_s3 = MagicMock()
-    mock_s3.upload_fileobj = MagicMock(return_value=None)
-
-    mock_session = MagicMock()
-    mock_session.client.return_value = mock_s3
-
-    with patch("app.lib.aws.get_boto3_session", return_value=mock_session):
-        result = upload_file_to_s3(
-            file=fs,
-            bucket_name="test-bucket",
-            filename_override="override-name",
-        )
+    result = upload_file_to_s3(
+        file=file,
+        bucket_name=bucket_name,
+        filename_override="override-name",
+    )
 
     assert result == "override-name.pdf"
-    call_args = mock_s3.upload_fileobj.call_args
-    assert call_args.kwargs["ExtraArgs"] == {"ContentType": "application/pdf"}
+
+    stored = s3.head_object(Bucket=bucket_name, Key="override-name.pdf")
+    assert stored["ContentType"] == "application/pdf"
 
 
-def test_move_proof_of_death_to_submitted_copies_and_deletes(context):
-    # config.Test sets ENVIRONMENT_NAME == "test" which causes move_proof_of_death_to_submitted
-    # to early-return True (skipping boto3). Override so we exercise the S3 copy+delete logic.
-    previous_env = current_app.config.get("ENVIRONMENT_NAME")
-    current_app.config["ENVIRONMENT_NAME"] = ""
+def test_upload_file_to_s3_uses_original_filename_without_override(
+    context, s3, bucket_name
+):
+    file = _make_file(filename="original.png")
 
-    mock_s3 = MagicMock()
-    mock_s3.copy_object = MagicMock(return_value=None)
-    mock_s3.delete_object = MagicMock(return_value=None)
+    result = upload_file_to_s3(file=file, bucket_name=bucket_name)
 
-    mock_session = MagicMock()
-    mock_session.client.return_value = mock_s3
+    assert result == "original.png"
+    assert _list_keys(s3, bucket_name) == ["original.png"]
 
-    try:
-        with patch("app.lib.aws.get_boto3_session", return_value=mock_session):
-            result = move_proof_of_death_to_submitted("holding/proof.png")
-    finally:
-        current_app.config["ENVIRONMENT_NAME"] = previous_env
+
+def test_upload_file_to_s3_invalid_empty_file_stores_nothing(context, s3, bucket_name):
+    file = _make_file(content=b"", filename="empty.png")
+
+    result = upload_file_to_s3(
+        file=file,
+        bucket_name=bucket_name,
+        filename_override="should-not-matter",
+    )
+
+    assert result is None
+    assert _list_keys(s3, bucket_name) == []
+
+
+def test_upload_file_to_s3_retries_then_gives_up_on_missing_bucket(context, caplog):
+    file = _make_file(filename="test.png")
+
+    with caplog.at_level(logging.ERROR):
+        result = upload_file_to_s3(file=file, bucket_name="bucket-that-does-not-exist")
+
+    assert result is None
+    attempts = [
+        record
+        for record in caplog.records
+        if "Error uploading file to S3" in record.message
+    ]
+    assert len(attempts) == 3
+    assert "Max upload attempts reached" in caplog.text
+
+
+def test_upload_proof_of_death_stores_object_under_holding_prefix(
+    context, s3, bucket_name
+):
+    file = _make_file(filename="proof.png")
+    generated_uuid = uuid.uuid4()
+
+    with patch("app.lib.aws.uuid.uuid4", return_value=generated_uuid):
+        result = upload_proof_of_death(file=file)
+
+    assert result == f"holding/{generated_uuid}.png"
+    assert _list_keys(s3, bucket_name) == [f"holding/{generated_uuid}.png"]
+
+
+def test_move_proof_of_death_to_submitted_copies_and_deletes(context, s3, bucket_name):
+    s3.put_object(Bucket=bucket_name, Key="holding/proof.png", Body=b"proof-bytes")
+
+    result = move_proof_of_death_to_submitted("holding/proof.png")
 
     assert result is True
-    mock_session.client.assert_called_once_with("s3")
-    mock_s3.copy_object.assert_called_once_with(
-        Bucket="proof-bucket",
-        Key="submitted/proof.png",
-        CopySource={"Bucket": "proof-bucket", "Key": "holding/proof.png"},
-    )
-    mock_s3.delete_object.assert_called_once_with(
-        Bucket="proof-bucket", Key="holding/proof.png"
-    )
+    assert _list_keys(s3, bucket_name) == ["submitted/proof.png"]
+
+    moved = s3.get_object(Bucket=bucket_name, Key="submitted/proof.png")
+    assert moved["Body"].read() == b"proof-bytes"
 
 
-def test_upload_file_to_s3_invalid_empty_file_returns_none(context):
-    # Arrange: empty file (read() -> b'')
-    empty_stream = io.BytesIO(b"")
-    fs = FileStorage(
-        stream=empty_stream, filename="empty.png", content_type="image/png"
-    )
+def test_move_proof_of_death_to_submitted_returns_false_for_missing_object(
+    context, s3, bucket_name
+):
+    result = move_proof_of_death_to_submitted("holding/not-here.png")
 
-    # Because the function returns early for empty content, boto3 should never be called
-    with patch("app.lib.aws.get_boto3_session") as mock_session:
-        result = upload_file_to_s3(
-            file=fs,
-            bucket_name="test-bucket",
-            filename_override="should-not-matter",
-        )
-
-    assert result is None
-    mock_session.assert_not_called()
+    assert result is False
+    assert _list_keys(s3, bucket_name) == []
 
 
-def test_upload_file_to_s3_retries_on_failure(context):
-    # Arrange: create a non-empty file
-    content = b"some-bytes"
-    stream = io.BytesIO(content)
-    fs = FileStorage(stream=stream, filename="test.png", content_type="image/png")
-
-    mock_s3 = MagicMock()
-    # Simulate failure on all attempts
-    mock_s3.upload_fileobj.side_effect = Exception("S3 error")
-
-    mock_session = MagicMock()
-    mock_session.client.return_value = mock_s3
-
-    with patch("app.lib.aws.get_boto3_session", return_value=mock_session):
-        result = upload_file_to_s3(
-            file=fs,
-            bucket_name="test-bucket",
-        )
-
-    assert result is None
-    # Should retry 3 times (MAX_UPLOAD_ATTEMPTS)
-    assert mock_s3.upload_fileobj.call_count == 3
+def test_move_proof_of_death_to_submitted_returns_false_when_bucket_not_configured(
+    context,
+):
+    with patch.dict(current_app.config, {"PROOF_OF_DEATH_BUCKET_NAME": ""}):
+        assert move_proof_of_death_to_submitted("holding/proof.png") is False
 
 
-def test_upload_proof_of_death_returns_key_name_when_mock_s3_enabled(context):
-    file = FileStorage(
-        stream=io.BytesIO(b"image-bytes"),
-        filename="proof.png",
-        content_type="image/png",
-    )
-
-    with (
-        patch.dict(current_app.config, {"MOCK_S3": True}),
-        patch("app.lib.aws.uuid.uuid4", return_value="generated-uuid"),
-        patch("app.lib.aws.upload_file_to_s3") as mock_upload,
-    ):
-        result = upload_proof_of_death(file=file)
-
-    assert result == "holding/generated-uuid.png"
-    mock_upload.assert_not_called()
-
-
-def test_upload_proof_of_death_uploads_to_s3_when_mock_s3_disabled(context):
-    file = FileStorage(
-        stream=io.BytesIO(b"image-bytes"),
-        filename="proof.png",
-        content_type="image/png",
-    )
-
-    with (
-        patch.dict(current_app.config, {"MOCK_S3": False}),
-        patch("app.lib.aws.uuid.uuid4", return_value="generated-uuid"),
-        patch(
-            "app.lib.aws.upload_file_to_s3",
-            return_value="holding/generated-uuid.png",
-        ) as mock_upload,
-    ):
-        result = upload_proof_of_death(file=file)
-
-    assert result == "holding/generated-uuid.png"
-    mock_upload.assert_called_once_with(
-        file=file,
-        bucket_name="proof-bucket",
-        filename_override="holding/generated-uuid.png",
-    )
+def test_move_proof_of_death_to_submitted_returns_false_without_key(context):
+    assert move_proof_of_death_to_submitted("") is False
