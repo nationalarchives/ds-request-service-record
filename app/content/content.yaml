@@ -745,6 +745,6 @@ forms:
     your_order_type_british_army_officers:
       call_to_action: Request a Full record check
     your_order_type_other_and_dont_know_officers:
-      call_to_action: Request a Full record check
+      call_to_action: Request Full record check
     unable_to_upload_proof_of_death:
       call_to_action: Continue
