@@ -108,6 +108,11 @@ class Production(Features):
     )
     MOD_COPYING_API_URL: str = os.environ.get("MOD_COPYING_API_URL", "")
 
+    MOCK_S3: bool = False
+    MOCK_S3_ENDPOINT_URL: str = ""
+    MOCK_S3_ACCESS_KEY_ID: str = ""
+    MOCK_S3_SECRET_ACCESS_KEY: str = ""
+
 
 class Staging(Production):
     DEBUG: bool = strtobool(os.getenv("DEBUG", "False"))
