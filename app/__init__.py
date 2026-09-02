@@ -100,10 +100,10 @@ def create_app(config_class):
 
     @app.context_processor
     def context_processor():
-        return dict(
-            cookie_preference=cookie_preference,
-            now_iso_8601=now_iso_8601,
-            app_config={
+        return {
+            "cookie_preference": cookie_preference,
+            "now_iso_8601": now_iso_8601,
+            "app_config": {
                 "ENVIRONMENT_NAME": app.config.get("ENVIRONMENT_NAME"),
                 "CONTAINER_IMAGE": app.config.get("CONTAINER_IMAGE"),
                 "BUILD_VERSION": app.config.get("BUILD_VERSION"),
@@ -111,8 +111,8 @@ def create_app(config_class):
                 "COOKIE_DOMAIN": app.config.get("COOKIE_DOMAIN"),
                 "GA4_ID": app.config.get("GA4_ID"),
             },
-            feature={},
-        )
+            "feature": {},
+        }
 
     @app.route("/")
     def index_redirect():
