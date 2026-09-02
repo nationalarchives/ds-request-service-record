@@ -77,9 +77,7 @@ def closure_status_calculation(date_of_birth: str, has_proof_of_death: bool) -> 
 
 
 def has_proof_of_death(record: ServiceRecordRequest) -> bool:
-    if record.proof_of_death and record.proof_of_death != "EMPTY":
-        return True
-    return False
+    return bool(record.proof_of_death and record.proof_of_death != "EMPTY")
 
 
 def subject_status(record: ServiceRecordRequest) -> str:
