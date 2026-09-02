@@ -49,7 +49,9 @@ def test_serializes_filestorage_empty_filename_to_placeholder():
 def test_formats_date_and_datetime():
     session_obj = {}
     d = datetime.date(2024, 7, 5)  # 05 July 2024
-    dt = datetime.datetime(2023, 12, 31, 23, 59)  # 31 December 2023
+    dt = datetime.datetime(
+        2023, 12, 31, 23, 59, tzinfo=datetime.timezone.utc
+    )  # 31 December 2023
     form = MockForm(
         {
             "date_field": MockField(d),

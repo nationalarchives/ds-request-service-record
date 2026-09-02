@@ -98,7 +98,7 @@ def send_payment_to_mod_copying_app(payment: DynamicsPayment) -> bool:
         "PayReference": payment.reference,
         "GovUkProviderId": payment.provider_id,
         "Amount": (payment.total_amount / 100),
-        "Date": str(payment.payment_date),
+        "Date": payment.payment_date.strftime("%Y-%m-%d %H:%M:%S"),
     }
 
     response = requests.post(

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -37,21 +37,21 @@ def test_age_over_115_sets_FOIOP(context):
 
 
 def test_proof_of_death_sets_FOICD(context):
-    recent_year = datetime.now().year - 40
+    recent_year = datetime.now(timezone.utc).year - 40
     dob = f"15 June {recent_year}"
     r = DummyRecord(dob, "file.png", "standard")
     assert subject_status(r) == "? FOI DIRECT MOD FOICD1"
 
 
 def test_no_evidence_sets_FOICDN_standard(context):
-    recent_year = datetime.now().year - 30
+    recent_year = datetime.now(timezone.utc).year - 30
     dob = f"10 March {recent_year}"
     r = DummyRecord(dob, None, "standard")
     assert subject_status(r) == "? FOI DIRECT MOD FOICDN1"
 
 
 def test_no_evidence_sets_FOICDN_full(context):
-    recent_year = datetime.now().year - 25
+    recent_year = datetime.now(timezone.utc).year - 25
     dob = f"20 August {recent_year}"
     r = DummyRecord(dob, None, "full")
     assert subject_status(r) == "? FOI DIRECT MOD FOICDN2"
@@ -94,7 +94,7 @@ def test_send_payment_to_mod_copying_app_payload_format(mock_post, context):
         net_amount=12000,
         delivery_amount=3000,
         payee_email="test@example.com",
-        payment_date=datetime(2024, 3, 15, 14, 30, 0),
+        payment_date=datetime(2024, 3, 15, 14, 30, 0, tzinfo=timezone.utc),
     )
 
     # Call the function
@@ -138,7 +138,7 @@ def test_send_payment_to_mod_copying_app_returns_false_on_error(mock_post, conte
         net_amount=12000,
         delivery_amount=3000,
         payee_email="test@example.com",
-        payment_date=datetime(2024, 3, 15, 14, 30, 0),
+        payment_date=datetime(2024, 3, 15, 14, 30, 0, tzinfo=timezone.utc),
     )
 
     # Verify it returns False on error

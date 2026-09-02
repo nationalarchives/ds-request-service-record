@@ -1,12 +1,12 @@
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from urllib.parse import unquote
 
 from flask import request
 
 
 def now_iso_8601():
-    now = datetime.now()
+    now = datetime.now(timezone.utc)
     now_date = now.strftime("%Y-%m-%dT%H:%M:%SZ")
     return now_date
 
