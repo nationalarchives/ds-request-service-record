@@ -97,7 +97,7 @@ def make_payment(id, state_machine):
 
 
 def _validate_and_convert_amount(
-    amount_value: float | int | str, field_name: str
+    amount_value: float | str, field_name: str
 ) -> tuple:
     """
     Validate and convert an amount to pence.

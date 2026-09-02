@@ -617,8 +617,7 @@ class RoutingStateMachine(StateMachine):
                         if holding_prefix.endswith("/")
                         else f"{holding_prefix}/"
                     )
-                    if file.startswith(normalized_prefix):
-                        file = file[len(normalized_prefix) :]
+                    file = file.removeprefix(normalized_prefix)
                 self.set_form_field_data(form, "proof_of_death", file)
                 return True
         self.set_form_field_data(form, "proof_of_death", None)
