@@ -32,7 +32,7 @@ def hash_check(record_hash: str) -> ServiceRecordRequest | None:
         return None
 
 
-def get_service_record_request(id: str = None) -> ServiceRecordRequest | None:
+def get_service_record_request(id: str | None = None) -> ServiceRecordRequest | None:
     """
     Get a ServiceRecordRequest item by its ID.
     """
