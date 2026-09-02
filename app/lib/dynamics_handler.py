@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 
 import requests
 from flask import current_app
@@ -60,7 +60,7 @@ def send_request_to_dynamics(record: ServiceRecordRequest) -> bool:
 
 
 def closure_status_calculation(date_of_birth: str, has_proof_of_death: bool) -> str:
-    dob = datetime.strptime(date_of_birth, "%d %B %Y")
+    dob = datetime.strptime(date_of_birth, "%d %B %Y").replace(tzinfo=UTC)
     first_birth_year_for_closed_records = (
         BoundaryYears.first_birth_year_for_closed_records()
     )
