@@ -154,8 +154,9 @@ def transform_form_data_to_record(form_data: dict) -> dict:
 
     transformed_data["delivery_type"] = get_delivery_type(form_data)
 
-    if service_branch := form_data.get("service_branch"):
-        if service_branch in ServiceBranches.__members__:
-            transformed_data["service_branch"] = ServiceBranches[service_branch].value
+    if (
+        service_branch := form_data.get("service_branch")
+    ) and service_branch in ServiceBranches.__members__:
+        transformed_data["service_branch"] = ServiceBranches[service_branch].value
 
     return transformed_data

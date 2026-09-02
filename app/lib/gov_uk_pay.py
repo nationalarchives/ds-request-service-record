@@ -102,16 +102,18 @@ def process_valid_request(id: str, payment_data: dict) -> None:
         record.status = PAID_STATUS
         db.session.commit()
 
-    if record.proof_of_death and record.proof_of_death != "EMPTY":
-        if not move_proof_of_death_to_submitted(record.proof_of_death):
-            current_app.logger.warning(
-                "Failed to move proof of death file to submitted bucket."
-            )
+    if (
+        record.proof_of_death
+        and record.proof_of_death != "EMPTY"
+        and not move_proof_of_death_to_submitted(record.proof_of_death)
+    ):
+        current_app.logger.warning(
+            "Failed to move proof of death file to submitted bucket."
+        )
 
-    if record.status == PAID_STATUS:
-        if send_request_to_dynamics(record):
-            record.status = SENT_STATUS
-            db.session.commit()
+    if record.status == PAID_STATUS and send_request_to_dynamics(record):
+        record.status = SENT_STATUS
+        db.session.commit()
 
 
 def process_valid_payment(id: str, *, provider_id: str) -> None:

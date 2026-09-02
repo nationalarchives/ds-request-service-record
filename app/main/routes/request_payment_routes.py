@@ -63,9 +63,10 @@ def send_to_gov_uk_pay():
 
 def _create_new_payment_or_redirect(form_data: dict):
     record_hash = _hash_form_data(form_data)
-    if existing_record := hash_check(record_hash):
-        if redirect_response := _handle_existing_payment(existing_record):
-            return redirect_response
+    if (existing_record := hash_check(record_hash)) and (
+        redirect_response := _handle_existing_payment(existing_record)
+    ):
+        return redirect_response
 
     payment_url = _create_new_payment(form_data, record_hash)
     return redirect(payment_url)
