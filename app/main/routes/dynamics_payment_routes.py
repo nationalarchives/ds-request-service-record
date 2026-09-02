@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 
 from flask import current_app, redirect, render_template, request, session, url_for
 
@@ -53,7 +53,7 @@ def gov_uk_pay_redirect(id):
         "id": id,
         "dynamics_payment_id": payment.id,
         "gov_uk_payment_id": gov_uk_payment_id,
-        "created_at": datetime.now(),
+        "created_at": datetime.now(timezone.utc),
     }
 
     gov_uk_dynamics_payment = add_gov_uk_dynamics_payment(data)

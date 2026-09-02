@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from flask import current_app, has_app_context, session
 from statemachine import State, StateMachine
@@ -580,7 +580,9 @@ class RoutingStateMachine(StateMachine):
         """Condition method to determine if the service person's date of birth requires a proof of death."""
         return (
             form.date_of_birth.data.year
-            >= BoundaryYears.first_birth_year_for_closed_records(datetime.now().year)
+            >= BoundaryYears.first_birth_year_for_closed_records(
+                datetime.now(timezone.utc).year
+            )
         )
 
     def does_not_have_email(self, form):

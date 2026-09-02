@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from unittest.mock import patch
 
 from app.lib.boundary_years import BoundaryYears
@@ -20,7 +20,7 @@ class TestBoundaryYears:
 
     def test_first_birth_year_for_closed_records_without_supplied_year(self):
         with patch("app.lib.boundary_years.datetime") as mock_datetime:
-            mock_datetime.now.return_value = datetime(2026, 1, 23)
+            mock_datetime.now.return_value = datetime(2026, 1, 23, tzinfo=timezone.utc)
             result = BoundaryYears.first_birth_year_for_closed_records()
             assert result == 1911
 
