@@ -589,7 +589,7 @@ def your_order_summary(form, state_machine):
 
 @bp.route("/request-submitted/", methods=["GET"])
 @bp.route("/request-submitted/<id>", methods=["GET"])
-def request_submitted(id: str = None):
+def request_submitted(id: str | None = None):
     reference_number = None
 
     # We are currently rendering the page without a payment reference if one
