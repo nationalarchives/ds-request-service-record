@@ -125,7 +125,7 @@ def prepare_page_title(ctx, title):
     if content is not None:
         try:
             app_title = content["app"]["title"]
-        except Exception:
+        except (KeyError, TypeError):
             app = getattr(content, "app", None)
             app_title = getattr(app, "title", None)
 

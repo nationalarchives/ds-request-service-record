@@ -110,7 +110,7 @@ def send_payment_to_mod_copying_app(payment: DynamicsPayment) -> bool:
     try:
         response.raise_for_status()
         return True
-    except Exception as e:
+    except requests.RequestException as e:
         current_app.logger.error(
             f"Error sending payment to MOD Copying app for payment {payment.id}: {e}: {response.text}"
         )

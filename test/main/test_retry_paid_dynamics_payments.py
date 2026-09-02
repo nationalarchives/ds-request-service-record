@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 from unittest.mock import MagicMock, patch
 
 import pytest
+from sqlalchemy.exc import SQLAlchemyError
 
 from app import create_app
 from app.lib.db.constants import NEW_STATUS, PAID_STATUS, SENT_STATUS
@@ -92,11 +93,12 @@ def test_resend_paid_dynamics_payments_rolls_back_on_exception(context):
         patch("retry_paid_dynamics_payments.db") as mock_db,
         patch(
             "retry_paid_dynamics_payments.send_payment_to_mod_copying_app",
-            side_effect=Exception("HTTP 500"),
+            return_value=True,
         ),
         patch("retry_paid_dynamics_payments.current_app.logger.error") as mock_error,
     ):
         _mock_query_chain(mock_db, [payment])
+        mock_db.session.commit.side_effect = SQLAlchemyError("db commit failed")
 
         sent_count = resend_paid_dynamics_payments()
 
@@ -142,8 +144,8 @@ def test_resend_paid_dynamics_payments_only_retries_paid_status(db_session):
     db_session.commit()
 
     with patch(
-        "retry_paid_dynamics_payments.send_payment_to_mod_copying_app",
-        return_value=True,
+            "retry_paid_dynamics_payments.send_payment_to_mod_copying_app",
+            return_value=True,
     ) as mock_send:
         sent_count = resend_paid_dynamics_payments()
 

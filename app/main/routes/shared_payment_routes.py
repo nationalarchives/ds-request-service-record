@@ -1,4 +1,5 @@
 from flask import abort, current_app, redirect, render_template, session, url_for
+from sqlalchemy.exc import SQLAlchemyError
 
 from app.lib.content import load_content
 from app.lib.db.db_handler import (
@@ -49,7 +50,7 @@ def _process_dynamics_payment(payment, client, gov_uk_payment_id):
             id=payment.dynamics_payment_id,
             provider_id=provider_id,
         )
-    except Exception as e:
+    except (SQLAlchemyError, ValueError) as e:
         current_app.logger.error(
             f"Error processing valid payment of payment ID {gov_uk_payment_id}: {e}"
         )
@@ -59,7 +60,7 @@ def _process_service_record_payment(payment, client, gov_uk_payment_id):
     """Process a successful service record payment."""
     try:
         process_valid_request(payment.id, client.data)
-    except Exception as e:
+    except (SQLAlchemyError, ValueError) as e:
         current_app.logger.error(
             f"Error processing valid request of payment ID {gov_uk_payment_id}: {e}"
         )

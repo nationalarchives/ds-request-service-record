@@ -77,7 +77,7 @@ def create_payment(
 
     try:
         response.raise_for_status()
-    except Exception as e:
+    except requests.RequestException as e:
         current_app.logger.error(f"Error creating payment: {e}: {response.text}")
         return None
 

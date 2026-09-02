@@ -9,6 +9,7 @@ send to the MOD Copying API are retried.
 import os
 
 from flask import current_app
+from sqlalchemy.exc import SQLAlchemyError
 
 from app import create_app
 from app.lib.db.constants import PAID_STATUS, SENT_STATUS
@@ -33,8 +34,9 @@ def resend_paid_dynamics_payments() -> int:
                 sent_count += 1
             else:
                 db.session.rollback()
-        except Exception as exc:
+        except SQLAlchemyError as exc:
             db.session.rollback()
+            payment.status = PAID_STATUS
             current_app.logger.error(
                 "Error resending paid dynamics payment %s: %s", payment.id, exc
             )

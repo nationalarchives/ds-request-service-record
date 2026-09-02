@@ -1,5 +1,12 @@
 from flask import current_app
-from requests import JSONDecodeError, Timeout, TooManyRedirects, codes, get
+from requests import (
+    JSONDecodeError,
+    RequestException,
+    Timeout,
+    TooManyRedirects,
+    codes,
+    get,
+)
 
 
 class JSONAPIError(Exception):
@@ -71,7 +78,7 @@ class JSONAPIClient:
         except TooManyRedirects as e:
             current_app.logger.exception("JSON API had too many redirects")
             raise JSONAPIRedirectError("Too many redirects") from e
-        except Exception as e:
+        except RequestException as e:
             current_app.logger.exception("Unknown JSON API exception")
             raise JSONAPIUnexpectedError(str(e)) from e
         current_app.logger.debug(response.url)
