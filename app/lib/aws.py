@@ -5,6 +5,7 @@ import uuid
 
 import boto3
 from botocore.client import Config
+from botocore.exceptions import BotoCoreError, ClientError
 from flask import current_app
 from werkzeug.datastructures.file_storage import FileStorage
 
@@ -96,7 +97,7 @@ def upload_file_to_s3(
                     ExtraArgs={"ContentType": content_type},
                 )
                 return filename
-            except Exception as e:
+            except (BotoCoreError, ClientError) as e:
                 current_app.logger.error(
                     f"Error uploading file to S3 (attempt {attempt}): {e}"
                 )
@@ -149,7 +150,7 @@ def move_proof_of_death_to_submitted(key_name: str) -> bool:
         )
         s3.delete_object(Bucket=bucket_name, Key=source_key)
         return True
-    except Exception as e:
+    except (BotoCoreError, ClientError) as e:
         current_app.logger.error(
             f"Error moving proof of death file {key_name} to submitted bucket: {e}"
         )
@@ -243,6 +244,6 @@ def send_email(to: str, subject: str, body: str) -> bool:
             },
         )
         return True
-    except Exception as e:
+    except (BotoCoreError, ClientError) as e:
         current_app.logger.error(f"Error sending email to {to}: {e}")
         return False

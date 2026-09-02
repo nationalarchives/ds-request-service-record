@@ -30,7 +30,7 @@ class TestForUnusedContent(unittest.TestCase):
         for f in TestForUnusedContent.TEMPLATES_DIR.rglob("*.html"):
             try:
                 texts.append(f.read_text(encoding="utf-8"))
-            except Exception:
+            except (OSError, UnicodeDecodeError):
                 pass
         return texts
 
@@ -42,7 +42,7 @@ class TestForUnusedContent(unittest.TestCase):
         for f in TestForUnusedContent.FORMS_DIR.rglob("*.py"):
             try:
                 texts.append(f.read_text(encoding="utf-8"))
-            except Exception:
+            except (OSError, UnicodeDecodeError):
                 pass
         return texts
 

@@ -8,6 +8,7 @@ import os
 from datetime import datetime, timedelta, timezone
 
 from flask import current_app
+from sqlalchemy.exc import SQLAlchemyError
 
 from app import create_app
 from app.lib.aws import send_email
@@ -52,7 +53,7 @@ def expire_old_payments(days: int = 30) -> int:
                     "Failed to send expiry email for dynamics payment %s",
                     payment.id,
                 )
-        except Exception as e:
+        except SQLAlchemyError as e:
             db.session.rollback()
             current_app.logger.error(
                 "Error expiring dynamics payment %s: %s", payment.id, e

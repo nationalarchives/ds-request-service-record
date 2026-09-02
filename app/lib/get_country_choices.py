@@ -34,7 +34,7 @@ def get_country_choices():
 
             cache.set(CACHE_KEY, sorted_countries, timeout=CACHE_TIMEOUT)
             return sorted_countries
-    except Exception:
+    except (requests.RequestException, KeyError, TypeError, ValueError):
         current_app.logger.error(
             "Failed to fetch country choices from the API. Using default."
         )

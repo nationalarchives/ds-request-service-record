@@ -1,4 +1,5 @@
 from flask import current_app
+from sqlalchemy.exc import SQLAlchemyError
 
 from app.constants import ServiceBranches
 from app.lib.db.models import (
@@ -26,7 +27,7 @@ def hash_check(record_hash: str) -> ServiceRecordRequest | None:
             )
             return existing_record
         return None
-    except Exception as e:
+    except SQLAlchemyError as e:
         current_app.logger.error(f"Error checking record hash: {e}")
         return None
 
@@ -37,7 +38,7 @@ def get_service_record_request(id: str = None) -> ServiceRecordRequest | None:
     """
     try:
         record = db.session.get(ServiceRecordRequest, id)
-    except Exception as e:
+    except SQLAlchemyError as e:
         current_app.logger.error(f"Error fetching service record request: {e}")
         return None
 
@@ -58,7 +59,7 @@ def add_service_record_request(data: dict) -> ServiceRecordRequest | None:
         record = ServiceRecordRequest(**data)
         db.session.add(record)
         db.session.commit()
-    except Exception as e:
+    except SQLAlchemyError as e:
         record = None
         current_app.logger.error(f"Error adding service record request: {e}")
         db.session.rollback()
@@ -70,7 +71,7 @@ def delete_service_record_request(record: ServiceRecordRequest) -> bool:
         db.session.delete(record)
         db.session.commit()
         return True
-    except Exception as e:
+    except SQLAlchemyError as e:
         current_app.logger.error(f"Error deleting service record request: {e}")
         db.session.rollback()
         return False
@@ -82,7 +83,7 @@ def get_dynamics_payment(id: str) -> DynamicsPayment | None:
         if not payment:
             current_app.logger.error(f"Dynamics payment not found for ID: {id}")
         return payment
-    except Exception as e:
+    except SQLAlchemyError as e:
         current_app.logger.error(f"Error fetching dynamics payment: {e}")
         return None
 
@@ -92,7 +93,7 @@ def add_dynamics_payment(data: dict) -> DynamicsPayment | None:
         payment = DynamicsPayment(**data)
         db.session.add(payment)
         db.session.commit()
-    except Exception as e:
+    except SQLAlchemyError as e:
         payment = None
         current_app.logger.error(f"Error adding dynamics payment: {e}")
         db.session.rollback()
@@ -103,7 +104,7 @@ def delete_dynamics_payment(record: DynamicsPayment) -> None:
     try:
         db.session.delete(record)
         db.session.commit()
-    except Exception as e:
+    except SQLAlchemyError as e:
         current_app.logger.error(f"Error deleting dynamics payment: {e}")
         db.session.rollback()
 
@@ -113,7 +114,7 @@ def add_gov_uk_dynamics_payment(data: dict) -> GOVUKDynamicsPayment | None:
         payment = GOVUKDynamicsPayment(**data)
         db.session.add(payment)
         db.session.commit()
-    except Exception as e:
+    except SQLAlchemyError as e:
         payment = None
         current_app.logger.error(f"Error adding GOV.UK dynamics payment: {e}")
         db.session.rollback()
@@ -126,7 +127,7 @@ def get_gov_uk_dynamics_payment(id: str) -> GOVUKDynamicsPayment | None:
         if not payment:
             current_app.logger.error(f"GOV UK payment not found for ID: {id}")
         return payment
-    except Exception as e:
+    except SQLAlchemyError as e:
         current_app.logger.error(f"Error fetching GOV UK payment: {e}")
         return None
 

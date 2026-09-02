@@ -1,6 +1,7 @@
 from unittest.mock import MagicMock, patch
 
 import pytest
+import requests
 
 from app import create_app
 from app.lib.gov_uk_pay import (
@@ -35,7 +36,7 @@ def test_create_payment_success(mock_post, test_app):
 @patch("app.lib.gov_uk_pay.requests.post")
 def test_create_payment_failure(mock_post, test_app):
     mock_response = MagicMock()
-    mock_response.raise_for_status.side_effect = Exception("fail")
+    mock_response.raise_for_status.side_effect = requests.HTTPError("fail")
     mock_post.return_value = mock_response
 
     with test_app.app_context():

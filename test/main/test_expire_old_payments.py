@@ -2,6 +2,7 @@ from datetime import datetime, timedelta, timezone
 from unittest.mock import MagicMock, patch
 
 import pytest
+from sqlalchemy.exc import SQLAlchemyError
 
 from app import create_app
 from app.lib.db.constants import EXPIRED_STATUS, NEW_STATUS, PAID_STATUS, SENT_STATUS
@@ -131,7 +132,7 @@ def test_expire_old_payments_rolls_back_on_commit_error(context):
         patch("expire_old_payments.current_app.logger.error") as mock_log_error,
     ):
         _mock_query_chain(mock_db, [payment])
-        mock_db.session.commit.side_effect = Exception("db commit failed")
+        mock_db.session.commit.side_effect = SQLAlchemyError("db commit failed")
 
         expired_count = expire_old_payments(days=30)
 

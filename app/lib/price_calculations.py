@@ -97,7 +97,7 @@ def prepare_order_summary_data(form_data: dict) -> dict:
             if processing_option == "standard" and delivery_type == "PrintedTracked"
             else 0
         )
-    except Exception as e:
+    except (requests.RequestException, KeyError, ValueError) as e:
         current_app.logger.error(f"Error in delivery fee calculation: {e}")
         return None
 

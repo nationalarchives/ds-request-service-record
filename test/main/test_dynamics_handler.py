@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 from unittest.mock import MagicMock, patch
 
 import pytest
+import requests
 
 from app import create_app
 from app.lib.db.models import DynamicsPayment, ServiceRecordRequest
@@ -125,7 +126,7 @@ def test_send_payment_to_mod_copying_app_returns_false_on_error(mock_post, conte
     """Test that the function returns False when API returns non-200 status"""
     # Setup mock response with error
     mock_response = MagicMock()
-    mock_response.raise_for_status.side_effect = Exception("HTTP 500")
+    mock_response.raise_for_status.side_effect = requests.HTTPError("HTTP 500")
     mock_post.return_value = mock_response
 
     # Create test payment

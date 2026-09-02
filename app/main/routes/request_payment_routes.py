@@ -2,8 +2,10 @@ import hashlib
 import uuid
 from datetime import datetime, timezone
 
+import requests
 from flask import current_app, redirect, session, url_for
 
+from app.lib.api import JSONAPIError, ResourceForbidden, ResourceNotFound
 from app.lib.check_for_fields_required_by_gov_uk_pay import (
     check_for_fields_required_by_gov_uk_pay,
 )
@@ -54,7 +56,7 @@ def send_to_gov_uk_pay():
     try:
         return _create_new_payment_or_redirect(transformed_data)
 
-    except Exception as e:
+    except (JSONAPIError, ResourceForbidden, ResourceNotFound, ValueError) as e:
         current_app.logger.error(f"Unexpected error in payment creation: {e}")
         return redirect(url_for("main.payment_link_creation_failed"))
 
@@ -81,7 +83,7 @@ def _create_new_payment(form_data: dict, record_hash: str) -> str:
 
     try:
         amount = calculate_amount_based_on_form_data(form_data)
-    except Exception as e:
+    except (requests.RequestException, ValueError) as e:
         current_app.logger.error(f"Error calculating amount: {e}")
         return url_for("main.payment_link_creation_failed")
 
