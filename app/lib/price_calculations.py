@@ -32,10 +32,10 @@ def calculate_delivery_fee(country: str) -> int:
         return round(float(response_data) * 100)
     except requests.RequestException as e:
         current_app.logger.error(f"Error while getting delivery fee: {e}")
-        raise e
+        raise
     except (ValueError, KeyError) as e:
         current_app.logger.error(f"Error calculating delivery fee response: {e}")
-        raise e
+        raise
 
 
 def calculate_base_fee(processing_option: str, delivery_type: str) -> int:
@@ -58,15 +58,15 @@ def calculate_amount_based_on_form_data(form_data: dict) -> int:
 
     try:
         amount = calculate_base_fee(processing_option, delivery_type)
-    except ValueError as e:
-        raise e
+    except ValueError:
+        raise
 
     if processing_option == "standard" and delivery_type == "PrintedTracked":
         if country := form_data.get("requester_country"):
             try:
                 delivery_fee = calculate_delivery_fee(country)
-            except Exception as e:
-                raise e
+            except Exception:
+                raise
             amount += delivery_fee
         else:
             raise ValueError("Country is required for printed delivery")
