@@ -73,7 +73,9 @@ def parse_first_birth_year_for_closed_records(s):
     if not s:
         return s
 
-    year = BoundaryYears.first_birth_year_for_closed_records(datetime.now(timezone.utc).year)
+    year = BoundaryYears.first_birth_year_for_closed_records(
+        datetime.now(timezone.utc).year
+    )
 
     span = f"<span data-last-birth-year-for-open-records='{year}'>{year}</span>"
 

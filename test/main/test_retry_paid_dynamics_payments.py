@@ -144,8 +144,8 @@ def test_resend_paid_dynamics_payments_only_retries_paid_status(db_session):
     db_session.commit()
 
     with patch(
-            "retry_paid_dynamics_payments.send_payment_to_mod_copying_app",
-            return_value=True,
+        "retry_paid_dynamics_payments.send_payment_to_mod_copying_app",
+        return_value=True,
     ) as mock_send:
         sent_count = resend_paid_dynamics_payments()
 

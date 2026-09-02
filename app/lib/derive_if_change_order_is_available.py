@@ -7,7 +7,6 @@ A user can change their order if:
 """
 
 
-
 def derive_if_change_order_is_available(form_data: dict | None) -> bool:
     """
     Determine if a user can change their order type based on form data.

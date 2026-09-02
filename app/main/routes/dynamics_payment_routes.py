@@ -96,9 +96,7 @@ def make_payment(id, state_machine):
     return redirect(url_for(state_machine.route_for_current_state))
 
 
-def _validate_and_convert_amount(
-    amount_value: float | str, field_name: str
-) -> tuple:
+def _validate_and_convert_amount(amount_value: float | str, field_name: str) -> tuple:
     """
     Validate and convert an amount to pence.
 

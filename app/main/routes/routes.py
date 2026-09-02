@@ -594,10 +594,15 @@ def request_submitted(id: str | None = None):
 
     # We are currently rendering the page without a payment reference if one
     # does not exist. In future, we will likely want to handle this differently.
-    if id and (record := get_service_record_request(id)) and record.status in {
-        PAID_STATUS,
-        SENT_STATUS,
-    }:
+    if (
+        id
+        and (record := get_service_record_request(id))
+        and record.status
+        in {
+            PAID_STATUS,
+            SENT_STATUS,
+        }
+    ):
         reference_number = record.payment_reference
 
     return render_template(
