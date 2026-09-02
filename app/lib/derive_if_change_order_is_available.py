@@ -6,10 +6,9 @@ A user can change their order if:
 2. The service person was an officer AND the service branch is RAF
 """
 
-from typing import Optional
 
 
-def derive_if_change_order_is_available(form_data: Optional[dict]) -> bool:
+def derive_if_change_order_is_available(form_data: dict | None) -> bool:
     """
     Determine if a user can change their order type based on form data.
 
