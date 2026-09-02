@@ -5,12 +5,12 @@ from app.constants import ORDER_TYPES, OrderFeesPence
 
 OPTION_MAP = {
     "standard": {
-        "Digital": OrderFeesPence.STANDARD_DIGITAL.value,
-        "PrintedTracked": OrderFeesPence.STANDARD_PRINTED.value,
+        "Digital": OrderFeesPence.STANDARD_DIGITAL,
+        "PrintedTracked": OrderFeesPence.STANDARD_PRINTED,
     },
     "full": {
-        "Digital": OrderFeesPence.FULL_DIGITAL.value,
-        "PrintedTracked": OrderFeesPence.FULL_PRINTED.value,
+        "Digital": OrderFeesPence.FULL_DIGITAL,
+        "PrintedTracked": OrderFeesPence.FULL_PRINTED,
     },
 }
 

@@ -69,7 +69,7 @@ class ServiceBranches(Enum):
     UNKNOWN = "I do not know"
 
 
-class OrderFeesPence(Enum):
+class OrderFeesPence:
     STANDARD_DIGITAL = 4225
     STANDARD_PRINTED = 4716
     FULL_DIGITAL = 4887
