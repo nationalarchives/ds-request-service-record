@@ -36,7 +36,6 @@ def resend_paid_dynamics_payments() -> int:
                 db.session.rollback()
         except SQLAlchemyError as exc:
             db.session.rollback()
-            payment.status = PAID_STATUS
             current_app.logger.error(
                 "Error resending paid dynamics payment %s: %s", payment.id, exc
             )
