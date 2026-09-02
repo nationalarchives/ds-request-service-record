@@ -8,7 +8,7 @@ from app.lib.content import load_content
 class TestForUnusedContent(unittest.TestCase):
     TEMPLATES_DIR = Path("app/templates")
     FORMS_DIR = Path("app/main/forms")
-    SKIP_PATTERNS = [
+    SKIP_PATTERNS = [  # noqa: RUF012
         re.compile(r"\.rows"),
         re.compile(r"\.table_rows"),
         re.compile(r"\.fields"),

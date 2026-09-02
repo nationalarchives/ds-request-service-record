@@ -11,14 +11,10 @@ class ResourceForbidden(Exception):
 
 
 class JSONAPIClient:
-    api_url = ""
-    params = {}
-    headers = {}
-
     def __init__(self, api_url, params=None, headers=None):
         self.api_url = api_url
-        self.params = params or {}
-        self.headers = headers or {}
+        self.params = params.copy() if params else {}
+        self.headers = headers.copy() if headers else {}
 
     def add_parameter(self, key, value):
         self.params[key] = value
