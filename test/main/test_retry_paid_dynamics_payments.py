@@ -1,5 +1,4 @@
-from datetime import datetime, timezone
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 from sqlalchemy.exc import SQLAlchemyError
@@ -8,13 +7,6 @@ from app import create_app
 from app.lib.db.constants import NEW_STATUS, PAID_STATUS, SENT_STATUS
 from app.lib.db.models import DynamicsPayment, db
 from retry_paid_dynamics_payments import resend_paid_dynamics_payments
-
-
-class DummyPayment:
-    def __init__(self, payment_id: str, status: str = PAID_STATUS):
-        self.id = payment_id
-        self.status = status
-        self.created_at = datetime.now(tz=timezone.utc)
 
 
 @pytest.fixture(scope="module")
@@ -39,72 +31,89 @@ def db_session(app):
         db.session.commit()
 
 
-def _mock_query_chain(mock_db, payments):
-    query = MagicMock()
-    mock_db.session.query.return_value = query
-    query.filter_by.return_value = query
-    query.order_by.return_value = query
-    query.all.return_value = payments
+def test_resend_paid_dynamics_payments_updates_sent_status(db_session):
+    payments = [
+        DynamicsPayment(
+            id=f"pmt-{index}",
+            case_number=f"CASE-{index}",
+            reference=f"REF-{index}",
+            net_amount=1000,
+            delivery_amount=200,
+            total_amount=1200,
+            payee_email=f"payment-{index}@example.com",
+            status=PAID_STATUS,
+        )
+        for index in (1, 2)
+    ]
+    db_session.add_all(payments)
+    db_session.commit()
 
-
-def test_resend_paid_dynamics_payments_updates_sent_status(context):
-    payments = [DummyPayment("pmt-1"), DummyPayment("pmt-2")]
-
-    with (
-        patch("retry_paid_dynamics_payments.db") as mock_db,
-        patch(
-            "retry_paid_dynamics_payments.send_payment_to_mod_copying_app",
-            return_value=True,
-        ),
+    with patch(
+        "retry_paid_dynamics_payments.send_payment_to_mod_copying_app",
+        return_value=True,
     ):
-        _mock_query_chain(mock_db, payments)
-
         sent_count = resend_paid_dynamics_payments()
 
     assert sent_count == 2
-    assert payments[0].status == SENT_STATUS
-    assert payments[1].status == SENT_STATUS
-    assert mock_db.session.commit.call_count == 2
+    assert all(
+        db_session.get(DynamicsPayment, payment.id).status == SENT_STATUS
+        for payment in payments
+    )
 
 
-def test_resend_paid_dynamics_payments_rolls_back_when_send_fails(context):
-    payment = DummyPayment("pmt-3")
+def test_resend_paid_dynamics_payments_rolls_back_when_send_fails(db_session):
+    payment = DynamicsPayment(
+        id="pmt-3",
+        case_number="CASE-3",
+        reference="REF-3",
+        net_amount=1000,
+        delivery_amount=200,
+        total_amount=1200,
+        payee_email="payment-3@example.com",
+        status=PAID_STATUS,
+    )
+    db_session.add(payment)
+    db_session.commit()
 
-    with (
-        patch("retry_paid_dynamics_payments.db") as mock_db,
-        patch(
-            "retry_paid_dynamics_payments.send_payment_to_mod_copying_app",
-            return_value=False,
-        ),
+    with patch(
+        "retry_paid_dynamics_payments.send_payment_to_mod_copying_app",
+        return_value=False,
     ):
-        _mock_query_chain(mock_db, [payment])
-
         sent_count = resend_paid_dynamics_payments()
 
     assert sent_count == 0
-    assert payment.status == PAID_STATUS
-    assert mock_db.session.rollback.call_count == 1
+    assert db_session.get(DynamicsPayment, payment.id).status == PAID_STATUS
 
 
-def test_resend_paid_dynamics_payments_rolls_back_on_exception(context):
-    payment = DummyPayment("pmt-4")
+def test_resend_paid_dynamics_payments_rolls_back_on_exception(db_session):
+    payment = DynamicsPayment(
+        id="pmt-4",
+        case_number="CASE-4",
+        reference="REF-4",
+        net_amount=1000,
+        delivery_amount=200,
+        total_amount=1200,
+        payee_email="payment@example.com",
+        status=PAID_STATUS,
+    )
+    db_session.add(payment)
+    db_session.commit()
 
     with (
-        patch("retry_paid_dynamics_payments.db") as mock_db,
         patch(
             "retry_paid_dynamics_payments.send_payment_to_mod_copying_app",
             return_value=True,
         ),
         patch("retry_paid_dynamics_payments.current_app.logger.error") as mock_error,
+        patch.object(
+            db_session, "commit", side_effect=SQLAlchemyError("db commit failed")
+        ),
     ):
-        _mock_query_chain(mock_db, [payment])
-        mock_db.session.commit.side_effect = SQLAlchemyError("db commit failed")
-
         sent_count = resend_paid_dynamics_payments()
 
     assert sent_count == 0
     assert payment.status == PAID_STATUS
-    assert mock_db.session.rollback.call_count == 1
+    assert db_session.get(DynamicsPayment, "pmt-4").status == PAID_STATUS
     mock_error.assert_called_once()
 
 
