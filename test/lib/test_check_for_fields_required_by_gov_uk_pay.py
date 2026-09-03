@@ -83,7 +83,7 @@ def test_returns_true_when_serviceperson_email_and_postal_present(
 def test_returns_false_when_required_serviceperson_field_missing(
     app, valid_serviceperson_data, missing_field
 ):
-    form_data = dict(valid_serviceperson_data)
+    form_data = valid_serviceperson_data.copy()
     form_data.pop(missing_field)
     form_data["requester_email"] = "test@example.com"
 
@@ -111,7 +111,7 @@ def test_returns_false_when_no_email_and_incomplete_postal(
 
 
 def test_returns_false_when_no_email_and_no_postal(app, valid_serviceperson_data):
-    form_data = dict(valid_serviceperson_data)
+    form_data = valid_serviceperson_data.copy()
 
     assert check_for_fields_required_by_gov_uk_pay(form_data, app) is False
     assert len(app.logger.warnings) == 1

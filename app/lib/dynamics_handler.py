@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 
 import requests
 from flask import current_app
@@ -60,7 +60,7 @@ def send_request_to_dynamics(record: ServiceRecordRequest) -> bool:
 
 
 def closure_status_calculation(date_of_birth: str, has_proof_of_death: bool) -> str:
-    dob = datetime.strptime(date_of_birth, "%d %B %Y")
+    dob = datetime.strptime(date_of_birth, "%d %B %Y").replace(tzinfo=UTC)
     first_birth_year_for_closed_records = (
         BoundaryYears.first_birth_year_for_closed_records()
     )
@@ -77,9 +77,7 @@ def closure_status_calculation(date_of_birth: str, has_proof_of_death: bool) -> 
 
 
 def has_proof_of_death(record: ServiceRecordRequest) -> bool:
-    if record.proof_of_death and record.proof_of_death != "EMPTY":
-        return True
-    return False
+    return bool(record.proof_of_death and record.proof_of_death != "EMPTY")
 
 
 def subject_status(record: ServiceRecordRequest) -> str:
@@ -98,7 +96,7 @@ def send_payment_to_mod_copying_app(payment: DynamicsPayment) -> bool:
         "PayReference": payment.reference,
         "GovUkProviderId": payment.provider_id,
         "Amount": (payment.total_amount / 100),
-        "Date": str(payment.payment_date),
+        "Date": payment.payment_date.strftime("%Y-%m-%d %H:%M:%S"),
     }
 
     response = requests.post(
@@ -110,7 +108,7 @@ def send_payment_to_mod_copying_app(payment: DynamicsPayment) -> bool:
     try:
         response.raise_for_status()
         return True
-    except Exception as e:
+    except requests.RequestException as e:
         current_app.logger.error(
             f"Error sending payment to MOD Copying app for payment {payment.id}: {e}: {response.text}"
         )

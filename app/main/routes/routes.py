@@ -589,15 +589,21 @@ def your_order_summary(form, state_machine):
 
 @bp.route("/request-submitted/", methods=["GET"])
 @bp.route("/request-submitted/<id>", methods=["GET"])
-def request_submitted(id: str = None):
+def request_submitted(id: str | None = None):
     reference_number = None
 
     # We are currently rendering the page without a payment reference if one
     # does not exist. In future, we will likely want to handle this differently.
-    if id:
-        if record := get_service_record_request(id):
-            if record.status == PAID_STATUS or record.status == SENT_STATUS:
-                reference_number = record.payment_reference
+    if (
+        id
+        and (record := get_service_record_request(id))
+        and record.status
+        in {
+            PAID_STATUS,
+            SENT_STATUS,
+        }
+    ):
+        reference_number = record.payment_reference
 
     return render_template(
         "main/request-submitted.html",

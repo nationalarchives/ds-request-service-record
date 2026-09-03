@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 
 from flask import current_app, redirect, render_template, request, session, url_for
 
@@ -53,7 +53,7 @@ def gov_uk_pay_redirect(id):
         "id": id,
         "dynamics_payment_id": payment.id,
         "gov_uk_payment_id": gov_uk_payment_id,
-        "created_at": datetime.now(),
+        "created_at": datetime.now(timezone.utc),
     }
 
     gov_uk_dynamics_payment = add_gov_uk_dynamics_payment(data)
@@ -96,9 +96,7 @@ def make_payment(id, state_machine):
     return redirect(url_for(state_machine.route_for_current_state))
 
 
-def _validate_and_convert_amount(
-    amount_value: float | int | str, field_name: str
-) -> tuple:
+def _validate_and_convert_amount(amount_value: float | str, field_name: str) -> tuple:
     """
     Validate and convert an amount to pence.
 

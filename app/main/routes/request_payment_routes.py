@@ -1,9 +1,11 @@
 import hashlib
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 
+import requests
 from flask import current_app, redirect, session, url_for
 
+from app.lib.api import JSONAPIError, ResourceForbidden, ResourceNotFound
 from app.lib.check_for_fields_required_by_gov_uk_pay import (
     check_for_fields_required_by_gov_uk_pay,
 )
@@ -54,16 +56,17 @@ def send_to_gov_uk_pay():
     try:
         return _create_new_payment_or_redirect(transformed_data)
 
-    except Exception as e:
+    except (JSONAPIError, ResourceForbidden, ResourceNotFound, ValueError) as e:
         current_app.logger.error(f"Unexpected error in payment creation: {e}")
         return redirect(url_for("main.payment_link_creation_failed"))
 
 
 def _create_new_payment_or_redirect(form_data: dict):
     record_hash = _hash_form_data(form_data)
-    if existing_record := hash_check(record_hash):
-        if redirect_response := _handle_existing_payment(existing_record):
-            return redirect_response
+    if (existing_record := hash_check(record_hash)) and (
+        redirect_response := _handle_existing_payment(existing_record)
+    ):
+        return redirect_response
 
     payment_url = _create_new_payment(form_data, record_hash)
     return redirect(payment_url)
@@ -81,7 +84,7 @@ def _create_new_payment(form_data: dict, record_hash: str) -> str:
 
     try:
         amount = calculate_amount_based_on_form_data(form_data)
-    except Exception as e:
+    except (requests.RequestException, ValueError) as e:
         current_app.logger.error(f"Error calculating amount: {e}")
         return url_for("main.payment_link_creation_failed")
 
@@ -131,7 +134,7 @@ def _generate_reference() -> str:
     Format: TNA<date><uuid>
     Example: TNA20260725a1b2c3d4e5f67890abcdef12345678
     """
-    date_stamp = datetime.now().strftime("%Y%m%d")
+    date_stamp = datetime.now(timezone.utc).strftime("%Y%m%d")
     unique_id = uuid.uuid4().hex
 
     return f"TNA{date_stamp}{unique_id}"
@@ -147,7 +150,7 @@ def _store_payment_record(
         "record_hash": record_hash,
         "id": unique_id,
         "gov_uk_payment_id": payment_id,
-        "created_at": datetime.now(),
+        "created_at": datetime.now(timezone.utc),
     }
 
     record = add_service_record_request(data)

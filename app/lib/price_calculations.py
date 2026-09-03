@@ -5,12 +5,12 @@ from app.constants import ORDER_TYPES, OrderFeesPence
 
 OPTION_MAP = {
     "standard": {
-        "Digital": OrderFeesPence.STANDARD_DIGITAL.value,
-        "PrintedTracked": OrderFeesPence.STANDARD_PRINTED.value,
+        "Digital": OrderFeesPence.STANDARD_DIGITAL,
+        "PrintedTracked": OrderFeesPence.STANDARD_PRINTED,
     },
     "full": {
-        "Digital": OrderFeesPence.FULL_DIGITAL.value,
-        "PrintedTracked": OrderFeesPence.FULL_PRINTED.value,
+        "Digital": OrderFeesPence.FULL_DIGITAL,
+        "PrintedTracked": OrderFeesPence.FULL_PRINTED,
     },
 }
 
@@ -18,24 +18,17 @@ OPTION_MAP = {
 def calculate_delivery_fee(country: str) -> int:
     payload = {"A3Colour": 10, "Country": country, "IsTracking": True}
 
-    try:
-        response = requests.post(
-            current_app.config["DELIVERY_FEE_API_URL"],
-            json=payload,
-            headers={"Content-Type": "application/json"},
-        )
+    response = requests.post(
+        current_app.config["DELIVERY_FEE_API_URL"],
+        json=payload,
+        headers={"Content-Type": "application/json"},
+    )
 
-        response.raise_for_status()
-        response_data = response.json()
+    response.raise_for_status()
+    response_data = response.json()
 
-        # Convert pounds to pence
-        return round(float(response_data) * 100)
-    except requests.RequestException as e:
-        current_app.logger.error(f"Error while getting delivery fee: {e}")
-        raise e
-    except (ValueError, KeyError) as e:
-        current_app.logger.error(f"Error calculating delivery fee response: {e}")
-        raise e
+    # Convert pounds to pence
+    return round(float(response_data) * 100)
 
 
 def calculate_base_fee(processing_option: str, delivery_type: str) -> int:
@@ -56,17 +49,11 @@ def calculate_amount_based_on_form_data(form_data: dict) -> int:
     delivery_type = get_delivery_type(form_data)
     processing_option = form_data.get("processing_option", "standard")
 
-    try:
-        amount = calculate_base_fee(processing_option, delivery_type)
-    except ValueError as e:
-        raise e
+    amount = calculate_base_fee(processing_option, delivery_type)
 
     if processing_option == "standard" and delivery_type == "PrintedTracked":
         if country := form_data.get("requester_country"):
-            try:
-                delivery_fee = calculate_delivery_fee(country)
-            except Exception as e:
-                raise e
+            delivery_fee = calculate_delivery_fee(country)
             amount += delivery_fee
         else:
             raise ValueError("Country is required for printed delivery")
@@ -97,7 +84,7 @@ def prepare_order_summary_data(form_data: dict) -> dict:
             if processing_option == "standard" and delivery_type == "PrintedTracked"
             else 0
         )
-    except Exception as e:
+    except (requests.RequestException, KeyError, ValueError) as e:
         current_app.logger.error(f"Error in delivery fee calculation: {e}")
         return None
 

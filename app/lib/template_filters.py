@@ -1,5 +1,5 @@
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 from urllib.parse import urlencode
 
 from jinja2 import pass_context
@@ -73,7 +73,9 @@ def parse_first_birth_year_for_closed_records(s):
     if not s:
         return s
 
-    year = BoundaryYears.first_birth_year_for_closed_records(datetime.now().year)
+    year = BoundaryYears.first_birth_year_for_closed_records(
+        datetime.now(timezone.utc).year
+    )
 
     span = f"<span data-last-birth-year-for-open-records='{year}'>{year}</span>"
 
@@ -125,7 +127,7 @@ def prepare_page_title(ctx, title):
     if content is not None:
         try:
             app_title = content["app"]["title"]
-        except Exception:
+        except (KeyError, TypeError):
             app = getattr(content, "app", None)
             app_title = getattr(app, "title", None)
 

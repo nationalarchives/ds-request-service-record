@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 import requests
 from flask import current_app
@@ -77,7 +77,7 @@ def create_payment(
 
     try:
         response.raise_for_status()
-    except Exception as e:
+    except requests.RequestException as e:
         current_app.logger.error(f"Error creating payment: {e}: {response.text}")
         return None
 
@@ -98,20 +98,22 @@ def process_valid_request(id: str, payment_data: dict) -> None:
             else None
         )
         record.payment_reference = payment_data.get("reference", "")
-        record.payment_date = datetime.now().strftime("%d %B %Y")
+        record.payment_date = datetime.now(timezone.utc).strftime("%d %B %Y")
         record.status = PAID_STATUS
         db.session.commit()
 
-    if record.proof_of_death and record.proof_of_death != "EMPTY":
-        if not move_proof_of_death_to_submitted(record.proof_of_death):
-            current_app.logger.warning(
-                "Failed to move proof of death file to submitted bucket."
-            )
+    if (
+        record.proof_of_death
+        and record.proof_of_death != "EMPTY"
+        and not move_proof_of_death_to_submitted(record.proof_of_death)
+    ):
+        current_app.logger.warning(
+            "Failed to move proof of death file to submitted bucket."
+        )
 
-    if record.status == PAID_STATUS:
-        if send_request_to_dynamics(record):
-            record.status = SENT_STATUS
-            db.session.commit()
+    if record.status == PAID_STATUS and send_request_to_dynamics(record):
+        record.status = SENT_STATUS
+        db.session.commit()
 
 
 def process_valid_payment(id: str, *, provider_id: str) -> None:
@@ -122,7 +124,7 @@ def process_valid_payment(id: str, *, provider_id: str) -> None:
 
     payment.status = PAID_STATUS
     payment.provider_id = provider_id
-    payment.payment_date = datetime.now()
+    payment.payment_date = datetime.now(timezone.utc)
     db.session.commit()
 
     if send_payment_to_mod_copying_app(payment):

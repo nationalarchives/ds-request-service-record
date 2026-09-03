@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class BoundaryYears:
@@ -7,7 +7,9 @@ class BoundaryYears:
     YEARS_A_RECORD_REMAINS_CLOSED = 115
 
     @classmethod
-    def first_birth_year_for_closed_records(cls, current_year: int = None) -> int:
+    def first_birth_year_for_closed_records(
+        cls, current_year: int | None = None
+    ) -> int:
         if current_year is None:
-            current_year = datetime.now().year
+            current_year = datetime.now(timezone.utc).year
         return current_year - cls.YEARS_A_RECORD_REMAINS_CLOSED
