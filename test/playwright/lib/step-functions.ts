@@ -292,7 +292,6 @@ export async function continueFromUploadAProofOfDeath(
   }
   await page.getByRole("button", { name: /Continue/i }).click();
   if (shouldValidate) {
-    await page.getByRole("button", { name: /Continue/i }).click();
     await expect(page).toHaveURL(Paths.SERVICE_PERSON_DETAILS);
   } else {
     await expect(page.locator(".tna-form-item__error")).toHaveText(

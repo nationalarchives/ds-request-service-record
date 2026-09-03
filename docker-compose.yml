@@ -39,6 +39,7 @@ services:
       - redis
       - mock-record-copying-service-api
       - mock-s3
+      - mock-s3-init
     healthcheck:
       start_period: 10s
       start_interval: 2s
