@@ -108,6 +108,11 @@ class Production(Features):
     )
     MOD_COPYING_API_URL: str = os.environ.get("MOD_COPYING_API_URL", "")
 
+    MOCK_S3: bool = False
+    MOCK_S3_ENDPOINT_URL: str = ""
+    MOCK_S3_ACCESS_KEY_ID: str = ""
+    MOCK_S3_SECRET_ACCESS_KEY: str = ""
+
 
 class Staging(Production):
     DEBUG: bool = strtobool(os.getenv("DEBUG", "False"))
@@ -137,15 +142,11 @@ class Develop(Production):
 class Test(Production):
     ENVIRONMENT_NAME = "test"
 
-    MOCK_S3: bool = strtobool(os.getenv("MOCK_S3", "True"))
-    MOCK_S3_ENDPOINT_URL: str = os.environ.get("MOCK_S3_ENDPOINT_URL", "")
-    MOCK_S3_ACCESS_KEY_ID: str = os.environ.get("MOCK_S3_ACCESS_KEY_ID", "minioadmin")
-    MOCK_S3_SECRET_ACCESS_KEY: str = os.environ.get(
-        "MOCK_S3_SECRET_ACCESS_KEY", "minioadmin"
-    )
-    PROOF_OF_DEATH_BUCKET_NAME: str = os.environ.get(
-        "PROOF_OF_DEATH_BUCKET_NAME", "test-proof-of-death"
-    )
+    MOCK_S3: bool = True
+    MOCK_S3_ENDPOINT_URL: str = "http://mock-s3:9000"
+    MOCK_S3_ACCESS_KEY_ID: str = "minioadmin"
+    MOCK_S3_SECRET_ACCESS_KEY: str = "minioadmin"
+    PROOF_OF_DEATH_BUCKET_NAME: str = "proof-of-death"
 
     SECRET_KEY: str = "abc123"
     DEBUG: bool = True
