@@ -37,14 +37,14 @@ runs:
         echo "ENVIRONMENT_NAME=test" >> .env
         cat .env
       shell: bash
-    - name: Create buckets
-      run: ./test/create-buckets.sh
-      shell: bash
     - name: Start service
       env:
         ENVIRONMENT_NAME: test
         CONFIG: config.Test
       run: docker compose up --detach --wait --wait-timeout 300 app || docker compose logs app
+      shell: bash
+    - name: Create buckets
+      run: ./test/create-buckets.sh
       shell: bash
     - name: Run tests
       run: CI=true npx playwright test --project=chromium --grep-invert "@wip"
