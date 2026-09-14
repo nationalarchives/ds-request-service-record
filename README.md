@@ -5,6 +5,9 @@
 ```sh
 # Build and start the container
 docker compose up -d
+
+# Create an empty buckets
+./test/create-buckets.sh
 ```
 
 ### Add the static assets

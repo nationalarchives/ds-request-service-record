@@ -87,6 +87,7 @@ class Production(Features):
         SESSION_REDIS = Redis.from_url(SESSION_REDIS_URL)
 
     AWS_DEFAULT_REGION: str = os.environ.get("AWS_DEFAULT_REGION", "eu-west-2")
+    S3_ENDPOINT: str = os.environ.get("S3_ENDPOINT", "")
     PROOF_OF_DEATH_BUCKET_NAME: str = os.environ.get("PROOF_OF_DEATH_BUCKET_NAME", "")
     PROOF_OF_DEATH_HOLDING_PREFIX: str = os.environ.get(
         "PROOF_OF_DEATH_HOLDING_PREFIX", "holding/"
@@ -126,23 +127,10 @@ class Develop(Production):
 
     SESSION_COOKIE_SECURE: bool = strtobool(os.getenv("SESSION_COOKIE_SECURE", "True"))
 
-    MOCK_S3: bool = strtobool(os.getenv("MOCK_S3", "False"))
-    MOCK_S3_ENDPOINT_URL: str = os.environ.get("MOCK_S3_ENDPOINT_URL", "")
-    MOCK_S3_ACCESS_KEY_ID: str = os.environ.get("MOCK_S3_ACCESS_KEY_ID", "minioadmin")
-    MOCK_S3_SECRET_ACCESS_KEY: str = os.environ.get(
-        "MOCK_S3_SECRET_ACCESS_KEY", "minioadmin"
-    )
-
 
 class Test(Production):
     ENVIRONMENT_NAME = "test"
 
-    MOCK_S3: bool = strtobool(os.getenv("MOCK_S3", "True"))
-    MOCK_S3_ENDPOINT_URL: str = os.environ.get("MOCK_S3_ENDPOINT_URL", "")
-    MOCK_S3_ACCESS_KEY_ID: str = os.environ.get("MOCK_S3_ACCESS_KEY_ID", "minioadmin")
-    MOCK_S3_SECRET_ACCESS_KEY: str = os.environ.get(
-        "MOCK_S3_SECRET_ACCESS_KEY", "minioadmin"
-    )
     PROOF_OF_DEATH_BUCKET_NAME: str = os.environ.get(
         "PROOF_OF_DEATH_BUCKET_NAME", "test-proof-of-death"
     )

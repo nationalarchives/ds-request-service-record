@@ -37,6 +37,9 @@ runs:
         echo "ENVIRONMENT_NAME=test" >> .env
         cat .env
       shell: bash
+    - name: Create buckets
+      run: ./test/create-buckets.sh
+      shell: bash
     - name: Start service
       env:
         ENVIRONMENT_NAME: test

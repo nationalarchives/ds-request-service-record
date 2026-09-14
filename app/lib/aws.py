@@ -24,16 +24,10 @@ def get_s3_client():
     Returns an S3 client, pointed at the local mock S3 container when one is configured.
     """
     session = get_boto3_session()
-    endpoint_url = _get_mock_s3_endpoint_url()
-
-    if not endpoint_url:
-        return session.client("s3")
 
     return session.client(
         "s3",
-        endpoint_url=endpoint_url,
-        aws_access_key_id=current_app.config.get("MOCK_S3_ACCESS_KEY_ID"),
-        aws_secret_access_key=current_app.config.get("MOCK_S3_SECRET_ACCESS_KEY"),
+        endpoint_url=current_app.config.get("S3_ENDPOINT", None),
         config=Config(s3={"addressing_style": "path"}),
     )
 
@@ -71,42 +65,56 @@ def upload_file_to_s3(
 
     Returns file name for use in other parts of application.
     """
-    if file:
-        data = file.read()
+    if not file:
+        return None
 
-        if not data:
-            current_app.logger.error("File is empty, cannot upload to S3.")
-            return None
+    data = file.read()
+    if not data:
+        current_app.logger.error("File is empty, cannot upload to S3.")
+        return None
 
-        s3 = get_s3_client()
+    s3 = get_s3_client()
 
-        filename = file.filename
+    try:
+        s3.head_bucket(Bucket=bucket_name)
+    except ClientError as e:
+        error_code = e.response["Error"]["Code"]
+        if error_code in ["404", "NoSuchBucket"]:
+            current_app.logger.exception(
+                f"Error: The bucket '{bucket_name}' does not exist. Upload aborted."
+            )
+        else:
+            current_app.logger.exception("An unexpected S3 client error occurred")
+        raise ClientError(e.response, e.operation_name) from e
 
-        if filename_override:
-            filename = _build_filename_with_extension(filename_override, file.filename)
+    filename = file.filename
 
-        content_type = _determine_content_type(file, filename)
+    if filename_override:
+        filename = _build_filename_with_extension(filename_override, file.filename)
 
-        for attempt in range(1, current_app.config["MAX_UPLOAD_ATTEMPTS"] + 1):
-            stream = io.BytesIO(data)
-            try:
-                s3.upload_fileobj(
-                    stream,
-                    bucket_name,
-                    filename,
-                    ExtraArgs={"ContentType": content_type},
-                )
-                return filename
-            except (BotoCoreError, ClientError) as e:
+    content_type = _determine_content_type(file, filename)
+
+    for attempt in range(1, current_app.config["MAX_UPLOAD_ATTEMPTS"] + 1):
+        stream = io.BytesIO(data)
+        try:
+            s3.upload_fileobj(
+                stream,
+                bucket_name,
+                filename,
+                ExtraArgs={"ContentType": content_type},
+            )
+            return filename
+        except (BotoCoreError, ClientError) as e:
+            current_app.logger.error(
+                f"Error uploading file to S3 (attempt {attempt}): {e}"
+            )
+            if attempt == current_app.config["MAX_UPLOAD_ATTEMPTS"]:
                 current_app.logger.error(
-                    f"Error uploading file to S3 (attempt {attempt}): {e}"
+                    f"Max upload attempts reached for file {filename}. Upload failed."
                 )
-                if attempt == current_app.config["MAX_UPLOAD_ATTEMPTS"]:
-                    current_app.logger.error(
-                        f"Max upload attempts reached for file {filename}. Upload failed."
-                    )
-                    return None  # Maximum number of attempts reached
-    return None  # No file was uploaded
+                return None  # Maximum number of attempts reached
+
+    return None  # Fallback in case all attempts fail
 
 
 def move_proof_of_death_to_submitted(key_name: str) -> bool:
@@ -195,19 +203,6 @@ def _get_proof_of_death_holding_prefix() -> str:
 
 def _get_proof_of_death_submitted_prefix() -> str:
     return current_app.config.get("PROOF_OF_DEATH_SUBMITTED_PREFIX")
-
-
-def _should_mock_s3() -> bool:
-    return current_app.config.get("MOCK_S3", False)
-
-
-def _get_mock_s3_endpoint_url() -> str:
-    """
-    The mock S3 endpoint is only used when S3 mocking is switched on.
-    """
-    if not _should_mock_s3():
-        return ""
-    return current_app.config.get("MOCK_S3_ENDPOINT_URL", "")
 
 
 def _determine_content_type(file: FileStorage, filename: str) -> str:

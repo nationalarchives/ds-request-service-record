@@ -21,10 +21,9 @@ services:
       - CACHE_REDIS_URL=redis://redis:6379/1
       - GA4_ID=GTM-T8DSWV
       - SESSION_COOKIE_SECURE=False
-      - MOCK_S3=${MOCK_S3:-True}
-      - MOCK_S3_ENDPOINT_URL=http://mock-s3:9000
-      - MOCK_S3_ACCESS_KEY_ID=minioadmin
-      - MOCK_S3_SECRET_ACCESS_KEY=minioadmin
+      - S3_ENDPOINT=http://s3:9000
+      - AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
+      - AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
       - PROOF_OF_DEATH_BUCKET_NAME=${PROOF_OF_DEATH_BUCKET_NAME:-proof-of-death}
     env_file:
       - path: .env
@@ -38,8 +37,7 @@ services:
       - db
       - redis
       - mock-record-copying-service-api
-      - mock-s3
-      - mock-s3-init
+      - s3
     healthcheck:
       start_period: 10s
       start_interval: 2s
@@ -65,36 +63,12 @@ services:
     ports:
       - 65498:8080
 
-  mock-s3:
-    image: minio/minio:latest
-    command: server /data --console-address ":9001"
-    environment:
-      - MINIO_ROOT_USER=minioadmin
-      - MINIO_ROOT_PASSWORD=minioadmin
+  s3:
+    image: scireum/s3-ninja
     ports:
-      - 65504:9001
+      - 65504:9000
     volumes:
-      - miniodata:/data
-    healthcheck:
-      test: ["CMD", "mc", "ready", "local"]
-      start_period: 5s
-      interval: 5s
-      retries: 5
-
-  mock-s3-init:
-    image: minio/mc:latest
-    depends_on:
-      mock-s3:
-        condition: service_healthy
-    environment:
-      - PROOF_OF_DEATH_BUCKET_NAME=${PROOF_OF_DEATH_BUCKET_NAME:-proof-of-death}
-      - MOCK_S3_ACCESS_KEY_ID=minioadmin
-      - MOCK_S3_SECRET_ACCESS_KEY=minioadmin
-    entrypoint: >
-      /bin/sh -c "
-      mc alias set mock-s3 http://mock-s3:9000 \"$$MOCK_S3_ACCESS_KEY_ID\" \"$$MOCK_S3_SECRET_ACCESS_KEY\" &&
-      mc mb --ignore-existing mock-s3/\"$$PROOF_OF_DEATH_BUCKET_NAME\"
-      "
+      - s3data:/home/sirius/data
 
   docs:
     image: squidfunk/mkdocs-material
@@ -111,4 +85,4 @@ services:
 volumes:
   redis:
   pgdata:
-  miniodata:
+  s3data:
