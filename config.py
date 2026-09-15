@@ -1,6 +1,7 @@
 import json
 import os
 
+from flask import current_app
 from redis import Redis
 
 from app.lib.util import strtobool
@@ -16,20 +17,19 @@ class Production(Features):
     BUILD_VERSION: str = os.environ.get("BUILD_VERSION", "")
     TNA_FRONTEND_VERSION: str = ""
     try:
-        with open(
-            os.path.join(
-                os.path.realpath(os.path.dirname(__file__)),
-                "node_modules/@nationalarchives/frontend",
-                "package.json",
+        package_lock_json_path = os.path.join(
+            os.path.realpath(os.path.dirname(__file__)),
+            "package-lock.json",
+        )
+        with open(package_lock_json_path) as package_json:
+            data = json.load(package_json)
+            TNA_FRONTEND_VERSION: str = (
+                data.get("packages", {})
+                .get("node_modules/@nationalarchives/frontend", {})
+                .get("version", "")
             )
-        ) as package_json:
-            try:
-                data = json.load(package_json)
-                TNA_FRONTEND_VERSION = data["version"] or ""
-            except ValueError:
-                pass
-    except FileNotFoundError:
-        pass
+    except Exception:
+        current_app.logger.exception("Error reading the version of TNA Frontend")
 
     SECRET_KEY: str = os.environ.get("SECRET_KEY", "")
 
@@ -87,6 +87,7 @@ class Production(Features):
         SESSION_REDIS = Redis.from_url(SESSION_REDIS_URL)
 
     AWS_DEFAULT_REGION: str = os.environ.get("AWS_DEFAULT_REGION", "eu-west-2")
+    S3_ENDPOINT: str = os.environ.get("S3_ENDPOINT", "")
     PROOF_OF_DEATH_BUCKET_NAME: str = os.environ.get("PROOF_OF_DEATH_BUCKET_NAME", "")
     PROOF_OF_DEATH_HOLDING_PREFIX: str = os.environ.get(
         "PROOF_OF_DEATH_HOLDING_PREFIX", "holding/"
@@ -126,26 +127,11 @@ class Develop(Production):
 
     SESSION_COOKIE_SECURE: bool = strtobool(os.getenv("SESSION_COOKIE_SECURE", "True"))
 
-    MOCK_S3: bool = strtobool(os.getenv("MOCK_S3", "False"))
-    MOCK_S3_ENDPOINT_URL: str = os.environ.get("MOCK_S3_ENDPOINT_URL", "")
-    MOCK_S3_ACCESS_KEY_ID: str = os.environ.get("MOCK_S3_ACCESS_KEY_ID", "minioadmin")
-    MOCK_S3_SECRET_ACCESS_KEY: str = os.environ.get(
-        "MOCK_S3_SECRET_ACCESS_KEY", "minioadmin"
-    )
-
 
 class Test(Production):
     ENVIRONMENT_NAME = "test"
 
-    MOCK_S3: bool = strtobool(os.getenv("MOCK_S3", "True"))
-    MOCK_S3_ENDPOINT_URL: str = os.environ.get("MOCK_S3_ENDPOINT_URL", "")
-    MOCK_S3_ACCESS_KEY_ID: str = os.environ.get("MOCK_S3_ACCESS_KEY_ID", "minioadmin")
-    MOCK_S3_SECRET_ACCESS_KEY: str = os.environ.get(
-        "MOCK_S3_SECRET_ACCESS_KEY", "minioadmin"
-    )
-    PROOF_OF_DEATH_BUCKET_NAME: str = os.environ.get(
-        "PROOF_OF_DEATH_BUCKET_NAME", "test-proof-of-death"
-    )
+    PROOF_OF_DEATH_BUCKET_NAME: str = "test-proof-of-death"
 
     SECRET_KEY: str = "abc123"
     DEBUG: bool = True
@@ -161,15 +147,7 @@ class Test(Production):
     FORCE_HTTPS: bool = False
     PREFERRED_URL_SCHEME: str = "http"
 
-    COUNTRY_API_URL: str = (
-        os.environ.get(
-            "RECORD_COPYING_SERVICE_API_URL",
-            "http://mock-record-copying-service-api:8080/",
-        )
-    ) + "GetCountry"
+    COUNTRY_API_URL: str = "http://mock-record-copying-service-api:8080/GetCountry"
     DELIVERY_FEE_API_URL: str = (
-        os.environ.get(
-            "RECORD_COPYING_SERVICE_API_URL",
-            "http://mock-record-copying-service-api:8080/",
-        )
-    ) + "GetDeliveryPrice"
+        "http://mock-record-copying-service-api:8080/GetDeliveryPrice"
+    )
