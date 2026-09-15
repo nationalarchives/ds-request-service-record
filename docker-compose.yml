@@ -25,6 +25,7 @@ services:
       - AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
       - AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
       - PROOF_OF_DEATH_BUCKET_NAME=${PROOF_OF_DEATH_BUCKET_NAME:-proof-of-death}
+      - RECORD_COPYING_SERVICE_API_URL=${RECORD_COPYING_SERVICE_API_URL:-http://mock-record-copying-service-api:8080/}
     env_file:
       - path: .env
         required: false

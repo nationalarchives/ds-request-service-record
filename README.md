@@ -44,12 +44,14 @@ docker compose exec app poetry run python create_database.py
 
 ### Run WireMock server for local development
 
-For local development, you can use a mock server instead of connecting to external APIs.
+For local development, we use a mock server instead of connecting to external APIs.
 
-The server will run on `http://localhost:65498` and is visible to your app on `http://mock-record-copying-service-api:8080/`. Set this in your `.env`:
+The server will run on `http://localhost:65498` and is visible to your app on `http://mock-record-copying-service-api:8080/`.
+
+To use the live API, set this in your `.env`:
 
 ```
-RECORD_COPYING_SERVICE_API_URL=http://mock-record-copying-service-api:8080/
+RECORD_COPYING_SERVICE_API_URL=[live record copying service API URL]
 ```
 
 ## Environment variables
