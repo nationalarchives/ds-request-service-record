@@ -6,7 +6,7 @@
 # Build and start the container
 docker compose up -d
 
-# Create an empty buckets
+# Create the fixed local S3 bucket in S3 Ninja
 ./test/create-buckets.sh
 ```
 

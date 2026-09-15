@@ -1,1 +1,7 @@
-AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY bash -c 'for b in proof-of-death test-proof-of-death; do aws s3api create-bucket --bucket "$b" --acl public-read-write --endpoint-url http://localhost:65504; done'
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Compatibility shim: keep existing CI/local command unchanged while delegating
+# the real implementation to Python in the app container.
+docker compose exec -T app poetry run python /app/test/create_buckets.py
