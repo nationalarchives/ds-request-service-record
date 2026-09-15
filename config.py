@@ -131,9 +131,7 @@ class Develop(Production):
 class Test(Production):
     ENVIRONMENT_NAME = "test"
 
-    PROOF_OF_DEATH_BUCKET_NAME: str = os.environ.get(
-        "PROOF_OF_DEATH_BUCKET_NAME", "test-proof-of-death"
-    )
+    PROOF_OF_DEATH_BUCKET_NAME: str = "test-proof-of-death"
 
     SECRET_KEY: str = "abc123"
     DEBUG: bool = True
@@ -149,15 +147,7 @@ class Test(Production):
     FORCE_HTTPS: bool = False
     PREFERRED_URL_SCHEME: str = "http"
 
-    COUNTRY_API_URL: str = (
-        os.environ.get(
-            "RECORD_COPYING_SERVICE_API_URL",
-            "http://mock-record-copying-service-api:8080/",
-        )
-    ) + "GetCountry"
+    COUNTRY_API_URL: str = "http://mock-record-copying-service-api:8080/GetCountry"
     DELIVERY_FEE_API_URL: str = (
-        os.environ.get(
-            "RECORD_COPYING_SERVICE_API_URL",
-            "http://mock-record-copying-service-api:8080/",
-        )
-    ) + "GetDeliveryPrice"
+        "http://mock-record-copying-service-api:8080/GetDeliveryPrice"
+    )
