@@ -25,9 +25,15 @@ def get_s3_client():
     """
     session = get_boto3_session()
 
+    if current_app.config.get("S3_ENDPOINT") is not None:
+        return session.client(
+            "s3",
+            endpoint_url=current_app.config.get("S3_ENDPOINT"),
+            config=Config(s3={"addressing_style": "path"}),
+        )
+
     return session.client(
         "s3",
-        endpoint_url=current_app.config.get("S3_ENDPOINT", None),
         config=Config(s3={"addressing_style": "path"}),
     )
 
