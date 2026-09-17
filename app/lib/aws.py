@@ -25,7 +25,7 @@ def get_s3_client():
     """
     session = get_boto3_session()
 
-    if current_app.config.get("S3_ENDPOINT") is not None:
+    if current_app.config.get("S3_ENDPOINT"):
         return session.client(
             "s3",
             endpoint_url=current_app.config.get("S3_ENDPOINT"),
