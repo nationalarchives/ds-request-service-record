@@ -15,6 +15,7 @@ from app.lib.derive_if_change_order_is_available import (
     derive_if_change_order_is_available,
 )
 from app.lib.get_dynamic_back_link_route import get_dynamic_back_link_route
+from app.lib.order_summary_template_selection import get_order_summary_template_variant
 from app.lib.price_calculations import prepare_order_summary_data
 from app.lib.save_catalogue_reference_to_session import (
     save_catalogue_reference_to_session,
@@ -576,8 +577,10 @@ def your_order_summary(form, state_machine):
 
     can_change_order = derive_if_change_order_is_available(form_data)
 
+    template_variant = get_order_summary_template_variant(order_summary_data)
+
     return render_template(
-        "main/your-order-summary.html",
+        f"main/{template_variant}.html",
         content=load_content(),
         form=form,
         form_data=form_data,

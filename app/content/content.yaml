@@ -497,18 +497,29 @@ pages:
             description:
               - We will refund the page check fee (£9.92) if we do not hold the record.
               - The search fee of £38.95 is non-refundable.
-  your_order_summary:
+  your_order_summary_standard_printed:
     heading: Your order summary
-    order_type_term: Order type
-    price_term: Price
-    format_term: Format
     format_description_printed: Printed colour copies of the record (received by tracked post)
-    format_description_digital: Digital colour scan of the record (received by email)
-    per_page_copying_fee:
-      full_record_check_printed: Please note there will be a second payment to copy the record, priced £1.89 per printed page plus postage and packaging.
-      full_record_check_digital: Please note there will be a second payment to copy the record, priced £1.04 per page.
     costs_standard_printed: This fee covers £[ORDER_TYPE_FEE] for printed colour copies and £[DELIVERY_FEE] for postage and packaging.
     processing_option_description_standard: Standard
+    change_order_type: Change order
+  your_order_summary_standard_digital:
+    heading: Your order summary
+    format_description_digital: Digital colour scan of the record (received by email)
+    processing_option_description_standard: Standard
+    change_order_type: Change order
+  your_order_summary_full_record_check_printed:
+    heading: Your order summary
+    format_description_printed: Printed colour copies of the record (received by tracked post)
+    per_page_copying_fee:
+      full_record_check_printed: Please note there will be a second payment to copy the record, priced £1.89 per printed page plus postage and packaging.
+    processing_option_description_full: Full record check
+    change_order_type: Change order
+  your_order_summary_full_record_check_digital:
+    heading: Your order summary
+    format_description_digital: Digital colour scan of the record (received by email)
+    per_page_copying_fee:
+      full_record_check_digital: Please note there will be a second payment to copy the record, priced £1.04 per page.
     processing_option_description_full: Full record check
     change_order_type: Change order
   request_submitted:
