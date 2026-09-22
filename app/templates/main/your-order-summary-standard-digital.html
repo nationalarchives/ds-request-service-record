@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{%- from 'macros/conditionally-available-link.html' import conditionallyAvailableLink %}
+
+{%- set pageTitle = content.pages.your_order_summary_standard_digital.heading | prepare_page_title -%}
+
+{% block beforeContent %}
+  {{ backLink(url_for(back_link_route)) }}
+{% endblock beforeContent %}
+
+{% block content %}
+  <div class="tna-section tna-!--padding-top-s">
+    <div class="tna-container">
+      <div
+        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+        <h1 class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.your_order_summary_standard_digital.heading }}</h1>
+        <dl class="order-summary tna-!--margin-top-m">
+          <dt><span><i
+            class="fa-solid fa-file"></i></span><span>Order type</span></dt>
+          <dd>
+            <span>&nbsp;</span><span
+            id="processing-option">{{ content.pages.your_order_summary_standard_digital.processing_option_description_standard }}</span>
+          </dd>
+          <dt><span><i
+            class="fa-solid fa-sterling-sign"></i></span><span>Price</span>
+          </dt>
+          <dd>
+            <span>&nbsp;</span>
+            <div>
+              <span
+                data-price="{{ order_type_price_in_pounds }}">£{{ (order_summary_data.delivery_fee_pence + order_summary_data.amount_pence) | convert_pence_to_pounds_string }}</span>
+            </div>
+          </dd>
+          <dt><span><i
+            class="fa-solid fa-envelope"></i></span><span>Format</span></dt>
+          <dd>
+            <span>&nbsp;</span><span>{{ content.pages.your_order_summary_standard_digital.format_description_digital }}</span>
+          </dd>
+        </dl>
+
+        <div class="tna-!--margin-top-m">
+          <form action="{{ url_for('main.your_order_summary') }}" method="post" novalidate>
+            {{ form.csrf_token }}
+            <div class="tna-button-group">
+              {{ conditionallyAvailableLink('main.choose_your_order_type', content.pages.your_order_summary_standard_digital.change_order_type, can_change_order) }}
+              {{ form.submit(params={'classes': 'tna-button--accent'}) }}
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
