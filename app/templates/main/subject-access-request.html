@@ -18,7 +18,7 @@
         {% endfor %}
         <ul class="tna-ul">
           {% for item in content.pages.subject_access_request.list_items %}
-            <li>{{ item | parse_markdown_links | safe }}</li>
+            <li>{{ item | parse_markdown_links(new_tab=False) | safe }}</li>
           {% endfor %}
         </ul>
       </div>

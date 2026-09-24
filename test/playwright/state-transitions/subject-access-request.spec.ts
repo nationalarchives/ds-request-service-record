@@ -1,7 +1,7 @@
 import { test } from "@playwright/test";
 import { Paths } from "../lib/constants";
 import {
-  checkExternalLink,
+  checkInternalLink,
   presentSubjectAccessRequest,
 } from "../lib/step-functions";
 
@@ -18,7 +18,7 @@ test.describe("the 'Subject Access Request' form", () => {
   test("the 'Request a record for a living person born before or in 1939' link has the correct destination and is set to open in new tab", async ({
     page,
   }) => {
-    await checkExternalLink(
+    await checkInternalLink(
       page,
       "Request a record for a living person born before or in 1939",
       "https://discovery.nationalarchives.gov.uk/mod-dsa-request-step1",
@@ -28,7 +28,7 @@ test.describe("the 'Subject Access Request' form", () => {
   test("the 'request a record for a living person born after or in 1940' link has the correct destination and is set to open in new tab", async ({
     page,
   }) => {
-    await checkExternalLink(
+    await checkInternalLink(
       page,
       "request a record for a living person born after or in 1940",
       "https://www.gov.uk/get-copy-military-records-of-service/apply-for-your-own-records",
