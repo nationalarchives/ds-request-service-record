@@ -30,7 +30,7 @@
             <div>
               <span
                 data-price="{{ order_type_price_in_pounds }}">£{{ (order_summary_data.delivery_fee_pence + order_summary_data.amount_pence) | convert_pence_to_pounds_string }}</span>
-              <p>
+              <p data-second-payment-details>
                 {{ content.pages.your_order_summary_full_record_check_british_army_officer_printed.per_page_copying_fee.full_record_check_printed }}
               </p>
             </div>
