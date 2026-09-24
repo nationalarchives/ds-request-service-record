@@ -87,6 +87,45 @@ def test_prepare_order_summary_data_full_record_check_digital(app_context):
     assert summary["order_type"] == "full_record_check_digital"
 
 
+@pytest.mark.parametrize(
+    "service_branch,commissioned_officer, does_not_have_email, expected_order_type",
+    [
+        (
+            "BRITISH_ARMY",
+            "yes",
+            True,
+            "full_record_check_printed",
+        ),
+        (
+            "BRITISH_ARMY",
+            "yes",
+            False,
+            "full_record_check_digital",
+        ),
+    ],
+)
+def test_prepare_order_summary_data_with_service_branch_and_commissioned_officer(
+    app_context,
+    service_branch,
+    commissioned_officer,
+    does_not_have_email,
+    expected_order_type,
+):
+    """Test order summary data preparation for full record check digital delivery."""
+    form_data = {
+        "processing_option": "full",
+        "does_not_have_email": does_not_have_email,
+        "were_they_a_commissioned_officer": commissioned_officer,
+        "service_branch": service_branch,
+    }
+
+    summary = prepare_order_summary_data(form_data)
+
+    assert summary["service_branch"] == service_branch
+    assert summary["were_they_a_commissioned_officer"] == commissioned_officer
+    assert summary["order_type"] == expected_order_type
+
+
 def test_prepare_order_summary_data_when_form_data_is_none(app_context):
     """Test order summary preparation returns None when form data is missing."""
     result = prepare_order_summary_data(None)

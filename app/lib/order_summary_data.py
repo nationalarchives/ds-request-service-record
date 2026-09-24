@@ -15,6 +15,10 @@ def prepare_order_summary_data(form_data: dict) -> dict:
         return None
 
     processing_option = form_data.get("processing_option", "standard")
+    were_they_a_commissioned_officer = form_data.get(
+        "were_they_a_commissioned_officer", None
+    )
+    service_branch = form_data.get("service_branch", None)
     delivery_type = get_delivery_type(form_data)
 
     try:
@@ -41,6 +45,8 @@ def prepare_order_summary_data(form_data: dict) -> dict:
         "amount_pence": base_fee,
         "delivery_fee_pence": delivery_fee_pence,
         "order_type": order_type,
+        "were_they_a_commissioned_officer": were_they_a_commissioned_officer,
+        "service_branch": service_branch,
     }
 
     return order_summary_data
