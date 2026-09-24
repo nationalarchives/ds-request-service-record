@@ -53,7 +53,7 @@ pages:
         - option: Standard
           fee: £42.25
         - option: Full record check
-          fee: £48.87 plus £1.04 per page copying fee. For example, 20 pages will cost an additional £20.80.
+          fee: £48.87 plus a record copying fee of £1.04 or £1.52 per page depending on the type of record
     delivery_method: |
       Records are delivered as PDF colour scans digitally via email. We can post a printed copy of the record instead 
       for an extra fee, but it will take longer to handle.
