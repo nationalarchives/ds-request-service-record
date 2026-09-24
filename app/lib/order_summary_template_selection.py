@@ -8,17 +8,42 @@ def get_order_summary_template_variant(order_summary_data):
 
     Args:
         order_summary_data: Dictionary containing order summary information
-                           with keys 'processing_option' and 'delivery_type'
+                           with keys 'processing_option', 'delivery_type', 'service_branch', and 'were_they_a_commissioned_officer'.
 
     Returns:
-        str: Template variant name (one of: standard-printed, standard-digital,
-             full-record-check-printed, full-record-check-digital)
+        str: Template variant name (one of:
+            your-order-summary-standard-printed,
+            your-order-summary-standard-digital,
+            your-order-summary-full-record-check-printed,
+            your-order-summary-full-record-check-digital,
+            your-order-summary-full-record-check-british-army-officer-digital,
+            your-order-summary-full-record-check-british-army-officer-printed)
 
     Raises:
         ValueError: If processing_option or delivery_type are invalid
     """
     processing_option = order_summary_data.get("processing_option")
     delivery_type = order_summary_data.get("delivery_type")
+    service_branch = order_summary_data.get("service_branch")
+    were_they_a_commissioned_officer = order_summary_data.get(
+        "were_they_a_commissioned_officer"
+    )
+
+    if (
+        processing_option == "full"
+        and delivery_type == "Digital"
+        and service_branch == "BRITISH_ARMY"
+        and were_they_a_commissioned_officer == "yes"
+    ):
+        return "your-order-summary-full-record-check-british-army-officer-digital"
+
+    if (
+        processing_option == "full"
+        and delivery_type == "PrintedTracked"
+        and service_branch == "BRITISH_ARMY"
+        and were_they_a_commissioned_officer == "yes"
+    ):
+        return "your-order-summary-full-record-check-british-army-officer-printed"
 
     # Validate that the combination exists in ORDER_TYPES
     key = (processing_option, delivery_type)

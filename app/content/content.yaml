@@ -53,7 +53,7 @@ pages:
         - option: Standard
           fee: £42.25
         - option: Full record check
-          fee: £48.87 plus £1.04 per page copying fee. For example, 20 pages will cost an additional £20.80.
+          fee: £48.87 plus a record copying fee of £1.04 or £1.52 per page depending on the type of record
     delivery_method: |
       Records are delivered as PDF colour scans digitally via email. We can post a printed copy of the record instead 
       for an extra fee, but it will take longer to handle.
@@ -400,7 +400,7 @@ pages:
           - term: What it costs
             description:
               - An upfront payment of £48.87, which covers the search (£38.95) and the page check (£9.92).
-              - A second payment of £1.04 per page. For example, 100 pages will cost an additional £104.
+              - A second payment of £1.52 per page. For example, 100 pages will cost an additional £152.
           - term: When you will get the record
             description:
               - We aim to confirm if we hold the record within 30 working days. The record will be released once we have received the second payment.
@@ -431,14 +431,14 @@ pages:
           - term: What it costs
             description:
               - An upfront payment of £48.87, which covers the search (£38.95) and the page check (£9.92).
-              - A second payment of £1.04 per page. For example, 100 pages will cost an additional £104.
+              - A second payment of £1.52 per page. For example, 100 pages will cost an additional £152.
           - term: When you will get the record
             description:
               - We aim to confirm if we hold the record within 30 working days. The record will be released once we have received the second payment.
           - term: Refunds
             description:
               - We will refund the page check fee (£9.92) if we do not hold the record.
-              - The search fee of £38.95 is non-refundable.
+              - The search fee is not refundable.
     final_paragraphs:
       - We will send you a digital colour scan of the record by email. You can request a printed copy by post for an extra cost.
   choose_your_order_type:
@@ -521,6 +521,20 @@ pages:
     per_page_copying_fee:
       full_record_check_digital: Please note there will be a second payment to copy the record, priced £1.04 per page.
     processing_option_description_full: Full record check
+    change_order_type: Change order
+  your_order_summary_full_record_check_british_army_officer_printed:
+    heading: Your order summary
+    processing_option_description_full: Full record check
+    per_page_copying_fee:
+      full_record_check_printed: Please note there will be a second payment to copy the record, priced £7.40 per printed page plus postage and packaging.
+    format_description_printed: Printed colour copies of the record (received by tracked post)
+    change_order_type: Change order
+  your_order_summary_full_record_check_british_army_officer_digital:
+    heading: Your order summary
+    processing_option_description_full: Full record check
+    per_page_copying_fee:
+      full_record_check_digital: Please note there will be a second payment to copy the record, priced £1.52 per page.
+    format_description_digital: Digital colour scan of the record (received by email)
     change_order_type: Change order
   request_submitted:
     heading: Request submitted
