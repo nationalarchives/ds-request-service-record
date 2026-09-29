@@ -543,13 +543,13 @@ pages:
     order_type_term: Order
     price:
       term: Price
-      message: "The price is calculated based on the number of pages we are copying: £1.04 per page for digital copies, or £1.89 per page for posted copies."
+      message: "The price is calculated based on the number of pages we are copying."
   second_payment_summary:
     heading: Payment summary
     paragraph: Check your details
     order_term: Order
     price_term: Price
-    pricing_information: "The price is calculated based on the number of pages we are copying: £1.04 per page for digital copies, or £1.89 per page for posted copies."
+    pricing_information: "The price is calculated based on the number of pages we are copying."
   page_not_found:
     heading: Page not found
     paragraphs:
