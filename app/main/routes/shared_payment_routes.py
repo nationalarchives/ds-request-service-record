@@ -2,7 +2,9 @@ from flask import abort, current_app, redirect, render_template, session, url_fo
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.lib.content import load_content
+from app.lib.db.constants import PAID_STATUS, SENT_STATUS
 from app.lib.db.db_handler import (
+    get_dynamics_payment,
     get_gov_uk_dynamics_payment,
     get_service_record_request,
 )
@@ -92,10 +94,25 @@ def handle_gov_uk_pay_response(payment_type, id):
 
 
 @bp.route("/confirm-payment-received/")
-def confirm_payment_received():
-    content = load_content()
+@bp.route("/confirm-payment-received/<id>/", methods=["GET"])
+def confirm_payment_received(id: str | None = None):
+    reference_number = None
+
+    if (
+        id
+        and (payment := get_dynamics_payment(id))
+        and payment.status
+        in {
+            PAID_STATUS,
+            SENT_STATUS,
+        }
+    ):
+        reference_number = payment.reference
+
     return render_template(
-        "main/payment/confirm-payment-received.html", content=content
+        "main/payment/confirm-payment-received.html",
+        reference_number=reference_number,
+        content=load_content(),
     )
 
 
