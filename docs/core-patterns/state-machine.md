@@ -45,4 +45,3 @@ This approach makes a complex service like Request a Military Service record muc
 
 - state machine route behaviour is tested extensively, both in Pytest and Playwright
 - navigation helper tests cover route changes that depend on journey state
-
