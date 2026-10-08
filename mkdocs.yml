@@ -1,2 +1,16 @@
-site_name: Flask Application Docs
+site_name: Request a military service record documentation
 repo_url: https://github.com/nationalarchives/flask-application-template
+nav:
+  - Home: index.md
+  - Core patterns:
+      - State machine: core-patterns/state-machine.md
+      - Post-Redirect-Get: core-patterns/post-redirect-get.md
+      - Content approach: core-patterns/content-approach.md
+      - Hyperlinks: core-patterns/hyperlinks.md
+      - Template approach: core-patterns/template-approach.md
+      - Back links: core-patterns/back-links.md
+  - Testing:
+      - Overview: testing/index.md
+      - Playwright: testing/playwright.md
+      - Unused content: testing/unused-content.md
+      - Navigation helpers: testing/navigation-helpers.md
