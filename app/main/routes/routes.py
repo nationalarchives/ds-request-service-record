@@ -15,8 +15,8 @@ from app.lib.derive_if_change_order_is_available import (
     derive_if_change_order_is_available,
 )
 from app.lib.get_dynamic_back_link_route import get_dynamic_back_link_route
+from app.lib.order_summary_data import prepare_order_summary_data
 from app.lib.order_summary_template_selection import get_order_summary_template_variant
-from app.lib.price_calculations import prepare_order_summary_data
 from app.lib.save_catalogue_reference_to_session import (
     save_catalogue_reference_to_session,
 )

@@ -19,6 +19,14 @@ test.describe("the 'Request a military service record' form", () => {
     test.expect(metaDescriptionElementCount).toBe(1);
   });
 
+  test("shows the correct pricing information (reflecting the current fees)", async ({
+    page,
+  }) => {
+    await test
+      .expect(page.locator("[data-fees-table]"))
+      .toContainText("£1.04 or £1.52 per page depending on the type of record");
+  });
+
   test("has the correct links", async ({ page }) => {
     await checkInternalLink(
       page,
