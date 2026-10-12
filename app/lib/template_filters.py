@@ -17,12 +17,20 @@ def parse_markdown_links(s, new_tab=True):
     if not s:
         return s
     # Regex to match [text](url)
-    pattern = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
+    pattern = re.compile(r"\[([^]]+)\]\(([^)]+)\)")
+
+    def resolve_link_target(key):
+        if hasattr(ExternalLinks, key):
+            return getattr(ExternalLinks, key)
+
+        raise ValueError(
+            f"Unknown markdown link target '{key}'. Markdown links must use an ExternalLinks constant."
+        )
 
     def replacer(match):
         text = match.group(1)
         key = match.group(2).strip()
-        url = getattr(ExternalLinks, key, key)
+        url = resolve_link_target(key)
         attrs = ' target="_blank" rel="noreferrer noopener"' if new_tab else ""
         return f'<a href="{url}"{attrs}>{text}</a>'
 
@@ -33,7 +41,7 @@ def inject_unique_survey_link(s, current_endpoint=None):
     if not s:
         return s
 
-    match = re.search(r"\[([^\]]+)\]\(([^)]+)\)", s)
+    match = re.search(r"\[([^]]+)\]\(([^)]+)\)", s)
     if not match:
         return s
 
@@ -99,7 +107,7 @@ def format_standard_printed_order_price(s, delivery_fee, order_type_fee):
         "ORDER_TYPE_FEE": f"<span data-order-type-price>{convert_pence_to_pounds_string(order_type_fee)}</span>",
     }
 
-    pattern = re.compile(r"\[(DELIVERY_FEE|ORDER_TYPE_FEE)\]")
+    pattern = re.compile(r"\[(DELIVERY_FEE|ORDER_TYPE_FEE)]")
 
     def replacer(m):
         return values[m.group(1)]

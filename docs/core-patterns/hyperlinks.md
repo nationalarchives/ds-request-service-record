@@ -6,14 +6,16 @@ content.
 ## What it does
 
 Content can use markdown-style links such as `[Search Ancestry](ANCESTRY_SEARCH)`. When the page is rendered, the link
-key is resolved against `ExternalLinks` and converted into an HTML anchor tag with relevant attributes (such as
-`target="_blank"` and `rel="noreferrer noopener"`).
+target is resolved against `ExternalLinks` and converted into an HTML anchor tag with relevant attributes (such as
+`target="_blank"` and `rel="noreferrer noopener"`). Raw URLs are intentionally not supported by
+`parse_markdown_links()`.
 
 This lets us keep:
 
 - link destinations in one place, without duplication
 - content copy readable in `app/content/content.yaml`
 - templates free from repeated hard-coded URLs
+- invalid markdown link targets fail loudly during testing and rendering
 
 ## Where it lives
 
@@ -27,6 +29,7 @@ Relevant code:
 Relevant tests:
 
 - `test/lib/test_template_filter_markdown_links.py`
+- `test/content/test_markdown_links_are_external_links.py`
 
 ## How it works
 
@@ -50,7 +53,7 @@ For each match, it:
 1. extracts the link text
 2. extracts the target value
 3. checks whether the target matches a constant on `ExternalLinks`
-4. falls back to the raw target value if there is no matching constant
+4. raises a `ValueError` if the target does not match an `ExternalLinks` constant
 5. returns an HTML `<a>` tag
 
 By default, links are rendered with:
