@@ -5,7 +5,7 @@ pages:
   all:
     phase_banner:
       phase: Beta
-      message: This is a new service. Help us improve it and [give your feedback (opens in new tab)](USER_FEEDBACK_SURVEY).
+      message: This is a new service. Help us improve it and [give your feedback (opens in new tab)](external:USER_FEEDBACK_SURVEY).
   request_a_military_service_record:
     heading: Request a military service record
     contents:
@@ -17,7 +17,7 @@ pages:
         - These records predominantly cover the period of the Second World War.
         - |
           If you are looking for a First World War record, see our 
-          [British Army soldiers of the First World War research guide](BRITISH_ARMY_FIRST_WORLD_WAR_RESEARCH_GUIDE). 
+          [British Army soldiers of the First World War research guide](external:BRITISH_ARMY_FIRST_WORLD_WAR_RESEARCH_GUIDE). 
           The majority are not available through this service.
     ways_to_request_a_record:
       heading: Ways to request a record
@@ -42,7 +42,7 @@ pages:
       paragraphs:
         - |
           We charge a fee to recover costs of providing the service. The 
-          [prices we charge (opens in new tab)](OUR_FEES) are set out by 
+          [prices we charge (opens in new tab)](external:OUR_FEES) are set out by 
           the Fees Regulations under the Public Records Act (1958).
         - The fee will depend on the service you select. You can pay with a debit or credit card.
     table:
@@ -76,7 +76,7 @@ pages:
     foi_information: |
       By completing this form you are requesting information from a UK public authority, The National Archives. We are 
       therefore required to treat it as a Freedom of Information (FOI) request. [You can find out more about FOI on 
-      GOV.UK (opens in new tab)](FOI_REQUEST_GUIDANCE).
+      GOV.UK (opens in new tab)](external:FOI_REQUEST_GUIDANCE).
   before_you_start:
     heading: Before you start
     paragraphs:
@@ -105,12 +105,12 @@ pages:
           - "The copy of proof of death must be:"
       first_list:
         - |
-          [A copy of a death certificate (opens in new tab)](COPIES_OF_DEATH_CERTIFICATES)
+          [A copy of a death certificate (opens in new tab)](external:COPIES_OF_DEATH_CERTIFICATES)
         - A published obituary (detailing publication source, name of deceased, and date of birth and death)
         - |
-          [A Commonwealth War Graves Commission (CWGC) war dead record (opens in new tab)](CWGC_WAR_DEAD_RECORDS)
+          [A Commonwealth War Graves Commission (CWGC) war dead record (opens in new tab)](external:CWGC_WAR_DEAD_RECORDS)
         - |
-          [Grant of probate (opens in new tab)](PROBATE_SEARCH)
+          [Grant of probate (opens in new tab)](external:PROBATE_SEARCH)
       second_list:
         - In a PDF, JPG, JPEG, GIF or PNG format
         - No more than 5MB in size
@@ -136,7 +136,7 @@ pages:
           Please make sure you are ready to submit your request in one session.
         - |
           We will only use the data you provide to answer your request. 
-          [Our privacy notice (opens in new tab)](PRIVACY_NOTICE) 
+          [Our privacy notice (opens in new tab)](external:PRIVACY_NOTICE) 
           explains how we collect, use, and protect personal data.
   is_service_person_alive:
     heading: Is the service person alive?
@@ -155,7 +155,7 @@ pages:
         need an Ancestry subscription or can use their pay-per-view service. Alternatively, you can access Ancestry 
         for free onsite at The National Archives.
       - |
-        [Search Ancestry (opens in new tab)](ANCESTRY_SEARCH)
+        [Search Ancestry (opens in new tab)](external:ANCESTRY_SEARCH)
       - If you have already checked, or do not wish to check Ancestry, please continue your request.
   are_you_sure_you_want_to_cancel:
     heading: Are you sure you want to cancel?
@@ -173,9 +173,9 @@ pages:
       - "Do not use this service to request records for:"
     list_items:
       - The British Indian Army, you can find out how to look for these records on [our Indian Army personnel
-        research guide](INDIAN_ARMY_PERSONNEL_RESEARCH_GUIDE)
+        research guide](external:INDIAN_ARMY_PERSONNEL_RESEARCH_GUIDE)
       - Polish forces who served under British army or navy command during the Second World War, these are [held
-        by the Ministry of Defence](MOD_SERVICE_DECEASED_SERVICEPERSON)
+        by the Ministry of Defence](external:MOD_SERVICE_DECEASED_SERVICEPERSON)
   were_they_a_commissioned_officer:
     heading: Were they a Commissioned Officer?
     paragraphs:
@@ -225,8 +225,8 @@ pages:
         Regulation. They are known as Subject Access Requests (SAR).
       - "There are two ways to make an SAR request:"
     list_items:
-      - "[Request a record for a living person born before or in 1939](SUBJECT_ACCESS_REQUEST_FORM)"
-      - Visit the Ministry of Defence website to [request a record for a living person born after or in 1940](MOD_SERVICE_LIVING_PERSON)
+      - "[Request a record for a living person born before or in 1939](external:SUBJECT_ACCESS_REQUEST_FORM)"
+      - Visit the Ministry of Defence website to [request a record for a living person born after or in 1940](external:MOD_SERVICE_LIVING_PERSON)
   we_do_not_have_royal_navy_service_records:
     heading: We do not hold this record
     paragraphs:
@@ -289,7 +289,7 @@ pages:
         is unlikely that we will be able to locate the record of interest within a 
         reasonable timeframe.
       - |
-        [Records relating to the Durham Home Guard](DURHAM_HOME_GUARD_RECORDS) are currently 
+        [Records relating to the Durham Home Guard](external:DURHAM_HOME_GUARD_RECORDS) are currently 
         available for download in our catalogue.
       - |
         The remaining Home Guard records will be made available via the genealogy company
@@ -328,12 +328,12 @@ pages:
         You will need to submit one of the following forms of evidence:
     list_items:
       - |
-        [A copy of a death certificate (opens in new tab)](COPIES_OF_DEATH_CERTIFICATES)
+        [A copy of a death certificate (opens in new tab)](external:COPIES_OF_DEATH_CERTIFICATES)
       - A published obituary (detailing publication source, name of deceased, and date of birth and death)
       - |
-        [A Commonwealth War Graves Commission (CWGC) war dead record (opens in new tab)](CWGC_WAR_DEAD_RECORDS)
+        [A Commonwealth War Graves Commission (CWGC) war dead record (opens in new tab)](external:CWGC_WAR_DEAD_RECORDS)
       - |
-        [Grant of probate (opens in new tab)](PROBATE_SEARCH)
+        [Grant of probate (opens in new tab)](external:PROBATE_SEARCH)
     copy_requirements: "The copy of proof of death must be:"
     copy_requirements_list:
       - In a PDF, JPG, JPEG, GIF or PNG format
@@ -361,7 +361,7 @@ pages:
     heading: Your payment link has expired
     paragraphs:
       - Payment links automatically expire after 30 days.
-      - You can request a new payment link by replying to the last email we sent you, or by visiting our [Contact us](CONTACT_US) page.
+      - You can request a new payment link by replying to the last email we sent you, or by visiting our [Contact us](external:CONTACT_US) page.
   payment_already_made:
     heading: Your payment was successful
     payment_reference_paragraph:
@@ -369,7 +369,7 @@ pages:
       part_two: Your payment reference number is
     further_paragraphs:
       - We have sent you a payment confirmation email if you provided an email address.
-      - You can get in touch with us by replying to the last email we sent you, or by visiting our [Contact us](CONTACT_US) page.
+      - You can get in touch with us by replying to the last email we sent you, or by visiting our [Contact us](external:CONTACT_US) page.
   your_contact_details:
     heading: Your contact details
   what_is_your_address:
@@ -545,7 +545,7 @@ pages:
       paragraphs:
         - We have sent your request to a member of our team. They will use the information provided to search for the record you are requesting.
         - We will contact you with the result of the search, or to ask for more information, within 30 working days.
-        - Get in touch with us by replying to your confirmation email, or visit our Contact us page.<br><br>[ What did you think of this form? (opens in new tab) ](USER_FEEDBACK_SURVEY)
+        - Get in touch with us by replying to your confirmation email, or visit our Contact us page.<br><br>[ What did you think of this form? (opens in new tab) ](external:USER_FEEDBACK_SURVEY)
   what_was_their_date_of_birth:
     heading: What was their date of birth?
   second_payment_summary:
@@ -559,7 +559,7 @@ pages:
     paragraphs:
       - If you typed the web address, check it is correct.
       - If you pasted the web address, check you copied the entire address.
-      - If the web address if correct or you selected a link or button, get in touch with us by replying to the last email we sent you, or by visiting our [Contact us](CONTACT_US) page.
+      - If the web address if correct or you selected a link or button, get in touch with us by replying to the last email we sent you, or by visiting our [Contact us](external:CONTACT_US) page.
   sorry_you_will_have_to_start_again:
     heading: Sorry, you will have to start again
     initial_paragraphs:

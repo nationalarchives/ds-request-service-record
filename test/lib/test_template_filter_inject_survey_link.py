@@ -28,26 +28,42 @@ def test_no_markdown_links_returns_original_string():
 
 
 def test_replaces_markdown_link_with_anchor_without_path():
-    s = "[Take survey](Survey)"
+    s = "[Take survey](external:Survey)"
     expected = '<a href="https://example.com/survey" target="_blank" rel="noreferrer noopener">Take survey</a>'
     assert inject_unique_survey_link(s) == expected
 
 
-def test_uses_raw_url_when_key_not_in_external_links():
-    s = "[Go](https://site.example/path)"
-    expected = '<a href="https://site.example/path" target="_blank" rel="noreferrer noopener">Go</a>'
-    assert inject_unique_survey_link(s) == expected
+@pytest.mark.parametrize(
+    "s,error_message",
+    [
+        (
+            "[Go](https://site.example/path)",
+            "external:EXTERNAL_LINK_NAME or route:ROUTE_NAME",
+        ),
+        (
+            "[Go](external:NotDefined)",
+            "ExternalLinks constant after 'external:'",
+        ),
+        (
+            "[Go](route:PROVIDE_A_PROOF_OF_DEATH)",
+            "Survey markdown links must use external:EXTERNAL_LINK_NAME targets",
+        ),
+    ],
+)
+def test_rejects_invalid_survey_link_targets(s, error_message):
+    with pytest.raises(ValueError, match=error_message):
+        inject_unique_survey_link(s)
 
 
 def test_appends_current_page_query_param_when_path_provided_simple():
-    s = "[Survey](Survey)"
+    s = "[Survey](external:Survey)"
     path = "main.before_you_start"
     expected = '<a href="https://example.com/survey?current_page=before_you_start" target="_blank" rel="noreferrer noopener">Survey</a>'
     assert inject_unique_survey_link(s, current_endpoint=path) == expected
 
 
 def test_does_not_append_query_when_path_becomes_empty_after_strip():
-    s = "[Survey](Survey)"
+    s = "[Survey](external:Survey)"
     path = "main."
     expected = '<a href="https://example.com/survey" target="_blank" rel="noreferrer noopener">Survey</a>'
     assert inject_unique_survey_link(s, current_endpoint=path) == expected
