@@ -2,53 +2,97 @@ import re
 from datetime import datetime, timezone
 from urllib.parse import urlencode
 
+from flask import url_for
 from jinja2 import pass_context
 from tna_utilities.string import slugify as slugify_util
 
-from app.constants import ExternalLinks
+from app.constants import ExternalLinks, MultiPageFormRoutes
 from app.lib.boundary_years import BoundaryYears
+
+MARKDOWN_LINK_PATTERN = re.compile(r"\[([^]]+)]\(([^)]+)\)")
 
 
 def slugify(s):
     return slugify_util(s)
 
 
+def resolve_markdown_link_target(target):
+    # Markdown links now have an explicit target type so content is self-describing.
+    # We only support:
+    # - external:EXTERNAL_LINK_NAME  -> looked up on ExternalLinks
+    # - route:ROUTE_NAME             -> looked up on MultiPageFormRoutes and built with url_for
+    # Anything else is rejected so raw URLs and typos fail loudly.
+    target = target.strip()
+
+    if target.startswith("external:"):
+        external_key = target.removeprefix("external:").strip()
+        if not external_key:
+            raise ValueError(
+                "External markdown links must use an ExternalLinks constant after 'external:'."
+            )
+        if not hasattr(ExternalLinks, external_key):
+            raise ValueError(
+                f"Unknown external markdown link target '{external_key}'. Markdown links must use an ExternalLinks constant after 'external:'."
+            )
+        return getattr(ExternalLinks, external_key), False
+
+    if target.startswith("route:"):
+        route_name = target.removeprefix("route:").strip()
+        if not route_name:
+            raise ValueError(
+                "Route markdown links must use a MultiPageFormRoutes member name after 'route:'."
+            )
+        if not hasattr(MultiPageFormRoutes, route_name):
+            raise ValueError(
+                f"Unknown route markdown link target '{route_name}'. Markdown links must use a MultiPageFormRoutes member name after 'route:'."
+            )
+        endpoint = getattr(MultiPageFormRoutes, route_name).value
+        return url_for(endpoint), True
+
+    raise ValueError(
+        f"Unknown markdown link target '{target}'. Markdown links must use external:EXTERNAL_LINK_NAME or route:ROUTE_NAME."
+    )
+
+
 def parse_markdown_links(s, new_tab=True):
     if not s:
         return s
-    # Regex to match [text](url)
-    pattern = re.compile(r"\[([^]]+)\]\(([^)]+)\)")
-
-    def resolve_link_target(key):
-        if hasattr(ExternalLinks, key):
-            return getattr(ExternalLinks, key)
-
-        raise ValueError(
-            f"Unknown markdown link target '{key}'. Markdown links must use an ExternalLinks constant."
-        )
 
     def replacer(match):
         text = match.group(1)
-        key = match.group(2).strip()
-        url = resolve_link_target(key)
-        attrs = ' target="_blank" rel="noreferrer noopener"' if new_tab else ""
+        target = match.group(2).strip()
+        url, is_internal_route = resolve_markdown_link_target(target)
+
+        # external: links behave like our existing outbound links and can still opt
+        # into opening in a new tab. route: links are internal navigation, so they
+        # stay in the same tab even when new_tab=True.
+        attrs = ""
+        if not is_internal_route and new_tab:
+            attrs = ' target="_blank" rel="noreferrer noopener"'
         return f'<a href="{url}"{attrs}>{text}</a>'
 
-    return pattern.sub(replacer, s)
+    return MARKDOWN_LINK_PATTERN.sub(replacer, s)
 
 
 def inject_unique_survey_link(s, current_endpoint=None):
     if not s:
         return s
 
-    match = re.search(r"\[([^]]+)\]\(([^)]+)\)", s)
+    match = MARKDOWN_LINK_PATTERN.search(s)
     if not match:
         return s
 
     link_text = match.group(1)
-    # We use the key from the Markdown to look up the property in ExternalLinks
-    key = match.group(2).strip()
-    link_url = getattr(ExternalLinks, key, key)
+    target = match.group(2).strip()
+
+    # Survey links always point to an external service, so we reject route:
+    # targets before trying to resolve them through Flask routing.
+    if target.startswith("route:"):
+        raise ValueError(
+            "Survey markdown links must use external:EXTERNAL_LINK_NAME targets."
+        )
+
+    link_url, _ = resolve_markdown_link_target(target)
 
     current_page = ""
     if current_endpoint:
@@ -61,7 +105,7 @@ def inject_unique_survey_link(s, current_endpoint=None):
         f'<a href="{url}" target="_blank" rel="noreferrer noopener">{link_text}</a>'
     )
     # Replace only the first match. This function is not a general-purpose link parser
-    return re.sub(r"\[([^]]+)]\(([^)]+)\)", replacement, s, count=1)
+    return MARKDOWN_LINK_PATTERN.sub(replacement, s, count=1)
 
 
 def parse_bold_text(s):

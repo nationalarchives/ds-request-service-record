@@ -1,14 +1,14 @@
 # Hyperlinks
 
-The service manages outbound hyperlinks through named constants rather than hard-coding URLs directly into templates or
+The service manages hyperlinks through explicit named targets rather than hard-coding URLs directly into templates or
 content.
 
 ## What it does
 
-Content can use markdown-style links such as `[Search Ancestry](ANCESTRY_SEARCH)`. When the page is rendered, the link
-target is resolved against `ExternalLinks` and converted into an HTML anchor tag with relevant attributes (such as
-`target="_blank"` and `rel="noreferrer noopener"`). Raw URLs are intentionally not supported by
-`parse_markdown_links()`.
+Content can use markdown-style links such as `[Search Ancestry](external:ANCESTRY_SEARCH)` or
+`[Find out more about proof of death](route:PROVIDE_A_PROOF_OF_DEATH)`. When the page is rendered, the link target is
+resolved against the correct source of truth and converted into an HTML anchor tag. Raw URLs are intentionally not
+supported by `parse_markdown_links()`.
 
 This lets us keep:
 
@@ -37,6 +37,8 @@ Relevant tests:
 
 External URLs are defined in the `ExternalLinks` class in `app/constants.py`.
 
+Internal application routes are defined in the `MultiPageFormRoutes` enum in `app/constants.py`.
+
 Examples include:
 
 - `ANCESTRY_SEARCH`
@@ -52,28 +54,42 @@ For each match, it:
 
 1. extracts the link text
 2. extracts the target value
-3. checks whether the target matches a constant on `ExternalLinks`
-4. raises a `ValueError` if the target does not match an `ExternalLinks` constant
-5. returns an HTML `<a>` tag
+3. checks whether the target starts with `external:` or `route:`
+4. resolves `external:` targets against `ExternalLinks`
+5. resolves `route:` targets against `MultiPageFormRoutes` and Flask routing
+6. raises a `ValueError` if the target is missing a supported prefix or does not resolve
+7. returns an HTML `<a>` tag
 
-By default, links are rendered with:
+By default, `external:` links are rendered with:
 
 - `target="_blank"`
 - `rel="noreferrer noopener"`
 
 That behaviour can be turned off by calling the helper with `new_tab=False`.
 
+`route:` links always render as normal in-service navigation and stay in the same tab.
+
+### Supported target syntax
+
+- `external:EXTERNAL_LINK_NAME`
+- `route:ROUTE_NAME`
+
+Examples:
+
+- `[Search Ancestry](external:ANCESTRY_SEARCH)`
+- `[Find out more about proof of death](route:PROVIDE_A_PROOF_OF_DEATH)`
+
 ## Special case: survey links
 
 `inject_unique_survey_link()` in `app/lib/template_filters.py` handles a more specific case for survey links. It reads a
-markdown link, resolves it through `ExternalLinks`, and appends the current page to the query string so the survey can
-identify where the user came from.
+markdown link, expects an `external:` target, resolves it through `ExternalLinks`, and appends the current page to the
+query string so the survey can identify where the user came from.
 
 ## Why this matters
 
 This approach makes links easier to maintain because:
 
 - URLs can be updated (and seen) in one place
-- content can reference named links instead of repeating long URLs
+- content can reference named links instead of repeating long URLs or route paths
 - templates stay simpler and more deterministic
 - link rendering behaviour is consistent across the service
