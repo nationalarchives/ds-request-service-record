@@ -737,3 +737,31 @@ def test_predicate_handles_missing_field_safely():
     assert sm.was_officer(make_form()) is False
     assert sm.born_too_late(make_form()) is False
     assert sm.does_not_have_email(make_form()) is False
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        ("standard", True),
+        ("full", False),
+        (None, False),
+    ],
+)
+def test_is_standard_order(value, expected):
+    sm = RoutingStateMachine()
+    form = make_form(processing_option=value)
+    assert sm.is_standard_order(form) is expected
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        ("standard", False),
+        ("full", True),
+        (None, False),
+    ],
+)
+def test_is_full_record_check_order(value, expected):
+    sm = RoutingStateMachine()
+    form = make_form(processing_option=value)
+    assert sm.is_full_record_check_order(form) is expected
