@@ -678,3 +678,62 @@ def test_continue_from_your_order_type_british_army_officer_form():
     sm.continue_from_your_order_type_british_army_officer_form()
     assert sm.current_state.id == "your_contact_details_form"
     assert sm.route_for_current_state == MultiPageFormRoutes.YOUR_CONTACT_DETAILS.value
+
+
+def test_get_form_field_data_returns_data_for_existing_field():
+    form = make_form(service_branch="ROYAL_NAVY")
+
+    assert (
+        RoutingStateMachine().get_form_field_data(form, "service_branch")
+        == "ROYAL_NAVY"
+    )
+
+
+def test_get_form_field_data_returns_none_and_logs_for_missing_field():
+    form = make_form(service_branch="ROYAL_NAVY")
+    sm = RoutingStateMachine()
+
+    with patch(
+        "app.lib.state_machine.state_machine.current_app.logger.error"
+    ) as mock_log_error:
+        assert sm.get_form_field_data(form, "missing_field") is None
+
+    mock_log_error.assert_called_once_with(
+        "Form (namespace(service_branch=namespace(data='ROYAL_NAVY'))) does not have field 'missing_field'"
+    )
+
+
+def test_set_form_field_data_sets_data_for_existing_field():
+    form = make_form(service_branch="ROYAL_NAVY")
+
+    assert (
+        RoutingStateMachine().set_form_field_data(
+            form, "service_branch", "BRITISH_ARMY"
+        )
+        == "BRITISH_ARMY"
+    )
+    assert form.service_branch.data == "BRITISH_ARMY"
+
+
+def test_set_form_field_data_returns_none_and_logs_for_missing_field():
+    form = make_form(service_branch="ROYAL_NAVY")
+    sm = RoutingStateMachine()
+
+    with patch(
+        "app.lib.state_machine.state_machine.current_app.logger.error"
+    ) as mock_log_error:
+        assert sm.set_form_field_data(form, "non_existent_field", "value") is None
+
+    mock_log_error.assert_called_once_with(
+        "Form (namespace(service_branch=namespace(data='ROYAL_NAVY'))) does not have field 'non_existent_field'"
+    )
+
+
+def test_predicate_handles_missing_field_safely():
+    sm = RoutingStateMachine()
+    form = make_form(service_branch="ROYAL_NAVY")
+
+    assert sm.is_royal_navy(form) is True
+    assert sm.was_officer(make_form()) is False
+    assert sm.born_too_late(make_form()) is False
+    assert sm.does_not_have_email(make_form()) is False
