@@ -32,22 +32,33 @@ class RoutingStateMachine(StateMachine):
     def get_form_field_data(self, form, field_name):
         """Helper method to get the data for a specific field from the form with error handling."""
         try:
-            return getattr(form, field_name).data
+            form_field = getattr(form, field_name)
         except AttributeError:
             current_app.logger.error(
                 f"Form ({form}) does not have field '{field_name}'"
             )
             return None
 
+        return getattr(form_field, "data", None)
+
     def set_form_field_data(self, form, field_name, value):
         """Helper method to set the data for a specific field in the form with error handling."""
         try:
             form_field = getattr(form, field_name)
-            form_field.data = value
         except AttributeError:
             current_app.logger.error(
                 f"Form ({form}) does not have field '{field_name}'"
             )
+            return None
+
+        if not hasattr(form_field, "data"):
+            current_app.logger.error(
+                f"Form field '{field_name}' on ({form}) does not have a 'data' attribute"
+            )
+            return None
+
+        form_field.data = value
+        return value
 
     """
     These are our States. They represent the different stages of the user journey. In most cases, you
@@ -543,7 +554,7 @@ class RoutingStateMachine(StateMachine):
 
     def is_royal_navy(self, form):
         """Condition method to determine if the service branch is Royal Navy."""
-        return form.service_branch.data in ["ROYAL_NAVY"]
+        return self.get_form_field_data(form, "service_branch") in ["ROYAL_NAVY"]
 
     def likely_unfindable(self, form):
         """Condition method to determine if we may be unable to find the record."""
@@ -551,57 +562,64 @@ class RoutingStateMachine(StateMachine):
 
     def was_officer(self, form):
         """Condition method to determine if the service person was an officer."""
-        return form.were_they_a_commissioned_officer.data == "yes"
+        return (
+            self.get_form_field_data(form, "were_they_a_commissioned_officer") == "yes"
+        )
 
     def service_branch_is_army(self, form):
         """Condition method to determine if the service branch is British Army."""
-        return form.service_branch.data == "BRITISH_ARMY"
+        return self.get_form_field_data(form, "service_branch") == "BRITISH_ARMY"
 
     def service_branch_is_raf(self, form):
         """Condition method to determine if the service branch is Royal Air Force."""
-        return form.service_branch.data == "ROYAL_AIR_FORCE"
+        return self.get_form_field_data(form, "service_branch") == "ROYAL_AIR_FORCE"
 
     def service_branch_is_other(self, form):
         """Condition method to determine if the service branch is Other."""
-        return form.service_branch.data == "OTHER"
+        return self.get_form_field_data(form, "service_branch") == "OTHER"
 
     def service_branch_is_unknown(self, form):
         """Condition method to determine if the service branch is Unknown."""
-        return form.service_branch.data == "UNKNOWN"
+        return self.get_form_field_data(form, "service_branch") == "UNKNOWN"
 
     def born_too_late(self, form):
         """Condition method to determine if the service person's date of birth is too late for TNA to have record."""
+        date_of_birth = self.get_form_field_data(form, "date_of_birth")
         return (
-            form.date_of_birth.data.year
+            bool(date_of_birth)
+            and date_of_birth.year
             > BoundaryYears.LATEST_SERVICE_PERSON_BIRTH_YEAR_FOR_THIS_SERVICE
         )
 
     def birth_year_requires_proof_of_death(self, form):
         """Condition method to determine if the service person's date of birth requires a proof of death."""
-        return (
-            form.date_of_birth.data.year
-            >= BoundaryYears.first_birth_year_for_closed_records(
-                datetime.now(timezone.utc).year
-            )
+        date_of_birth = self.get_form_field_data(form, "date_of_birth")
+        return bool(
+            date_of_birth
+        ) and date_of_birth.year >= BoundaryYears.first_birth_year_for_closed_records(
+            datetime.now(timezone.utc).year
         )
 
     def does_not_have_email(self, form):
         """Condition method to determine if the user does not have an email address."""
-        return form.does_not_have_email.data
+        return self.get_form_field_data(form, "does_not_have_email") is True
 
     def does_not_have_proof_of_death(self, form):
         """Condition method to determine if the user does not have a proof of death."""
-        return form.do_you_have_a_proof_of_death.data == "no"
+        return self.get_form_field_data(form, "do_you_have_a_proof_of_death") == "no"
 
     def happy_to_proceed_without_proof_of_death(self, form):
         """Condition method to determine if the user is happy to proceed without a proof of death."""
         return (
-            form.are_you_sure_you_want_to_proceed_without_proof_of_death.data == "yes"
+            self.get_form_field_data(
+                form, "are_you_sure_you_want_to_proceed_without_proof_of_death"
+            )
+            == "yes"
         )
 
     def user_has_not_uploaded_proof_of_death(self, form):
         """Condition method to determine if no proof of death was uploaded."""
-        return not form.proof_of_death.data
+        return not self.get_form_field_data(form, "proof_of_death")
 
     def proof_of_death_uploaded_to_s3(self, form):
         """Condition method to determine if proof of death was successfully uploaded to S3."""
