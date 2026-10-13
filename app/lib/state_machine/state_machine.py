@@ -617,6 +617,14 @@ class RoutingStateMachine(StateMachine):
             == "yes"
         )
 
+    def is_standard_order(self, form):
+        """Condition method to determine if the user selected a standard order."""
+        return self.get_form_field_data(form, "processing_option") == "standard"
+
+    def is_full_record_check_order(self, form):
+        """Condition method to determine if the user selected a full record check order."""
+        return self.get_form_field_data(form, "processing_option") == "full"
+
     def user_has_not_uploaded_proof_of_death(self, form):
         """Condition method to determine if no proof of death was uploaded."""
         return not self.get_form_field_data(form, "proof_of_death")
