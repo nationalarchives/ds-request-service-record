@@ -6,6 +6,7 @@ from statemachine import State, StateMachine
 from app.constants import MultiPageFormRoutes
 from app.lib.aws import upload_proof_of_death
 from app.lib.boundary_years import BoundaryYears
+from app.lib.date_of_birth import get_date_of_birth_from_session
 from app.lib.db.constants import (
     EXPIRED_STATUS,
     PAID_STATUS,
@@ -624,6 +625,30 @@ class RoutingStateMachine(StateMachine):
     def is_full_record_check_order(self, form):
         """Condition method to determine if the user selected a full record check order."""
         return self.get_form_field_data(form, "processing_option") == "full"
+
+    def proof_of_death_is_required(self, form):
+        """Condition method to determine if a proof of death is required for the order."""
+        date_of_birth = get_date_of_birth_from_session()
+        if not date_of_birth:
+            return False
+
+        if self.is_standard_order(form):
+            return (
+                date_of_birth.year
+                >= BoundaryYears.first_birth_year_standard_orders_require_proof_of_death(
+                    datetime.now(timezone.utc).year
+                )
+            )
+
+        if self.is_full_record_check_order(form):
+            return (
+                date_of_birth.year
+                >= BoundaryYears.first_birth_year_for_closed_records(
+                    datetime.now(timezone.utc).year
+                )
+            )
+
+        return False
 
     def user_has_not_uploaded_proof_of_death(self, form):
         """Condition method to determine if no proof of death was uploaded."""
