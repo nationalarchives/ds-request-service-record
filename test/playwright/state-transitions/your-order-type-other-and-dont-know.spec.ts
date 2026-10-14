@@ -69,6 +69,11 @@ test.describe("the 'Your order type for officers where service branch is 'other'
       "",
     );
 
+    await continueFromYourOrderTypeOtherAndDontKnowOfficers(
+      page,
+      Paths.PROVIDE_A_PROOF_OF_DEATH,
+    );
+
     await continueFromProvideAProofOfDeath(
       page,
       person.hasDeathCertificate,
