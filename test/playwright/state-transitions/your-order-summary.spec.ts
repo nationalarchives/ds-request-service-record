@@ -52,7 +52,11 @@ test.describe("Routes to 'Your order summary'", () => {
     test(`we're presenting the correct information for a ${description.toLowerCase()} order provided by post`, async ({
       page,
     }) => {
-      await continueFromChooseYourOrderType(page, buttonText);
+      await continueFromChooseYourOrderType(
+        page,
+        buttonText,
+        Paths.YOUR_CONTACT_DETAILS,
+      );
       await continueFromYourContactDetails(page, personMakingRequest);
       await continueFromYourPostalAddress(page);
       await expect(page.locator("#processing-option")).toHaveText(
@@ -77,7 +81,11 @@ test.describe("Routes to 'Your order summary'", () => {
     test(`the postal address user is able to change their order selection from the order summary page for ${description.toLowerCase()}`, async ({
       page,
     }) => {
-      await continueFromChooseYourOrderType(page, buttonText);
+      await continueFromChooseYourOrderType(
+        page,
+        buttonText,
+        Paths.YOUR_CONTACT_DETAILS,
+      );
       await continueFromYourContactDetails(page, personMakingRequest);
       await continueFromYourPostalAddress(page);
       await page.getByRole("link", { name: "Change order" }).click();
@@ -117,7 +125,11 @@ test.describe("Routes to 'Your order summary'", () => {
     test(`we're presenting the correct information for a ${description.toLowerCase()} order provided by email`, async ({
       page,
     }) => {
-      await continueFromChooseYourOrderType(page, buttonText);
+      await continueFromChooseYourOrderType(
+        page,
+        buttonText,
+        Paths.YOUR_CONTACT_DETAILS,
+      );
       await continueFromYourContactDetails(page, personMakingRequest);
       await expect(page.locator("#processing-option")).toHaveText(
         new RegExp(description),
@@ -131,7 +143,11 @@ test.describe("Routes to 'Your order summary'", () => {
     test(`the email user is able to change their order selection from the order summary page for ${description.toLowerCase()}`, async ({
       page,
     }) => {
-      await continueFromChooseYourOrderType(page, buttonText);
+      await continueFromChooseYourOrderType(
+        page,
+        buttonText,
+        Paths.YOUR_CONTACT_DETAILS,
+      );
       await continueFromYourContactDetails(page, personMakingRequest);
       await page.getByRole("link", { name: "Change order" }).click();
       await expect(page).toHaveURL(Paths.CHOOSE_YOUR_ORDER_TYPE);
@@ -185,7 +201,11 @@ test.describe("'Change order' availability rules on 'Your order summary'", () =>
       page,
     }) => {
       await continueToChooseYourOrderTypeFromJourneyStart(page, scenario);
-      await continueFromChooseYourOrderType(page, "Choose standard");
+      await continueFromChooseYourOrderType(
+        page,
+        "Choose standard",
+        Paths.YOUR_CONTACT_DETAILS,
+      );
       await continueFromYourContactDetails(page, {
         firstName: "Francis",
         lastName: "Palgrave",
