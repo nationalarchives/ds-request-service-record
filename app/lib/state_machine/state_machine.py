@@ -288,17 +288,11 @@ class RoutingStateMachine(StateMachine):
         what_was_their_date_of_birth_form
     )
 
-    continue_from_what_was_their_date_of_birth_form = (
-        initial.to(
-            service_person_details_form,
-            unless="born_too_late or birth_year_requires_proof_of_death",
-        )
-        | initial.to(
-            we_do_not_have_records_for_people_born_after_page, cond="born_too_late"
-        )
-        | initial.to(
-            provide_a_proof_of_death_form, cond="birth_year_requires_proof_of_death"
-        )
+    continue_from_what_was_their_date_of_birth_form = initial.to(
+        service_person_details_form,
+        unless="born_too_late",
+    ) | initial.to(
+        we_do_not_have_records_for_people_born_after_page, cond="born_too_late"
     )
 
     continue_from_we_do_not_have_records_for_people_born_after_form = initial.to(
@@ -314,14 +308,14 @@ class RoutingStateMachine(StateMachine):
             upload_a_proof_of_death_form,
             unless="happy_to_proceed_without_proof_of_death",
         )
-        | initial.to(service_person_details_form)
+        | initial.to(your_contact_details_form)
     )
 
     continue_from_upload_a_proof_of_death_form = (
         initial.to(
-            service_person_details_form, cond="user_has_not_uploaded_proof_of_death"
+            your_contact_details_form, cond="user_has_not_uploaded_proof_of_death"
         )
-        | initial.to(service_person_details_form, cond="proof_of_death_uploaded_to_s3")
+        | initial.to(your_contact_details_form, cond="proof_of_death_uploaded_to_s3")
         | initial.to(unable_to_upload_proof_of_death_form)
     )
 
@@ -356,14 +350,16 @@ class RoutingStateMachine(StateMachine):
     continue_from_what_is_your_address_form = initial.to(your_order_summary_form)
 
     continue_from_your_order_type_other_and_dont_know_officer_form = initial.to(
-        your_contact_details_form
-    )
+        provide_a_proof_of_death_form, cond="proof_of_death_is_required"
+    ) | initial.to(your_contact_details_form)
 
     continue_from_your_order_type_british_army_officer_form = initial.to(
-        your_contact_details_form
-    )
+        provide_a_proof_of_death_form, cond="proof_of_death_is_required"
+    ) | initial.to(your_contact_details_form)
 
-    continue_from_choose_your_order_type_form = initial.to(your_contact_details_form)
+    continue_from_choose_your_order_type_form = initial.to(
+        provide_a_proof_of_death_form, cond="proof_of_death_is_required"
+    ) | initial.to(your_contact_details_form)
 
     continue_from_your_order_summary_form = initial.to(gov_uk_pay_redirect)
 
