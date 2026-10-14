@@ -372,7 +372,7 @@ def what_was_their_date_of_birth(form, state_machine):
 @update_dynamic_back_link_mapping(
     mappings={
         MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH: MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_PROOF_OF_DEATH,
-        MultiPageFormRoutes.SERVICE_PERSON_DETAILS: MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_PROOF_OF_DEATH,
+        MultiPageFormRoutes.YOUR_CONTACT_DETAILS: MultiPageFormRoutes.ARE_YOU_SURE_YOU_WANT_TO_PROCEED_WITHOUT_PROOF_OF_DEATH,
     }
 )
 @with_form_prefilled_from_session(AreYouSureYouWantToProceedWithoutProofOfDeath)
@@ -489,6 +489,7 @@ def provide_a_proof_of_death(form, state_machine):
         "main/provide-a-proof-of-death.html",
         form=form,
         content=load_content(),
+        back_link_route=get_dynamic_back_link_route(key=request.endpoint),
     )
 
 
@@ -515,6 +516,7 @@ def what_is_your_address(form, state_machine):
 @bp.route("/choose-your-order-type/", methods=["GET", "POST"])
 @update_dynamic_back_link_mapping(
     mappings={
+        MultiPageFormRoutes.PROVIDE_A_PROOF_OF_DEATH: MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE,
         MultiPageFormRoutes.YOUR_CONTACT_DETAILS: MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE,
     }
 )
@@ -536,7 +538,7 @@ def choose_your_order_type(state_machine):
 @bp.route("/upload-a-proof-of-death/", methods=["GET", "POST"])
 @update_dynamic_back_link_mapping(
     mappings={
-        MultiPageFormRoutes.SERVICE_PERSON_DETAILS: MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH,
+        MultiPageFormRoutes.YOUR_CONTACT_DETAILS: MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH,
     }
 )
 @with_form_prefilled_from_session(UploadAProofOfDeath)
@@ -652,6 +654,12 @@ def sorry_you_will_have_to_start_again(form, state_machine):
 
 @bp.route("/your-order-type-british-army-officers/", methods=["GET", "POST"])
 @with_form_prefilled_from_session(YourOrderTypeBritishArmyOfficers)
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.PROVIDE_A_PROOF_OF_DEATH: MultiPageFormRoutes.YOUR_ORDER_TYPE_BRITISH_ARMY_OFFICER,
+        MultiPageFormRoutes.YOUR_CONTACT_DETAILS: MultiPageFormRoutes.YOUR_ORDER_TYPE_BRITISH_ARMY_OFFICER,
+    }
+)
 @with_state_machine
 def your_order_type_british_army_officers(form, state_machine):
     if form.validate_on_submit():
@@ -668,6 +676,12 @@ def your_order_type_british_army_officers(form, state_machine):
 
 @bp.route("/your-order-type-other-and-dont-know-officers/", methods=["GET", "POST"])
 @with_form_prefilled_from_session(YourOrderTypeOtherAndDontKnowOfficers)
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.PROVIDE_A_PROOF_OF_DEATH: MultiPageFormRoutes.YOUR_ORDER_TYPE_OTHER_AND_DONT_KNOW_OFFICER,
+        MultiPageFormRoutes.YOUR_CONTACT_DETAILS: MultiPageFormRoutes.YOUR_ORDER_TYPE_OTHER_AND_DONT_KNOW_OFFICER,
+    }
+)
 @with_state_machine
 def your_order_type_other_and_dont_know_officers(form, state_machine):
     if form.validate_on_submit():
@@ -686,7 +700,7 @@ def your_order_type_other_and_dont_know_officers(form, state_machine):
 @bp.route("/unable-to-upload-proof-of-death/", methods=["GET", "POST"])
 @update_dynamic_back_link_mapping(
     mappings={
-        MultiPageFormRoutes.SERVICE_PERSON_DETAILS: MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH,
+        MultiPageFormRoutes.YOUR_CONTACT_DETAILS: MultiPageFormRoutes.UPLOAD_A_PROOF_OF_DEATH,
     }
 )
 @with_form_prefilled_from_session(UnableToUploadProofOfDeath)
