@@ -544,7 +544,10 @@ export async function continueFromYourOrderTypeBritishArmyOfficers(
   await expect(page).toHaveURL(nextPath);
 }
 
-export async function continueFromYourOrderTypeOtherAndDontKnowOfficers(page) {
+export async function continueFromYourOrderTypeOtherAndDontKnowOfficers(
+  page,
+  nextPath,
+) {
   await expect(page).toHaveURL(
     Paths.YOUR_ORDER_TYPE_OTHER_AND_DONT_KNOW_OFFICERS,
   );
@@ -552,7 +555,7 @@ export async function continueFromYourOrderTypeOtherAndDontKnowOfficers(page) {
   await page
     .getByRole("button", { name: "Request a Full record check" })
     .click();
-  await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
+  await expect(page).toHaveURL(nextPath);
 }
 
 /**
