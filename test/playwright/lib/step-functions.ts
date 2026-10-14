@@ -415,11 +415,15 @@ export async function continueFromHaveYouPreviouslyMadeARequest(
   }
 }
 
-export async function continueFromChooseYourOrderType(page, buttonText) {
+export async function continueFromChooseYourOrderType(
+  page,
+  buttonText,
+  nextPath,
+) {
   await expect(page).toHaveURL(Paths.CHOOSE_YOUR_ORDER_TYPE);
   await expect(page.locator("h1")).toHaveText(/Choose your order type/);
   await page.getByRole("button", { name: buttonText }).click();
-  await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
+  await expect(page).toHaveURL(nextPath);
 }
 
 export async function continueFromYourContactDetails(
