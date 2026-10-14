@@ -7,7 +7,7 @@ export const robertHughJones = {
   dateOfBirth: {
     day: "15",
     month: "06",
-    year: "1914",
+    year: "1932",
   },
   serviceBranch: "British Army",
   wasOfficer: "No",
