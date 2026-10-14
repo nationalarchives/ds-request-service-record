@@ -532,13 +532,16 @@ export async function clickBackLink(page, expectedPath) {
   await expect(page).toHaveURL(expectedPath);
 }
 
-export async function continueFromYourOrderTypeBritishArmyOfficers(page) {
+export async function continueFromYourOrderTypeBritishArmyOfficers(
+  page,
+  nextPath,
+) {
   await expect(page).toHaveURL(Paths.YOUR_ORDER_TYPE_BRITISH_ARMY_OFFICERS);
   await expect(page.locator("h1")).toHaveText(/Your order type/);
   await page
     .getByRole("button", { name: "Request a Full record check" })
     .click();
-  await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
+  await expect(page).toHaveURL(nextPath);
 }
 
 export async function continueFromYourOrderTypeOtherAndDontKnowOfficers(page) {
