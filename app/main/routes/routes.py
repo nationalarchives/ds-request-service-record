@@ -111,6 +111,13 @@ def before_you_start(form, state_machine):
     )
 
 
+@bp.route("/providing-a-proof-of-death/", methods=["GET", "POST"])
+def providing_a_proof_of_death():
+    return render_template(
+        "main/providing-a-proof-of-death.html", content=load_content()
+    )
+
+
 @bp.route("/are-you-sure-you-want-to-cancel/", methods=["GET", "POST"])
 @with_state_machine
 @with_form_prefilled_from_session(AreYouSureYouWantToCancel)
