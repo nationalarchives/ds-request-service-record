@@ -635,6 +635,8 @@ forms:
       call_to_action: Continue
     before_you_start:
       call_to_action: Start now
+    providing_a_proof_of_death:
+      call_to_action: Return to your request
     ready_to_continue:
       label: I confirm I can provide the mandatory information
       messages:
