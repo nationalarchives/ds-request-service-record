@@ -137,6 +137,22 @@ def parse_first_birth_year_for_closed_records(s):
     )
 
 
+def parse_first_birth_year_standard_orders_require_proof_of_death(s):
+    if not s:
+        return s
+
+    year = BoundaryYears.first_birth_year_standard_orders_require_proof_of_death(
+        datetime.now(timezone.utc).year
+    )
+
+    span = f"<span data-first-birth-year-standard-orders-require-proof-of-death='{year}'>{year}</span>"
+
+    return s.replace(
+        "[FIRST_BIRTH_YEAR_STANDARD_ORDERS_REQUIRE_PROOF_OF_DEATH]",
+        span,
+    )
+
+
 def format_standard_printed_order_price(s, delivery_fee, order_type_fee):
     if s is None:
         return s
