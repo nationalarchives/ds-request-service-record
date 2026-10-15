@@ -49,6 +49,12 @@
         {% for paragraph in content.pages.providing_a_proof_of_death.documents_we_accept.final_paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
+        <form action="{{ url_for('main.providing_a_proof_of_death') }}" method="post" novalidate>
+          {{ form.csrf_token }}
+          <div class="tna-button-group">
+            {{ form.submit(params={'classes': 'tna-button--accent'}) }}
+          </div>
+        </form>
       </div>
     </div>
   </div>

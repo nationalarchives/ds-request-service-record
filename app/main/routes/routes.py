@@ -39,6 +39,7 @@ from app.main.forms.have_you_previously_made_a_request import (
 from app.main.forms.how_we_process_requests import HowTheProcessWorks
 from app.main.forms.is_service_person_alive import IsServicePersonAlive
 from app.main.forms.provide_a_proof_of_death import ProvideAProofOfDeath
+from app.main.forms.providing_a_proof_of_death import ProvidingAProofOfDeath
 from app.main.forms.request_a_military_service_record import (
     RequestAMilitaryServiceRecord,
 )
@@ -112,9 +113,14 @@ def before_you_start(form, state_machine):
 
 
 @bp.route("/providing-a-proof-of-death/", methods=["GET", "POST"])
-def providing_a_proof_of_death():
+@with_state_machine
+@with_form_prefilled_from_session(ProvidingAProofOfDeath)
+def providing_a_proof_of_death(form, state_machine):
+    if form.validate_on_submit():
+        state_machine.continue_from_providing_a_proof_of_death_form()
+        return redirect(url_for(state_machine.route_for_current_state))
     return render_template(
-        "main/providing-a-proof-of-death.html", content=load_content()
+        "main/providing-a-proof-of-death.html", form=form, content=load_content()
     )
 
 
