@@ -17,13 +17,21 @@ test.describe("choose your order type", () => {
       test(`selecting '${buttonText}' continues to 'Your order summary'`, async ({
         page,
       }) => {
-        await continueFromChooseYourOrderType(page, buttonText);
+        await continueFromChooseYourOrderType(
+          page,
+          buttonText,
+          Paths.YOUR_CONTACT_DETAILS,
+        );
       });
 
       test(`clicking 'Back' from 'Your order summary' after selecting '${buttonText}' returns to 'Choose your order type'`, async ({
         page,
       }) => {
-        await continueFromChooseYourOrderType(page, buttonText);
+        await continueFromChooseYourOrderType(
+          page,
+          buttonText,
+          Paths.YOUR_CONTACT_DETAILS,
+        );
         await clickBackLink(page, Paths.CHOOSE_YOUR_ORDER_TYPE);
       });
     });
