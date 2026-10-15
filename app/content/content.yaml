@@ -138,6 +138,52 @@ pages:
           We will only use the data you provide to answer your request. 
           [Our privacy notice (opens in new tab)](external:PRIVACY_NOTICE) 
           explains how we collect, use, and protect personal data.
+  providing_a_proof_of_death:
+    heading: Providing a proof of death
+    paragraphs:
+      - |
+        Depending on the date of the birth of the service person, you may 
+        be required to provide a proof of death. This is to protect any 
+        personal data in the record that might relate to a living person.
+    when_is_proof_of_death_required:
+      heading: When is a proof of death required?
+      initial_paragraphs:
+        - |
+          Proof of death is required in two circumstances:
+      list_items:
+        - |
+          For Standard requests, when the service person is deceased 
+          and was born on or after 1 January [FIRST_BIRTH_YEAR_STANDARD_ORDERS_REQUIRE_PROOF_OF_DEATH] (100 years ago)
+        - |
+          For a Full record check, when the service person is deceased 
+          and was born on or after 1 January [FIRST_BIRTH_YEAR_FOR_CLOSED_RECORDS] (115 years ago)
+      subsequent_paragraphs:
+        - |
+          We will confirm if you need to submit one based on your answers.
+    documents_we_accept:
+      heading: Documents we accept
+      initial_paragraphs:
+        - |
+          You can submit one of the following forms of evidence:
+      initial_list_items:
+        - |
+          [A copy of a death certificate (opens in new tab)](external:COPIES_OF_DEATH_CERTIFICATES)
+        - A published obituary (detailing publication source, name of deceased, and date of birth and death)
+        - |
+          [A Commonwealth War Graves Commission (CWGC) war dead record (opens in new tab)](external:CWGC_WAR_DEAD_RECORDS)
+        - |
+          [Grant of probate (opens in new tab)](external:PROBATE_SEARCH)
+      subsequent_paragraphs:
+        - |
+          The copy of proof of death must be:
+      subsequent_list_items:
+        - In a PDF, JPG, JPEG, GIF or PNG format
+        - No more than 5MB in size
+        - Clearly showing all the information so our staff can read it
+      final_paragraphs:
+        - |
+          If you do not submit a proof of death when required, it is unlikely 
+          that we will be able to provide the record.
   is_service_person_alive:
     heading: Is the service person alive?
     paragraphs:
