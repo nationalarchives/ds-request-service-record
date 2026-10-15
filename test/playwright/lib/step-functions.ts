@@ -43,6 +43,13 @@ export async function continueFromBeforeYouStart(
   }
 }
 
+export async function continueFromProvidingAProofOfDeath(page, nextPath) {
+  await expect(page).toHaveURL(Paths.PROVIDING_A_PROOF_OF_DEATH);
+  await expect(page.locator("h1")).toHaveText(/Providing a proof of death/);
+  await page.getByRole("button", { name: /Return to your request/i }).click();
+  await expect(page).toHaveURL(nextPath);
+}
+
 export async function continueFromYouMayWantToCheckAncestry(page) {
   await expect(page).toHaveURL(Paths.YOU_MAY_WANT_TO_CHECK_ANCESTRY);
   await expect(page.locator("h1")).toHaveText(/You may want to check Ancestry/);

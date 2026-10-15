@@ -4,6 +4,7 @@ export const Paths = {
   PROVIDE_A_PROOF_OF_DEATH: `${basePath}/provide-a-proof-of-death/`,
   HOW_WE_PROCESS_REQUESTS: `${basePath}/how-we-process-requests/`,
   BEFORE_YOU_START: `${basePath}/before-you-start/`,
+  PROVIDING_A_PROOF_OF_DEATH: `${basePath}/providing-a-proof-of-death/`,
   YOU_HAVE_CANCELLED_YOUR_REQUEST: `${basePath}/you-have-cancelled-your-request/`,
   ARE_YOU_SURE_YOU_WANT_TO_CANCEL: `${basePath}/are-you-sure-you-want-to-cancel/`,
   YOU_MAY_WANT_TO_CHECK_ANCESTRY: `${basePath}/you-may-want-to-check-ancestry/`,
