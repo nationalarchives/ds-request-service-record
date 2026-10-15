@@ -127,7 +127,7 @@ def parse_first_birth_year_for_closed_records(s):
 
     year = BoundaryYears.first_birth_year_for_closed_records(datetime.now(UTC).year)
 
-    span = f"<span data-last-birth-year-for-open-records='{year}'>{year}</span>"
+    span = f"<span data-first-birth-year-for-closed-records='{year}'>{year}</span>"
 
     return s.replace(
         "[FIRST_BIRTH_YEAR_FOR_CLOSED_RECORDS]",
