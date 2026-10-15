@@ -1,5 +1,5 @@
 import re
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -64,6 +64,13 @@ def test_continue_from_before_you_start_sets_route():
         sm.route_for_current_state
         == MultiPageFormRoutes.YOU_MAY_WANT_TO_CHECK_ANCESTRY.value
     )
+
+
+def test_continue_from_providing_a_proof_of_death_sets_route():
+    sm = RoutingStateMachine()
+    sm.continue_from_providing_a_proof_of_death_form()
+    assert sm.current_state.id == "before_you_start_form"
+    assert sm.route_for_current_state == MultiPageFormRoutes.BEFORE_YOU_START.value
 
 
 def test_continue_from_are_you_sure_you_want_to_cancel_sets_route():
@@ -608,7 +615,7 @@ def test_continue_from_order_type_routes_by_proof_of_death_requirement(
     session["form_data"] = {"date_of_birth": f"01 January {date_of_birth_year}"}
 
     with patch("app.lib.state_machine.state_machine.datetime") as mock_datetime:
-        mock_datetime.now.return_value = datetime(2026, 1, 23, tzinfo=timezone.utc)
+        mock_datetime.now.return_value = datetime(2026, 1, 23, tzinfo=UTC)
 
         getattr(sm, event_name)(form=make_form(**form_kwargs))
 
@@ -800,7 +807,7 @@ def test_proof_of_death_is_required(processing_option, date_of_birth_year, expec
     session["form_data"] = {"date_of_birth": f"01 January {date_of_birth_year}"}
 
     with patch("app.lib.state_machine.state_machine.datetime") as mock_datetime:
-        mock_datetime.now.return_value = datetime(2026, 1, 23, tzinfo=timezone.utc)
+        mock_datetime.now.return_value = datetime(2026, 1, 23, tzinfo=UTC)
 
         assert sm.proof_of_death_is_required(form) is expected
 
@@ -810,7 +817,7 @@ def test_proof_of_death_is_required_returns_false_when_date_of_birth_is_missing(
     form = make_form(processing_option="standard")
 
     with patch("app.lib.state_machine.state_machine.datetime") as mock_datetime:
-        mock_datetime.now.return_value = datetime(2026, 1, 23, tzinfo=timezone.utc)
+        mock_datetime.now.return_value = datetime(2026, 1, 23, tzinfo=UTC)
 
         assert sm.proof_of_death_is_required(form) is False
 
