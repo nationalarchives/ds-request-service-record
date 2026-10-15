@@ -7,7 +7,7 @@ pages:
       phase: Beta
       message: This is a new service. Help us improve it and [give your feedback (opens in new tab)](external:USER_FEEDBACK_SURVEY).
   request_a_military_service_record:
-    heading: Request a military service record
+    heading: Request a military service cord
     contents:
       paragraphs:
         - |
