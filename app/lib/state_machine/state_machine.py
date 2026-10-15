@@ -227,6 +227,8 @@ class RoutingStateMachine(StateMachine):
         you_may_want_to_check_ancestry_page
     )
 
+    continue_from_providing_a_proof_of_death_form = initial.to(before_you_start_form)
+
     continue_from_are_you_sure_you_want_to_cancel_form = initial.to(
         you_have_cancelled_your_request_page
     )

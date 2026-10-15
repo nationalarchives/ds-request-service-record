@@ -66,6 +66,13 @@ def test_continue_from_before_you_start_sets_route():
     )
 
 
+def test_continue_from_providing_a_proof_of_death_sets_route():
+    sm = RoutingStateMachine()
+    sm.continue_from_providing_a_proof_of_death_form()
+    assert sm.current_state.id == "before_you_start_form"
+    assert sm.route_for_current_state == MultiPageFormRoutes.BEFORE_YOU_START.value
+
+
 def test_continue_from_are_you_sure_you_want_to_cancel_sets_route():
     sm = RoutingStateMachine()
     sm.continue_from_are_you_sure_you_want_to_cancel_form()
