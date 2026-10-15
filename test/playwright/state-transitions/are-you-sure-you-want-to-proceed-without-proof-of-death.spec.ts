@@ -32,10 +32,10 @@ test.describe("The 'Are you sure you want to proceed without a proof of death?' 
     const selectionMappings = [
       {
         label: "Yes, I would like to continue without a proof of death",
-        nextUrl: Paths.SERVICE_PERSON_DETAILS,
-        heading: /Tell us as much as you know about the service person/,
+        nextUrl: Paths.YOUR_CONTACT_DETAILS,
+        heading: /Your contact details/,
         description:
-          'when "Yes" is selected, the user is directed to "Tell us as much as you know about the service person" form',
+          'when "Yes" is selected, the user is directed to "Your contact details" form',
       },
       {
         label: "No, I would like to upload a proof of death",
