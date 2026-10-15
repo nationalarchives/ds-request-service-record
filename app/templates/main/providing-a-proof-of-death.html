@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% from "components/warning/macro.html" import tnaWarning %}
+
+{%- set pageTitle = content.pages.providing_a_proof_of_death.heading | prepare_page_title -%}
+
+{% block beforeContent %}
+  {{ backLink(url_for('main.before_you_start')) }}
+{% endblock beforeContent %}
+
+{% block content %}
+  <div class="tna-section tna-!--padding-top-s">
+    <div class="tna-container">
+      <div
+        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+        <h1 class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.providing_a_proof_of_death.heading }}</h1>
+        {% for paragraph in content.pages.providing_a_proof_of_death.paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+        <h2 class="tna-heading-m">{{ content.pages.providing_a_proof_of_death.when_is_proof_of_death_required.heading }}</h2>
+        {% for paragraph in content.pages.providing_a_proof_of_death.when_is_proof_of_death_required.initial_paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+        <ul class="tna-ul">
+          {% for item in content.pages.providing_a_proof_of_death.when_is_proof_of_death_required.list_items %}
+            <li>{{ item | parse_first_birth_year_for_closed_records | parse_first_birth_year_standard_orders_require_proof_of_death | safe }}</li>
+          {% endfor %}
+        </ul>
+        {% for paragraph in content.pages.providing_a_proof_of_death.when_is_proof_of_death_required.subsequent_paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+        <h2 class="tna-heading-m">{{ content.pages.providing_a_proof_of_death.documents_we_accept.heading }}</h2>
+        {% for paragraph in content.pages.providing_a_proof_of_death.documents_we_accept.initial_paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+        <ul class="tna-ul">
+          {% for item in content.pages.providing_a_proof_of_death.documents_we_accept.initial_list_items %}
+            <li>{{ item | parse_markdown_links | safe }}</li>
+          {% endfor %}
+        </ul>
+        {% for paragraph in content.pages.providing_a_proof_of_death.documents_we_accept.subsequent_paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+        <ul class="tna-ul">
+          {% for item in content.pages.providing_a_proof_of_death.documents_we_accept.subsequent_list_items %}
+            <li>{{ item | parse_markdown_links | safe }}</li>
+          {% endfor %}
+        </ul>
+        {% for paragraph in content.pages.providing_a_proof_of_death.documents_we_accept.final_paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock content %}
