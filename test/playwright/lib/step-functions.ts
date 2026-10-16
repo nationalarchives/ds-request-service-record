@@ -43,6 +43,13 @@ export async function continueFromBeforeYouStart(
   }
 }
 
+export async function continueFromProvidingAProofOfDeath(page, nextPath) {
+  await expect(page).toHaveURL(Paths.PROVIDING_A_PROOF_OF_DEATH);
+  await expect(page.locator("h1")).toHaveText(/Providing a proof of death/);
+  await page.getByRole("button", { name: /Return to your request/i }).click();
+  await expect(page).toHaveURL(nextPath);
+}
+
 export async function continueFromYouMayWantToCheckAncestry(page) {
   await expect(page).toHaveURL(Paths.YOU_MAY_WANT_TO_CHECK_ANCESTRY);
   await expect(page.locator("h1")).toHaveText(/You may want to check Ancestry/);
@@ -292,7 +299,7 @@ export async function continueFromUploadAProofOfDeath(
   }
   await page.getByRole("button", { name: /Continue/i }).click();
   if (shouldValidate) {
-    await expect(page).toHaveURL(Paths.SERVICE_PERSON_DETAILS);
+    await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
   } else {
     await expect(page.locator(".tna-form-item__error")).toHaveText(
       validationMessage,
@@ -415,11 +422,15 @@ export async function continueFromHaveYouPreviouslyMadeARequest(
   }
 }
 
-export async function continueFromChooseYourOrderType(page, buttonText) {
+export async function continueFromChooseYourOrderType(
+  page,
+  buttonText,
+  nextPath,
+) {
   await expect(page).toHaveURL(Paths.CHOOSE_YOUR_ORDER_TYPE);
   await expect(page.locator("h1")).toHaveText(/Choose your order type/);
   await page.getByRole("button", { name: buttonText }).click();
-  await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
+  await expect(page).toHaveURL(nextPath);
 }
 
 export async function continueFromYourContactDetails(
@@ -528,16 +539,22 @@ export async function clickBackLink(page, expectedPath) {
   await expect(page).toHaveURL(expectedPath);
 }
 
-export async function continueFromYourOrderTypeBritishArmyOfficers(page) {
+export async function continueFromYourOrderTypeBritishArmyOfficers(
+  page,
+  nextPath,
+) {
   await expect(page).toHaveURL(Paths.YOUR_ORDER_TYPE_BRITISH_ARMY_OFFICERS);
   await expect(page.locator("h1")).toHaveText(/Your order type/);
   await page
     .getByRole("button", { name: "Request a Full record check" })
     .click();
-  await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
+  await expect(page).toHaveURL(nextPath);
 }
 
-export async function continueFromYourOrderTypeOtherAndDontKnowOfficers(page) {
+export async function continueFromYourOrderTypeOtherAndDontKnowOfficers(
+  page,
+  nextPath,
+) {
   await expect(page).toHaveURL(
     Paths.YOUR_ORDER_TYPE_OTHER_AND_DONT_KNOW_OFFICERS,
   );
@@ -545,7 +562,7 @@ export async function continueFromYourOrderTypeOtherAndDontKnowOfficers(page) {
   await page
     .getByRole("button", { name: "Request a Full record check" })
     .click();
-  await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
+  await expect(page).toHaveURL(nextPath);
 }
 
 /**

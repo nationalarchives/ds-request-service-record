@@ -7,7 +7,7 @@ export const armyOfficer = {
   dateOfBirth: {
     day: "23",
     month: "03",
-    year: "1918",
+    year: "1930",
   },
   serviceBranch: "British Army",
   wasOfficer: "Yes",

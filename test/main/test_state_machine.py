@@ -1,5 +1,5 @@
 import re
-from datetime import date
+from datetime import date, datetime, timezone
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -64,6 +64,13 @@ def test_continue_from_before_you_start_sets_route():
         sm.route_for_current_state
         == MultiPageFormRoutes.YOU_MAY_WANT_TO_CHECK_ANCESTRY.value
     )
+
+
+def test_continue_from_providing_a_proof_of_death_sets_route():
+    sm = RoutingStateMachine()
+    sm.continue_from_providing_a_proof_of_death_form()
+    assert sm.current_state.id == "before_you_start_form"
+    assert sm.route_for_current_state == MultiPageFormRoutes.BEFORE_YOU_START.value
 
 
 def test_continue_from_are_you_sure_you_want_to_cancel_sets_route():
@@ -299,8 +306,8 @@ def test_continue_from_we_are_unlikely_to_hold_officer_records():
     + [
         (
             date(year, 1, 1),
-            "provide_a_proof_of_death_form",
-            MultiPageFormRoutes.PROVIDE_A_PROOF_OF_DEATH.value,
+            "service_person_details_form",
+            MultiPageFormRoutes.SERVICE_PERSON_DETAILS.value,
         )
         for year in range(1911, 1939)
     ],
@@ -347,8 +354,8 @@ def test_continue_from_provide_a_proof_of_death(
     [
         (
             "yes",
-            "service_person_details_form",
-            MultiPageFormRoutes.SERVICE_PERSON_DETAILS.value,
+            "your_contact_details_form",
+            MultiPageFormRoutes.YOUR_CONTACT_DETAILS.value,
         ),
         (
             "no",
@@ -408,8 +415,8 @@ def test_continue_from_upload_a_proof_of_death_where_upload_proof_of_death_retur
     sm.continue_from_upload_a_proof_of_death_form(
         form=make_form(proof_of_death="an-uploaded-file-object")
     )
-    assert sm.current_state.id == "service_person_details_form"
-    assert sm.route_for_current_state == "main.service_person_details"
+    assert sm.current_state.id == "your_contact_details_form"
+    assert sm.route_for_current_state == "main.your_contact_details"
     mock_upload.assert_called_once_with(file="an-uploaded-file-object")
 
 
@@ -419,8 +426,8 @@ def test_continue_from_upload_a_proof_of_death_where_upload_proof_of_death_retur
 def test_continue_from_upload_a_proof_of_death_where_proof_of_death_is_not_provided():
     sm = RoutingStateMachine()
     sm.continue_from_upload_a_proof_of_death_form(form=make_form(proof_of_death=None))
-    assert sm.current_state.id == "service_person_details_form"
-    assert sm.route_for_current_state == "main.service_person_details"
+    assert sm.current_state.id == "your_contact_details_form"
+    assert sm.route_for_current_state == "main.your_contact_details"
 
 
 def test_continue_from_service_person_details():
@@ -551,19 +558,69 @@ def test_continue_from_what_is_your_address():
     assert sm.route_for_current_state == MultiPageFormRoutes.YOUR_ORDER_SUMMARY.value
 
 
-@pytest.mark.parametrize("processing_option", ["standard", "full"])
-def test_continue_from_choose_your_order_type(processing_option):
+@pytest.mark.parametrize(
+    "event_name,form_kwargs,date_of_birth_year,expected_state,expected_route",
+    [
+        (
+            "continue_from_choose_your_order_type_form",
+            {
+                "processing_option": "standard",
+            },
+            1926,
+            "provide_a_proof_of_death_form",
+            MultiPageFormRoutes.PROVIDE_A_PROOF_OF_DEATH.value,
+        ),
+        (
+            "continue_from_choose_your_order_type_form",
+            {
+                "processing_option": "standard",
+            },
+            1925,
+            "your_contact_details_form",
+            MultiPageFormRoutes.YOUR_CONTACT_DETAILS.value,
+        ),
+        (
+            "continue_from_your_order_type_other_and_dont_know_officer_form",
+            {
+                "processing_option": "full",
+            },
+            1926,
+            "provide_a_proof_of_death_form",
+            MultiPageFormRoutes.PROVIDE_A_PROOF_OF_DEATH.value,
+        ),
+        (
+            "continue_from_your_order_type_british_army_officer_form",
+            {
+                "processing_option": "full",
+            },
+            1911,
+            "provide_a_proof_of_death_form",
+            MultiPageFormRoutes.PROVIDE_A_PROOF_OF_DEATH.value,
+        ),
+        (
+            "continue_from_your_order_type_british_army_officer_form",
+            {
+                "processing_option": "full",
+            },
+            1910,
+            "your_contact_details_form",
+            MultiPageFormRoutes.YOUR_CONTACT_DETAILS.value,
+        ),
+    ],
+)
+def test_continue_from_order_type_routes_by_proof_of_death_requirement(
+    event_name, form_kwargs, date_of_birth_year, expected_state, expected_route
+):
     sm = RoutingStateMachine()
-    sm.continue_from_choose_your_order_type_form(
-        form=make_form(
-            processing_option=processing_option,
-            choose_your_order_type_standard=None,
-            choose_your_order_type_full=None,
-            submit=None,
-        )
-    )
-    assert sm.current_state.id == "your_contact_details_form"
-    assert sm.route_for_current_state == MultiPageFormRoutes.YOUR_CONTACT_DETAILS.value
+    session["form_data"] = {"date_of_birth": f"01 January {date_of_birth_year}"}
+
+    with patch("app.lib.state_machine.state_machine.datetime") as mock_datetime:
+        mock_datetime.now.return_value = datetime(2026, 1, 23, tzinfo=timezone.utc)
+
+        getattr(sm, event_name)(form=make_form(**form_kwargs))
+
+    assert sm.current_state.id == expected_state
+    assert sm.route_for_current_state == expected_route
 
 
 def test_continue_from_your_order_summary():
@@ -673,13 +730,6 @@ def test_continue_from_sorry_you_will_have_to_start_again():
     assert sm.route_for_current_state == MultiPageFormRoutes.JOURNEY_START.value
 
 
-def test_continue_from_your_order_type_british_army_officer_form():
-    sm = RoutingStateMachine()
-    sm.continue_from_your_order_type_british_army_officer_form()
-    assert sm.current_state.id == "your_contact_details_form"
-    assert sm.route_for_current_state == MultiPageFormRoutes.YOUR_CONTACT_DETAILS.value
-
-
 def test_get_form_field_data_returns_data_for_existing_field():
     form = make_form(service_branch="ROYAL_NAVY")
 
@@ -737,3 +787,64 @@ def test_predicate_handles_missing_field_safely():
     assert sm.was_officer(make_form()) is False
     assert sm.born_too_late(make_form()) is False
     assert sm.does_not_have_email(make_form()) is False
+
+
+@pytest.mark.parametrize(
+    "processing_option,date_of_birth_year,expected",
+    [
+        ("standard", 1926, True),
+        ("standard", 1925, False),
+        ("full", 1911, True),
+        ("full", 1910, False),
+        (None, 1926, False),
+    ],
+)
+def test_proof_of_death_is_required(processing_option, date_of_birth_year, expected):
+    sm = RoutingStateMachine()
+    form = make_form(
+        processing_option=processing_option,
+    )
+    session["form_data"] = {"date_of_birth": f"01 January {date_of_birth_year}"}
+
+    with patch("app.lib.state_machine.state_machine.datetime") as mock_datetime:
+        mock_datetime.now.return_value = datetime(2026, 1, 23, tzinfo=timezone.utc)
+
+        assert sm.proof_of_death_is_required(form) is expected
+
+
+def test_proof_of_death_is_required_returns_false_when_date_of_birth_is_missing():
+    sm = RoutingStateMachine()
+    form = make_form(processing_option="standard")
+
+    with patch("app.lib.state_machine.state_machine.datetime") as mock_datetime:
+        mock_datetime.now.return_value = datetime(2026, 1, 23, tzinfo=timezone.utc)
+
+        assert sm.proof_of_death_is_required(form) is False
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        ("standard", True),
+        ("full", False),
+        (None, False),
+    ],
+)
+def test_is_standard_order(value, expected):
+    sm = RoutingStateMachine()
+    form = make_form(processing_option=value)
+    assert sm.is_standard_order(form) is expected
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        ("standard", False),
+        ("full", True),
+        (None, False),
+    ],
+)
+def test_is_full_record_check_order(value, expected):
+    sm = RoutingStateMachine()
+    form = make_form(processing_option=value)
+    assert sm.is_full_record_check_order(form) is expected
