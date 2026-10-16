@@ -344,7 +344,14 @@ pages:
     heading: Are you sure you want to proceed without a proof of death?
     warning: If you do not submit a proof of death when required, it is unlikely that we will be able to provide the record.
   confirm_payment_received:
-    heading: Payment received
+    heading: Payment complete
+    processing_confirmation: Your payment has been received and is being processed.
+    reference_number: Your payment reference number is
+    what_happens_next:
+      heading: What happens next
+      paragraphs:
+        - Your payment is being processed. We will send you a payment confirmation email if you provided an email address.
+        - You can get in touch with us by replying to the last email we sent you, or by visiting our [Contact us](external:CONTACT_US) page.
   payment_link_creation_failed:
     heading: Payment link creation failed
     paragraphs:
