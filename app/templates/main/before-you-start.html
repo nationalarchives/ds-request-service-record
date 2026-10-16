@@ -25,31 +25,9 @@
         {% endfor %}
         <ul class="tna-ul">
           {% for item in content.pages.before_you_start.mandatory_information.list_items %}
-            <li>{{ item }}</li>
-          {% endfor %}
-        </ul>
-        <h2 class="tna-heading-m">{{ content.pages.before_you_start.proof_of_death_requirement.heading }}</h2>
-        {% for paragraph in content.pages.before_you_start.proof_of_death_requirement.before_first_list.paragraphs %}
-          <p>{{ paragraph | parse_first_birth_year_for_closed_records | safe }}</p>
-        {% endfor %}
-        <ul class="tna-ul">
-          {% for item in content.pages.before_you_start.proof_of_death_requirement.first_list %}
             <li>{{ item | parse_markdown_links | safe }}</li>
           {% endfor %}
         </ul>
-        {% for paragraph in content.pages.before_you_start.proof_of_death_requirement.before_second_list.paragraphs %}
-          <p>{{ paragraph }}</p>
-        {% endfor %}
-        <ul class="tna-ul">
-          {% for item in content.pages.before_you_start.proof_of_death_requirement.second_list %}
-            <li>{{ item }}</li>
-          {% endfor %}
-        </ul>
-
-        {{ tnaWarning({
-          "headingLevel": 3,
-          "body": content.pages.before_you_start.proof_of_death_requirement.after_second_list.paragraph
-        }) }}
 
         <h2 class="tna-heading-m">{{ content.pages.before_you_start.important_information_that_will_help.heading }}</h2>
         {% for paragraph in content.pages.before_you_start.important_information_that_will_help.paragraphs %}
