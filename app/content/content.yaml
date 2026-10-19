@@ -520,6 +520,7 @@ pages:
             description:
               - We will refund the page check fee (£9.92) if we do not hold the record.
               - The search fee of £38.95 is non-refundable.
+      proof_of_death_warning: If you choose a Full record check you will be asked to provide a proof of death
   your_order_summary_standard_printed:
     heading: Your order summary
     format_description_printed: Printed colour copies of the record (received by tracked post)
