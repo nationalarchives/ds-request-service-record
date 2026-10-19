@@ -92,7 +92,7 @@ pages:
         - The service person's forenames and last names
         - Their full date of birth
         - Your contact details so we can answer your request
-        - Depending on when the service person was born we may ask you to upload a proof of death. [Find out more about proof of death](route:PROVIDING_A_PROOF_OF_DEATH)
+        - In some cases you may be asked to submit a proof of death. [Find out more about proof of death](route:PROVIDING_A_PROOF_OF_DEATH)
     important_information_that_will_help:
       heading: Useful information that will help our search
       paragraphs:
@@ -116,9 +116,8 @@ pages:
     heading: Providing a proof of death
     paragraphs:
       - |
-        Depending on the date of the birth of the service person, you may 
-        be required to provide a proof of death. This is to protect any 
-        personal data in the record that might relate to a living person.
+        In some cases you may be required to provide a proof of death. This is to 
+        protect any personal data in the record that might relate to a living person.
     when_is_proof_of_death_required:
       heading: When is a proof of death required?
       initial_paragraphs:
@@ -126,11 +125,11 @@ pages:
           Proof of death is required in two circumstances:
       list_items:
         - |
-          For Standard requests, when the service person is deceased 
-          and was born on or after 1 January [FIRST_BIRTH_YEAR_STANDARD_ORDERS_REQUIRE_PROOF_OF_DEATH] (100 years ago)
+          For Standard, when the service person is deceased and was born on or after 
+          1 January [FIRST_BIRTH_YEAR_STANDARD_ORDERS_REQUIRE_PROOF_OF_DEATH] (100 years ago)
         - |
-          For a Full record check, when the service person is deceased 
-          and was born on or after 1 January [FIRST_BIRTH_YEAR_FOR_CLOSED_RECORDS] (115 years ago)
+          For Full record check, when the service person is deceased and was born on or after 
+          1 January [FIRST_BIRTH_YEAR_FOR_CLOSED_RECORDS] (115 years ago)
       subsequent_paragraphs:
         - |
           We will confirm if you need to submit one based on your answers.
@@ -364,7 +363,14 @@ pages:
     heading: Are you sure you want to proceed without a proof of death?
     warning: If you do not submit a proof of death when required, it is unlikely that we will be able to provide the record.
   confirm_payment_received:
-    heading: Payment received
+    heading: Payment complete
+    processing_confirmation: Your payment has been received and is being processed.
+    reference_number: Your payment reference number is
+    what_happens_next:
+      heading: What happens next
+      paragraphs:
+        - Your payment is being processed. We will send you a payment confirmation email if you provided an email address.
+        - You can get in touch with us by replying to the last email we sent you, or by visiting our [Contact us](external:CONTACT_US) page.
   payment_link_creation_failed:
     heading: Payment link creation failed
     paragraphs:
