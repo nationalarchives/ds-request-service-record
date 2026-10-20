@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "components/warning/macro.html" import tnaWarning %}
+{% from "macros/conditionally-available-warning.html" import conditionallyAvailableWarning %}
 
 {%- set pageTitle = content.pages.choose_your_order_type.heading | prepare_page_title -%}
 
@@ -48,9 +48,10 @@
         {% if content.pages.choose_your_order_type.full_record_check.information_list.list_items %}
           {{ descriptionList(content.pages.choose_your_order_type.full_record_check.information_list.list_items) }}
         {% endif %}
-        {{ tnaWarning({
-          "headingLevel": 3,
-          "body": content.pages.choose_your_order_type.full_record_check.proof_of_death_warning
+        {{ conditionallyAvailableWarning({
+          "message": content.pages.choose_your_order_type.full_record_check.proof_of_death_warning,
+          "heading_level": 3,
+          "should_render": True
         }) }}
         <form action="{{ url_for('main.choose_your_order_type') }}" method="post" novalidate>
           {{ form.csrf_token(id='full-check-option') }}
