@@ -2,6 +2,8 @@ from flask import redirect, render_template, request, session, url_for
 
 from app.constants import ExternalLinks, MultiPageFormRoutes
 from app.lib.content import load_content
+from app.lib.date_of_birth import get_date_of_birth_from_session
+from app.lib.date_of_birth_rules import DateOfBirthRules
 from app.lib.db.constants import PAID_STATUS, SENT_STATUS
 from app.lib.db.db_handler import get_service_record_request
 from app.lib.decorators.state_machine_decorator import with_state_machine
@@ -540,11 +542,15 @@ def choose_your_order_type(state_machine):
         save_submitted_form_fields_to_session(form)
         state_machine.continue_from_choose_your_order_type_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
+
+    date_of_birth = get_date_of_birth_from_session()
+
     return render_template(
         "main/choose-your-order-type.html",
         form=form,
         content=load_content(),
         back_link_route=get_dynamic_back_link_route(key=request.endpoint),
+        show_pod_warning=DateOfBirthRules.show_proof_of_death_warning(date_of_birth),
     )
 
 
