@@ -4,6 +4,7 @@ nav:
   - Home: index.md
   - Core patterns:
       - State machine: core-patterns/state-machine.md
+      - Date of birth rules: core-patterns/date-of-birth-rules.md
       - Post-Redirect-Get: core-patterns/post-redirect-get.md
       - Content approach: core-patterns/content-approach.md
       - Hyperlinks: core-patterns/hyperlinks.md

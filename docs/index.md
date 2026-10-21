@@ -5,6 +5,7 @@ This documentation explains how the service is structured and how the key applic
 ## Key topics
 
 - **State machine** — how the request journey is controlled and how the next page is chosen
+- **Date of birth rules** — how we normalise DOB values and apply business logic relating to DOB
 - **Post-Redirect-Get** — how the service handles form submissions and redirects after POST requests
 - **Content approach** — how page content, labels, and validation messages are stored and loaded
 - **Hyperlinks** — how named link constants and markdown parsing are used to render outbound links consistently
@@ -15,6 +16,7 @@ This documentation explains how the service is structured and how the key applic
 ## Start here
 
 - `core-patterns/state-machine.md`
+- `core-patterns/date-of-birth-rules.md`
 - `core-patterns/post-redirect-get.md`
 - `core-patterns/content-approach.md`
 - `core-patterns/hyperlinks.md`
