@@ -4,7 +4,10 @@
   {% if params.should_render %}
     {{ tnaWarning({
           "headingLevel": params.heading_level,
-          "body": params.message
+          "body": params.message,
+          "attributes": {
+            "data-testid": "conditionally-available-warning"
+          }
         }) }}
   {% endif %}
 {%- endmacro %}

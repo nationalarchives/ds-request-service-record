@@ -6,9 +6,11 @@ export async function testfirstBirthYearStandardOrdersRequireProofOfDeath(
   const firstBirthYearStandardOrdersRequireProofOfDeath = String(
     new Date().getFullYear() - 100,
   );
-  for (const row of await page
-    .locator("[data-first-birth-year-standard-orders-require-proof-of-death]")
-    .all()) {
+  const rows = page.locator(
+    "[data-first-birth-year-standard-orders-require-proof-of-death]",
+  );
+  await expect(rows.first()).toBeVisible();
+  for (const row of await rows.all()) {
     await expect(row).toHaveText(
       firstBirthYearStandardOrdersRequireProofOfDeath,
     );
