@@ -1,12 +1,10 @@
-from datetime import datetime, timezone
-
 from flask import current_app, has_app_context, session
 from statemachine import State, StateMachine
 
 from app.constants import MultiPageFormRoutes
 from app.lib.aws import upload_proof_of_death
-from app.lib.boundary_years import BoundaryYears
 from app.lib.date_of_birth import get_date_of_birth_from_session
+from app.lib.date_of_birth_rules import DateOfBirthRules
 from app.lib.db.constants import (
     EXPIRED_STATUS,
     PAID_STATUS,
@@ -584,11 +582,7 @@ class RoutingStateMachine(StateMachine):
     def born_too_late(self, form):
         """Condition method to determine if the service person's date of birth is too late for TNA to have record."""
         date_of_birth = self.get_form_field_data(form, "date_of_birth")
-        return (
-            bool(date_of_birth)
-            and date_of_birth.year
-            > BoundaryYears.LATEST_SERVICE_PERSON_BIRTH_YEAR_FOR_THIS_SERVICE
-        )
+        return DateOfBirthRules.is_born_too_late(date_of_birth)
 
     def does_not_have_email(self, form):
         """Condition method to determine if the user does not have an email address."""
@@ -622,19 +616,13 @@ class RoutingStateMachine(StateMachine):
             return False
 
         if self.is_standard_order(form):
-            return (
-                date_of_birth.year
-                >= BoundaryYears.first_birth_year_standard_orders_require_proof_of_death(
-                    datetime.now(timezone.utc).year
-                )
+            return DateOfBirthRules.requires_proof_of_death_for_standard_order(
+                date_of_birth
             )
 
         if self.is_full_record_check_order(form):
-            return (
-                date_of_birth.year
-                >= BoundaryYears.first_birth_year_for_closed_records(
-                    datetime.now(timezone.utc).year
-                )
+            return DateOfBirthRules.requires_proof_of_death_for_full_record_check(
+                date_of_birth
             )
 
         return False
