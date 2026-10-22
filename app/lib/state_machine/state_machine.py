@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from flask import current_app, has_app_context, session
 from statemachine import State, StateMachine
@@ -597,7 +597,7 @@ class RoutingStateMachine(StateMachine):
         return bool(
             date_of_birth
         ) and date_of_birth.year >= BoundaryYears.first_birth_year_for_closed_records(
-            datetime.now(timezone.utc).year
+            datetime.now(UTC).year
         )
 
     def does_not_have_email(self, form):

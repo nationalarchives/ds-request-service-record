@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 
 class BoundaryYears:
@@ -11,5 +11,5 @@ class BoundaryYears:
         cls, current_year: int | None = None
     ) -> int:
         if current_year is None:
-            current_year = datetime.now(timezone.utc).year
+            current_year = datetime.now(UTC).year
         return current_year - cls.YEARS_A_RECORD_REMAINS_CLOSED
