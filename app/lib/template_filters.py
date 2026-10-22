@@ -1,5 +1,5 @@
 import re
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from urllib.parse import urlencode
 
 from flask import url_for
@@ -125,9 +125,7 @@ def parse_first_birth_year_for_closed_records(s):
     if not s:
         return s
 
-    year = BoundaryYears.first_birth_year_for_closed_records(
-        datetime.now(timezone.utc).year
-    )
+    year = BoundaryYears.first_birth_year_for_closed_records(datetime.now(UTC).year)
 
     span = f"<span data-last-birth-year-for-open-records='{year}'>{year}</span>"
 

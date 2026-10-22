@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import requests
 from flask import current_app
@@ -98,7 +98,7 @@ def process_valid_request(id: str, payment_data: dict) -> None:
             else None
         )
         record.payment_reference = payment_data.get("reference", "")
-        record.payment_date = datetime.now(timezone.utc).strftime("%d %B %Y")
+        record.payment_date = datetime.now(UTC).strftime("%d %B %Y")
         record.status = PAID_STATUS
         db.session.commit()
 
@@ -124,7 +124,7 @@ def process_valid_payment(id: str, *, provider_id: str) -> None:
 
     payment.status = PAID_STATUS
     payment.provider_id = provider_id
-    payment.payment_date = datetime.now(timezone.utc)
+    payment.payment_date = datetime.now(UTC)
     db.session.commit()
 
     if send_payment_to_mod_copying_app(payment):

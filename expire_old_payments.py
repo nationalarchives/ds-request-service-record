@@ -5,7 +5,7 @@ This is intended to be run as a cron job.
 """
 
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from flask import current_app
 from sqlalchemy.exc import SQLAlchemyError
@@ -17,7 +17,7 @@ from app.lib.db.models import DynamicsPayment, db
 
 
 def expire_old_payments(days: int = 30) -> int:
-    cutoff = datetime.now(tz=timezone.utc) - timedelta(days=days)
+    cutoff = datetime.now(tz=UTC) - timedelta(days=days)
 
     payments = (
         db.session.query(DynamicsPayment)

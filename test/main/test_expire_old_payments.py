@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -27,7 +27,7 @@ class DummyPayment:
         self.first_name = first_name
         self.last_name = last_name
         self.status = "N"
-        self.created_at = datetime.now(tz=timezone.utc) - timedelta(days=31)
+        self.created_at = datetime.now(tz=UTC) - timedelta(days=31)
 
 
 @pytest.fixture(scope="module")
@@ -142,7 +142,7 @@ def test_expire_old_payments_rolls_back_on_commit_error(context):
 
 
 def test_expire_old_payments_uses_30_day_cutoff_and_only_new_status(db_session):
-    fixed_now = datetime(2026, 3, 11, 0, 0, 0, tzinfo=timezone.utc)
+    fixed_now = datetime(2026, 3, 11, 0, 0, 0, tzinfo=UTC)
 
     payment_31_days = DynamicsPayment(
         id="pmt-31-days-new",
