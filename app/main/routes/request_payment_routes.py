@@ -1,6 +1,6 @@
 import hashlib
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import requests
 from flask import current_app, redirect, session, url_for
@@ -134,7 +134,7 @@ def _generate_reference() -> str:
     Format: TNA<date><uuid>
     Example: TNA20260725a1b2c3d4e5f67890abcdef12345678
     """
-    date_stamp = datetime.now(timezone.utc).strftime("%Y%m%d")
+    date_stamp = datetime.now(UTC).strftime("%Y%m%d")
     unique_id = uuid.uuid4().hex
 
     return f"TNA{date_stamp}{unique_id}"
@@ -150,7 +150,7 @@ def _store_payment_record(
         "record_hash": record_hash,
         "id": unique_id,
         "gov_uk_payment_id": payment_id,
-        "created_at": datetime.now(timezone.utc),
+        "created_at": datetime.now(UTC),
     }
 
     record = add_service_record_request(data)

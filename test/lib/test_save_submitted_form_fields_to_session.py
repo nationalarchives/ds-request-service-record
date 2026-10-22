@@ -50,7 +50,7 @@ def test_formats_date_and_datetime():
     session_obj = {}
     d = datetime.date(2024, 7, 5)  # 05 July 2024
     dt = datetime.datetime(
-        2023, 12, 31, 23, 59, tzinfo=datetime.timezone.utc
+        2023, 12, 31, 23, 59, tzinfo=datetime.UTC
     )  # 31 December 2023
     form = MockForm(
         {
