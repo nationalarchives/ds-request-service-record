@@ -614,7 +614,7 @@ def test_continue_from_order_type_routes_by_proof_of_death_requirement(
     sm = RoutingStateMachine()
     session["form_data"] = {"date_of_birth": f"01 January {date_of_birth_year}"}
 
-    with patch("app.lib.state_machine.state_machine.datetime") as mock_datetime:
+    with patch("app.lib.date_of_birth_rules.datetime") as mock_datetime:
         mock_datetime.now.return_value = datetime(2026, 1, 23, tzinfo=UTC)
 
         getattr(sm, event_name)(form=make_form(**form_kwargs))
