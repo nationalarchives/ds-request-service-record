@@ -92,7 +92,7 @@ pages:
         - The service person's forenames and last names
         - Their full date of birth
         - Your contact details so we can answer your request
-        - In some cases you may be asked to submit a proof of death. [Find out more about proof of death](route:PROVIDING_A_PROOF_OF_DEATH)
+        - In some cases you may be asked to submit a proof of death. [Find out more about proof of death](route:PROVIDING_A_PROOF_OF_DEATH).
     important_information_that_will_help:
       heading: Useful information that will help our search
       paragraphs:
