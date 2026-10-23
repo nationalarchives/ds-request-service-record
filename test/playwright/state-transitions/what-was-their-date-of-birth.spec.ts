@@ -99,15 +99,6 @@ test.describe("the 'What was their date of birth?' form", () => {
         description:
           "when the year of birth is 1950, the 'We do not have records for people born after 1939' page is shown and 'Back' links work as expected",
       },
-      {
-        month: "01",
-        day: "01",
-        year: "1925",
-        nextUrl: Paths.PROVIDE_A_PROOF_OF_DEATH,
-        shouldValidate: true,
-        description:
-          "when the year of birth is 1925, the 'Provide proof of death' page is shown and 'Back' links work as expected",
-      },
     ];
 
     validSubmissionMappings.forEach(

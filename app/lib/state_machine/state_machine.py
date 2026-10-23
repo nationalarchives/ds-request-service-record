@@ -1,11 +1,12 @@
-from datetime import UTC, datetime
+from datetime import UTC, datetime  # noqa: F401
 
 from flask import current_app, has_app_context, session
 from statemachine import State, StateMachine
 
 from app.constants import MultiPageFormRoutes
 from app.lib.aws import upload_proof_of_death
-from app.lib.boundary_years import BoundaryYears
+from app.lib.date_of_birth import get_date_of_birth_from_session
+from app.lib.date_of_birth_rules import DateOfBirthRules
 from app.lib.db.constants import (
     EXPIRED_STATUS,
     PAID_STATUS,
@@ -226,6 +227,8 @@ class RoutingStateMachine(StateMachine):
         you_may_want_to_check_ancestry_page
     )
 
+    continue_from_providing_a_proof_of_death_form = initial.to(before_you_start_form)
+
     continue_from_are_you_sure_you_want_to_cancel_form = initial.to(
         you_have_cancelled_your_request_page
     )
@@ -287,17 +290,11 @@ class RoutingStateMachine(StateMachine):
         what_was_their_date_of_birth_form
     )
 
-    continue_from_what_was_their_date_of_birth_form = (
-        initial.to(
-            service_person_details_form,
-            unless="born_too_late or birth_year_requires_proof_of_death",
-        )
-        | initial.to(
-            we_do_not_have_records_for_people_born_after_page, cond="born_too_late"
-        )
-        | initial.to(
-            provide_a_proof_of_death_form, cond="birth_year_requires_proof_of_death"
-        )
+    continue_from_what_was_their_date_of_birth_form = initial.to(
+        service_person_details_form,
+        unless="born_too_late",
+    ) | initial.to(
+        we_do_not_have_records_for_people_born_after_page, cond="born_too_late"
     )
 
     continue_from_we_do_not_have_records_for_people_born_after_form = initial.to(
@@ -313,19 +310,19 @@ class RoutingStateMachine(StateMachine):
             upload_a_proof_of_death_form,
             unless="happy_to_proceed_without_proof_of_death",
         )
-        | initial.to(service_person_details_form)
+        | initial.to(your_contact_details_form)
     )
 
     continue_from_upload_a_proof_of_death_form = (
         initial.to(
-            service_person_details_form, cond="user_has_not_uploaded_proof_of_death"
+            your_contact_details_form, cond="user_has_not_uploaded_proof_of_death"
         )
-        | initial.to(service_person_details_form, cond="proof_of_death_uploaded_to_s3")
+        | initial.to(your_contact_details_form, cond="proof_of_death_uploaded_to_s3")
         | initial.to(unable_to_upload_proof_of_death_form)
     )
 
     continue_from_unable_to_upload_proof_of_death_form = initial.to(
-        service_person_details_form
+        your_contact_details_form
     )
 
     continue_from_service_person_details_form = initial.to(
@@ -355,14 +352,16 @@ class RoutingStateMachine(StateMachine):
     continue_from_what_is_your_address_form = initial.to(your_order_summary_form)
 
     continue_from_your_order_type_other_and_dont_know_officer_form = initial.to(
-        your_contact_details_form
-    )
+        provide_a_proof_of_death_form, cond="proof_of_death_is_required"
+    ) | initial.to(your_contact_details_form)
 
     continue_from_your_order_type_british_army_officer_form = initial.to(
-        your_contact_details_form
-    )
+        provide_a_proof_of_death_form, cond="proof_of_death_is_required"
+    ) | initial.to(your_contact_details_form)
 
-    continue_from_choose_your_order_type_form = initial.to(your_contact_details_form)
+    continue_from_choose_your_order_type_form = initial.to(
+        provide_a_proof_of_death_form, cond="proof_of_death_is_required"
+    ) | initial.to(your_contact_details_form)
 
     continue_from_your_order_summary_form = initial.to(gov_uk_pay_redirect)
 
@@ -585,20 +584,7 @@ class RoutingStateMachine(StateMachine):
     def born_too_late(self, form):
         """Condition method to determine if the service person's date of birth is too late for TNA to have record."""
         date_of_birth = self.get_form_field_data(form, "date_of_birth")
-        return (
-            bool(date_of_birth)
-            and date_of_birth.year
-            > BoundaryYears.LATEST_SERVICE_PERSON_BIRTH_YEAR_FOR_THIS_SERVICE
-        )
-
-    def birth_year_requires_proof_of_death(self, form):
-        """Condition method to determine if the service person's date of birth requires a proof of death."""
-        date_of_birth = self.get_form_field_data(form, "date_of_birth")
-        return bool(
-            date_of_birth
-        ) and date_of_birth.year >= BoundaryYears.first_birth_year_for_closed_records(
-            datetime.now(UTC).year
-        )
+        return DateOfBirthRules.is_born_too_late(date_of_birth)
 
     def does_not_have_email(self, form):
         """Condition method to determine if the user does not have an email address."""
@@ -616,6 +602,32 @@ class RoutingStateMachine(StateMachine):
             )
             == "yes"
         )
+
+    def is_standard_order(self, form):
+        """Condition method to determine if the user selected a standard order."""
+        return self.get_form_field_data(form, "processing_option") == "standard"
+
+    def is_full_record_check_order(self, form):
+        """Condition method to determine if the user selected a full record check order."""
+        return self.get_form_field_data(form, "processing_option") == "full"
+
+    def proof_of_death_is_required(self, form):
+        """Condition method to determine if a proof of death is required for the order."""
+        date_of_birth = get_date_of_birth_from_session()
+        if not date_of_birth:
+            return False
+
+        if self.is_standard_order(form):
+            return DateOfBirthRules.requires_proof_of_death_for_standard_order(
+                date_of_birth
+            )
+
+        if self.is_full_record_check_order(form):
+            return DateOfBirthRules.requires_proof_of_death_for_full_record_check(
+                date_of_birth
+            )
+
+        return False
 
     def user_has_not_uploaded_proof_of_death(self, form):
         """Condition method to determine if no proof of death was uploaded."""

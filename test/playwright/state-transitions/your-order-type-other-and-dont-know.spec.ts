@@ -64,9 +64,23 @@ test.describe("the 'Your order type for officers where service branch is 'other'
       person.dateOfBirth.day,
       person.dateOfBirth.month,
       person.dateOfBirth.year,
-      Paths.PROVIDE_A_PROOF_OF_DEATH,
+      Paths.SERVICE_PERSON_DETAILS,
       true,
       "",
+    );
+
+    await continueFromServicePersonDetails(page, person);
+
+    await continueFromHaveYouPreviouslyMadeARequest(page, {
+      label: person.hasPreviouslyMadeRequest,
+      errorMessage: null,
+      populatedReferenceNumber: null,
+      nextPath: Paths.YOUR_ORDER_TYPE_OTHER_AND_DONT_KNOW_OFFICERS,
+    });
+
+    await continueFromYourOrderTypeOtherAndDontKnowOfficers(
+      page,
+      Paths.PROVIDE_A_PROOF_OF_DEATH,
     );
 
     await continueFromProvideAProofOfDeath(
@@ -83,17 +97,6 @@ test.describe("the 'Your order type for officers where service branch is 'other'
       true,
       "",
     );
-
-    await continueFromServicePersonDetails(page, person);
-
-    await continueFromHaveYouPreviouslyMadeARequest(page, {
-      label: person.hasPreviouslyMadeRequest,
-      errorMessage: null,
-      populatedReferenceNumber: null,
-      nextPath: Paths.YOUR_ORDER_TYPE_OTHER_AND_DONT_KNOW_OFFICERS,
-    });
-
-    await continueFromYourOrderTypeOtherAndDontKnowOfficers(page);
   }
 
   scenarios.forEach(({ person }) => {
@@ -103,10 +106,7 @@ test.describe("the 'Your order type for officers where service branch is 'other'
       await runFromStartPageToYourOrderTypePage(page, person);
       // the previous step function results in the user being on "Your contact details"
       // so we check the back link takes them back to the correct order type variant
-      await clickBackLink(
-        page,
-        Paths.YOUR_ORDER_TYPE_OTHER_AND_DONT_KNOW_OFFICERS,
-      );
+      await clickBackLink(page, Paths.UPLOAD_A_PROOF_OF_DEATH);
     });
   });
 });

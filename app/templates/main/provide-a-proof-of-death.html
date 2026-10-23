@@ -3,7 +3,7 @@
 {%- set pageTitle = content.pages.provide_a_proof_of_death.heading | prepare_page_title -%}
 
 {% block beforeContent %}
-  {{ backLink(url_for('main.what_was_their_date_of_birth')) }}
+  {{ backLink(url_for(back_link_route)) }}
 {% endblock beforeContent %}
 
 {% block content %}
@@ -16,7 +16,7 @@
         {% endif %}
         <h1 class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.provide_a_proof_of_death.heading }}</h1>
         {% for paragraph in content.pages.provide_a_proof_of_death.paragraphs %}
-          <p>{{ paragraph | parse_first_birth_year_for_closed_records | safe }}</p>
+          <p>{{ paragraph | parse_first_birth_year_for_closed_records }}</p>
         {% endfor %}
         <ul class="tna-ul">
           {% for item in content.pages.provide_a_proof_of_death.list_items %}
