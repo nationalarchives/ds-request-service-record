@@ -855,4 +855,3 @@ def test_continue_from_unable_to_upload_proof_of_death_form():
     sm.continue_from_unable_to_upload_proof_of_death_form()
     assert sm.current_state.id == "your_contact_details_form"
     assert sm.route_for_current_state == "main.your_contact_details"
-
