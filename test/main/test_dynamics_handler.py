@@ -93,7 +93,7 @@ def test_generate_tagged_request_includes_commissioned_officer_status(context):
         '<injected attribute="value">text</injected>',
         "</enquiry><injected>text</injected><enquiry>",
         "<![CDATA[text]]>",
-        '&lt;already escaped&gt; "quoted" \'text\'',
+        "&lt;already escaped&gt; \"quoted\" 'text'",
     ],
 )
 def test_generate_tagged_request_escapes_xml_values(context, attribute, tag, value):
