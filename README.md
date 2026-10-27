@@ -28,6 +28,20 @@ docker compose exec app cp -r /app/node_modules/@nationalarchives/frontend/natio
 docker compose exec app poetry run python -m pytest
 ```
 
+### AWS credentials for local development
+
+Docker Compose supplies S3 Ninja credentials through `S3_ACCESS_KEY_ID` and
+`S3_SECRET_ACCESS_KEY`. These apply only to the client using `S3_ENDPOINT`;
+they do not override credentials for SES or other AWS services locally.
+
+SES uses Boto3's default credential chain. The host's `~/.aws` directory is
+mounted into the app container, so set `AWS_PROFILE` in `.env` to select your
+AWS CLI profile if needed. Refresh your login if that profile uses temporary
+credentials. Do not set global `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or
+`AWS_SESSION_TOKEN` to S3 Ninja values: environment credentials take precedence
+over profile credentials and so Boto3 will be passing these incorrect credentials
+to AWS - resulting in errors.
+
 ### Format and lint code
 
 ```sh
@@ -89,6 +103,9 @@ In addition to the [base Docker image variables](https://github.com/nationalarch
 | `SESSION_COOKIE_SECURE`           | Whether cookies are marked secure (develop config override)                                      | `True`                                                    |
 | `SESSION_REDIS_URL`               | Redis URL connection string for sessions                                                         | _none_                                                    |
 | `AWS_DEFAULT_REGION`              | AWS region for clients (SES/S3)                                                                  | `eu-west-2`                                               |
+| `S3_ENDPOINT`                     | Custom S3 endpoint (Docker Compose uses S3 Ninja)                                                 | _none_                                                    |
+| `S3_ACCESS_KEY_ID`                | Access key for `S3_ENDPOINT`; must be set with `S3_SECRET_ACCESS_KEY`                              | _none_                                                    |
+| `S3_SECRET_ACCESS_KEY`            | Secret key for `S3_ENDPOINT`; leaves other AWS clients on the default credential chain            | _none_                                                    |
 | `PROOF_OF_DEATH_BUCKET_NAME`      | S3 bucket location for uploaded proof-of-death files                                             | _none_ (required for file uploads)                        |
 | `PROOF_OF_DEATH_HOLDING_PREFIX`   | S3 prefix used for holding proof-of-death files                                                  | `holding/`                                                |
 | `PROOF_OF_DEATH_SUBMITTED_PREFIX` | S3 prefix used for submitted proof-of-death files                                                | `submitted/`                                              |
