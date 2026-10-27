@@ -1,5 +1,6 @@
 from datetime import UTC, datetime
 from unittest.mock import MagicMock, patch
+from xml.etree import ElementTree
 
 import pytest
 import requests
@@ -75,6 +76,62 @@ def test_generate_tagged_request_includes_commissioned_officer_status(context):
     tagged_request = generate_tagged_request(record)
 
     assert "<commissioned_officer>unknown</commissioned_officer>" in tagged_request
+
+
+@pytest.mark.parametrize(
+    ("attribute", "tag"),
+    [
+        ("requester_first_name", "mandatory_forename"),
+        ("additional_information", "enquiry"),
+        ("proof_of_death", "mandatory_upload_file_name"),
+    ],
+)
+@pytest.mark.parametrize(
+    "value",
+    [
+        "Smith & Jones",
+        '<injected attribute="value">text</injected>',
+        "</enquiry><injected>text</injected><enquiry>",
+        "<![CDATA[text]]>",
+        '&lt;already escaped&gt; "quoted" \'text\'',
+    ],
+)
+def test_generate_tagged_request_escapes_xml_values(context, attribute, tag, value):
+    record = ServiceRecordRequest(
+        date_of_birth=f"01 January {datetime.now(UTC).year - 40}",
+        **{attribute: value},
+    )
+
+    tagged_request = generate_tagged_request(record)
+    root = ElementTree.fromstring(f"<request>{tagged_request}</request>")
+    element = root.find(tag)
+
+    assert element is not None
+    assert element.text == value
+    assert len(element) == 0
+    assert root.find("injected") is None
+
+
+@pytest.mark.parametrize(
+    ("date_of_birth", "proof_of_death", "expected"),
+    [
+        ("01 January 1900", None, "Not applicable"),
+        ("01 January 1900", "<file>.png", "Not applicable"),
+        (f"01 January {datetime.now(UTC).year - 40}", None, None),
+        (f"01 January {datetime.now(UTC).year - 40}", "EMPTY", None),
+    ],
+)
+def test_generate_tagged_request_preserves_upload_placeholder(
+    context, date_of_birth, proof_of_death, expected
+):
+    record = ServiceRecordRequest(
+        date_of_birth=date_of_birth, proof_of_death=proof_of_death
+    )
+
+    tagged_request = generate_tagged_request(record)
+    root = ElementTree.fromstring(f"<request>{tagged_request}</request>")
+
+    assert root.findtext("mandatory_upload_file_name") == expected
 
 
 @patch("app.lib.dynamics_handler.requests.post")
