@@ -88,6 +88,8 @@ class Production(Features):
 
     AWS_DEFAULT_REGION: str = os.environ.get("AWS_DEFAULT_REGION", "eu-west-2")
     S3_ENDPOINT: str = os.environ.get("S3_ENDPOINT", "")
+    S3_ACCESS_KEY_ID: str = os.environ.get("S3_ACCESS_KEY_ID", "")
+    S3_SECRET_ACCESS_KEY: str = os.environ.get("S3_SECRET_ACCESS_KEY", "")
     PROOF_OF_DEATH_BUCKET_NAME: str = os.environ.get("PROOF_OF_DEATH_BUCKET_NAME", "")
     PROOF_OF_DEATH_HOLDING_PREFIX: str = os.environ.get(
         "PROOF_OF_DEATH_HOLDING_PREFIX", "holding/"
