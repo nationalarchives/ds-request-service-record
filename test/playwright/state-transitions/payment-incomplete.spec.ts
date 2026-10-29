@@ -18,7 +18,11 @@ test.describe("the 'Problem processing payment' form", () => {
         page,
       }) => {
         await page.goto(Paths.CHOOSE_YOUR_ORDER_TYPE);
-        await continueFromChooseYourOrderType(page, "Choose standard");
+        await continueFromChooseYourOrderType(
+          page,
+          "Choose standard",
+          Paths.YOUR_CONTACT_DETAILS,
+        );
         await continueFromYourContactDetails(page, {
           firstName: "Francis",
           lastName: "Palgrave",

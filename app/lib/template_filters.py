@@ -127,10 +127,26 @@ def parse_first_birth_year_for_closed_records(s):
 
     year = BoundaryYears.first_birth_year_for_closed_records(datetime.now(UTC).year)
 
-    span = f"<span data-last-birth-year-for-open-records='{year}'>{year}</span>"
+    span = f"<span data-first-birth-year-for-closed-records='{year}'>{year}</span>"
 
     return s.replace(
         "[FIRST_BIRTH_YEAR_FOR_CLOSED_RECORDS]",
+        span,
+    )
+
+
+def parse_first_birth_year_standard_orders_require_proof_of_death(s):
+    if not s:
+        return s
+
+    year = BoundaryYears.first_birth_year_standard_orders_require_proof_of_death(
+        datetime.now(UTC).year
+    )
+
+    span = f"<span data-first-birth-year-standard-orders-require-proof-of-death='{year}'>{year}</span>"
+
+    return s.replace(
+        "[FIRST_BIRTH_YEAR_STANDARD_ORDERS_REQUIRE_PROOF_OF_DEATH]",
         span,
     )
 
