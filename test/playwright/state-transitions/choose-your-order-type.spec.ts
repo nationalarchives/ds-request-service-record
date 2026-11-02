@@ -21,6 +21,18 @@ const orderCases = [
     expectedNextPath: Paths.PROVIDE_A_PROOF_OF_DEATH,
   },
   {
+    label: "100 years ago",
+    year: String(new Date().getFullYear() - 100),
+    orderType: "Choose standard",
+    expectedNextPath: Paths.PROVIDE_A_PROOF_OF_DEATH,
+  },
+  {
+    label: "100 years ago",
+    year: String(new Date().getFullYear() - 100),
+    orderType: "Choose full record check",
+    expectedNextPath: Paths.PROVIDE_A_PROOF_OF_DEATH,
+  },
+  {
     label: "101 years ago",
     year: String(new Date().getFullYear() - 101),
     orderType: "Choose standard",
