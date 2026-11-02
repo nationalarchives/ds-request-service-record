@@ -1,4 +1,4 @@
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from unittest.mock import MagicMock, patch
 from xml.etree import ElementTree
 
@@ -8,7 +8,10 @@ import requests
 from app import create_app
 from app.lib.db.models import DynamicsPayment, ServiceRecordRequest
 from app.lib.dynamics_handler import (
+    determine_dynamics_closure_status,
     generate_tagged_request,
+    is_open_record,
+    proof_of_death_not_required,
     send_payment_to_mod_copying_app,
     subject_status,
 )
@@ -30,6 +33,134 @@ def app():
 def context(app):
     with app.app_context():
         yield
+
+
+@pytest.mark.parametrize(
+    ("dob", "expected"),
+    [
+        (date(1910, 12, 31), True),
+        (date(1911, 1, 1), False),
+        (date(1911, 12, 31), False),
+        (date(1912, 1, 1), False),
+    ],
+)
+def test_is_open_record(dob, expected):
+    with patch(
+        "app.lib.dynamics_handler.BoundaryYears.first_birth_year_for_closed_records",
+        return_value=1911,
+    ):
+        assert is_open_record(dob) is expected
+
+
+@pytest.mark.parametrize(
+    ("processing_option", "dob", "expected"),
+    [
+        ("standard", date(1910, 12, 31), True),
+        ("full", date(1910, 12, 31), True),
+        ("standard", date(1911, 1, 1), True),
+        ("full", date(1911, 1, 1), False),
+        ("standard", date(1911, 12, 31), True),
+        ("full", date(1911, 12, 31), False),
+        ("standard", date(1925, 12, 31), True),
+        ("full", date(1925, 12, 31), False),
+        ("standard", date(1926, 1, 1), False),
+        ("full", date(1926, 1, 1), False),
+        ("standard", date(1927, 1, 1), False),
+        ("full", date(1927, 1, 1), False),
+    ],
+)
+def test_proof_of_death_not_required(processing_option, dob, expected):
+    with (
+        patch(
+            "app.lib.dynamics_handler.BoundaryYears.first_birth_year_for_closed_records",
+            return_value=1911,
+        ),
+        patch(
+            "app.lib.dynamics_handler.BoundaryYears.first_birth_year_standard_orders_require_proof_of_death",
+            return_value=1926,
+        ),
+    ):
+        assert proof_of_death_not_required(processing_option, dob) is expected
+
+
+@pytest.mark.parametrize(
+    ("processing_option", "dob", "has_proof", "expected"),
+    [
+        ("standard", "31 December 1910", False, "FOIOP"),
+        ("standard", "31 December 1910", True, "FOIOP"),
+        ("full", "31 December 1910", False, "FOIOP"),
+        ("full", "31 December 1910", True, "FOIOP"),
+        ("standard", "01 January 1911", False, "FOICD"),
+        ("standard", "01 January 1911", True, "FOICD"),
+        ("full", "01 January 1911", False, "FOICDN"),
+        ("full", "01 January 1911", True, "FOICD"),
+        ("standard", "31 December 1911", False, "FOICD"),
+        ("standard", "31 December 1911", True, "FOICD"),
+        ("full", "31 December 1911", False, "FOICDN"),
+        ("full", "31 December 1911", True, "FOICD"),
+        ("standard", "31 December 1925", False, "FOICD"),
+        ("standard", "31 December 1925", True, "FOICD"),
+        ("full", "31 December 1925", False, "FOICDN"),
+        ("full", "31 December 1925", True, "FOICD"),
+        ("standard", "01 January 1926", False, "FOICDN"),
+        ("standard", "01 January 1926", True, "FOICD"),
+        ("full", "01 January 1926", False, "FOICDN"),
+        ("full", "01 January 1926", True, "FOICD"),
+        ("standard", "01 January 1927", False, "FOICDN"),
+        ("standard", "01 January 1927", True, "FOICD"),
+        ("full", "01 January 1927", False, "FOICDN"),
+        ("full", "01 January 1927", True, "FOICD"),
+    ],
+)
+def test_determine_dynamics_closure_status(processing_option, dob, has_proof, expected):
+    with (
+        patch(
+            "app.lib.dynamics_handler.BoundaryYears.first_birth_year_for_closed_records",
+            return_value=1911,
+        ),
+        patch(
+            "app.lib.dynamics_handler.BoundaryYears.first_birth_year_standard_orders_require_proof_of_death",
+            return_value=1926,
+        ),
+    ):
+        assert (
+            determine_dynamics_closure_status(dob, has_proof, processing_option)
+            == expected
+        )
+
+
+@pytest.mark.parametrize("dob", ["", "not a date", "32 January 1910"])
+def test_determine_dynamics_closure_status_rejects_invalid_date(dob):
+    with pytest.raises(ValueError):
+        determine_dynamics_closure_status(dob, False, "standard")
+
+
+@pytest.mark.parametrize(
+    ("processing_option", "proof_of_death", "expected"),
+    [
+        ("standard", None, "? FOI DIRECT MOD FOICD1"),
+        ("standard", "EMPTY", "? FOI DIRECT MOD FOICD1"),
+        ("standard", "file.png", "? FOI DIRECT MOD FOICD1"),
+        ("full", None, "? FOI DIRECT MOD FOICDN2"),
+        ("full", "EMPTY", "? FOI DIRECT MOD FOICDN2"),
+        ("full", "file.png", "? FOI DIRECT MOD FOICD2"),
+    ],
+)
+def test_subject_status_for_closed_record_below_standard_proof_boundary(
+    processing_option, proof_of_death, expected
+):
+    record = DummyRecord("01 January 1920", proof_of_death, processing_option)
+    with (
+        patch(
+            "app.lib.dynamics_handler.BoundaryYears.first_birth_year_for_closed_records",
+            return_value=1911,
+        ),
+        patch(
+            "app.lib.dynamics_handler.BoundaryYears.first_birth_year_standard_orders_require_proof_of_death",
+            return_value=1926,
+        ),
+    ):
+        assert subject_status(record) == expected
 
 
 def test_age_over_115_sets_FOIOP(context):
