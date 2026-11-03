@@ -26,10 +26,24 @@ def get_s3_client():
     session = get_boto3_session()
 
     if current_app.config.get("S3_ENDPOINT"):
+        credentials = {}
+        access_key = current_app.config.get("S3_ACCESS_KEY_ID")
+        secret_key = current_app.config.get("S3_SECRET_ACCESS_KEY")
+        if access_key or secret_key:
+            if not access_key or not secret_key:
+                raise ValueError(
+                    "S3_ACCESS_KEY_ID and S3_SECRET_ACCESS_KEY must be configured together."
+                )
+            credentials = {
+                "aws_access_key_id": access_key,
+                "aws_secret_access_key": secret_key,
+                "aws_session_token": "",
+            }
         return session.client(
             "s3",
             endpoint_url=current_app.config.get("S3_ENDPOINT"),
             config=Config(s3={"addressing_style": "path"}),
+            **credentials,
         )
 
     return session.client(

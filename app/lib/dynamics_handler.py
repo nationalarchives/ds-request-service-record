@@ -1,4 +1,5 @@
 from datetime import UTC, datetime
+from xml.sax.saxutils import escape
 
 import requests
 from flask import current_app
@@ -124,7 +125,7 @@ def _generate_tagged_data(mapping: list[tuple[str, str | None]], obj) -> str:
             value = getattr(obj, attr) if attr else None
             if value:
                 text = str(value)
-                chunks.append(f"<{tag}>{text}</{tag}>")
+                chunks.append(f"<{tag}>{escape(text)}</{tag}>")
         else:
             if (
                 closure_status_calculation(obj.date_of_birth, has_proof_of_death(obj))
@@ -134,7 +135,7 @@ def _generate_tagged_data(mapping: list[tuple[str, str | None]], obj) -> str:
                 if value:
                     text = str(value)
                     if text != "EMPTY":
-                        chunks.append(f"<{tag}>{text}</{tag}>")
+                        chunks.append(f"<{tag}>{escape(text)}</{tag}>")
             else:
                 chunks.append(f"<{tag}>Not applicable</{tag}>")
     return "\n".join(chunks)
