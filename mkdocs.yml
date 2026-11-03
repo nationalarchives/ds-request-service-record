@@ -1,7 +1,18 @@
 site_name: Request a military service record documentation
 repo_url: https://github.com/nationalarchives/flask-application-template
+theme:
+  name: material
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
 nav:
   - Home: index.md
+  - Business rules:
+      - Closed records: business-rules/closed-records.md
+      - Birth years covered: business-rules/birth-years-covered.md
   - Core patterns:
       - State machine: core-patterns/state-machine.md
       - Date of birth rules: core-patterns/date-of-birth-rules.md

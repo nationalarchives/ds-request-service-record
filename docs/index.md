@@ -4,6 +4,7 @@ This documentation explains how the service is structured and how the key applic
 
 ## Key topics
 
+- **Business rules** — how the service applies rules
 - **State machine** — how the request journey is controlled and how the next page is chosen
 - **Date of birth rules** — how we normalise DOB values and apply business logic relating to DOB
 - **Post-Redirect-Get** — how the service handles form submissions and redirects after POST requests
