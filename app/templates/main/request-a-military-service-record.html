@@ -24,6 +24,11 @@
     <div class="tna-container">
       <div
         class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny tna-!--padding-top-m">
+        <div class="notify">
+          <b class="notify_heading">Please note</b><br>
+          We are making some technical changes to this service on Thursday 5 November between 11.00 and 14.00. While you will be able to access the service, some users may experience errors. We recommend you complete your request either before or after this time.
+        </div>
+
         {% for paragraph in content.pages.request_a_military_service_record.contents.paragraphs %}
           <p>{{ paragraph | parse_markdown_links(new_tab=False) | safe }}</p>
         {% endfor %}
