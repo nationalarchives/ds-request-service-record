@@ -3,6 +3,7 @@ repo_url: https://github.com/nationalarchives/flask-application-template
 theme:
   name: material
 markdown_extensions:
+  - admonition
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -13,6 +14,7 @@ nav:
   - Business rules:
       - Closed records: business-rules/closed-records.md
       - Birth years covered: business-rules/birth-years-covered.md
+      - Proof of death: business-rules/proof-of-death.md
   - Core patterns:
       - State machine: core-patterns/state-machine.md
       - Date of birth rules: core-patterns/date-of-birth-rules.md

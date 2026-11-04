@@ -18,7 +18,7 @@ After the date-of-birth form validates, the state machine's `born_too_late` cond
 birth year is greater than 1939. If so, the user is routed to “We do not have records for people born after
 1939” and directed to request the record from the Ministry of Defence. Unlike the earliest-year rule,
 this is a routing decision rather than a form validation error because there is additional information the
-user will need. 
+user will need.
 
 ## Decision flow
 
