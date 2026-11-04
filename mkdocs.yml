@@ -18,6 +18,7 @@ nav:
       - Directing users elsewhere: business-rules/directing-users-elsewhere.md
       - Standard order availability: business-rules/standard-order-availability.md
       - Users without an email address: business-rules/users-without-email.md
+      - Price calculations: business-rules/price-calculations.md
   - Core patterns:
       - State machine: core-patterns/state-machine.md
       - Date of birth rules: core-patterns/date-of-birth-rules.md
