@@ -7,8 +7,8 @@ entered alongside this selection.
 ## Postal contact and delivery
 
 Users without email are taken to **What is your address** before **Your order summary**. They must provide
-an address line, town or city, postcode and country. We use their postal address to contact them about the 
-request and, if the record can be provided, send printed copies by tracked post. The confirmation content 
+an address line, town or city, postcode and country. We use their postal address to contact them about the
+request and, if the record can be provided, send printed copies by tracked post. The confirmation content
 tells users they will receive a letter instead of an email.
 
 The order summary reflects printed delivery and the associated charges:

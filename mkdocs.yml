@@ -27,6 +27,9 @@ nav:
       - Hyperlinks: core-patterns/hyperlinks.md
       - Template approach: core-patterns/template-approach.md
       - Back links: core-patterns/back-links.md
+  - Backend:
+      - Proof of death uploads (to S3): backend/proof-of-death-uploads.md
+      - File move upon payment (in S3): backend/proof-of-death-file-movement.md
   - Testing:
       - Overview: testing/index.md
       - Playwright: testing/playwright.md

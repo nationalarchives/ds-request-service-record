@@ -1,6 +1,6 @@
 # Standard order availability
 
-Users who reach the order stage will be presented with either a "Choose your order type" page or a "Your order type" 
+Users who reach the order stage will be presented with either a "Choose your order type" page or a "Your order type"
 page, depending on whether a **Standard** order is available for the record they are requesting.
 
 The state machine in `app/lib/state_machine/state_machine.py` determines which order page users see.
