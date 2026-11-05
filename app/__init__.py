@@ -18,6 +18,7 @@ from app.lib.template_filters import (
     inject_unique_survey_link,
     parse_bold_text,
     parse_first_birth_year_for_closed_records,
+    parse_first_birth_year_standard_orders_require_proof_of_death,
     parse_markdown_links,
     prepare_page_title,
     prepare_page_type_for_analytics_meta_tag,
@@ -92,6 +93,9 @@ def create_app(config_class):
     app.add_template_filter(parse_markdown_links)
     app.add_template_filter(parse_bold_text)
     app.add_template_filter(parse_first_birth_year_for_closed_records)
+    app.add_template_filter(
+        parse_first_birth_year_standard_orders_require_proof_of_death
+    )
     app.add_template_filter(format_standard_printed_order_price)
     app.add_template_filter(convert_pence_to_pounds_string)
     app.add_template_filter(inject_unique_survey_link)

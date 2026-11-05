@@ -78,7 +78,7 @@ class Production(Features):
     PERMANENT_SESSION_LIFETIME: int = int(
         os.environ.get("PERMANENT_SESSION_LIFETIME", "86400")
     )
-    SESSION_COOKIE_NAME: str = "ds_request_service_record_session"
+    SESSION_COOKIE_NAME: str = "ds_request_service_record_session_v1"
     SESSION_COOKIE_PATH: str = SERVICE_URL_PREFIX
     SESSION_COOKIE_SECURE: bool = True
     SESSION_REDIS_URL: str = os.environ.get("SESSION_REDIS_URL", "")

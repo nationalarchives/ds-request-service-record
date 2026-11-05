@@ -63,7 +63,10 @@ test.describe("Routes to 'Your order summary' pages specific to British Army Com
       label: "No",
       nextPath: Paths.YOUR_ORDER_TYPE_BRITISH_ARMY_OFFICERS,
     });
-    await continueFromYourOrderTypeBritishArmyOfficers(page);
+    await continueFromYourOrderTypeBritishArmyOfficers(
+      page,
+      Paths.YOUR_CONTACT_DETAILS,
+    );
   });
 
   test.describe("we're presenting the correct information for British Army Commissioned Officer Full Record Check order when", () => {

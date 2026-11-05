@@ -14,9 +14,7 @@ test.describe("the 'Sorry, we were unable to upload your file' form", () => {
 
   test("works as expected", async ({ page }) => {
     await page.getByRole("button", { name: /Continue/i }).click();
-    await expect(page).toHaveURL(Paths.SERVICE_PERSON_DETAILS);
-    await expect(page.locator("h1")).toHaveText(
-      /Tell us as much as you know about the service person/,
-    );
+    await expect(page).toHaveURL(Paths.YOUR_CONTACT_DETAILS);
+    await expect(page.locator("h1")).toHaveText(/Your contact details/);
   });
 });

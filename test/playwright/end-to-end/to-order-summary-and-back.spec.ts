@@ -53,9 +53,18 @@ test.describe("End-to-end journey", () => {
         robertHughJones.dateOfBirth.day,
         robertHughJones.dateOfBirth.month,
         robertHughJones.dateOfBirth.year,
-        Paths.PROVIDE_A_PROOF_OF_DEATH,
+        Paths.SERVICE_PERSON_DETAILS,
         true,
         "",
+      );
+      await continueFromServicePersonDetails(page, robertHughJones);
+      await continueFromHaveYouPreviouslyMadeARequest(page, {
+        label: robertHughJones.hasPreviouslyMadeRequest,
+      });
+      await continueFromChooseYourOrderType(
+        page,
+        robertHughJones.orderSelection,
+        Paths.PROVIDE_A_PROOF_OF_DEATH,
       );
       await continueFromProvideAProofOfDeath(
         page,
@@ -70,14 +79,7 @@ test.describe("End-to-end journey", () => {
         true,
         "",
       );
-      await continueFromServicePersonDetails(page, robertHughJones);
-      await continueFromHaveYouPreviouslyMadeARequest(page, {
-        label: robertHughJones.hasPreviouslyMadeRequest,
-      });
-      await continueFromChooseYourOrderType(
-        page,
-        robertHughJones.orderSelection,
-      );
+
       await continueFromYourContactDetails(
         page,
         robertHughJones.personMakingRequest,
@@ -90,11 +92,11 @@ test.describe("End-to-end journey", () => {
       );
       // And now we go back up the journey to check all the back links work as expected
       await clickBackLink(page, Paths.YOUR_CONTACT_DETAILS);
+      await clickBackLink(page, Paths.UPLOAD_A_PROOF_OF_DEATH);
+      await clickBackLink(page, Paths.PROVIDE_A_PROOF_OF_DEATH);
       await clickBackLink(page, Paths.CHOOSE_YOUR_ORDER_TYPE);
       await clickBackLink(page, Paths.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST);
       await clickBackLink(page, Paths.SERVICE_PERSON_DETAILS);
-      await clickBackLink(page, Paths.UPLOAD_A_PROOF_OF_DEATH);
-      await clickBackLink(page, Paths.PROVIDE_A_PROOF_OF_DEATH);
       await clickBackLink(page, Paths.WHAT_WAS_THEIR_DATE_OF_BIRTH);
       await clickBackLink(page, Paths.WE_MAY_HOLD_THIS_RECORD);
       await clickBackLink(page, Paths.WERE_THEY_A_COMMISSIONED_OFFICER);

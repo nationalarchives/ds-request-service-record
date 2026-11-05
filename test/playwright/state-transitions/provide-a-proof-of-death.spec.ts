@@ -9,6 +9,7 @@ import { testfirstBirthYearForClosedRecords } from "../lib/test-first-birth-year
 test.describe("The 'Provide a proof of death?' form", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(Paths.JOURNEY_START);
+    await page.goto(Paths.CHOOSE_YOUR_ORDER_TYPE);
     await page.goto(Paths.PROVIDE_A_PROOF_OF_DEATH);
   });
 
@@ -18,10 +19,10 @@ test.describe("The 'Provide a proof of death?' form", () => {
     await testfirstBirthYearForClosedRecords(page);
   });
 
-  test("clicking the 'Back' link takes the user to the 'What was their date of birth?' page", async ({
+  test("clicking the 'Back' link takes the user to the 'Choose your order type' page", async ({
     page,
   }) => {
-    await clickBackLink(page, Paths.WHAT_WAS_THEIR_DATE_OF_BIRTH);
+    await clickBackLink(page, Paths.CHOOSE_YOUR_ORDER_TYPE);
   });
 
   test.describe("when submitted", () => {

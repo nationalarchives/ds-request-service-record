@@ -4,6 +4,7 @@ import {
   clickBackLink,
   checkExternalLink,
   continueFromBeforeYouStart,
+  checkInternalLink,
 } from "../lib/step-functions";
 import { testfirstBirthYearForClosedRecords } from "../lib/test-first-birth-year-for-closed-records";
 
@@ -36,28 +37,12 @@ test.describe("the 'Before you start' form", () => {
     await clickBackLink(page, Paths.BEFORE_YOU_START);
   });
 
-  test.describe("inspecting the external links", () => {
-    test("the 'Copies of death certificates' link", async ({ page }) => {
-      await checkExternalLink(
+  test.describe("inspecting the links", () => {
+    test("the 'Providing a proof of death' link", async ({ page }) => {
+      await checkInternalLink(
         page,
-        "A copy of a death certificate (opens in new tab)",
-        "https://www.gov.uk/order-copy-birth-death-marriage-certificate",
-      );
-    });
-
-    test("the 'Commonwealth War Graves' link", async ({ page }) => {
-      await checkExternalLink(
-        page,
-        "A Commonwealth War Graves Commission (CWGC) war dead record (opens in new tab)",
-        "https://www.cwgc.org/find-records/find-war-dead/",
-      );
-    });
-
-    test("the 'Grant of probate' link", async ({ page }) => {
-      await checkExternalLink(
-        page,
-        "Grant of probate (opens in new tab)",
-        "https://probatesearch.service.gov.uk/",
+        "Find out more about proof of death",
+        "/request-a-military-service-record/providing-a-proof-of-death/",
       );
     });
 

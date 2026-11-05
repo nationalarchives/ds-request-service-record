@@ -1,4 +1,4 @@
-from datetime import UTC, datetime
+from datetime import date
 from xml.sax.saxutils import escape
 
 import requests
@@ -6,6 +6,7 @@ from flask import current_app
 
 from app.lib.aws import send_email
 from app.lib.boundary_years import BoundaryYears
+from app.lib.date_of_birth import parse_date_of_birth
 from app.lib.db.models import DynamicsPayment, ServiceRecordRequest
 
 DYNAMICS_REQUEST_FIELD_MAP = [
@@ -60,21 +61,49 @@ def send_request_to_dynamics(record: ServiceRecordRequest) -> bool:
     )
 
 
-def closure_status_calculation(date_of_birth: str, has_proof_of_death: bool) -> str:
-    dob = datetime.strptime(date_of_birth, "%d %B %Y").replace(tzinfo=UTC)
-    first_birth_year_for_closed_records = (
-        BoundaryYears.first_birth_year_for_closed_records()
+def is_open_record(dob: date) -> bool:
+    """Return whether the birth year falls before the closed-record boundary."""
+    return dob.year < BoundaryYears.first_birth_year_for_closed_records()
+
+
+def proof_of_death_not_required(processing_option: str, dob: date) -> bool:
+    # Open records never require proof of death.
+    if is_open_record(dob):
+        return True
+
+    # For closed records:
+    # - standard orders with a birth year before the boundary don't require proof of death.
+    # - everything else requires proof of death.
+    return (
+        dob.year
+        < BoundaryYears.first_birth_year_standard_orders_require_proof_of_death()
+        and processing_option == "standard"
     )
 
-    if dob.year < first_birth_year_for_closed_records:
-        closure_status = DynamicsClosureStatus.FOIOP
-    else:
-        if has_proof_of_death:
-            closure_status = DynamicsClosureStatus.FOICD
-        else:
-            closure_status = DynamicsClosureStatus.FOICDN
 
-    return closure_status
+def determine_dynamics_closure_status(
+    date_of_birth: str, has_proof_of_death: bool, processing_option: str
+) -> str:
+    """Determine the Dynamics status from the DOB, processing option and proof of death.
+
+    - Open records use FOIOP.
+    - Closed records use FOICD when
+        1. proof of death is unnecessary
+        2. proof of death has been supplied
+    - When required proof is required and missing use FOICDN.
+    """
+    dob = parse_date_of_birth(date_of_birth)
+    if is_open_record(dob):
+        return DynamicsClosureStatus.FOIOP
+
+    if proof_of_death_not_required(processing_option, dob):
+        # Dynamics uses FOICD even without an upload when proof is not required.
+        return DynamicsClosureStatus.FOICD
+
+    if has_proof_of_death:
+        return DynamicsClosureStatus.FOICD
+    else:
+        return DynamicsClosureStatus.FOICDN
 
 
 def has_proof_of_death(record: ServiceRecordRequest) -> bool:
@@ -82,9 +111,10 @@ def has_proof_of_death(record: ServiceRecordRequest) -> bool:
 
 
 def subject_status(record: ServiceRecordRequest) -> str:
-    closure_status = closure_status_calculation(
+    closure_status = determine_dynamics_closure_status(
         date_of_birth=record.date_of_birth,
         has_proof_of_death=has_proof_of_death(record),
+        processing_option=record.processing_option,
     )
 
     option = "1" if record.processing_option == "standard" else "2"
@@ -128,7 +158,9 @@ def _generate_tagged_data(mapping: list[tuple[str, str | None]], obj) -> str:
                 chunks.append(f"<{tag}>{escape(text)}</{tag}>")
         else:
             if (
-                closure_status_calculation(obj.date_of_birth, has_proof_of_death(obj))
+                determine_dynamics_closure_status(
+                    obj.date_of_birth, has_proof_of_death(obj), obj.processing_option
+                )
                 != DynamicsClosureStatus.FOIOP
             ):
                 value = getattr(obj, attr) if attr else None

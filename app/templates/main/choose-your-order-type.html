@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "macros/conditionally-available-warning.html" import conditionallyAvailableWarning %}
 
 {%- set pageTitle = content.pages.choose_your_order_type.heading | prepare_page_title -%}
 
@@ -47,6 +48,11 @@
         {% if content.pages.choose_your_order_type.full_record_check.information_list.list_items %}
           {{ descriptionList(content.pages.choose_your_order_type.full_record_check.information_list.list_items) }}
         {% endif %}
+        {{ conditionallyAvailableWarning({
+          "message": content.pages.choose_your_order_type.full_record_check.proof_of_death_warning,
+          "heading_level": 3,
+          "should_render": show_pod_warning
+        }) }}
         <form action="{{ url_for('main.choose_your_order_type') }}" method="post" novalidate>
           {{ form.csrf_token(id='full-check-option') }}
           {{ form.processing_option(value='full', id='processing_option_full_record_check') }}
