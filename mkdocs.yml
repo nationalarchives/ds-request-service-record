@@ -28,6 +28,7 @@ nav:
       - Template approach: core-patterns/template-approach.md
       - Back links: core-patterns/back-links.md
   - Backend:
+      - Country choices: backend/country-choices.md
       - Sending data to Dynamics: backend/sending-to-dynamics.md
       - Copying-payment confirmations: backend/copying-payment-confirmations.md
       - Proof of death uploads (to S3): backend/proof-of-death-uploads.md
