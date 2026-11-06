@@ -24,5 +24,5 @@ This documentation explains how the service is structured and how the key applic
 - `core-patterns/hyperlinks.md`
 - `core-patterns/template-approach.md`
 - `core-patterns/back-links.md`
-- `backend/proof-of-death-uploads.md`
+- `integrations`
 - `testing/index.md`

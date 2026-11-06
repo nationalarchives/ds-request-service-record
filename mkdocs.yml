@@ -27,12 +27,12 @@ nav:
       - Hyperlinks: core-patterns/hyperlinks.md
       - Template approach: core-patterns/template-approach.md
       - Back links: core-patterns/back-links.md
-  - Backend:
-      - Country choices: backend/country-choices.md
-      - Sending data to Dynamics: backend/sending-to-dynamics.md
-      - Copying-payment confirmations: backend/copying-payment-confirmations.md
-      - Proof of death uploads (to S3): backend/proof-of-death-uploads.md
-      - File move upon payment (in S3): backend/proof-of-death-file-movement.md
+  - Integrations:
+      - Countries (Record copying API): integrations/country-choices.md
+      - Proof of death uploads (to S3): integrations/proof-of-death-uploads.md
+      - Sending data to Dynamics: integrations/sending-to-dynamics.md
+      - File move upon payment (in S3): integrations/proof-of-death-file-movement.md
+      - Copying payment confirmations: integrations/copying-payment-confirmations.md
   - Testing:
       - Overview: testing/index.md
       - Playwright: testing/playwright.md
