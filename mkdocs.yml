@@ -28,6 +28,7 @@ nav:
       - Template approach: core-patterns/template-approach.md
       - Back links: core-patterns/back-links.md
   - Integrations:
+      - GOV.UK Pay: integrations/gov-uk-pay.md
       - Countries (Record copying API): integrations/country-choices.md
       - Proof of death uploads (to S3): integrations/proof-of-death-uploads.md
       - Sending data to Dynamics: integrations/sending-to-dynamics.md
