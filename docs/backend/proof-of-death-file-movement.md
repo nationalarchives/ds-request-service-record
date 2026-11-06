@@ -1,9 +1,9 @@
 # Moving proof of death files after payment (S3)
 
-The holding and submitted S3 prefixes have different purposes: 
+The holding and submitted S3 prefixes have different purposes:
 
 - `holding/` contains uploads awaiting payment
-- `submitted/` means the file can be scanned and further processed. 
+- `submitted/` means the file can be scanned and further processed.
 
 Moving a file after payment separates unpaid uploads, which are removed by the retention policy, from files that should be processed.
 
