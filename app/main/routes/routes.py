@@ -448,6 +448,7 @@ def service_person_details(form, state_machine):
 @update_dynamic_back_link_mapping(
     mappings={
         MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE: MultiPageFormRoutes.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST,
+        MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE_RAF_NON_OFFICER: MultiPageFormRoutes.HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST,
     }
 )
 @with_form_prefilled_from_session(HaveYouPreviouslyMadeARequest)
@@ -547,6 +548,33 @@ def choose_your_order_type(state_machine):
 
     return render_template(
         "main/choose-your-order-type.html",
+        form=form,
+        content=load_content(),
+        back_link_route=get_dynamic_back_link_route(key=request.endpoint),
+        show_pod_warning=DateOfBirthRules.show_proof_of_death_warning(date_of_birth),
+    )
+
+
+@bp.route("/choose-your-order-type-raf-non-officer/", methods=["GET", "POST"])
+@update_dynamic_back_link_mapping(
+    mappings={
+        MultiPageFormRoutes.PROVIDE_A_PROOF_OF_DEATH: MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE_RAF_NON_OFFICER,
+        MultiPageFormRoutes.YOUR_CONTACT_DETAILS: MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE_RAF_NON_OFFICER,
+    }
+)
+@with_state_machine
+def choose_your_order_type_raf_non_officer(state_machine):
+    form = ChooseYourOrderType()
+
+    if form.validate_on_submit():
+        save_submitted_form_fields_to_session(form)
+        state_machine.continue_from_choose_your_order_type_raf_non_officer_form(form)
+        return redirect(url_for(state_machine.route_for_current_state))
+
+    date_of_birth = get_date_of_birth_from_session()
+
+    return render_template(
+        "main/choose-your-order-type-raf-non-officer.html",
         form=form,
         content=load_content(),
         back_link_route=get_dynamic_back_link_route(key=request.endpoint),
