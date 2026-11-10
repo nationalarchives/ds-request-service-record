@@ -178,6 +178,10 @@ class RoutingStateMachine(StateMachine):
         enter="entering_your_order_type_other_and_dont_know_officer_form", final=True
     )
 
+    choose_your_order_type_raf_non_officer_form = State(
+        enter="entering_choose_your_order_type_raf_non_officer_form", final=True
+    )
+
     choose_your_order_type_form = State(
         enter="entering_choose_your_order_type_form", final=True
     )
@@ -342,6 +346,10 @@ class RoutingStateMachine(StateMachine):
             your_order_type_other_and_dont_know_officer_form,
             cond="was_officer and service_branch_is_unknown",
         )
+        | initial.to(
+            choose_your_order_type_raf_non_officer_form,
+            cond="not_officer and service_branch_is_raf",
+        )
         | initial.to(choose_your_order_type_form)
     )
 
@@ -360,6 +368,10 @@ class RoutingStateMachine(StateMachine):
     ) | initial.to(your_contact_details_form)
 
     continue_from_choose_your_order_type_form = initial.to(
+        provide_a_proof_of_death_form, cond="proof_of_death_is_required"
+    ) | initial.to(your_contact_details_form)
+
+    continue_from_choose_your_order_type_raf_non_officer_form = initial.to(
         provide_a_proof_of_death_form, cond="proof_of_death_is_required"
     ) | initial.to(your_contact_details_form)
 
@@ -517,6 +529,11 @@ class RoutingStateMachine(StateMachine):
     def entering_choose_your_order_type_form(self):
         self.route_for_current_state = MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE.value
 
+    def entering_choose_your_order_type_raf_non_officer_form(self):
+        self.route_for_current_state = (
+            MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE_RAF_NON_OFFICER.value
+        )
+
     def entering_your_order_summary_form(self):
         self.route_for_current_state = MultiPageFormRoutes.YOUR_ORDER_SUMMARY.value
 
@@ -563,6 +580,12 @@ class RoutingStateMachine(StateMachine):
         """Condition method to determine if the service person was an officer."""
         return (
             self.get_form_field_data(form, "were_they_a_commissioned_officer") == "yes"
+        )
+
+    def not_officer(self, form):
+        """Condition method to determine if the service person was not an officer."""
+        return (
+            self.get_form_field_data(form, "were_they_a_commissioned_officer") == "no"
         )
 
     def service_branch_is_army(self, form):

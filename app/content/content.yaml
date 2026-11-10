@@ -521,6 +521,65 @@ pages:
               - We will refund the page check fee (£9.92) if we do not hold the record.
               - The search fee of £38.95 is non-refundable.
       proof_of_death_warning: If you choose a Full record check you will be asked to provide a proof of death
+  choose_your_order_type_raf_non_officer:
+    heading: Choose your order type
+    paragraphs:
+      - >
+        There are two ways to request a record from us: **Standard**, or **Full record check**.
+      - |
+        We will send you a digital colour scan of the record by email. 
+        You can request a printed copy by post for an extra cost.
+    standard:
+      heading: Standard
+      sub_heading: (Recommended)
+      paragraphs:
+        - |
+          For most applicants a Standard request will provide the information they are looking for.
+        - |
+          Standard provides a subset of documents from the record. This may include details provided
+          when the service person enlisted, records of service and testimonials.
+        - We charge a single fee for Standard of £42.25, which covers the search (£38.95) and record copying fees (£3.30).
+      information_list:
+        list_items:
+          - term: What it costs
+            description:
+              - £42.25
+          - term: When you will get the record
+            description:
+              - Within 20 to 30 working days
+          - term: Refunds
+            description:
+              - We will refund the record copying fee (£3.30) if we do not hold the record.
+              - The search fee of £38.95 is non-refundable.
+    full_record_check:
+      heading: Full record check
+      initial_paragraphs:
+        - |
+          Documents not provided in Standard will, in most cases, contain sensitive information and will be closed to 
+          the public. However, we can complete a sensitivity check of the record to assess what can be released.
+        - In some cases, we will not be able to supply the entire record, or large parts of it will be redacted.
+      proof_of_death_warning: "**You will be asked to submit a proof of death.**"
+      subsequent_paragraphs:
+        - |
+          We charge two fees for a Full record check. The first covers the search for the record and a page check. 
+          We will then email you a quote for the second payment to copy the parts of the record that can be 
+          released.
+      information_list:
+        list_items:
+          - term: What it costs
+            description:
+              - An upfront payment of £48.87, which covers the search (£38.95) and the page check (£9.92).
+              - A second payment of £1.04 per page. For example, 20 pages will cost an additional £20.80.
+          - term: When you will get the record
+            description:
+              - We aim to confirm if we hold the record within 30 working days. The record will be released once we have received the second payment.
+          - term: Refunds
+            description:
+              - We will refund the page check fee (£9.92) if we do not hold the record.
+              - The search fee of £38.95 is non-refundable.
+      warning: |
+        RAF non-commissioned officer records are often quite short and most of the information will 
+        be available in **Standard**. Full record check could provide no extra information.
   your_order_summary_standard_printed:
     heading: Your order summary
     format_description_printed: Printed colour copies of the record (received by tracked post)

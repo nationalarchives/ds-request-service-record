@@ -433,6 +433,30 @@ export async function continueFromChooseYourOrderType(
   await expect(page).toHaveURL(nextPath);
 }
 
+export async function continueFromChooseYourOrderTypeRAFNonOfficer(
+  page,
+  buttonText,
+  nextPath,
+  seesProofOfDeathWarning = false,
+) {
+  await expect(page).toHaveURL(Paths.CHOOSE_YOUR_ORDER_TYPE_RAF_NON_OFFICER);
+  await expect(page.locator("h1")).toHaveText(/Choose your order type/);
+  await expect(
+    page.locator('[data-testid="raf-full-record-check-warning"]'),
+  ).toBeVisible();
+  if (seesProofOfDeathWarning) {
+    await expect(
+      page.locator('[data-testid="proof-of-death-notice-raf-non-officer"]'),
+    ).toBeVisible();
+  } else {
+    await expect(
+      page.locator('[data-testid="proof-of-death-notice-raf-non-officer"]'),
+    ).not.toBeVisible();
+  }
+  await page.getByRole("button", { name: buttonText }).click();
+  await expect(page).toHaveURL(nextPath);
+}
+
 export async function continueFromYourContactDetails(
   page,
   personMakingRequest,
