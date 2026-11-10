@@ -1,0 +1,5 @@
+{% macro conditionallyAvailableParagraph(content, should_render=True, testId=None) -%}
+  {% if should_render %}
+    <p{% if testId is not none %} data-testid="{{ testId }}"{% endif %}>{{ content | parse_bold_text | safe }}</p>
+  {% endif %}
+{%- endmacro %}
