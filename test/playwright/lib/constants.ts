@@ -10,6 +10,7 @@ export const Paths = {
   YOU_MAY_WANT_TO_CHECK_ANCESTRY: `${basePath}/you-may-want-to-check-ancestry/`,
   HAVE_YOU_PREVIOUSLY_MADE_A_REQUEST: `${basePath}/have-you-previously-made-a-request/`,
   CHOOSE_YOUR_ORDER_TYPE: `${basePath}/choose-your-order-type/`,
+  CHOOSE_YOUR_ORDER_TYPE_RAF_NON_OFFICER: `${basePath}/choose-your-order-type-raf-non-officer/`,
   IS_SERVICE_PERSON_ALIVE: `${basePath}/is-service-person-alive/`,
   JOURNEY_START: `${basePath}/`,
   SUBJECT_ACCESS_REQUEST: `${basePath}/subject-access-request/`,
