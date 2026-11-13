@@ -76,29 +76,3 @@
     }
   }
 }
-
-.ramsr-alert {
-  padding: 15px;
-
-  border: solid #fc0 5px;
-  border-radius: 3px;
-
-  &__heading {
-    display: inline-block;
-
-    border-bottom: 5px var(--keyline-dark, rgb(38 38 42)) solid;
-  }
-
-  &__body {
-    margin-top: 0.25rem;
-
-    font-size: 1rem;
-    font-weight: 600;
-  }
-}
-
-.notify_heading {
-  margin-bottom: 3px;
-
-  border-bottom: solid 5px black;
-}
