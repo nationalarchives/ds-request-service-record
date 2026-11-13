@@ -2,6 +2,8 @@
 @use "@nationalarchives/frontend/nationalarchives/tools/colour";
 @use "@nationalarchives/frontend/nationalarchives/tools/a11y";
 
+@forward "./design-system-overrides";
+
 .form-separator {
   @include colour.thick-keyline-dark(bottom);
 

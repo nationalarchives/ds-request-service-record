@@ -16,7 +16,7 @@ class IsServicePersonAlive(FlaskForm):
     content = load_content()
 
     is_service_person_alive = RadioField(
-        get_field_content(content, "is_service_person_alive", "label"),
+        get_field_content(content, "is_service_person_alive", "legend"),
         choices=[("yes", "Yes"), ("no", "No"), ("unknown", "I do not know ")],
         validators=[
             InputRequired(
@@ -25,7 +25,6 @@ class IsServicePersonAlive(FlaskForm):
                 )["required"]
             )
         ],
-        render_kw={"label": ""},
         widget=TnaRadiosWidget(),
     )
 
