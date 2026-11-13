@@ -750,6 +750,7 @@ forms:
       messages:
         too_long: Regiment or squadron must be %(max)d characters or less
     service_branch:
+      legend: Which military branch did the person serve in?
       messages:
         required: Select the branch they served in
     additional_information:

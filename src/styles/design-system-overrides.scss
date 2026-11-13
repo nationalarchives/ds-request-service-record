@@ -9,4 +9,10 @@
       font-size: inherit;
     }
   }
+
+  &--legend-visually-hidden {
+    .tna-fieldset__legend span {
+      @include a11y.visually-hidden;
+    }
+  }
 }
