@@ -682,7 +682,7 @@ forms:
       messages:
         required: Tell us if the service person is alive
     were_they_a_commissioned_officer:
-      label: Were they a Commissioned Officer?
+      legend: Were they a Commissioned Officer?
       messages:
         required: Tell us if the service person was a Commissioned Officer
       call_to_action: Continue
