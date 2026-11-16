@@ -12,7 +12,7 @@ class WereTheyACommissionedOfficer(FlaskForm):
     service_branch = HiddenField("Service Branch")
 
     were_they_a_commissioned_officer = RadioField(
-        get_field_content(content, "were_they_a_commissioned_officer", "label"),
+        get_field_content(content, "were_they_a_commissioned_officer", "legend"),
         choices=[("yes", "Yes"), ("no", "No"), ("unknown", "I do not know")],
         validators=[
             InputRequired(
@@ -22,7 +22,6 @@ class WereTheyACommissionedOfficer(FlaskForm):
             )
         ],
         widget=TnaRadiosWidget(),
-        render_kw={"label": ""},
     )
 
     submit = SubmitField("Continue", widget=TnaSubmitWidget())

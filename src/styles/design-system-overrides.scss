@@ -1,0 +1,18 @@
+@use "@nationalarchives/frontend/nationalarchives/tools/a11y";
+
+.ramsr-form {
+  &--hint-prominent {
+    .tna-fieldset__hint {
+      margin-block: 1rem;
+
+      color: inherit;
+      font-size: inherit;
+    }
+  }
+
+  &--legend-visually-hidden {
+    .tna-fieldset__legend span {
+      @include a11y.visually-hidden;
+    }
+  }
+}

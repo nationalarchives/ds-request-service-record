@@ -24,7 +24,7 @@
             <li>{{ item | parse_markdown_links(new_tab=False) | safe | safe }}</li>
           {% endfor %}
         </ul>
-        <form action="{{ url_for('main.service_branch_form') }}" method="post" novalidate>
+        <form action="{{ url_for('main.service_branch_form') }}" class="ramsr-form ramsr-form--legend-visually-hidden" method="post" novalidate>
           {{ form.csrf_token }}
           {{ form.service_branch() }}
           <div class="tna-button-group">
