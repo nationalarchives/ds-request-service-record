@@ -1,7 +1,24 @@
 site_name: Request a military service record documentation
 repo_url: https://github.com/nationalarchives/flask-application-template
+theme:
+  name: material
+markdown_extensions:
+  - admonition
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
 nav:
   - Home: index.md
+  - Business rules:
+      - Closed records: business-rules/closed-records.md
+      - Birth years covered: business-rules/birth-years-covered.md
+      - Proof of death: business-rules/proof-of-death.md
+      - Directing users elsewhere: business-rules/directing-users-elsewhere.md
+      - Standard order availability: business-rules/standard-order-availability.md
+      - Users without an email address: business-rules/users-without-email.md
+      - Price calculations: business-rules/price-calculations.md
   - Core patterns:
       - State machine: core-patterns/state-machine.md
       - Date of birth rules: core-patterns/date-of-birth-rules.md
@@ -10,6 +27,13 @@ nav:
       - Hyperlinks: core-patterns/hyperlinks.md
       - Template approach: core-patterns/template-approach.md
       - Back links: core-patterns/back-links.md
+  - Integrations:
+      - GOV.UK Pay: integrations/gov-uk-pay.md
+      - Countries (Record copying API): integrations/country-choices.md
+      - Proof of death uploads (to S3): integrations/proof-of-death-uploads.md
+      - Sending data to Dynamics: integrations/sending-to-dynamics.md
+      - File move upon payment (in S3): integrations/proof-of-death-file-movement.md
+      - Copying payment confirmations: integrations/copying-payment-confirmations.md
   - Testing:
       - Overview: testing/index.md
       - Playwright: testing/playwright.md

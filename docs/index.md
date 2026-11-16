@@ -1,25 +1,12 @@
 # Request a military service record documentation
 
-This documentation explains how the service is structured and how the key application patterns work.
+This documentation explains the rules, application design, external integrations and testing behind the service.
 
-## Key topics
+## What the documentation covers
 
-- **State machine** — how the request journey is controlled and how the next page is chosen
-- **Date of birth rules** — how we normalise DOB values and apply business logic relating to DOB
-- **Post-Redirect-Get** — how the service handles form submissions and redirects after POST requests
-- **Content approach** — how page content, labels, and validation messages are stored and loaded
-- **Hyperlinks** — how named link constants and markdown parsing are used to render outbound links consistently
-- **Template approach** — why we keep templates simple and accept deliberate similarity where that makes the behaviour easier to reason about
-- **Back links** — how the service decides where the Back link should go based on the user's journey
-- **Testing** — how we cover browser journeys with Playwright and protect content usage and navigation behaviour with targeted tests
-
-## Start here
-
-- `core-patterns/state-machine.md`
-- `core-patterns/date-of-birth-rules.md`
-- `core-patterns/post-redirect-get.md`
-- `core-patterns/content-approach.md`
-- `core-patterns/hyperlinks.md`
-- `core-patterns/template-approach.md`
-- `core-patterns/back-links.md`
-- `testing/index.md`
+| Section            | Topics                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Business rules** | [Birth years covered](business-rules/birth-years-covered.md), [open and closed records](business-rules/closed-records.md), [proof of death](business-rules/proof-of-death.md), [order availability](business-rules/standard-order-availability.md), [directing users elsewhere](business-rules/directing-users-elsewhere.md), [users without email](business-rules/users-without-email.md), and [pricing](business-rules/price-calculations.md).               |
+| **Core patterns**  | Journey control through the [state machine](core-patterns/state-machine.md), [date of birth logic](core-patterns/date-of-birth-rules.md), [form submissions and redirects](core-patterns/post-redirect-get.md), [content](core-patterns/content-approach.md), [templates](core-patterns/template-approach.md), [hyperlinks](core-patterns/hyperlinks.md), and [back links](core-patterns/back-links.md).                                                       |
+| **Integrations**   | Initial and second payments through [GOV.UK Pay](integrations/gov-uk-pay.md), [country choices from the Record Copying API](integrations/country-choices.md), [proof of death storage](integrations/proof-of-death-uploads.md) and [file movement in S3](integrations/proof-of-death-file-movement.md), [request emails to Dynamics](integrations/sending-to-dynamics.md), and [copying-payment confirmations](integrations/copying-payment-confirmations.md). |
+| **Testing**        | The [testing approach](testing/index.md), [Playwright browser journeys](testing/playwright.md), [unused content checks](testing/unused-content.md), and [navigation helpers](testing/navigation-helpers.md).                                                                                                                                                                                                                                                   |
