@@ -19,6 +19,17 @@ Proof of death is required for Standard orders when the birth year is **in or af
 !!! tip "These are calendar-year comparisons"
 The day and month of birth are not part of the calculation. For example, in 2026, Standard orders for closed records with birth years from 1911 to 1925 inclusive do not require proof of death. Standard orders with birth years of 1926 or later require it.
 
+## Notice on the "Choose your order type" page
+
+When a service person's year of birth falls in the window after records close to the public but before Standard orders require proof of death, the "Choose your order type" page explains that a Full record check will require proof of death. How this notice is presented depends on the type of record:
+
+| Request                              | How the proof-of-death notice is presented | Why                                                                                                                                    |
+| ------------------------------------ | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| RAF non-commissioned officer records | As a regular paragraph                     | The page gives greater prominence to the warning that **a Full record check may provide no additional information** for these records. |
+| All other requests                   | In a warning component                     | To give prominence to the warning that **the user's choice will affect the proof of death requirement**.                               |
+
+This affects only how the notice is presented; it does not change when proof of death is required.
+
 ## Users can proceed without uploading proof of death
 
 It is a requirement of Freedom of Information (FOI) legislation that users can submit a request without providing proof of death.
