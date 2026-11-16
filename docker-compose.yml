@@ -66,6 +66,8 @@ services:
 
   s3:
     image: scireum/s3-ninja
+    environment:
+      http.sessionSecret: ABC123
     ports:
       - 65504:9000
     volumes:

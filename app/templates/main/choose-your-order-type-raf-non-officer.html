@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% from "components/warning/macro.html" import tnaWarning %}
+{% from "macros/conditionally-available-paragraph.html" import conditionallyAvailableParagraph %}
+
+{%- set pageTitle = content.pages.choose_your_order_type_raf_non_officer.heading | prepare_page_title -%}
+
+{% block beforeContent %}
+  {{ backLink(url_for(back_link_route)) }}
+{% endblock beforeContent %}
+
+{% block content %}
+  <div class="tna-section tna-!--padding-top-s">
+    <div class="tna-container">
+      <div
+        class="tna-column tna-column--width-2-3 tna-column--width-5-6-medium tna-column--full-small tna-column--full-tiny">
+        {% if form.errors %}
+          {{ tnaErrorSummary(wtforms_errors(form)) }}
+        {% endif %}
+        <h1 class="tna-heading-xl tna-!--margin-top-m">{{ content.pages.choose_your_order_type_raf_non_officer.heading }}</h1>
+        {% for paragraph in content.pages.choose_your_order_type_raf_non_officer.paragraphs %}
+          <p>{{ paragraph | parse_bold_text | safe }}</p>
+        {% endfor %}
+        <hgroup class="tna-!--margin-top-m">
+          <h2 class="tna-heading-l">{{ content.pages.choose_your_order_type_raf_non_officer.standard.heading }}</h2>
+          <p><strong>{{ content.pages.choose_your_order_type_raf_non_officer.standard.sub_heading }}</strong></p>
+        </hgroup>
+        {% for paragraph in content.pages.choose_your_order_type_raf_non_officer.standard.paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+        {% if content.pages.choose_your_order_type_raf_non_officer.standard.information_list.list_items %}
+          {{ descriptionList(content.pages.choose_your_order_type_raf_non_officer.standard.information_list.list_items) }}
+        {% endif %}
+        <form action="{{ url_for('main.choose_your_order_type_raf_non_officer') }}" method="post" novalidate
+              class="form-separator">
+          {{ form.csrf_token(id='standard-option') }}
+          {{ form.processing_option(value='standard', id='processing_option_standard') }}
+          <div class="tna-button-group">
+            {{ form.submit_standard(params={'classes':'tna-button--accent'}) }}
+          </div>
+        </form>
+        <h2 class="tna-heading-l">
+          {{ content.pages.choose_your_order_type_raf_non_officer.full_record_check.heading }}<br>
+          <span
+            class="tna-heading-s">{{ content.pages.choose_your_order_type_raf_non_officer.full_record_check.sub_heading }}</span>
+        </h2>
+        {% for paragraph in content.pages.choose_your_order_type_raf_non_officer.full_record_check.initial_paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+        {{ conditionallyAvailableParagraph(
+          content.pages.choose_your_order_type_raf_non_officer.full_record_check.proof_of_death_warning,
+          show_pod_warning,
+          testId="proof-of-death-notice-raf-non-officer"
+        ) }}
+        {% for paragraph in content.pages.choose_your_order_type_raf_non_officer.full_record_check.subsequent_paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+        {% if content.pages.choose_your_order_type_raf_non_officer.full_record_check.information_list.list_items %}
+          {{ descriptionList(content.pages.choose_your_order_type_raf_non_officer.full_record_check.information_list.list_items) }}
+        {% endif %}
+        {% if content.pages.choose_your_order_type_raf_non_officer.full_record_check.full_record_check_warning %}
+          <p class="tna-!--margin-top-m tna-!--margin-bottom-m tna-!--font-weight-bold">
+            {{ content.pages.choose_your_order_type_raf_non_officer.full_record_check.full_record_check_warning }}
+          </p>
+        {% endif %}
+
+        {{ tnaWarning({
+          "headingLevel": 2,
+          "body": content.pages.choose_your_order_type_raf_non_officer.full_record_check.warning | parse_bold_text | safe,
+          "attributes": {
+            "data-testid": "raf-full-record-check-warning"
+          }
+        }) }}
+
+        <form action="{{ url_for('main.choose_your_order_type_raf_non_officer') }}" method="post" novalidate>
+          {{ form.csrf_token(id='full-check-option') }}
+          {{ form.processing_option(value='full', id='processing_option_full_record_check') }}
+          <div class="tna-button-group">
+            {{ form.submit_full_check(params={'classes':'tna-button--accent'}) }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

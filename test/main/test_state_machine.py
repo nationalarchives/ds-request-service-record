@@ -458,6 +458,18 @@ def test_continue_from_service_person_details():
             MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE.value,
         ),
         (
+            "ROYAL_AIR_FORCE",
+            "yes",
+            "choose_your_order_type_form",
+            MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE.value,
+        ),
+        (
+            "ROYAL_AIR_FORCE",
+            "no",
+            "choose_your_order_type_raf_non_officer_form",
+            MultiPageFormRoutes.CHOOSE_YOUR_ORDER_TYPE_RAF_NON_OFFICER.value,
+        ),
+        (
             "OTHER",
             "yes",
             "your_order_type_other_and_dont_know_officer_form",
