@@ -34,6 +34,10 @@ handlers.
 
 For the form-submission pattern we use across the site, see [Post-Redirect-Get](post-redirect-get.md).
 
+Unreleased journey changes can be gated by [feature flags](feature-flags.md).
+The state machine reads the parsed flag from Flask configuration through a named
+condition, preserving the existing route when the flag is disabled.
+
 ## Why this matters
 
 This approach makes a complex service like Request a Military Service record much easier to maintain because:
