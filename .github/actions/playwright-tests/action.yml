@@ -49,3 +49,18 @@ runs:
     - name: Run tests
       run: CI=true npx playwright test --project=chromium --grep-invert "@wip"
       shell: bash
+    - name: Enable Feature 13 in the app
+      env:
+        ENVIRONMENT_NAME: test
+        CONFIG: config.Test
+      run: |
+        echo "CONFIG=config.Test" > .env
+        echo "ENVIRONMENT_NAME=test" >> .env
+        echo "ENABLE_FEATURE_13=True" >> .env
+        docker compose up --detach --no-deps --force-recreate --wait --wait-timeout 300 app
+      shell: bash
+    - name: Run Feature 13 tests
+      env:
+        ENABLE_FEATURE_13: "True"
+      run: CI=true npx playwright test test/playwright/state-transitions/feature-13.spec.ts --project=chromium
+      shell: bash
