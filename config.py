@@ -8,7 +8,7 @@ from app.lib.util import strtobool
 
 
 class Features:
-    pass
+    ENABLE_FEATURE_13: bool = strtobool(os.getenv("ENABLE_FEATURE_13", "False"))
 
 
 class Production(Features):

@@ -76,6 +76,7 @@ In addition to the [base Docker image variables](https://github.com/nationalarch
 | --------------------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------- |
 | `CONFIG`                          | The configuration to use                                                                         | `config.Production`                                       |
 | `DEBUG`                           | If true, allow debugging[^1]                                                                     | `False`                                                   |
+| `ENABLE_FEATURE_13`               | Opt in to the upcoming Army-officer journey change (configuration only; not yet used for routing) | `False`                                                   |
 | `SENTRY_DSN`                      | The Sentry DSN (project code)                                                                    | _none_                                                    |
 | `SENTRY_SAMPLE_RATE`              | How often to sample traces and profiles (0-1.0)                                                  | production: `0.1`, staging: `1`, develop: `0`             |
 | `COOKIE_DOMAIN`                   | The domain to save cookie preferences against                                                    | `.nationalarchives.gov.uk`                                |
