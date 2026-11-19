@@ -261,6 +261,10 @@ class RoutingStateMachine(StateMachine):
     continue_from_were_they_a_commissioned_officer_form = (
         initial.to(we_may_hold_this_record_page, unless="was_officer")
         | initial.to(
+            we_may_hold_this_record_page,
+            cond="was_officer and service_branch_is_army and feature_13_enabled",
+        )
+        | initial.to(
             we_are_unlikely_to_hold_officer_records__raf_page,
             cond="was_officer and service_branch_is_raf",
         )
@@ -275,6 +279,7 @@ class RoutingStateMachine(StateMachine):
         | initial.to(
             we_are_unlikely_to_hold_officer_records__army_page,
             cond="was_officer and service_branch_is_army",
+            unless="feature_13_enabled",
         )
     )
 
@@ -575,6 +580,9 @@ class RoutingStateMachine(StateMachine):
     def likely_unfindable(self, form):
         """Condition method to determine if we may be unable to find the record."""
         return self.get_form_field_data(form, "service_branch") in ["HOME_GUARD"]
+
+    def feature_13_enabled(self):
+        return current_app.config["ENABLE_FEATURE_13"]
 
     def was_officer(self, form):
         """Condition method to determine if the service person was an officer."""
