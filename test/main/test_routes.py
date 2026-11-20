@@ -76,3 +76,25 @@ class MainBlueprintTestCase(unittest.TestCase):
                 response = self.client.get(date_of_birth_path)
                 self.assertEqual(response.status_code, 200)
                 self.assertIn(f'href="{destination}"', response.text)
+
+    def test_army_officer_order_type_transfer_guidance_feature_flag(self):
+        prefix = self.app.config["SERVICE_URL_PREFIX"]
+        order_type_path = f"{prefix}/your-order-type-british-army-officers/"
+        transfer_guidance = (
+            "British Army Commissioned Officer records are currently being ",
+            "transferred to us.",
+            "We recommend waiting until December 2026 to submit a request.",
+        )
+        self.client.get(f"{prefix}/")
+
+        for enabled in (False, True):
+            with self.subTest(feature_13_enabled=enabled):
+                self.app.config["ENABLE_FEATURE_13"] = enabled
+                response = self.client.get(order_type_path)
+                self.assertEqual(response.status_code, 200)
+                self.assertIn("You are requesting a British Army", response.text)
+                for paragraph in transfer_guidance:
+                    if enabled:
+                        self.assertNotIn(paragraph, response.text)
+                    else:
+                        self.assertIn(paragraph, response.text)

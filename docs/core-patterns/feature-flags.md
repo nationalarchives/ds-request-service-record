@@ -61,13 +61,15 @@ by default; local opt-in belongs in `.env`, not in committed configuration.
 `ENABLE_FEATURE_13` changes the destination after the commissioned-officer form
 only when the service person was a British Army Commissioned Officer:
 
-| Flag value | Next page |
-| ---------- | --------- |
+| Flag value        | Next page                                               |
+| ----------------- | ------------------------------------------------------- |
 | `False` (default) | We are unlikely to hold this record yet (Army guidance) |
-| `True` | We may hold this record |
+| `True`            | We may hold this record                                 |
 
 Other service branches and officer-status answers keep their existing routes.
-The flag does not change page wording, eligibility, order options or prices.
+When enabled, the flag also hides the Army records-transfer and waiting
+paragraphs on the British Army order-type page. It does not change eligibility,
+order options or prices.
 
 ## Testing
 
