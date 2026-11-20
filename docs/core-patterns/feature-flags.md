@@ -13,8 +13,9 @@ class Features:
 ```
 
 `Production` inherits from `Features`; `Staging`, `Develop` and `Test` inherit
-from `Production`. This makes the same flag available in every environment,
-with a default of `False` when the variable is absent.
+from `Production`. Flags default to `False` when the variable is absent, except
+that `ENABLE_FEATURE_13` defaults to `True` in Staging. An explicit environment
+value overrides that default.
 
 Use the existing `strtobool` helper to convert environment strings to booleans.
 It accepts values such as `True` and `False`, case-insensitively, and raises
@@ -35,7 +36,8 @@ Do not read environment strings directly in route handlers or treat the string
 Flags are evaluated when `config.py` loads. They are not live runtime switches:
 the application must restart with the new environment to pick up a change.
 Deployments stay on the existing behaviour unless the flag is explicitly enabled
-in that deployment's environment.
+in that deployment's environment or the environment-specific config defaults it
+on.
 
 ## Enabling a flag locally
 
