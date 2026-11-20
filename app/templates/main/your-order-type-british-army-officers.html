@@ -15,6 +15,11 @@
         {% for paragraph in content.pages.your_order_type_army_officer.paragraphs %}
           <p>{{ paragraph }}</p>
         {% endfor %}
+        {% if not config["ENABLE_FEATURE_13"] %}
+          {% for paragraph in content.pages.your_order_type_army_officer.feature_13_disabled_paragraphs %}
+            <p>{{ paragraph }}</p>
+          {% endfor %}
+        {% endif %}
 
         <h2 class="tna-heading-l">{{ content.pages.your_order_type_army_officer.full_record_check.heading }}</h2>
         {% for paragraph in content.pages.your_order_type_army_officer.full_record_check.paragraphs %}

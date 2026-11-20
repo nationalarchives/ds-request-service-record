@@ -2,6 +2,8 @@
 
 This documentation explains the rules, application design, external integrations and testing behind the service.
 
+See [Feature flags](core-patterns/feature-flags.md) for enabling unreleased changes locally and testing their journeys separately.
+
 ## What the documentation covers
 
 | Section            | Topics                                                                                                                                                                                                                                                                                                                                                                                                                                                         |

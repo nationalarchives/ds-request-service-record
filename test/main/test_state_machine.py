@@ -4,7 +4,7 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 import pytest
-from flask import session
+from flask import current_app, session
 
 from app import create_app
 from app.constants import MultiPageFormRoutes
@@ -211,6 +211,18 @@ def test_continue_from_we_are_unlikely_to_locate_this_record():
             MultiPageFormRoutes.WE_ARE_UNLIKELY_TO_HOLD_OFFICER_RECORDS__RAF.value,
         ),
         (
+            "ROYAL_AIR_FORCE",
+            "no",
+            "we_may_hold_this_record_page",
+            MultiPageFormRoutes.WE_MAY_HOLD_THIS_RECORD.value,
+        ),
+        (
+            "ROYAL_AIR_FORCE",
+            "unknown",
+            "we_may_hold_this_record_page",
+            MultiPageFormRoutes.WE_MAY_HOLD_THIS_RECORD.value,
+        ),
+        (
             "OTHER",
             "yes",
             "we_are_unlikely_to_hold_officer_records__generic_page",
@@ -248,9 +260,15 @@ def test_continue_from_we_are_unlikely_to_locate_this_record():
         ),
     ],
 )
+@pytest.mark.parametrize("feature_13_enabled", [False, True])
 def test_continue_from_were_they_a_commissioned_officer_form_routes_by_condition(
-    service_branch, was_officer, expected_state, expected_route
+    service_branch, was_officer, expected_state, expected_route, feature_13_enabled
 ):
+    current_app.config["ENABLE_FEATURE_13"] = feature_13_enabled
+    if feature_13_enabled and service_branch == "BRITISH_ARMY" and was_officer == "yes":
+        expected_state = "we_may_hold_this_record_page"
+        expected_route = MultiPageFormRoutes.WE_MAY_HOLD_THIS_RECORD.value
+
     sm = RoutingStateMachine()
     sm.continue_from_were_they_a_commissioned_officer_form(
         form=make_form(
@@ -495,9 +513,11 @@ def test_continue_from_service_person_details():
         ),
     ],
 )
+@pytest.mark.parametrize("feature_13_enabled", [False, True])
 def test_continue_from_have_you_previously_made_a_request_routes_by_condition(
-    service_branch, was_officer, expected_state, expected_route
+    service_branch, was_officer, expected_state, expected_route, feature_13_enabled
 ):
+    current_app.config["ENABLE_FEATURE_13"] = feature_13_enabled
     sm = RoutingStateMachine()
 
     sm.continue_from_have_you_previously_made_a_request_form(
