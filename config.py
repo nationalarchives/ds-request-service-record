@@ -78,6 +78,21 @@ class Production(Features):
     PERMANENT_SESSION_LIFETIME: int = int(
         os.environ.get("PERMANENT_SESSION_LIFETIME", "86400")
     )
+
+    # Session settings
+    #
+    # Increment SESSION_INVALIDATION_VERSION to invalidate existing user
+    # sessions. The new value becomes the current version for all users.
+    #
+    # This static value is intentionally maintained in code rather than an
+    # environment variable, so that the intended feature/release change triggers
+    # session invalidation wihout changing environment variables through the
+    # deployment process in the AWS parameter store.
+    #
+    # IMPORTANT: Increment this value to invalidate all existing user sessions.
+    # Only change when required as part of a feature/release.
+    SESSION_INVALIDATION_VERSION = 1
+
     SESSION_COOKIE_NAME: str = "ds_request_service_record_session_v1"
     SESSION_COOKIE_PATH: str = SERVICE_URL_PREFIX
     SESSION_COOKIE_SECURE: bool = True
