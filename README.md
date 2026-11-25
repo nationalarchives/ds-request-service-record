@@ -76,6 +76,7 @@ In addition to the [base Docker image variables](https://github.com/nationalarch
 | --------------------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------- |
 | `CONFIG`                          | The configuration to use                                                                         | `config.Production`                                       |
 | `DEBUG`                           | If true, allow debugging[^1]                                                                     | `False`                                                   |
+| `PROXY_DEPTH`                     | The number of proxies to trust for `X-Forwarded-` headers[^2]                                    | `0`                                                       |
 | `ENABLE_FEATURE_13`               | Route commissioned British Army officers to "We may hold this record"                            | `False` (Staging defaults to `True`)                      |
 | `SENTRY_DSN`                      | The Sentry DSN (project code)                                                                    | _none_                                                    |
 | `SENTRY_SAMPLE_RATE`              | How often to sample traces and profiles (0-1.0)                                                  | production: `0.1`, staging: `1`, develop: `0`             |
@@ -118,3 +119,4 @@ In addition to the [base Docker image variables](https://github.com/nationalarch
 | `MOD_COPYING_API_URL`             | The URL of the MOD Record Copying Service API, which receives notification of the second payment | _none_                                                    |
 
 [^1] [Debugging in Flask](https://flask.palletsprojects.com/en/2.3.x/debugging/)
+[^2] [Tell Flask it is Behind a Proxy](https://flask.palletsprojects.com/en/stable/deploying/proxy_fix/)
