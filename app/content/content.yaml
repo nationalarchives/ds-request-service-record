@@ -404,6 +404,7 @@ pages:
     paragraphs:
       - |
         You are requesting a British Army Commissioned Officer record. These can only be requested with a Full record check, our Standard option is not available.
+    feature_13_disabled_paragraphs:
       - |
         British Army Commissioned Officer records are currently being transferred to us. We may not have the record you are looking for yet or are still processing it.
       - |

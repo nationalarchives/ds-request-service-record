@@ -106,3 +106,27 @@ The npm scripts in `package.json` include:
 - `test:playwright:ui`
 
 In this project, Playwright is usually run through the existing project tooling rather than as isolated test files.
+
+### Feature-flagged journeys
+
+The existing suite expects the default journey with feature flags disabled.
+Enabled-only checks live in a separate spec, such as
+`test/playwright/state-transitions/feature-13.spec.ts`.
+
+For local Feature 13 testing, set `ENABLE_FEATURE_13=True` in `.env`, then run:
+
+```sh
+docker compose up -d --no-deps --force-recreate --wait app
+ENABLE_FEATURE_13=True CI=true npx playwright test test/playwright/state-transitions/feature-13.spec.ts --project=chromium
+```
+
+Both settings are necessary: `.env` configures Flask, while the command-line
+variable prevents the dedicated spec from skipping. Passing the flag to
+Playwright does not change the running app.
+
+Restore `ENABLE_FEATURE_13=False` in `.env` and recreate the app before running
+the normal suite without the runner flag.
+
+CI runs the normal suite first, then enables Feature 13 in a recreated app
+container and runs only its dedicated spec. See
+[Feature flags](../core-patterns/feature-flags.md) for the configuration approach.

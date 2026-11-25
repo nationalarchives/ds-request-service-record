@@ -8,7 +8,7 @@ from app.lib.util import strtobool
 
 
 class Features:
-    pass
+    ENABLE_FEATURE_13: bool = strtobool(os.getenv("ENABLE_FEATURE_13", "False"))
 
 
 class Production(Features):
@@ -113,6 +113,8 @@ class Production(Features):
 
 
 class Staging(Production):
+    ENABLE_FEATURE_13: bool = strtobool(os.getenv("ENABLE_FEATURE_13", "True"))
+
     DEBUG: bool = strtobool(os.getenv("DEBUG", "False"))
 
     SENTRY_SAMPLE_RATE: float = float(os.getenv("SENTRY_SAMPLE_RATE", "1"))

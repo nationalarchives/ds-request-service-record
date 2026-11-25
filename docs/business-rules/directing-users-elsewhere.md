@@ -10,7 +10,7 @@ if they choose to
 
 ## Current mappings
 
-The conditions and messages below reflect the current journey.
+The conditions and messages below reflect the default journey, with feature flags disabled.
 
 | Condition                                       | Message or page shown                                                 |
 | ----------------------------------------------- | --------------------------------------------------------------------- |
@@ -24,3 +24,9 @@ The conditions and messages below reflect the current journey.
 | Born after 1939                                 | We do not have records for people born after 1939                     |
 
 The birth-year check is described in [Birth years covered](birth-years-covered.md).
+
+When `ENABLE_FEATURE_13=True`, commissioned British Army officers go to
+"We may hold this record" instead of the Army-specific warning page. All other
+mappings remain unchanged.
+
+See [Feature flags](../core-patterns/feature-flags.md) for configuration and testing.
