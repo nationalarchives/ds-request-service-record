@@ -9,6 +9,7 @@ services:
       - ENVIRONMENT_NAME=${ENVIRONMENT_NAME:-localhost}
       - CONFIG=${CONFIG:-config.Develop}
       - BUILD_VERSION=local
+      - PROXY_DEPTH=1
       - DEBUG=true
       - SECRET_KEY=abc123
       - NPM_DEVELOP_COMMAND=dev
