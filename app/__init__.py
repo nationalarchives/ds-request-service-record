@@ -25,11 +25,16 @@ from app.lib.template_filters import (
     slugify,
 )
 
+from .session_management import invalidate_existing_session
+
 
 def create_app(config_class):
     config = import_string(config_class)()
     app = Flask(__name__, static_url_path=f"{config.SERVICE_URL_PREFIX}/static")
     app.config.from_object(config_class)
+
+    # global session invalidation version
+    app.before_request(invalidate_existing_session)
 
     if app.config.get("SENTRY_DSN"):
         sentry_sdk.init(
