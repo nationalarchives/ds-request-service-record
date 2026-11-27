@@ -1,4 +1,4 @@
-from flask import redirect, render_template, request, session, url_for
+from flask import current_app, redirect, render_template, request, session, url_for
 
 from app.constants import ExternalLinks, MultiPageFormRoutes, ServiceBranches
 from app.lib.content import load_content
@@ -226,6 +226,9 @@ def were_they_a_commissioned_officer(form, state_machine):
         # in a previous step. If the service branch is not one of the expected values, we redirect.
         # This is a safeguard against scripted tampering with form data that we have seen.
         if form.service_branch.data not in ServiceBranches.__members__:
+            current_app.logger.warning(
+                "Commissioned officer submission has a missing or invalid service branch; redirecting to branch selection."
+            )
             return redirect(url_for("main.service_branch_form"))
         save_submitted_form_fields_to_session(form)
         state_machine.continue_from_were_they_a_commissioned_officer_form(form)
