@@ -1,6 +1,6 @@
 from flask import redirect, render_template, request, session, url_for
 
-from app.constants import ExternalLinks, MultiPageFormRoutes
+from app.constants import ExternalLinks, MultiPageFormRoutes, ServiceBranches
 from app.lib.content import load_content
 from app.lib.date_of_birth import get_date_of_birth_from_session
 from app.lib.date_of_birth_rules import DateOfBirthRules
@@ -222,6 +222,11 @@ def service_branch_form(form, state_machine):
 @with_state_machine
 def were_they_a_commissioned_officer(form, state_machine):
     if form.validate_on_submit():
+        # The transition from commissioned officer requires a service branch to have been selected
+        # in a previous step. If the service branch is not one of the expected values, we redirect.
+        # This is a safeguard against scripted tampering with form data that we have seen.
+        if form.service_branch.data not in ServiceBranches.__members__:
+            return redirect(url_for("main.service_branch_form"))
         save_submitted_form_fields_to_session(form)
         state_machine.continue_from_were_they_a_commissioned_officer_form(form)
         return redirect(url_for(state_machine.route_for_current_state))
